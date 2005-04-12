@@ -1,5 +1,5 @@
 /* 
- * "$Id: panorama.c,v 1.7 2005/04/11 14:40:18 hofmann Exp $"
+ * "$Id: panorama.c,v 1.8 2005/04/12 19:56:42 hofmann Exp $"
  *
  * flpsed program.
  *
@@ -45,7 +45,7 @@ main(int argc, char **argv) {
   int errflg = 0;
   int dist = 100000;
   double phi_a, lam_a, phi_b, lam_b;
-  double h_d_ratio = 0.1, mm_per_deg = 10.0, dist_c_m1 = 0.0;
+  double h_d_ratio = 0.1, mm_per_deg = 200.0, dist_c_m1 = 0.0;
   double dist_c_m2 = 0.0, a_center = 0.0;
   char *pos = NULL, *m1 = NULL, *m2 = NULL, *m_c = NULL;
   
@@ -85,10 +85,10 @@ main(int argc, char **argv) {
       h_d_ratio = atof(optarg);
       break;
     case 's':
-      dist_c_m1 = atof(optarg);
+      dist_c_m1 = -atof(optarg);
       break;
     case 't':
-      dist_c_m2 = atof(optarg);
+      dist_c_m2 = -atof(optarg);
       break;
     case 'p':
       pos = optarg;
@@ -104,6 +104,16 @@ main(int argc, char **argv) {
       break;
     }
 }
+
+#if 0
+  {
+    double a1 = 0.0, a2 = 90.0;
+    double d1 = -20.0, d2 = 10.0;
+    
+    fprintf(stderr, "==> %f\n", center_angle(a1*deg2rad, a2*deg2rad, d1, d2) / deg2rad);
+    exit(1);
+  }
+#endif
 
   if (errflg) {
     usage();
@@ -128,7 +138,7 @@ main(int argc, char **argv) {
     }
   }
 
-  if (dist_c_m1 > 0 && dist_c_m2 && m1 && m2) {
+  if (m1 && m2) {
     double phi, lam;
     double a1, a2, a;
     int n;
@@ -158,7 +168,7 @@ main(int argc, char **argv) {
     a2 = alpha(phi_a, lam_a, phi, lam);
 
     a_center = center_angle(a1, a2, dist_c_m1, dist_c_m2);
-
+    mm_per_deg = (dist_c_m1 - dist_c_m2) / (tan(a1 - a_center) - tan(a2 - a_center));
     fprintf(stderr, "center_angle = %f\n", a_center / deg2rad);
 
   }
@@ -198,8 +208,6 @@ stroke
 #define PS_HEADER_PHOTO "%!\n \
  /mountain {             % expects name, height, dist, deg on stack\n \
    newpath\n \
-   a_center sub\n \
-   mm_per_deg mul\n \
    0.352778 div          % convert from mm to PS points\n \
    dup\n \
    dup\n \
@@ -259,7 +267,7 @@ int read_file(double phi_a, double lam_a, char *name,
   char buf[1024];
   char *vals[10];
   char **ap, *bp;
-  double phi_b, lam_b, height;
+  double phi_b, lam_b, height, alph, dist_center;
 
   fp = fopen(name, "r");
   if (!fp) {
@@ -294,10 +302,18 @@ int read_file(double phi_a, double lam_a, char *name,
       continue;
     }
 
+    alph = alpha(phi_a, lam_a, phi_b, lam_b);
+    alph = alph - a_center;
+    if (alph > pi / 2.0 || alph < - pi /2.0) {
+      continue;
+    }
+
+    dist_center = tan(alph) * mm_per_deg;
+
     printf("(%s) %f %f %f mountain\n", vals[1], 
 	   height / 20.0,
 	   distance(phi_a, lam_a, phi_b, lam_b) * 25000.0,
-	   alpha(phi_a, lam_a, phi_b, lam_b));
+	   dist_center);
    
 
 #if 0
@@ -355,9 +371,10 @@ center_angle(double alph_a, double alph_b, double d1, double d2) {
 	  alph_a / deg2rad, alph_b / deg2rad, d1, d2);
 
   tan_a = tan(alph_a - alph_b);
-  
-  tan_b = (d2 - d1 - ((sqrt((d2*(d2 - (2*d1*(1 + (2*(tan_a * tan_a)))))) + (d1*d1))))) / (2*d2*tan_a);
+  fprintf(stderr, "tan_a %f\n", tan_a);
+  tan_b = (d2 - d1 + ((sqrt((d2*(d2 - (2.0*d1*(1.0 + (2.0 * tan_a * tan_a))))) + (d1*d1))))) / (2.0*d2*tan_a);
 
+  fprintf(stderr, "tan_b=%f\n", tan_b);
   return alph_a + atan(tan_b);
 }
   
