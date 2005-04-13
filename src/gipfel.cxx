@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.5 2005/04/13 21:58:31 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.6 2005/04/13 22:24:53 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -63,6 +63,12 @@ void scale_cb(Fl_Slider* o, void*) {
 void angle_cb(Fl_Slider* o, void*) {
   if (gipf) {
     gipf->set_center_angle((double)(o->value()));
+  }
+}
+
+void h_d_cb(Fl_Slider* o, void*) {
+  if (gipf) {
+    gipf->set_height_dist_ratio((double)(o->value()));
   }
 }
 
@@ -141,17 +147,25 @@ int main(int argc, char** argv) {
   s->box(FL_THIN_DOWN_BOX);
   s->labelsize(10);
   s->step(10.0);
-  s->bounds(0.0, 800.0);
+  s->bounds(0.0, 2000.0);
   s->slider(FL_UP_BOX);
   s->callback((Fl_Callback*)scale_cb);
   Fl_Slider* a = new Fl_Slider(160, 30, 160, 15, "angle");
   a->type(1);
   a->box(FL_THIN_DOWN_BOX);
   a->labelsize(10);
-  a->step(0.01);
-  a->bounds(-4.0, 4.0);
+  a->step(0.0001);
+  a->bounds(-6.4, 6.4);
   a->slider(FL_UP_BOX);
   a->callback((Fl_Callback*)angle_cb);
+  Fl_Slider* r = new Fl_Slider(320, 30, 160, 15, "height-dist");
+  r->type(1);
+  r->box(FL_THIN_DOWN_BOX);
+  r->labelsize(10);
+  r->step(-0.005);
+  r->bounds(0.2, 0.02);
+  r->slider(FL_UP_BOX);
+  r->callback((Fl_Callback*)h_d_cb);
 
 
   scroll = new Fl_Scroll(0, 60, win->w(), win->h()-60);

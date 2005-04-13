@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.3 2005/04/13 21:58:31 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.4 2005/04/13 22:24:53 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -33,7 +33,7 @@ Panorama::Panorama() {
   visible_mountains = NULL;
   m1 = NULL;
   m2 = NULL;
-  height_dist_ratio = 0.10;
+  height_dist_ratio = 0.07;
   pi = asin(1.0) * 2.0;
   deg2rad = pi / 180.0;
   a_center = 0.2*pi;
@@ -140,13 +140,21 @@ Panorama::move_mountain(Mountain *m, int x, int y) {
 void
 Panorama::set_center_angle(double a) {
   a_center = a;
-  fprintf(stderr, "--> %f\n", a);
+  fprintf(stderr, "--> angle%f\n", a);
   update_visible_mountains();
 }
 
 void
 Panorama::set_scale(double s) {
   scale = s;
+  fprintf(stderr, "-->scale %f\n", s);
+  update_visible_mountains();
+}
+
+void
+Panorama::set_height_dist_ratio(double r) {
+  height_dist_ratio = r;
+  fprintf(stderr, "-->ratio %f\n", r);
   update_visible_mountains();
 }
 

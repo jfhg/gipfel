@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.4 2005/04/13 21:58:31 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.5 2005/04/13 22:24:53 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -145,6 +145,12 @@ GipfelWidget::set_center_angle(double a) {
 void
 GipfelWidget::set_scale(double s) {
   pan->set_scale(s);
+  redraw();
+}
+
+void
+GipfelWidget::set_height_dist_ratio(double r) {
+  pan->set_height_dist_ratio(r);
   redraw();
 }
 
