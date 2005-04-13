@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.1 2005/04/12 20:34:41 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.2 2005/04/13 15:36:36 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -40,9 +40,8 @@
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_JPEG_Image.H>
-#include <FL/Fl_Shared_Image.H>
 
+#include "GipfelWidget.H"
 
 char *filename;
 
@@ -120,16 +119,16 @@ int main(int argc, char** argv) {
     filename = my_argv[0];
   }
   
-  fl_register_images();
+
   win = new Fl_Window(600,700);
   m = new Fl_Menu_Bar(0, 0, 600, 30);
   m->menu(menuitems);
   scroll = new Fl_Scroll(0, 30, win->w(), win->h()-30);
   fprintf(stderr, "%s\n", filename);
+  
+  GipfelWidget *gipf = new GipfelWidget(0,30,500,500);
 
-  Fl_Image *img = new Fl_JPEG_Image(filename);
-  Fl_Box *b = new Fl_Box(0, 0, img->w(), img->h());
-  b->image(img);
+  gipf->load(filename);
   scroll->end();
   
     
@@ -137,6 +136,7 @@ int main(int argc, char** argv) {
   
   win->end();
   win->show(1, argv); 
+  gipf->redraw_overlay();
   
   return Fl::run();
 }
