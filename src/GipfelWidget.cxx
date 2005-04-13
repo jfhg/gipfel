@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.3 2005/04/13 19:09:19 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.4 2005/04/13 21:58:31 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -43,6 +43,7 @@
 GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   img = NULL;
   pan = new Panorama();
+  cur_mountain = NULL;
   fl_register_images();
 }
 
@@ -82,18 +83,98 @@ GipfelWidget::draw() {
   img->draw(x(),y(),w(),h(),0,0);
 
 
-  fl_color(FL_RED);
+
   fl_font(FL_COURIER, 10);
   m = pan->get_visible_mountains();
   while (m) {
-    int m_x = pan->get_x(m);
-
-    fl_line(center + m_x + x(), 0 + y(), center + m_x + x(), h() + y());
-    fl_draw(m->name, m_x + x(), 20 + y() + m_x / 4);
-    m = m->get_next();
+    if (m == cur_mountain) {
+      fl_color(FL_RED);
+    } else {
+      fl_color(FL_BLACK);
+    }
+    
+    fl_line(center + m->x + x(), 0 + y(), center + m->x + x(), h() + y());
+    fl_draw(m->name, center + m->x + x(), 20 + y() + (int) m->height / 6);
+    m = m->get_next_visible();
   }
 
   fl_pop_clip();
 }
 
+int
+GipfelWidget::set_cur_mountain(int m_x, int m_y) {
+  Mountain *m = pan->get_visible_mountains();
+  int center = w() / 2;
 
+  while (m) {
+    if (m_x - center >= m->x - 2 && m_x - center < m->x + 2) {
+      cur_mountain = m;
+      redraw();
+      return 0;
+    }
+
+    m = m->get_next_visible();
+  }
+
+  cur_mountain = NULL;
+  redraw();
+  return 1;
+}
+
+int
+GipfelWidget::move_mountain(int m_x, int m_y) {
+  int ret;
+  int center = w() / 2;
+
+  if (cur_mountain == NULL) {
+    return 1;
+  }
+
+  ret = pan->move_mountain(cur_mountain, m_x - center, m_y - center);
+  
+  redraw();
+  return ret;
+}
+
+void
+GipfelWidget::set_center_angle(double a) {
+  pan->set_center_angle(a);
+  redraw();
+}
+
+void
+GipfelWidget::set_scale(double s) {
+  pan->set_scale(s);
+  redraw();
+}
+
+int
+GipfelWidget::handle(int event) {
+  int mark_x, mark_y;
+
+  switch(event) {
+  case FL_PUSH:    
+    if (Fl::event_button() == 1) {
+         
+      mark_x = Fl::event_x()-x();
+      mark_y = Fl::event_y()-y();
+      fprintf(stderr, "x %d, y %d\n", mark_x, mark_y);
+      set_cur_mountain(mark_x, mark_y);
+
+      Fl::focus(this);
+      return 1;
+    }
+    break;
+  case FL_DRAG:
+    move_mountain(Fl::event_x()-x(), Fl::event_y()-y());
+    return 1;
+    break;
+  case FL_FOCUS:
+    return 1;
+    break;
+  case FL_UNFOCUS:
+    return 0;
+    break;
+  }
+  return 0;
+}

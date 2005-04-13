@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.2 2005/04/13 19:09:19 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.3 2005/04/13 21:58:31 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -31,11 +31,13 @@
 Panorama::Panorama() {
   mountains = NULL;
   visible_mountains = NULL;
-  height_dist_ratio = 0.1;
+  m1 = NULL;
+  m2 = NULL;
+  height_dist_ratio = 0.10;
   pi = asin(1.0) * 2.0;
   deg2rad = pi / 180.0;
-  center_angle = 0.0;
-  scale = 200.0;
+  a_center = 0.2*pi;
+  scale = 0.2;
 }
 
 Panorama::~Panorama() {
@@ -109,7 +111,43 @@ Panorama::get_visible_mountains() {
   
 int
 Panorama::get_x(Mountain *m) {
-  return (int) (tan(m->alph - center_angle) * scale);
+  return  (int) (tan(m->alph - a_center) * scale);
+}
+
+int
+Panorama::move_mountain(Mountain *m, int x, int y) {
+  if (m1 && m2 && m != m1 && m != m2) {
+    return 1;
+  }
+
+  m->x = x;
+
+  if (m1 == NULL) {
+    m1 = m;
+  } else if (m2 == NULL && m != m1) {
+    m2 = m;
+  } else if (m1 && m2) {
+    a_center = center_angle(m1->alph, m2->alph, m1->x, m2->x);
+    scale = (m1->x - m2->x) / 
+      (tan(m1->alph - a_center) - tan(m2->alph - a_center));
+    fprintf(stderr, "center = %f, scale = %f\n", a_center /deg2rad, scale);
+    update_visible_mountains();
+  }
+
+  return 0;
+}
+
+void
+Panorama::set_center_angle(double a) {
+  a_center = a;
+  fprintf(stderr, "--> %f\n", a);
+  update_visible_mountains();
+}
+
+void
+Panorama::set_scale(double s) {
+  scale = s;
+  update_visible_mountains();
 }
 
 int
@@ -144,12 +182,18 @@ Panorama::update_visible_mountains() {
   visible_mountains = NULL;
 
   while (m) {
+    if ((m->phi != view_phi || m->lam != view_lam) &&
+	(m->height / (distance(m->phi, m->lam)* 6368000) 
+	 > height_dist_ratio)) {
 
-    if (m->height / (distance(m->phi, m->lam)* 6368000) 
-	> height_dist_ratio) {
-      m ->alph = alpha(m->phi, m->lam);
+      m->alph = alpha(m->phi, m->lam);
 
-      if (m->alph < pi / 2.0 &&  m->alph > - pi / 2.0) {
+      if (m->alph - a_center < pi / 2.0 && 
+	  m->alph - a_center > - pi / 2.0) {
+      //      fprintf(stderr, "==> %s\n", m->name);
+      
+	m->x = get_x(m);
+	m->clear_next_visible();
 	if (visible_mountains) {
 	  visible_mountains->append_visible(m);
 	} else {
@@ -197,3 +241,14 @@ Panorama::alpha(double phi, double lam) {
   return alph;
 }
 
+double 
+Panorama::center_angle(double alph_a, double alph_b, double d1, double d2) {
+  double tan_a, tan_b;
+
+  tan_a = tan(alph_a - alph_b);
+  fprintf(stderr, "tan_a %f\n", tan_a);
+  tan_b = (d2 - d1 + ((sqrt((d2*(d2 - (2.0*d1*(1.0 + (2.0 * tan_a * tan_a))))) + (d1*d1))))) / (2.0*d2*tan_a);
+
+  fprintf(stderr, "tan_b=%f\n", tan_b);
+  return alph_a + atan(tan_b);
+}

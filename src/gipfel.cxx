@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.4 2005/04/13 19:09:19 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.5 2005/04/13 21:58:31 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -45,12 +45,25 @@
 
 char *img_file;
 char *data_file;
+GipfelWidget *gipf;
 
 void open_cb() {
   char *file = fl_file_chooser("Open File?", "*.jpeg", img_file);
   if(file != NULL) {
 
   }  
+}
+
+void scale_cb(Fl_Slider* o, void*) {
+  if (gipf) {
+    gipf->set_scale((double)(o->value()));
+  }
+}
+
+void angle_cb(Fl_Slider* o, void*) {
+  if (gipf) {
+    gipf->set_center_angle((double)(o->value()));
+  }
 }
 
 void about_cb() {
@@ -123,9 +136,27 @@ int main(int argc, char** argv) {
   win = new Fl_Window(600,700);
   m = new Fl_Menu_Bar(0, 0, 600, 30);
   m->menu(menuitems);
-  scroll = new Fl_Scroll(0, 30, win->w(), win->h()-30);
+  Fl_Slider* s = new Fl_Slider(0, 30, 160, 15, "scale");
+  s->type(1);
+  s->box(FL_THIN_DOWN_BOX);
+  s->labelsize(10);
+  s->step(10.0);
+  s->bounds(0.0, 800.0);
+  s->slider(FL_UP_BOX);
+  s->callback((Fl_Callback*)scale_cb);
+  Fl_Slider* a = new Fl_Slider(160, 30, 160, 15, "angle");
+  a->type(1);
+  a->box(FL_THIN_DOWN_BOX);
+  a->labelsize(10);
+  a->step(0.01);
+  a->bounds(-4.0, 4.0);
+  a->slider(FL_UP_BOX);
+  a->callback((Fl_Callback*)angle_cb);
+
+
+  scroll = new Fl_Scroll(0, 60, win->w(), win->h()-60);
   
-  GipfelWidget *gipf = new GipfelWidget(0,30,500,500);
+  gipf = new GipfelWidget(0,60,500,500);
 
   gipf->load_image(img_file);
   gipf->load_data(data_file);
