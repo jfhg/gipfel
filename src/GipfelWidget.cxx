@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.1 2005/04/13 15:36:36 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.2 2005/04/13 18:07:16 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -40,7 +40,7 @@
 #include "GipfelWidget.H"
 
 
-GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Overlay_Window(X, Y, W, H) {
+GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
 
   img = NULL;
   fl_register_images();
@@ -66,14 +66,14 @@ GipfelWidget::draw() {
     return;
   }
 
-  img->draw(0,0,w(),h(),0,0);
-}
+  fl_push_clip(x(), y(), w(), h());
+  img->draw(x(),y(),w(),h(),0,0);
 
-void 
-GipfelWidget::draw_overlay() {
+
   fl_color(FL_RED);
 
-  fl_draw_box(FL_UP_BOX, 10, 10, 25,25, FL_GRAY); 
-} 
+  fl_draw_box(FL_UP_BOX, x()+20, y()+20, 25,25, FL_GRAY);
+  fl_pop_clip();
+}
 
 

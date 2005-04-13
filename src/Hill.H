@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.H,v 1.2 2005/04/13 18:07:16 hofmann Exp $"
+// "$Id: Hill.H,v 1.1 2005/04/13 18:07:16 hofmann Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -21,20 +21,33 @@
 // USA.
 //
 
-#ifndef GipfelWidget_H
-#define GipfelWidget_H
+#ifndef MOUNTAIN_H
+#define MOUNTAIN_H
 
-#include <FL/Fl_Widget.H>
+class Mountain;
 
-class GipfelWidget : public Fl_Widget {
+class Mountain {
  private:
-  Fl_Image *img;
+  Mountain *next;
+  Mountain *next_visible;
 
  public:
-  GipfelWidget(int X,int Y,int W, int H);
+  double phi, lam;
+  double height;
+  char *name;
+ 
+  Mountain(const char *n, double p, double l, double h);
 
-  int load(const char *file);
+  ~Mountain();
 
-  void draw();
+  void append(Mountain *m);
+
+  void append_visible(Mountain *m);
+
+  void set_first_visible();
+  
+  Mountain * get_next();
+
+  Mountain * get_next_visible();
 };
 #endif

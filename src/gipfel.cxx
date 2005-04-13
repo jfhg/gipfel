@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.2 2005/04/13 15:36:36 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.3 2005/04/13 18:07:16 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -136,7 +136,6 @@ int main(int argc, char** argv) {
   
   win->end();
   win->show(1, argv); 
-  gipf->redraw_overlay();
   
   return Fl::run();
 }

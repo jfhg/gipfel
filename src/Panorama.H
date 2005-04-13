@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.H,v 1.2 2005/04/13 18:07:16 hofmann Exp $"
+// "$Id: Panorama.H,v 1.1 2005/04/13 18:07:16 hofmann Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -21,20 +21,33 @@
 // USA.
 //
 
-#ifndef GipfelWidget_H
-#define GipfelWidget_H
+#ifndef PANORAMA_H
+#define PANORAMA_H
 
-#include <FL/Fl_Widget.H>
+#include "Mountain.H"
 
-class GipfelWidget : public Fl_Widget {
+class Panorama {
  private:
-  Fl_Image *img;
+  double view_phi, view_lam;
+  double height_dist_ratio;
+  Mountain *mountains;
+  Mountain *visible_mountains;
+  double pi, deg2rad;
+  
+  int get_pos(const char *name, double *phi, double *lam);
 
+  void check_visibility();
+
+  double Panorama::distance(double phi, double lam);
  public:
-  GipfelWidget(int X,int Y,int W, int H);
+  Panorama();
 
-  int load(const char *file);
+  ~Panorama();
+  
+  int load_file(const char *name);
 
-  void draw();
+  int set_viewpoint(const char *pos);  
+
+  void set_height_dist_ratio(double r);
 };
 #endif

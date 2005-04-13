@@ -4,7 +4,7 @@ CFLAGS=-g -I/usr/X11R6/include
 CXXFLAGS=-g -I/usr/X11R6/include
 LDFLAGS=-g 
 
-OBJECTS=flmountains.o GipfelWidget.o
+OBJECTS=flmountains.o GipfelWidget.o Mountain.o Panorama.o
 
 #%.o: %.c
 #	$(CC) -c $(CFLAGS) $*.c
