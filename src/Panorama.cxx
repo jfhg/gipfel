@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.1 2005/04/13 18:07:16 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.2 2005/04/13 19:09:19 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -34,6 +34,8 @@ Panorama::Panorama() {
   height_dist_ratio = 0.1;
   pi = asin(1.0) * 2.0;
   deg2rad = pi / 180.0;
+  center_angle = 0.0;
+  scale = 200.0;
 }
 
 Panorama::~Panorama() {
@@ -50,6 +52,13 @@ Panorama::load_file(const char *name) {
   char **ap, *bp;
   double phi, lam, height;
   Mountain *m;
+
+  if (mountains) {
+    delete(mountains);
+  }
+
+  mountains = NULL;
+  visible_mountains = NULL;
 
   fp = fopen(name, "r");
   if (!fp) {
@@ -78,7 +87,7 @@ Panorama::load_file(const char *name) {
 
   fclose(fp);
 
-  check_visibility();
+  update_visible_mountains();
   return 0;
 }
 
@@ -89,8 +98,18 @@ Panorama::set_viewpoint(const char *name) {
     return 1;
   }
 
-  check_visibility();
+  update_visible_mountains();
   return 0;
+}
+
+Mountain * 
+Panorama::get_visible_mountains() {
+  return visible_mountains;
+}
+  
+int
+Panorama::get_x(Mountain *m) {
+  return (int) (tan(m->alph - center_angle) * scale);
 }
 
 int
@@ -120,7 +139,7 @@ Panorama::get_pos(const char *name, double *phi, double *lam) {
 }
 
 void 
-Panorama::check_visibility() {
+Panorama::update_visible_mountains() {
   Mountain *m = mountains;
   visible_mountains = NULL;
 
@@ -128,11 +147,14 @@ Panorama::check_visibility() {
 
     if (m->height / (distance(m->phi, m->lam)* 6368000) 
 	> height_dist_ratio) {
-      
-      if (visible_mountains) {
-	visible_mountains->append_visible(m);
-      } else {
-	visible_mountains = m;
+      m ->alph = alpha(m->phi, m->lam);
+
+      if (m->alph < pi / 2.0 &&  m->alph > - pi / 2.0) {
+	if (visible_mountains) {
+	  visible_mountains->append_visible(m);
+	} else {
+	  visible_mountains = m;
+	}
       }
     }
 
@@ -145,3 +167,33 @@ Panorama::distance(double phi, double lam) {
   return acos(sin(view_phi) * sin(phi) + 
 	      cos(view_phi) * cos(phi) * cos(view_lam - lam));
 }
+
+double 
+Panorama::sin_alpha(double lam, double phi, double c) {
+  return sin(lam - view_lam) * cos(phi) / sin(c);
+}
+
+
+double
+Panorama::cos_alpha(double phi, double c) {
+  return (sin(phi) - sin(view_phi) * cos(c)) / (cos(view_phi) * sin(c));
+}
+
+
+double 
+Panorama::alpha(double phi, double lam) {
+  double dist, sin_alph, cos_alph, alph;
+  
+  dist = distance(phi, lam);
+  sin_alph = sin_alpha(lam, phi, dist);
+  cos_alph = cos_alpha(phi, dist);
+
+  if (sin_alph > 0) {
+    alph = acos(cos_alph);
+  } else {
+    alph = 2.0 * pi - acos(cos_alph);
+  }
+
+  return alph;
+}
+

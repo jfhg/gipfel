@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.3 2005/04/13 18:07:16 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.4 2005/04/13 19:09:19 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -43,10 +43,11 @@
 
 #include "GipfelWidget.H"
 
-char *filename;
+char *img_file;
+char *data_file;
 
 void open_cb() {
-  char *file = fl_file_chooser("Open File?", "*.ps", filename);
+  char *file = fl_file_chooser("Open File?", "*.jpeg", img_file);
   if(file != NULL) {
 
   }  
@@ -83,23 +84,24 @@ void usage() {
 
 int main(int argc, char** argv) {
   char c, *sep, *tmp, **my_argv;
+  char *view_point = NULL;
   int err, bflag = 0, dflag = 0, my_argc;
   Fl_Window *win;
   Fl_Scroll *scroll;
   Fl_Menu_Bar *m;
   
   err = 0;
-  while ((c = getopt(argc, argv, "hdbt:")) != EOF) {
+  while ((c = getopt(argc, argv, "d:v:")) != EOF) {
     switch (c) {  
     case 'h':
       usage();
       exit(0);
       break;
-    case 'b':
-      bflag = 1;
-      break;
     case 'd':
-      dflag = 1;
+      data_file = optarg;
+      break;
+    case 'v':
+      view_point = optarg;
       break;
     default:
       err++;
@@ -114,23 +116,23 @@ int main(int argc, char** argv) {
   my_argc = argc - optind;
   my_argv = argv + optind;
 
-  fprintf(stderr, "%d %s\n", my_argc, my_argv[0]);
   if (my_argc >= 1) {
-    filename = my_argv[0];
+    img_file = my_argv[0];
   }
-  
 
   win = new Fl_Window(600,700);
   m = new Fl_Menu_Bar(0, 0, 600, 30);
   m->menu(menuitems);
   scroll = new Fl_Scroll(0, 30, win->w(), win->h()-30);
-  fprintf(stderr, "%s\n", filename);
   
   GipfelWidget *gipf = new GipfelWidget(0,30,500,500);
 
-  gipf->load(filename);
-  scroll->end();
-  
+  gipf->load_image(img_file);
+  gipf->load_data(data_file);
+  if (view_point) {
+    gipf->set_viewpoint(view_point);
+  }
+  scroll->end();  
     
   win->resizable(scroll);
   
