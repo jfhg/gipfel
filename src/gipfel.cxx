@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.6 2005/04/13 22:24:53 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.7 2005/04/14 19:54:58 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
   a->box(FL_THIN_DOWN_BOX);
   a->labelsize(10);
   a->step(0.0001);
-  a->bounds(-6.4, 6.4);
+  a->bounds(-3.14, 3.14);
   a->slider(FL_UP_BOX);
   a->callback((Fl_Callback*)angle_cb);
   Fl_Slider* r = new Fl_Slider(320, 30, 160, 15, "height-dist");

@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.5 2005/04/13 22:24:53 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.6 2005/04/14 19:54:58 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -94,7 +94,7 @@ GipfelWidget::draw() {
     }
     
     fl_line(center + m->x + x(), 0 + y(), center + m->x + x(), h() + y());
-    fl_draw(m->name, center + m->x + x(), 20 + y() + (int) m->height / 6);
+    fl_draw(m->name, center + m->x + x(), 20 + y() + (int) m->height / 8);
     m = m->get_next_visible();
   }
 

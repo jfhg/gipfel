@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.4 2005/04/13 22:24:53 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.5 2005/04/14 19:54:58 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -111,7 +111,7 @@ Panorama::get_visible_mountains() {
   
 int
 Panorama::get_x(Mountain *m) {
-  return  (int) (tan(m->alph - a_center) * scale);
+  return  (int) (tan(m->a_view) * scale);
 }
 
 int
@@ -165,7 +165,7 @@ Panorama::get_pos(const char *name, double *phi, double *lam) {
   double p, l;
 
   while (m) {
-    if (strstr(m->name, name)) {
+    if (strcmp(m->name, name) == 0) {
       p = m->phi;
       l = m->lam;
 
@@ -195,10 +195,16 @@ Panorama::update_visible_mountains() {
 	 > height_dist_ratio)) {
 
       m->alph = alpha(m->phi, m->lam);
-
-      if (m->alph - a_center < pi / 2.0 && 
-	  m->alph - a_center > - pi / 2.0) {
-      //      fprintf(stderr, "==> %s\n", m->name);
+      m->a_view = m->alph - a_center;
+      if (m->a_view > pi) {
+	m->a_view -= 2.0*pi;
+      } else if (m->a_view < -pi) {
+	m->a_view += 2.0*pi;
+      }
+      
+      //      fprintf(stderr, "==> %s %f, dist %f km  %f\n", m->name, m->alph, distance(m->phi, m->lam)* 6368, m->a_view);
+      if (m->a_view < pi / 2.0 && 
+	  m->a_view > - pi / 2.0) {
       
 	m->x = get_x(m);
 	m->clear_next_visible();
