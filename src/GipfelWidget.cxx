@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.7 2005/04/14 21:15:45 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.8 2005/04/14 21:48:28 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -83,7 +83,7 @@ GipfelWidget::draw() {
   fl_push_clip(x(), y(), w(), h());
   img->draw(x(),y(),w(),h(),0,0);
 
-  fl_font(FL_COURIER, 10);
+  fl_font(FL_HELVETICA, 8);
   m = pan->get_visible_mountains();
   while (m) {
     if (m == cur_mountain) {

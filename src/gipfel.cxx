@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.8 2005/04/14 21:15:45 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.9 2005/04/14 21:48:28 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -148,7 +148,16 @@ int main(int argc, char** argv) {
   win = new Fl_Window(800,700);
   m = new Fl_Menu_Bar(0, 0, 800, 30);
   m->menu(menuitems);
-  Fl_Slider* s = new Fl_Slider(0, 30, 160, 15, "scale");
+  Fl_Slider* a = new Fl_Slider(50, 30, 750, 15, "angle");
+  a->type(1);
+  a->box(FL_THIN_DOWN_BOX);
+  a->labelsize(10);
+  a->step(0.00001);
+  a->bounds(-3.14, 3.14);
+  a->slider(FL_UP_BOX);
+  a->callback((Fl_Callback*)angle_cb);
+  a->align(FL_ALIGN_LEFT);
+  Fl_Slider* s = new Fl_Slider(100, 45, 160, 15, "scale");
   s->type(1);
   s->box(FL_THIN_DOWN_BOX);
   s->labelsize(10);
@@ -156,15 +165,8 @@ int main(int argc, char** argv) {
   s->bounds(0.0, 2000.0);
   s->slider(FL_UP_BOX);
   s->callback((Fl_Callback*)scale_cb);
-  Fl_Slider* a = new Fl_Slider(160, 30, 160, 15, "angle");
-  a->type(1);
-  a->box(FL_THIN_DOWN_BOX);
-  a->labelsize(10);
-  a->step(0.0001);
-  a->bounds(-3.14, 3.14);
-  a->slider(FL_UP_BOX);
-  a->callback((Fl_Callback*)angle_cb);
-  Fl_Slider* n = new Fl_Slider(320, 30, 160, 15, "nick");
+  s->align(FL_ALIGN_LEFT);
+  Fl_Slider* n = new Fl_Slider(360, 45, 160, 15, "nick");
   n->type(1);
   n->box(FL_THIN_DOWN_BOX);
   n->labelsize(10);
@@ -172,7 +174,8 @@ int main(int argc, char** argv) {
   n->bounds(-0.5, 0.5);
   n->slider(FL_UP_BOX);
   n->callback((Fl_Callback*)nick_cb);
-  Fl_Slider* r = new Fl_Slider(480, 30, 160, 15, "height-dist");
+  n->align(FL_ALIGN_LEFT);
+  Fl_Slider* r = new Fl_Slider(620, 45, 160, 15, "height-dist");
   r->type(1);
   r->box(FL_THIN_DOWN_BOX);
   r->labelsize(10);
@@ -180,7 +183,7 @@ int main(int argc, char** argv) {
   r->bounds(0.2, 0.02);
   r->slider(FL_UP_BOX);
   r->callback((Fl_Callback*)h_d_cb);
-
+  r->align(FL_ALIGN_LEFT);
 
   scroll = new Fl_Scroll(0, 60, win->w(), win->h()-60);
   
