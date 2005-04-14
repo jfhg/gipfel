@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.7 2005/04/14 19:54:58 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.8 2005/04/14 21:15:45 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -63,6 +63,12 @@ void scale_cb(Fl_Slider* o, void*) {
 void angle_cb(Fl_Slider* o, void*) {
   if (gipf) {
     gipf->set_center_angle((double)(o->value()));
+  }
+}
+
+void nick_cb(Fl_Slider* o, void*) {
+  if (gipf) {
+    gipf->set_nick_angle((double)(o->value()));
   }
 }
 
@@ -139,8 +145,8 @@ int main(int argc, char** argv) {
     img_file = my_argv[0];
   }
 
-  win = new Fl_Window(600,700);
-  m = new Fl_Menu_Bar(0, 0, 600, 30);
+  win = new Fl_Window(800,700);
+  m = new Fl_Menu_Bar(0, 0, 800, 30);
   m->menu(menuitems);
   Fl_Slider* s = new Fl_Slider(0, 30, 160, 15, "scale");
   s->type(1);
@@ -158,7 +164,15 @@ int main(int argc, char** argv) {
   a->bounds(-3.14, 3.14);
   a->slider(FL_UP_BOX);
   a->callback((Fl_Callback*)angle_cb);
-  Fl_Slider* r = new Fl_Slider(320, 30, 160, 15, "height-dist");
+  Fl_Slider* n = new Fl_Slider(320, 30, 160, 15, "nick");
+  n->type(1);
+  n->box(FL_THIN_DOWN_BOX);
+  n->labelsize(10);
+  n->step(0.00001);
+  n->bounds(-0.5, 0.5);
+  n->slider(FL_UP_BOX);
+  n->callback((Fl_Callback*)nick_cb);
+  Fl_Slider* r = new Fl_Slider(480, 30, 160, 15, "height-dist");
   r->type(1);
   r->box(FL_THIN_DOWN_BOX);
   r->labelsize(10);

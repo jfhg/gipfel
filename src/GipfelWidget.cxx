@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.6 2005/04/14 19:54:58 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.7 2005/04/14 21:15:45 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -73,7 +73,8 @@ GipfelWidget::set_viewpoint(const char *pos) {
 void 
 GipfelWidget::draw() {
   Mountain *m;
-  int center = w() / 2;
+  int center_x = w() / 2;
+  int center_y = h() / 2;
   
   if (img == NULL) {
     return;
@@ -81,8 +82,6 @@ GipfelWidget::draw() {
 
   fl_push_clip(x(), y(), w(), h());
   img->draw(x(),y(),w(),h(),0,0);
-
-
 
   fl_font(FL_COURIER, 10);
   m = pan->get_visible_mountains();
@@ -93,8 +92,14 @@ GipfelWidget::draw() {
       fl_color(FL_BLACK);
     }
     
-    fl_line(center + m->x + x(), 0 + y(), center + m->x + x(), h() + y());
-    fl_draw(m->name, center + m->x + x(), 20 + y() + (int) m->height / 8);
+    fl_rectf(center_x + m->x + x() - 2, 
+	     center_y + m->y + y() - 2,
+	     4,
+	     4);
+      //    fl_line(center_x + m->x + x(), 0 + y(), center_x + m->x + x(), h() + y());
+    fl_draw(m->name, 
+	    center_x + m->x + x(), 
+	    center_y + m->y + y());
     m = m->get_next_visible();
   }
 
@@ -139,6 +144,12 @@ GipfelWidget::move_mountain(int m_x, int m_y) {
 void
 GipfelWidget::set_center_angle(double a) {
   pan->set_center_angle(a);
+  redraw();
+}
+
+void
+GipfelWidget::set_nick_angle(double a) {
+  pan->set_nick_angle(a);
   redraw();
 }
 

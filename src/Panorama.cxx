@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.5 2005/04/14 19:54:58 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.6 2005/04/14 21:15:45 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -36,8 +36,9 @@ Panorama::Panorama() {
   height_dist_ratio = 0.07;
   pi = asin(1.0) * 2.0;
   deg2rad = pi / 180.0;
-  a_center = 0.2*pi;
-  scale = 0.2;
+  a_center = 0.0;
+  a_nick = 0.0;
+  scale = 20.0;
 }
 
 Panorama::~Panorama() {
@@ -95,7 +96,7 @@ Panorama::load_file(const char *name) {
 
 int
 Panorama::set_viewpoint(const char *name) {
-  if (get_pos(name, &view_phi, &view_lam) != 1) {
+  if (get_pos(name, &view_phi, &view_lam, &view_height) != 1) {
     fprintf(stderr, "Could not find exactly one entry for %s.\n");
     return 1;
   }
@@ -112,6 +113,11 @@ Panorama::get_visible_mountains() {
 int
 Panorama::get_x(Mountain *m) {
   return  (int) (tan(m->a_view) * scale);
+}
+
+int
+Panorama::get_y(Mountain *m) {
+  return  - (int) (tan(m->a_nick - a_nick) * scale);
 }
 
 int
@@ -145,6 +151,12 @@ Panorama::set_center_angle(double a) {
 }
 
 void
+Panorama::set_nick_angle(double a) {
+  a_nick = a;
+  update_visible_mountains();
+}
+
+void
 Panorama::set_scale(double s) {
   scale = s;
   fprintf(stderr, "-->scale %f\n", s);
@@ -159,15 +171,16 @@ Panorama::set_height_dist_ratio(double r) {
 }
 
 int
-Panorama::get_pos(const char *name, double *phi, double *lam) {
+Panorama::get_pos(const char *name, double *phi, double *lam, double *height) {
   Mountain *m = mountains;
   int found = 0;
-  double p, l;
+  double p, l, h;
 
   while (m) {
     if (strcmp(m->name, name) == 0) {
       p = m->phi;
       l = m->lam;
+      h = m->height;
 
       fprintf(stderr, "Found matching entry: %s (%fm)\n", m->name, m->height);
       found++;
@@ -177,8 +190,9 @@ Panorama::get_pos(const char *name, double *phi, double *lam) {
   }
 
   if (found == 1) {
-    *phi = p;
-    *lam = l;
+    *phi    = p;
+    *lam    = l;
+    *height = h;
   }
 
   return found;
@@ -190,8 +204,9 @@ Panorama::update_visible_mountains() {
   visible_mountains = NULL;
 
   while (m) {
+    m->dist = distance(m->phi, m->lam);
     if ((m->phi != view_phi || m->lam != view_lam) &&
-	(m->height / (distance(m->phi, m->lam)* 6368000) 
+	(m->height / (m->dist * 6368000) 
 	 > height_dist_ratio)) {
 
       m->alph = alpha(m->phi, m->lam);
@@ -203,10 +218,11 @@ Panorama::update_visible_mountains() {
       }
       
       //      fprintf(stderr, "==> %s %f, dist %f km  %f\n", m->name, m->alph, distance(m->phi, m->lam)* 6368, m->a_view);
-      if (m->a_view < pi / 2.0 && 
-	  m->a_view > - pi / 2.0) {
-      
+      if (m->a_view < pi / 2.0 && m->a_view > - pi / 2.0) {
+	
+	m->a_nick = nick(m->dist, m->height);
 	m->x = get_x(m);
+	m->y = get_y(m);
 	m->clear_next_visible();
 	if (visible_mountains) {
 	  visible_mountains->append_visible(m);
@@ -265,4 +281,18 @@ Panorama::center_angle(double alph_a, double alph_b, double d1, double d2) {
 
   fprintf(stderr, "tan_b=%f\n", tan_b);
   return alph_a + atan(tan_b);
+}
+
+double
+Panorama::nick(double dist, double height) {
+  double a, b, c;
+  double beta;
+
+  b = height + 6368000.0;
+  c = view_height + 6368000.0;
+
+  a = pow(((b * (b - (2.0 * c * cos(dist)))) + (c * c)), (1.0 / 2.0));
+  beta = acos((-(b*b) + (a*a) + (c*c))/(2 * a * c));
+  
+  return beta - pi / 2.0;
 }
