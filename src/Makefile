@@ -1,8 +1,8 @@
 CC=gcc
 CPP=c++
 CFLAGS=-g -I/usr/X11R6/include
-CXXFLAGS=-g -I/usr/X11R6/include
-LDFLAGS=-g 
+CXXFLAGS=-g -I/usr/X11R6/include -fno-stack-protector
+LDFLAGS=-g -fno-stack-protector
 
 OBJECTS=flmountains.o GipfelWidget.o Mountain.o Panorama.o
 
@@ -10,10 +10,10 @@ OBJECTS=flmountains.o GipfelWidget.o Mountain.o Panorama.o
 #	$(CC) -c $(CFLAGS) $*.c
 
 %.o: %.cxx
-	$(CPP) -c $(CFLAGS) $*.cxx
+	$(CPP) -c $(CXXFLAGS) $*.cxx
 
 gipfel: $(OBJECTS)
-	$(CC) -o gipfel $(OBJECTS) -L/usr/X11R6/lib -lm -lfltk -lfltk_images
+	$(CC) -fno-stack-protector -o gipfel $(OBJECTS) -L/usr/X11R6/lib -lm -lfltk -lfltk_images
 
 flmountains: $(flmountains.o)
 	$(CPP) -o flmountains flmountains.o -L/usr/X11R6/lib -lm -lfltk -lfltk_images

@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.8 2005/04/14 21:48:28 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.9 2005/04/17 20:03:13 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -127,15 +127,16 @@ GipfelWidget::set_cur_mountain(int m_x, int m_y) {
 }
 
 int
-GipfelWidget::move_mountain(int m_x, int m_y) {
+GipfelWidget::set_mountain(int m_x, int m_y) {
   int ret;
-  int center = w() / 2;
+  int center_x = w() / 2;
+  int center_y = h() / 2;
 
   if (cur_mountain == NULL) {
     return 1;
   }
 
-  ret = pan->move_mountain(cur_mountain, m_x - center, m_y - center);
+  ret = pan->set_mountain(cur_mountain, m_x - center_x, m_y - center_y);
   
   redraw();
   return ret;
@@ -166,6 +167,12 @@ GipfelWidget::set_height_dist_ratio(double r) {
 }
 
 int
+GipfelWidget::comp_params() {
+  pan->comp_params();
+  redraw();
+}
+
+int
 GipfelWidget::handle(int event) {
   int mark_x, mark_y;
 
@@ -183,7 +190,7 @@ GipfelWidget::handle(int event) {
     }
     break;
   case FL_DRAG:
-    move_mountain(Fl::event_x()-x(), Fl::event_y()-y());
+    set_mountain(Fl::event_x()-x(), Fl::event_y()-y());
     return 1;
     break;
   case FL_FOCUS:
