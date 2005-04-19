@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.7 2005/04/17 20:03:13 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.8 2005/04/19 16:17:56 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -163,6 +163,13 @@ void
 Panorama::set_nick_angle(double a) {
   a_nick = a;
   fprintf(stderr, "-->nick%f\n", a_nick/deg2rad);
+  update_visible_mountains();
+}
+
+void
+Panorama::set_tilt_angle(double a) {
+  a_tilt = a;
+  fprintf(stderr, "-->tilt%f\n", a_tilt/deg2rad);
   update_visible_mountains();
 }
 

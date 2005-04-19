@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.10 2005/04/17 20:03:13 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.11 2005/04/19 16:17:56 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -69,6 +69,12 @@ void angle_cb(Fl_Slider* o, void*) {
 void nick_cb(Fl_Slider* o, void*) {
   if (gipf) {
     gipf->set_nick_angle((double)(o->value()));
+  }
+}
+
+void tilt_cb(Fl_Slider* o, void*) {
+  if (gipf) {
+    gipf->set_tilt_angle((double)(o->value()));
   }
 }
 
@@ -190,12 +196,21 @@ int main(int argc, char** argv) {
   r->slider(FL_UP_BOX);
   r->callback((Fl_Callback*)h_d_cb);
   r->align(FL_ALIGN_LEFT);
-  Fl_Button *b = new Fl_Button(780, 45, 20, 15, "comp");
+  Fl_Slider* t = new Fl_Slider(50, 60, 160, 15, "tilt");
+  t->type(1);
+  t->box(FL_THIN_DOWN_BOX);
+  t->labelsize(10);
+  t->step(0.005);
+  t->bounds(-0.1, 0.1);
+  t->slider(FL_UP_BOX);
+  t->callback((Fl_Callback*)tilt_cb);
+  t->align(FL_ALIGN_LEFT);
+  Fl_Button *b = new Fl_Button(200, 60, 20, 15, "comp");
   b->callback(comp_cb);
 
-  scroll = new Fl_Scroll(0, 60, win->w(), win->h()-60);
+  scroll = new Fl_Scroll(0, 75, win->w(), win->h()-75);
   
-  gipf = new GipfelWidget(0,60,500,500);
+  gipf = new GipfelWidget(0,75,500,500);
 
   gipf->load_image(img_file);
   gipf->load_data(data_file);

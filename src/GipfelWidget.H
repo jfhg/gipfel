@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.H,v 1.7 2005/04/17 20:03:13 hofmann Exp $"
+// "$Id: GipfelWidget.H,v 1.8 2005/04/19 16:17:56 hofmann Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,8 +30,8 @@
 class GipfelWidget : public Fl_Widget {
  private:
   Fl_Image *img;
-  Panorama *pan;
   Mountain *cur_mountain;
+  Panorama *pan;
 
   int handle(int event);
 
@@ -51,6 +51,8 @@ class GipfelWidget : public Fl_Widget {
   void set_center_angle(double a);
 
   void set_nick_angle(double a);
+
+  void set_tilt_angle(double a);
 
   void set_scale(double s);
   
