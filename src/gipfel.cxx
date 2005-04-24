@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.11 2005/04/19 16:17:56 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.12 2005/04/24 09:51:17 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -87,6 +87,12 @@ void h_d_cb(Fl_Slider* o, void*) {
 void comp_cb(Fl_Widget *, void *) {
   if (gipf) {
     gipf->comp_params();
+  }
+}
+
+void newton_cb(Fl_Widget *, void *) {
+  if (gipf) {
+    gipf->newton();
   }
 }
 
@@ -207,6 +213,8 @@ int main(int argc, char** argv) {
   t->align(FL_ALIGN_LEFT);
   Fl_Button *b = new Fl_Button(200, 60, 20, 15, "comp");
   b->callback(comp_cb);
+  Fl_Button *b1 = new Fl_Button(250, 60, 20, 15, "opt");
+  b1->callback(newton_cb);
 
   scroll = new Fl_Scroll(0, 75, win->w(), win->h()-75);
   

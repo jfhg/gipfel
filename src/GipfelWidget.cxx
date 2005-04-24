@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.10 2005/04/19 16:17:56 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.11 2005/04/24 09:51:17 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -175,6 +175,13 @@ GipfelWidget::set_height_dist_ratio(double r) {
 int
 GipfelWidget::comp_params() {
   pan->comp_params();
+  redraw();
+}
+
+
+int
+GipfelWidget::newton() {
+  pan->newton();
   redraw();
 }
 
