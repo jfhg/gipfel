@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.10 2005/04/24 13:03:55 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.11 2005/04/25 20:02:56 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -142,13 +142,18 @@ Panorama::comp_params() {
     return 1;
   }
 
+  x2 = m2->x;
+  y2 = m2->y;
+  
+  x1 = m1->x;
+  y1 = m1->y;
 
   fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
-  a_center = comp_center_angle(m1->alph, m2->alph, m1->x, m2->x);
-  scale    = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
+  a_center = comp_center_angle(m1->alph, m2->alph, x1, x2);
+  scale    = comp_scale(m1->alph, m2->alph, x1, x2);
   fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
-  a_nick   = atan ((m1->y + tan(m1->a_nick) * scale) / ( scale - m1->y * tan(m1->a_nick)));
-  //  a_nick = comp_center_angle(m1->a_nick, m2->a_nick, -m1->y, -m2->y) - pi;  
+  a_nick   = atan ((y1 + tan(m1->a_nick) * scale) / ( scale - y1 * tan(m1->a_nick)));
+  //  a_nick = comp_center_angle(m1->a_nick, m2->a_nick, -y1, -y2) - pi;  
   fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
   update_visible_mountains();
 #if 0
@@ -225,11 +230,12 @@ Panorama::update_visible_mountains() {
   double x1, y1;
 
   while (m) {
+ 
     m->dist = distance(m->phi, m->lam);
     if ((m->phi != view_phi || m->lam != view_lam) &&
 	(m->height / (m->dist * 6368000) 
 	 > height_dist_ratio)) {
-
+      
       m->alph = alpha(m->phi, m->lam);
       m->a_view = m->alph - a_center;
       if (m->a_view > pi) {
@@ -240,7 +246,6 @@ Panorama::update_visible_mountains() {
       
       //      fprintf(stderr, "==> %s %f, dist %f km  %f\n", m->name, m->alph, distance(m->phi, m->lam)* 6368, m->a_view);
       if (m->a_view < pi / 2.0 && m->a_view > - pi / 2.0) {
-	
 	m->a_nick = nick(m->dist, m->height);
 	x1 = tan(m->a_view) * scale;
 	y1 = - (tan(m->a_nick - a_nick) * scale);
@@ -256,7 +261,7 @@ Panorama::update_visible_mountains() {
 	}
       }
     }
-
+    
     m = m->get_next();
   }
 }
@@ -405,10 +410,10 @@ Panorama::newton() {
   tan_dir_m2 = tan(m2->alph);
   tan_nick_m2 = tan(m2->a_nick);
 
-  fprintf(stderr, "m1: %d, %d; m2: %d, %d\n", m1->x, m1->y, m2->x, m2->y);
-  d_m1_2 = pow(m1->x, 2.0) + pow(m1->y, 2.0);
-  d_m2_2 = pow(m2->x, 2.0) + pow(m2->y, 2.0);
-  d_m1_m2_2 = pow(m1->x - m2->x, 2.0) + pow(m1->y - m2->y, 2.0);
+  fprintf(stderr, "m1: %d, %d; m2: %d, %d\n", x1, y1, x2, y2);
+  d_m1_2 = pow(x1, 2.0) + pow(y1, 2.0);
+  d_m2_2 = pow(x2, 2.0) + pow(y2, 2.0);
+  d_m1_m2_2 = pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0);
 
   fprintf(stderr, "d_m1_2 %f, d_m2_2 %f, d_m1_m2_2 %f\n", 
 	  d_m1_2, d_m2_2, d_m1_m2_2);
@@ -452,7 +457,27 @@ Panorama::newton() {
   }
   
   scale = b[2];
-  fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
+
+  a_tilt = comp_tilt();
+  fprintf(stderr, "center = %f, scale = %f, nick=%f tilt %f\n", a_center /deg2rad, scale, a_nick/deg2rad, a_tilt/deg2rad);
   update_visible_mountains();
   return 0;
+}
+
+
+double
+Panorama::comp_tilt() {
+  double sin_a_tilt, sign1 = 1.0, res;
+  
+ sin_a_tilt = (((pow((1.0 + (tan_nick_m1 * tan_nick_view)), 2.0) * y1 * ((tan_dir_view * (1.0 - (tan_dir_m1 * tan_dir_m1))) + (tan_dir_m1 * ((tan_dir_view * tan_dir_view) - 1.0)))) + (pow(((pow((scale * y1), 2.0) * pow((1.0 + (tan_dir_view * tan_dir_m1)), 4.0) * ((2.0 * (tan_nick_view - pow(tan_nick_view, 3.0)) * (tan_nick_m1 - pow(tan_nick_m1, 3.0))) - ((tan_nick_view * tan_nick_view) * (1.0 + pow(tan_nick_m1, 4.0))) + ((tan_nick_m1 * tan_nick_m1) * ((4.0 * (tan_nick_view * tan_nick_view)) - 1.0 - pow(tan_nick_view, 4.0))))) + (pow(scale, 4.0) * ((2.0 * ((pow(tan_nick_view, 3.0) * ((pow(tan_nick_m1, 3.0) * (((tan_dir_view * tan_dir_view) * ((4.0 * (tan_dir_m1 * tan_dir_m1)) - pow(tan_dir_m1, 4.0) - 1.0)) - ((tan_dir_m1 * tan_dir_m1) * (pow(tan_dir_view, 4.0) + 1.0)) + (2.0 * (tan_dir_m1 - pow(tan_dir_m1, 3.0)) * (tan_dir_view - pow(tan_dir_view, 3.0))))) + (tan_nick_m1 * (((tan_dir_view * tan_dir_view) * (pow(tan_dir_m1, 4.0) + 1.0 - (16.0 * (tan_dir_m1 * tan_dir_m1)))) + (pow(tan_dir_view, 4.0) * ((tan_dir_m1 * tan_dir_m1) - (2.0 * pow(tan_dir_m1, 4.0)))) + (2.0 * ((tan_dir_view * (pow(tan_dir_m1, 3.0) - (5.0 * tan_dir_m1))) + (pow(tan_dir_view, 3.0) * (tan_dir_m1 - (5.0 * pow(tan_dir_m1, 3.0)))) - 1.0)) + (tan_dir_m1 * tan_dir_m1))))) + (tan_nick_view * ((pow(tan_nick_m1, 3.0) * (((tan_dir_view * tan_dir_view) * (pow(tan_dir_m1, 4.0) + 1.0 - (16.0 * (tan_dir_m1 * tan_dir_m1)))) + (pow(tan_dir_view, 4.0) * ((tan_dir_m1 * tan_dir_m1) - (2.0 * pow(tan_dir_m1, 4.0)))) + (2.0 * ((tan_dir_view * (pow(tan_dir_m1, 3.0) - (5.0 * tan_dir_m1))) + (pow(tan_dir_view, 3.0) * (tan_dir_m1 - (5.0 * pow(tan_dir_m1, 3.0)))) - 1.0)) + (tan_dir_m1 * tan_dir_m1))) + (tan_nick_m1 * (((tan_dir_view * tan_dir_view) * ((4.0 * (tan_dir_m1 * tan_dir_m1)) - pow(tan_dir_m1, 4.0) - 1.0)) - ((tan_dir_m1 * tan_dir_m1) * (pow(tan_dir_view, 4.0) + 1.0)) + (2.0 * (tan_dir_m1 - pow(tan_dir_m1, 3.0)) * (tan_dir_view - pow(tan_dir_view, 3.0))))))))) + ((tan_nick_view * tan_nick_view) * ((pow(tan_nick_m1, 4.0) * ((2.0 * (pow(tan_dir_m1, 3.0) - tan_dir_m1) * (tan_dir_view - pow(tan_dir_view, 3.0))) + ((tan_dir_view * tan_dir_view) * (pow(tan_dir_m1, 4.0) + 1.0 - (4.0 * (tan_dir_m1 * tan_dir_m1)))) + ((tan_dir_m1 * tan_dir_m1) * (pow(tan_dir_view, 4.0) + 1.0)))) + ((tan_nick_m1 * tan_nick_m1) * ((8.0 * ((tan_dir_view * ((4.0 * tan_dir_m1) - pow(tan_dir_m1, 3.0))) + (pow(tan_dir_view, 3.0) * ((4.0 * pow(tan_dir_m1, 3.0)) - tan_dir_m1)))) + (4.0 * (((tan_dir_view * tan_dir_view) * ((13.0 * (tan_dir_m1 * tan_dir_m1)) - pow(tan_dir_m1, 4.0) - 1.0)) - (tan_dir_m1 * tan_dir_m1))) + (pow(tan_dir_view, 4.0) * ((6.0 * pow(tan_dir_m1, 4.0)) - (4.0 * (tan_dir_m1 * tan_dir_m1)))) + 6.0)) + (2.0 * (pow(tan_dir_m1, 3.0) - tan_dir_m1) * (tan_dir_view - pow(tan_dir_view, 3.0))) + ((tan_dir_view * tan_dir_view) * (pow(tan_dir_m1, 4.0) + 1.0 - (4.0 * (tan_dir_m1 * tan_dir_m1)))) + ((tan_dir_m1 * tan_dir_m1) * (pow(tan_dir_view, 4.0) + 1.0)))) + (pow((1.0 + (tan_dir_m1 * tan_dir_view)), 4.0) * (pow(tan_nick_m1, 4.0) + pow(tan_nick_view, 4.0))) + ((tan_nick_m1 * tan_nick_m1) * (((tan_dir_view * tan_dir_view) * (1.0 + pow(tan_dir_m1, 4.0))) + ((tan_dir_m1 * tan_dir_m1) * (1.0 - (4.0 * (tan_dir_view * tan_dir_view)) + pow(tan_dir_view, 4.0))) + (2.0 * (pow(tan_dir_view, 3.0) - tan_dir_view) * (tan_dir_m1 - pow(tan_dir_m1, 3.0)))) * (pow(tan_nick_view, 4.0) + 1.0))))), (1.0 / 2.0)) * sign1 / scale)) / (scale * ((2.0 * ((tan_nick_view * tan_nick_m1 * ((4.0 * tan_dir_m1 * tan_dir_view) + (((tan_dir_view * tan_dir_view) - 1.0) * ((tan_dir_m1 * tan_dir_m1) - 1.0)))) + (tan_dir_m1 * tan_dir_view))) - ((tan_nick_m1 * tan_nick_m1) * (pow((tan_nick_view * (tan_dir_m1 - tan_dir_view)), 2.0) + (2.0 * tan_dir_m1 * tan_dir_view) + pow((tan_dir_m1 * tan_dir_view), 2.0) + 1.0)) - pow((tan_nick_view * (1.0 + (tan_dir_m1 * tan_dir_view))), 2.0) - (tan_dir_m1 * tan_dir_m1) - (tan_dir_view * tan_dir_view))));
+
+ res = asin(sin_a_tilt);
+
+ if (res > pi / 4.0) {
+   res = res - pi / 2.0;
+ } else if (res < -pi / 4.0) {
+   res = res + pi / 2.0;
+ }
+ 
+ return res;
 }
