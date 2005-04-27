@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.11 2005/04/25 20:02:56 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.12 2005/04/27 19:26:07 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -467,17 +467,20 @@ Panorama::newton() {
 
 double
 Panorama::comp_tilt() {
-  double sin_a_tilt, sign1 = 1.0, res;
-  
- sin_a_tilt = (((pow((1.0 + (tan_nick_m1 * tan_nick_view)), 2.0) * y1 * ((tan_dir_view * (1.0 - (tan_dir_m1 * tan_dir_m1))) + (tan_dir_m1 * ((tan_dir_view * tan_dir_view) - 1.0)))) + (pow(((pow((scale * y1), 2.0) * pow((1.0 + (tan_dir_view * tan_dir_m1)), 4.0) * ((2.0 * (tan_nick_view - pow(tan_nick_view, 3.0)) * (tan_nick_m1 - pow(tan_nick_m1, 3.0))) - ((tan_nick_view * tan_nick_view) * (1.0 + pow(tan_nick_m1, 4.0))) + ((tan_nick_m1 * tan_nick_m1) * ((4.0 * (tan_nick_view * tan_nick_view)) - 1.0 - pow(tan_nick_view, 4.0))))) + (pow(scale, 4.0) * ((2.0 * ((pow(tan_nick_view, 3.0) * ((pow(tan_nick_m1, 3.0) * (((tan_dir_view * tan_dir_view) * ((4.0 * (tan_dir_m1 * tan_dir_m1)) - pow(tan_dir_m1, 4.0) - 1.0)) - ((tan_dir_m1 * tan_dir_m1) * (pow(tan_dir_view, 4.0) + 1.0)) + (2.0 * (tan_dir_m1 - pow(tan_dir_m1, 3.0)) * (tan_dir_view - pow(tan_dir_view, 3.0))))) + (tan_nick_m1 * (((tan_dir_view * tan_dir_view) * (pow(tan_dir_m1, 4.0) + 1.0 - (16.0 * (tan_dir_m1 * tan_dir_m1)))) + (pow(tan_dir_view, 4.0) * ((tan_dir_m1 * tan_dir_m1) - (2.0 * pow(tan_dir_m1, 4.0)))) + (2.0 * ((tan_dir_view * (pow(tan_dir_m1, 3.0) - (5.0 * tan_dir_m1))) + (pow(tan_dir_view, 3.0) * (tan_dir_m1 - (5.0 * pow(tan_dir_m1, 3.0)))) - 1.0)) + (tan_dir_m1 * tan_dir_m1))))) + (tan_nick_view * ((pow(tan_nick_m1, 3.0) * (((tan_dir_view * tan_dir_view) * (pow(tan_dir_m1, 4.0) + 1.0 - (16.0 * (tan_dir_m1 * tan_dir_m1)))) + (pow(tan_dir_view, 4.0) * ((tan_dir_m1 * tan_dir_m1) - (2.0 * pow(tan_dir_m1, 4.0)))) + (2.0 * ((tan_dir_view * (pow(tan_dir_m1, 3.0) - (5.0 * tan_dir_m1))) + (pow(tan_dir_view, 3.0) * (tan_dir_m1 - (5.0 * pow(tan_dir_m1, 3.0)))) - 1.0)) + (tan_dir_m1 * tan_dir_m1))) + (tan_nick_m1 * (((tan_dir_view * tan_dir_view) * ((4.0 * (tan_dir_m1 * tan_dir_m1)) - pow(tan_dir_m1, 4.0) - 1.0)) - ((tan_dir_m1 * tan_dir_m1) * (pow(tan_dir_view, 4.0) + 1.0)) + (2.0 * (tan_dir_m1 - pow(tan_dir_m1, 3.0)) * (tan_dir_view - pow(tan_dir_view, 3.0))))))))) + ((tan_nick_view * tan_nick_view) * ((pow(tan_nick_m1, 4.0) * ((2.0 * (pow(tan_dir_m1, 3.0) - tan_dir_m1) * (tan_dir_view - pow(tan_dir_view, 3.0))) + ((tan_dir_view * tan_dir_view) * (pow(tan_dir_m1, 4.0) + 1.0 - (4.0 * (tan_dir_m1 * tan_dir_m1)))) + ((tan_dir_m1 * tan_dir_m1) * (pow(tan_dir_view, 4.0) + 1.0)))) + ((tan_nick_m1 * tan_nick_m1) * ((8.0 * ((tan_dir_view * ((4.0 * tan_dir_m1) - pow(tan_dir_m1, 3.0))) + (pow(tan_dir_view, 3.0) * ((4.0 * pow(tan_dir_m1, 3.0)) - tan_dir_m1)))) + (4.0 * (((tan_dir_view * tan_dir_view) * ((13.0 * (tan_dir_m1 * tan_dir_m1)) - pow(tan_dir_m1, 4.0) - 1.0)) - (tan_dir_m1 * tan_dir_m1))) + (pow(tan_dir_view, 4.0) * ((6.0 * pow(tan_dir_m1, 4.0)) - (4.0 * (tan_dir_m1 * tan_dir_m1)))) + 6.0)) + (2.0 * (pow(tan_dir_m1, 3.0) - tan_dir_m1) * (tan_dir_view - pow(tan_dir_view, 3.0))) + ((tan_dir_view * tan_dir_view) * (pow(tan_dir_m1, 4.0) + 1.0 - (4.0 * (tan_dir_m1 * tan_dir_m1)))) + ((tan_dir_m1 * tan_dir_m1) * (pow(tan_dir_view, 4.0) + 1.0)))) + (pow((1.0 + (tan_dir_m1 * tan_dir_view)), 4.0) * (pow(tan_nick_m1, 4.0) + pow(tan_nick_view, 4.0))) + ((tan_nick_m1 * tan_nick_m1) * (((tan_dir_view * tan_dir_view) * (1.0 + pow(tan_dir_m1, 4.0))) + ((tan_dir_m1 * tan_dir_m1) * (1.0 - (4.0 * (tan_dir_view * tan_dir_view)) + pow(tan_dir_view, 4.0))) + (2.0 * (pow(tan_dir_view, 3.0) - tan_dir_view) * (tan_dir_m1 - pow(tan_dir_m1, 3.0)))) * (pow(tan_nick_view, 4.0) + 1.0))))), (1.0 / 2.0)) * sign1 / scale)) / (scale * ((2.0 * ((tan_nick_view * tan_nick_m1 * ((4.0 * tan_dir_m1 * tan_dir_view) + (((tan_dir_view * tan_dir_view) - 1.0) * ((tan_dir_m1 * tan_dir_m1) - 1.0)))) + (tan_dir_m1 * tan_dir_view))) - ((tan_nick_m1 * tan_nick_m1) * (pow((tan_nick_view * (tan_dir_m1 - tan_dir_view)), 2.0) + (2.0 * tan_dir_m1 * tan_dir_view) + pow((tan_dir_m1 * tan_dir_view), 2.0) + 1.0)) - pow((tan_nick_view * (1.0 + (tan_dir_m1 * tan_dir_view))), 2.0) - (tan_dir_m1 * tan_dir_m1) - (tan_dir_view * tan_dir_view))));
+  double y1_tmp, x1_tmp, sin_a_tilt, sign1 = -1.0, res;
 
- res = asin(sin_a_tilt);
+  y1_tmp = y1_tmp = - (((tan_nick_view - tan_nick_m1) * scale) / (tan_nick_m1 * tan_nick_view + 1));
+  x1_tmp = - (((tan_dir_view - tan_dir_m1) * scale) / (tan_dir_m1 * tan_dir_view + 1));
+
+  sin_a_tilt = (((pow((pow(y1_tmp, 4.0) + ((y1_tmp * y1_tmp) * ((x1_tmp * x1_tmp) - (y1 * y1)))), (1.0 / 2.0)) * sign1) + (x1_tmp * y1)) / ((y1_tmp * y1_tmp) + (x1_tmp * x1_tmp)));
+
+  res = asin(sin_a_tilt);
 
  if (res > pi / 4.0) {
    res = res - pi / 2.0;
  } else if (res < -pi / 4.0) {
    res = res + pi / 2.0;
  }
- 
+
  return res;
 }
