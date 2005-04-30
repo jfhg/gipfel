@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.H,v 1.9 2005/04/24 09:51:17 hofmann Exp $"
+// "$Id: GipfelWidget.H,v 1.10 2005/04/30 07:58:19 hofmann Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -25,6 +25,7 @@
 #define GipfelWidget_H
 
 #include <FL/Fl_Widget.H>
+#include <FL/Fl_Menu_Button.H>
 #include "Panorama.H"
 
 class GipfelWidget : public Fl_Widget {
@@ -32,6 +33,7 @@ class GipfelWidget : public Fl_Widget {
   Fl_Image *img;
   Mountain *cur_mountain;
   Panorama *pan;
+  Fl_Menu_Button *mb;
 
   int handle(int event);
 

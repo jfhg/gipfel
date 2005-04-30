@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.12 2005/04/27 19:26:07 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.13 2005/04/30 07:58:19 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -142,12 +142,12 @@ Panorama::comp_params() {
     return 1;
   }
 
-  x2 = m2->x;
-  y2 = m2->y;
-  
   x1 = m1->x;
   y1 = m1->y;
 
+  x2 = m2->x;
+  y2 = m2->y;
+  
   fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
   a_center = comp_center_angle(m1->alph, m2->alph, x1, x2);
   scale    = comp_scale(m1->alph, m2->alph, x1, x2);
@@ -155,11 +155,43 @@ Panorama::comp_params() {
   a_nick   = atan ((y1 + tan(m1->a_nick) * scale) / ( scale - y1 * tan(m1->a_nick)));
   //  a_nick = comp_center_angle(m1->a_nick, m2->a_nick, -y1, -y2) - pi;  
   fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
-  update_visible_mountains();
+
 #if 0
   m1 = NULL;
   m2 = NULL;
 #endif
+
+  tan_nick_view = tan(a_nick);
+  tan_dir_view = tan(a_center);
+  n_scale = scale;
+  tan_dir_m1 = tan(m1->alph);
+  tan_nick_m1 = tan(m1->a_nick);
+  tan_dir_m2 = tan(m2->alph);
+  tan_nick_m2 = tan(m2->a_nick);
+
+  newton();
+  newton();
+  newton();
+  newton();
+
+  a_nick = atan(tan_nick_view);
+  a_center = atan(tan_dir_view);
+
+  if (fabs(a_center - m1->alph) > pi/2.0) {
+    a_center = a_center + pi;
+  }
+  if (a_center > 2.0 * pi) {
+    a_center = a_center - 2.0 *  pi;
+  } else if (a_center < 0.0) {
+    a_center = a_center + 2.0 * pi;
+  }
+  
+  scale = n_scale;
+
+  a_tilt = comp_tilt();
+  fprintf(stderr, "center = %f, scale = %f, nick=%f tilt %f\n", a_center /deg2rad, scale, a_nick/deg2rad, a_tilt/deg2rad);
+  update_visible_mountains();
+
   return 0;
 }
 
@@ -227,7 +259,7 @@ void
 Panorama::update_visible_mountains() {
   Mountain *m = mountains;
   visible_mountains = NULL;
-  double x1, y1;
+  double x_tmp, y_tmp;
 
   while (m) {
  
@@ -247,11 +279,11 @@ Panorama::update_visible_mountains() {
       //      fprintf(stderr, "==> %s %f, dist %f km  %f\n", m->name, m->alph, distance(m->phi, m->lam)* 6368, m->a_view);
       if (m->a_view < pi / 2.0 && m->a_view > - pi / 2.0) {
 	m->a_nick = nick(m->dist, m->height);
-	x1 = tan(m->a_view) * scale;
-	y1 = - (tan(m->a_nick - a_nick) * scale);
+	x_tmp = tan(m->a_view) * scale;
+	y_tmp = - (tan(m->a_nick - a_nick) * scale);
 	// rotate by a_tilt;
-	m->x = (int) (x1 * cos(a_tilt) - y1 * sin(a_tilt));
-	m->y = (int) (x1 * sin(a_tilt) + y1 * cos(a_tilt));
+	m->x = (int) rint(x_tmp * cos(a_tilt) - y_tmp * sin(a_tilt));
+	m->y = (int) rint(x_tmp * sin(a_tilt) + y_tmp * cos(a_tilt));
 
 	m->clear_next_visible();
 	if (visible_mountains) {
@@ -402,14 +434,6 @@ Panorama::newton() {
   double a_x0[3], f_x0 [3], x0[3];
   int ret;
 
-  tan_nick_view = tan(a_nick);
-  tan_dir_view = tan(a_center);
-  n_scale = scale;
-  tan_dir_m1 = tan(m1->alph);
-  tan_nick_m1 = tan(m1->a_nick);
-  tan_dir_m2 = tan(m2->alph);
-  tan_nick_m2 = tan(m2->a_nick);
-
   fprintf(stderr, "m1: %d, %d; m2: %d, %d\n", x1, y1, x2, y2);
   d_m1_2 = pow(x1, 2.0) + pow(y1, 2.0);
   d_m2_2 = pow(x2, 2.0) + pow(y2, 2.0);
@@ -442,25 +466,11 @@ Panorama::newton() {
   ret = solv(a, b, 3);
   fprintf(stderr, "solv returned %d\n", ret);
 
-  a_nick = atan(b[0]);
-  a_center = atan(b[1]);
-  fprintf(stderr, "==> m1->alph %f, a_center = %f\n", m1->alph/deg2rad,
-	  a_center/deg2rad);
-  if (fabs(a_center - m1->alph) > pi/2.0) {
-    a_center = a_center + pi;
-    fprintf(stderr, "==> adding pi => %f\n", a_center);
-  }
-  if (a_center > 2.0 * pi) {
-    a_center = a_center - 2.0 *  pi;
-  } else if (a_center < 0.0) {
-    a_center = a_center + 2.0 * pi;
-  }
-  
-  scale = b[2];
 
-  a_tilt = comp_tilt();
-  fprintf(stderr, "center = %f, scale = %f, nick=%f tilt %f\n", a_center /deg2rad, scale, a_nick/deg2rad, a_tilt/deg2rad);
-  update_visible_mountains();
+  tan_nick_view = b[0];
+  tan_dir_view  = b[1];
+  n_scale       = b[2];
+
   return 0;
 }
 

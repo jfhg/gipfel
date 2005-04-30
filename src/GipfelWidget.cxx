@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.11 2005/04/24 09:51:17 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.12 2005/04/30 07:58:19 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -32,6 +32,7 @@
 #include <errno.h>
 
 #include <FL/Fl.H>
+#include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Shared_Image.H>
 #include <FL/Fl_JPEG_Image.H>
 #include <FL/fl_draw.H>
@@ -39,11 +40,18 @@
 
 #include "GipfelWidget.H"
 
-
+static Fl_Menu_Item menuitems[] = {
+  { "&File",              0, 0, 0, FL_SUBMENU },
+    { "&Open File...",    FL_CTRL + 'o', NULL},
+  {0},
+  { 0 }
+};
+  
 GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   img = NULL;
   pan = new Panorama();
   cur_mountain = NULL;
+  mb = NULL;
   fl_register_images();
 }
 
@@ -57,6 +65,12 @@ GipfelWidget::load_image(const char *file) {
 
   w(img->w());
   h(img->h());
+
+  mb = new Fl_Menu_Button(x(),y(),w()+x(),h()+y(),"&popup");
+  mb->type(Fl_Menu_Button::POPUP3);
+  mb->box(FL_NO_BOX);
+  mb->menu(menuitems);
+
   return 0;
 }
 

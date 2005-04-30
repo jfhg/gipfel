@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.12 2005/04/24 09:51:17 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.13 2005/04/30 07:58:19 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -215,6 +215,9 @@ int main(int argc, char** argv) {
   b->callback(comp_cb);
   Fl_Button *b1 = new Fl_Button(250, 60, 20, 15, "opt");
   b1->callback(newton_cb);
+
+
+  
 
   scroll = new Fl_Scroll(0, 75, win->w(), win->h()-75);
   
