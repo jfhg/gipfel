@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.18 2005/04/30 21:18:43 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.19 2005/04/30 21:41:56 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -161,12 +161,12 @@ Panorama::get_value(Mountain *p) {
   if (isnan(scale) || isnan(a_center) || isnan(a_tilt) || isnan(a_nick) ||
       scale < 1000.0 || scale > 100000.0 || 
       a_nick > pi_d/4.0 || a_nick < - pi_d/4.0 || 
-      a_tilt > pi_d/4.0 || a_tilt < - pi_d/4.0) {
+      a_tilt > pi_d/8.0 || a_tilt < - pi_d/8.0) {
     return 10000000.0;
   }
 
   while (p) {
-    d_min = 100000.0;
+    d_min = 1000.0;
     m = visible_mountains;
     while (m) {
       d = pow(p->x - m->x, 2.0) + pow(p->y - m->y, 2.0);
@@ -193,46 +193,54 @@ Panorama::guess(Mountain *p) {
   double a_center_best, a_nick_best, a_tilt_best, scale_best;
 
   p1 = p;
-  p2 = p->get_next();
 
-  m_tmp1 = mountains;
-  while(m_tmp1) {
-    if (m_tmp1->height / (m_tmp1->dist * EARTH_RADIUS) > 
+  while (p1) {
+    p2 = p;
+    while (p2) {
+  
+      m_tmp1 = mountains;
+      while(m_tmp1) {
+	if (m_tmp1->height / (m_tmp1->dist * EARTH_RADIUS) > 
 	height_dist_ratio) {
-      m_tmp2 = mountains;
-    
-      while(m_tmp2) {
-	if (m_tmp2->height / (m_tmp2->dist * EARTH_RADIUS) > 
-	    height_dist_ratio) {
+	  m_tmp2 = mountains;
 	  
-	  if (p1 != p2 && m_tmp1 != m_tmp2) {
-	    
-	    m_tmp1->x = p1->x;
-	    m_tmp1->y = p1->y;
-	    m1 = m_tmp1;
-	    m_tmp2->x = p2->x;
-	    m_tmp2->y = p2->y;
-	    m2 = m_tmp2;
-	    
-	    comp_params();
-	    
-	    v = get_value(p);
-	    
-	    if (v < best) {
-	      best = v;
-	      a_center_best = a_center;
-	      a_nick_best = a_nick;
-	      a_tilt_best = a_tilt;
-	      scale_best = scale;
-	      fprintf(stderr, "best %f\n", best);
-	    }	    
-	  }
-	}
+	  while(m_tmp2) {
+	    if (fabs(m_tmp1->alph - m_tmp2->alph) < pi_d / 2.0 &&
+		m_tmp2->height / (m_tmp2->dist * EARTH_RADIUS) > 
+		height_dist_ratio) {
+	      
+	      if (p1 != p2 && m_tmp1 != m_tmp2) {
+		
+		m_tmp1->x = p1->x;
+		m_tmp1->y = p1->y;
+		m1 = m_tmp1;
+		m_tmp2->x = p2->x;
+		m_tmp2->y = p2->y;
+		m2 = m_tmp2;
+		
+		comp_params();
+		
+		v = get_value(p);
+		
+		if (v < best) {
+		  best = v;
+		  a_center_best = a_center;
+		  a_nick_best = a_nick;
+		  a_tilt_best = a_tilt;
+		  scale_best = scale;
+		  fprintf(stderr, "best %f\n", best);
+		}	    
+	      }
+	    }
 	
-	m_tmp2 = m_tmp2->get_next();
-      }      
+	    m_tmp2 = m_tmp2->get_next();
+	  }      
+	}
+	m_tmp1 = m_tmp1->get_next();
+      }
+      p2 = p2->get_next();
     }
-    m_tmp1 = m_tmp1->get_next();
+    p1 = p1->get_next();
   }
 
   a_center = a_center_best;
@@ -301,7 +309,7 @@ Panorama::optimize() {
   //  fprintf(stderr, "d_m1_2 %f, d_m2_2 %f, d_m1_m2_2 %f\n", 
   //  d_m1_2, d_m2_2, d_m1_m2_2);
 
-  for (i=0; i<8; i++) {
+  for (i=0; i<5; i++) {
     newton(&tan_nick_view, &tan_dir_view, &n_scale, 
 	   tan_dir_m1, tan_nick_m1, tan_dir_m2, tan_nick_m2,
 	   d_m1_2, d_m2_2, d_m1_m2_2);
