@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.14 2005/04/30 08:54:35 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.15 2005/04/30 09:42:47 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -30,14 +30,31 @@ extern "C" {
 }
 #include "Panorama.H"
 
+static int newton(double *tan_nick_view, 
+		  double *tan_dir_view,
+		  double *n_scale,
+		  double tan_dir_m1,
+		  double tan_nick_m1,
+		  double tan_dir_m2,
+		  double tan_nick_m2,
+		  double d_m1_2, double d_m2_2, double d_m1_m2_2);
+
+static double
+comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
+	  double tan_nick_m, double tan_dir_m,
+	  double x, double y);
+
+
+static double pi_d, deg2rad;
+
 Panorama::Panorama() {
   mountains = NULL;
   visible_mountains = NULL;
   m1 = NULL;
   m2 = NULL;
   height_dist_ratio = 0.07;
-  pi = asin(1.0) * 2.0;
-  deg2rad = pi / 180.0;
+  pi_d = asin(1.0) * 2.0;
+  deg2rad = pi_d / 180.0;
   a_center = 0.0;
   a_nick = 0.0;
   a_tilt = 0.0;
@@ -135,7 +152,6 @@ Panorama::set_mountain(Mountain *m, int x, int y) {
 
 int
 Panorama::comp_params() {
-  int i;
 
   if (m1 == NULL || m2 == NULL) {
     fprintf(stderr, "Position two mountains first.\n");
@@ -157,6 +173,24 @@ Panorama::comp_params() {
   a_nick   = atan ((y1 + tan(m1->a_nick) * scale) / ( scale - y1 * tan(m1->a_nick)));
   fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
 
+  optimize();
+
+  update_visible_mountains();
+
+  return 0;
+}
+
+int
+Panorama::optimize() {
+  int i;
+  double tan_nick_view, tan_dir_view, n_scale;
+  double tan_nick_m1, tan_dir_m1;
+  double tan_nick_m2, tan_dir_m2;
+  double d_m1_2, d_m2_2, d_m1_m2_2;
+
+  d_m1_2 = pow(x1, 2.0) + pow(y1, 2.0);
+  d_m2_2 = pow(x2, 2.0) + pow(y2, 2.0);
+  d_m1_m2_2 = pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0);
 
   tan_nick_view = tan(a_nick);
   tan_dir_view = tan(a_center);
@@ -166,31 +200,51 @@ Panorama::comp_params() {
   tan_dir_m2 = tan(m2->alph);
   tan_nick_m2 = tan(m2->a_nick);
 
+  fprintf(stderr, "m1: %d, %d; m2: %d, %d\n", x1, y1, x2, y2);
+  d_m1_2 = pow(x1, 2.0) + pow(y1, 2.0);
+  d_m2_2 = pow(x2, 2.0) + pow(y2, 2.0);
+  d_m1_m2_2 = pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0);
+
+  fprintf(stderr, "d_m1_2 %f, d_m2_2 %f, d_m1_m2_2 %f\n", 
+	  d_m1_2, d_m2_2, d_m1_m2_2);
+
   for (i=0; i<8; i++) {
-    newton();
+    newton(&tan_nick_view, &tan_dir_view, &n_scale, 
+	   tan_dir_m1, tan_nick_m1, tan_dir_m2, tan_nick_m2,
+	   d_m1_2, d_m2_2, d_m1_m2_2);
   }
 
   a_nick = atan(tan_nick_view);
   a_center = atan(tan_dir_view);
 
-  if (fabs(a_center - m1->alph) > pi/2.0) {
-    a_center = a_center + pi;
+  if (fabs(a_center - m1->alph) > pi_d/2.0) {
+    a_center = a_center + pi_d;
   }
-  if (a_center > 2.0 * pi) {
-    a_center = a_center - 2.0 *  pi;
+  if (a_center > 2.0 * pi_d) {
+    a_center = a_center - 2.0 *  pi_d;
   } else if (a_center < 0.0) {
-    a_center = a_center + 2.0 * pi;
+    a_center = a_center + 2.0 * pi_d;
   }
   
   scale = n_scale;
 
-  a_tilt = comp_tilt();
+  // use the point with greater distance from center for tilt computation 
+  if (d_m1_2 > d_m2_2) {
+      a_tilt = comp_tilt(tan_nick_view, tan_dir_view, n_scale, 
+			 tan_nick_m1, tan_dir_m1,
+			 (double) x1, (double) y1);
+  } else {
+    a_tilt = comp_tilt(tan_nick_view, tan_dir_view, n_scale, 
+		       tan_nick_m2, tan_dir_m2,
+		       (double) x2, (double) y2);
+  }
+
+ 
   fprintf(stderr, "center = %f, scale = %f, nick=%f tilt %f\n", a_center /deg2rad, scale, a_nick/deg2rad, a_tilt/deg2rad);
-  update_visible_mountains();
 
-  return 0;
+
+
 }
-
 void
 Panorama::set_center_angle(double a) {
   a_center = a;
@@ -266,14 +320,14 @@ Panorama::update_visible_mountains() {
       
       m->alph = alpha(m->phi, m->lam);
       m->a_view = m->alph - a_center;
-      if (m->a_view > pi) {
-	m->a_view -= 2.0*pi;
-      } else if (m->a_view < -pi) {
-	m->a_view += 2.0*pi;
+      if (m->a_view > pi_d) {
+	m->a_view -= 2.0*pi_d;
+      } else if (m->a_view < -pi_d) {
+	m->a_view += 2.0*pi_d;
       }
       
       //      fprintf(stderr, "==> %s %f, dist %f km  %f\n", m->name, m->alph, distance(m->phi, m->lam)* 6368, m->a_view);
-      if (m->a_view < pi / 2.0 && m->a_view > - pi / 2.0) {
+      if (m->a_view < pi_d / 2.0 && m->a_view > - pi_d / 2.0) {
 	m->a_nick = nick(m->dist, m->height);
 	x_tmp = tan(m->a_view) * scale;
 	y_tmp = - (tan(m->a_nick - a_nick) * scale);
@@ -323,14 +377,14 @@ Panorama::alpha(double phi, double lam) {
   if (sin_alph > 0) {
     alph = acos(cos_alph);
   } else {
-    alph = 2.0 * pi - acos(cos_alph);
+    alph = 2.0 * pi_d - acos(cos_alph);
   }
 
 
-  if (alph > 2.0 * pi) {
-    alph = alph - 2.0 *  pi;
+  if (alph > 2.0 * pi_d) {
+    alph = alph - 2.0 *  pi_d;
   } else if (alph < 0.0) {
-    alph = alph + 2.0 * pi;
+    alph = alph + 2.0 * pi_d;
   }
   return alph;
 }
@@ -346,7 +400,7 @@ Panorama::comp_center_angle(double a1, double a2, double d1, double d2) {
 
   tan_acenter = (((pow(((pow((1.0 + (tan_a1 * tan_a2)), 2.0) * ((d1 * d1) + (d2 * d2))) + (2.0 * d1 * d2 * ((2.0 * ((tan_a2 * tan_a1) - (tan_a2 * tan_a2))) - ((tan_a1 * tan_a1) * (2.0 + (tan_a2 * tan_a2))) - 1.0))), (1.0 / 2.0)) * sign1) + ((1.0 - (tan_a1 * tan_a2)) * (d1 - d2))) / (2.0 * ((d2 * tan_a2) - (d1 * tan_a1))));
   
-  return atan(tan_acenter) + pi;
+  return atan(tan_acenter) + pi_d;
 }
 
 double
@@ -374,7 +428,7 @@ Panorama::nick(double dist, double height) {
   a = pow(((b * (b - (2.0 * c * cos(dist)))) + (c * c)), (1.0 / 2.0));
   beta = acos((-(b*b) + (a*a) + (c*c))/(2 * a * c));
   
-  return beta - pi / 2.0;
+  return beta - pi_d / 2.0;
 }
 
 
@@ -385,8 +439,11 @@ Panorama::nick(double dist, double height) {
 //
 //
 
-int
-Panorama::get_matrix(double m[]) {
+static int
+get_matrix(double m[], 
+	   double tan_nick_view, double tan_dir_view, double n_scale,
+	   double tan_dir_m1, double tan_nick_m1,
+	   double tan_dir_m2, double tan_nick_m2) {
   
   m[0] = pow(n_scale,2.0)*(1.0/pow((tan_nick_m1*tan_nick_view + 1.0),2.0)*(2.0*tan_nick_m1 - 2.0 * tan_nick_view) + 2.0*tan_nick_m1*pow((tan_nick_m1 - tan_nick_view), 2.0)/pow((tan_nick_m1*tan_nick_view + 1.0), 3.0));
 
@@ -410,35 +467,34 @@ Panorama::get_matrix(double m[]) {
 }
 
 
-int 
-Panorama::newton() {
+static int newton(double *tan_nick_view, 
+		  double *tan_dir_view,
+		  double *n_scale,
+		  double tan_dir_m1,
+		  double tan_nick_m1,
+		  double tan_dir_m2,
+		  double tan_nick_m2,
+		  double d_m1_2, double d_m2_2, double d_m1_m2_2) {
   double a[9];
   double b[3];
   double a_x0[3], f_x0 [3], x0[3];
   int ret;
 
-  fprintf(stderr, "m1: %d, %d; m2: %d, %d\n", x1, y1, x2, y2);
-  d_m1_2 = pow(x1, 2.0) + pow(y1, 2.0);
-  d_m2_2 = pow(x2, 2.0) + pow(y2, 2.0);
-  d_m1_m2_2 = pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0);
+  get_matrix(a, *tan_nick_view, *tan_dir_view, *n_scale, 
+	     tan_dir_m1, tan_nick_m1, tan_dir_m2, tan_nick_m2);
 
-  fprintf(stderr, "d_m1_2 %f, d_m2_2 %f, d_m1_m2_2 %f\n", 
-	  d_m1_2, d_m2_2, d_m1_m2_2);
+  f_x0[0] = d_m1_2 - (pow((*tan_nick_view-tan_nick_m1),2.0)/pow((tan_nick_m1**tan_nick_view+1), 2.0)+pow((*tan_dir_view-tan_dir_m1),2.0)/pow((tan_dir_m1**tan_dir_view+1),2.0))*pow(*n_scale, 2.0);
 
-  get_matrix(a);
+  f_x0[1] = d_m2_2 - (pow((*tan_nick_view-tan_nick_m2),2.0)/pow((tan_nick_m2**tan_nick_view+1),2.0)+pow((*tan_dir_view-tan_dir_m2),2.0)/pow((tan_dir_m2**tan_dir_view+1),2.0))*pow(*n_scale, 2.0);
 
-  f_x0[0] = d_m1_2 - (pow((tan_nick_view-tan_nick_m1),2.0)/pow((tan_nick_m1*tan_nick_view+1), 2.0)+pow((tan_dir_view-tan_dir_m1),2.0)/pow((tan_dir_m1*tan_dir_view+1),2.0))*pow(n_scale, 2.0);
-
-  f_x0[1] = d_m2_2 - (pow((tan_nick_view-tan_nick_m2),2.0)/pow((tan_nick_m2*tan_nick_view+1),2.0)+pow((tan_dir_view-tan_dir_m2),2.0)/pow((tan_dir_m2*tan_dir_view+1),2.0))*pow(n_scale, 2.0);
-
-  f_x0[2] = d_m1_m2_2 - (pow((- (((tan_dir_view - tan_dir_m1) * n_scale) / (tan_dir_m1 * tan_dir_view + 1.0)) + (((tan_dir_view - tan_dir_m2) * n_scale) / (tan_dir_m2 * tan_dir_view + 1))), 2.0) + pow((- (((tan_nick_view - tan_nick_m1) * n_scale) / (tan_nick_m1 * tan_nick_view + 1)) + ((tan_nick_view - tan_nick_m2) * n_scale) / (tan_nick_m2 * tan_nick_view + 1)), 2.0));
+  f_x0[2] = d_m1_m2_2 - (pow((- (((*tan_dir_view - tan_dir_m1) * *n_scale) / (tan_dir_m1 * *tan_dir_view + 1.0)) + (((*tan_dir_view - tan_dir_m2) * *n_scale) / (tan_dir_m2 * *tan_dir_view + 1))), 2.0) + pow((- (((*tan_nick_view - tan_nick_m1) * *n_scale) / (tan_nick_m1 * *tan_nick_view + 1)) + ((*tan_nick_view - tan_nick_m2) * *n_scale) / (tan_nick_m2 * *tan_nick_view + 1)), 2.0));
 
   fprintf(stderr, "f_x0[0] %f, f_x0[1] %f, f_x0[2] %f\n", 
 	  f_x0[0], f_x0[1], f_x0[2]);
 
-  x0[0] = tan_nick_view;
-  x0[1] = tan_dir_view;
-  x0[2] = n_scale;
+  x0[0] = *tan_nick_view;
+  x0[1] = *tan_dir_view;
+  x0[2] = *n_scale;
 
   rmmult(a_x0, a, x0, 3, 3, 1);
     
@@ -450,29 +506,31 @@ Panorama::newton() {
   fprintf(stderr, "solv returned %d\n", ret);
 
 
-  tan_nick_view = b[0];
-  tan_dir_view  = b[1];
-  n_scale       = b[2];
+  *tan_nick_view = b[0];
+  *tan_dir_view  = b[1];
+  *n_scale       = b[2];
 
   return 0;
 }
 
 
-double
-Panorama::comp_tilt() {
-  double y1_tmp, x1_tmp, sin_a_tilt, sign1 = -1.0, res;
+static double
+comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
+	  double tan_nick_m, double tan_dir_m,
+	  double x, double y) {
+  double y_tmp, x_tmp, sin_a_tilt, sign1 = 1.0, res;
 
-  y1_tmp = y1_tmp = - (((tan_nick_view - tan_nick_m1) * scale) / (tan_nick_m1 * tan_nick_view + 1));
-  x1_tmp = - (((tan_dir_view - tan_dir_m1) * scale) / (tan_dir_m1 * tan_dir_view + 1));
+  y_tmp = - (((tan_nick_view - tan_nick_m) * n_scale) / (tan_nick_m * tan_nick_view + 1));
+  x_tmp = - (((tan_dir_view - tan_dir_m) * n_scale) / (tan_dir_m * tan_dir_view + 1));
 
-  sin_a_tilt = (((pow((pow(y1_tmp, 4.0) + ((y1_tmp * y1_tmp) * ((x1_tmp * x1_tmp) - (y1 * y1)))), (1.0 / 2.0)) * sign1) + (x1_tmp * y1)) / ((y1_tmp * y1_tmp) + (x1_tmp * x1_tmp)));
+  sin_a_tilt = (((pow((pow(y_tmp, 4.0) + ((y_tmp * y_tmp) * ((x_tmp * x_tmp) - (y * y)))), (1.0 / 2.0)) * sign1) + (x_tmp * y)) / ((y_tmp * y_tmp) + (x_tmp * x_tmp)));
 
   res = asin(sin_a_tilt);
 
- if (res > pi / 4.0) {
-   res = res - pi / 2.0;
- } else if (res < -pi / 4.0) {
-   res = res + pi / 2.0;
+ if (res > pi_d / 4.0) {
+   res = res - pi_d / 2.0;
+ } else if (res < -pi_d / 4.0) {
+   res = res + pi_d / 2.0;
  }
 
  return res;
