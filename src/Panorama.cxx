@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.16 2005/04/30 17:38:13 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.17 2005/04/30 17:44:46 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -44,6 +44,8 @@ comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
 	  double tan_nick_m, double tan_dir_m,
 	  double x, double y);
 
+
+#define EARTH_RADIUS 6371010.0
 
 static double pi_d, deg2rad;
 
@@ -315,7 +317,7 @@ Panorama::update_visible_mountains() {
  
     m->dist = distance(m->phi, m->lam);
     if ((m->phi != view_phi || m->lam != view_lam) &&
-	(m->height / (m->dist * 6368000) 
+	(m->height / (m->dist * EARTH_RADIUS) 
 	 > height_dist_ratio)) {
       
       m->alph = alpha(m->phi, m->lam);
@@ -422,8 +424,8 @@ Panorama::nick(double dist, double height) {
   double a, b, c;
   double beta;
 
-  b = height + 6368000.0;
-  c = view_height + 6368000.0;
+  b = height + EARTH_RADIUS;
+  c = view_height + EARTH_RADIUS;
 
   a = pow(((b * (b - (2.0 * c * cos(dist)))) + (c * c)), (1.0 / 2.0));
   beta = acos((-(b*b) + (a*a) + (c*c))/(2 * a * c));
@@ -526,7 +528,6 @@ comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
 	     (tan_dir_m * tan_dir_view + 1));
 
 
-
   sin_a_tilt1 = - (y * - pow(x*x + y*y - y_tmp*y_tmp, 0.5) - x * y_tmp) /
     (x*x + y*y);
 
@@ -536,11 +537,6 @@ comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
   fprintf(stderr, "====> sin_a_tilt1 %f sin_a_tilt2 %f \n", sin_a_tilt1, sin_a_tilt2);
 
   sin_a_tilt = fabs(sin_a_tilt1) < fabs(sin_a_tilt2)?sin_a_tilt1:sin_a_tilt2;
-
-#if 0
-  sin_a_tilt = (((pow((pow(y_tmp, 4.0) + ((y_tmp * y_tmp) * ((x_tmp * x_tmp) - (y * y)))), (1.0 / 2.0)) * sign1) + (x_tmp * y)) / 
-		((y_tmp * y_tmp) + (x_tmp * x_tmp)));
-#endif
 
   res = asin(sin_a_tilt);
 
