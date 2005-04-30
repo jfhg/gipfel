@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.15 2005/04/30 09:42:47 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.16 2005/04/30 17:38:13 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -518,20 +518,37 @@ static double
 comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
 	  double tan_nick_m, double tan_dir_m,
 	  double x, double y) {
-  double y_tmp, x_tmp, sin_a_tilt, sign1 = 1.0, res;
+  double y_tmp, x_tmp, sin_a_tilt1, sin_a_tilt2, sin_a_tilt, res;
 
-  y_tmp = - (((tan_nick_view - tan_nick_m) * n_scale) / (tan_nick_m * tan_nick_view + 1));
-  x_tmp = - (((tan_dir_view - tan_dir_m) * n_scale) / (tan_dir_m * tan_dir_view + 1));
+  y_tmp = - (((tan_nick_view - tan_nick_m) * n_scale) / 
+	     (tan_nick_m * tan_nick_view + 1));
+  x_tmp = - (((tan_dir_view - tan_dir_m) * n_scale) / 
+	     (tan_dir_m * tan_dir_view + 1));
 
-  sin_a_tilt = (((pow((pow(y_tmp, 4.0) + ((y_tmp * y_tmp) * ((x_tmp * x_tmp) - (y * y)))), (1.0 / 2.0)) * sign1) + (x_tmp * y)) / ((y_tmp * y_tmp) + (x_tmp * x_tmp)));
+
+
+  sin_a_tilt1 = - (y * - pow(x*x + y*y - y_tmp*y_tmp, 0.5) - x * y_tmp) /
+    (x*x + y*y);
+
+  sin_a_tilt2 = - (y * pow(x*x + y*y - y_tmp*y_tmp, 0.5) - x * y_tmp) / 
+    (x*x + y*y);
+
+  fprintf(stderr, "====> sin_a_tilt1 %f sin_a_tilt2 %f \n", sin_a_tilt1, sin_a_tilt2);
+
+  sin_a_tilt = fabs(sin_a_tilt1) < fabs(sin_a_tilt2)?sin_a_tilt1:sin_a_tilt2;
+
+#if 0
+  sin_a_tilt = (((pow((pow(y_tmp, 4.0) + ((y_tmp * y_tmp) * ((x_tmp * x_tmp) - (y * y)))), (1.0 / 2.0)) * sign1) + (x_tmp * y)) / 
+		((y_tmp * y_tmp) + (x_tmp * x_tmp)));
+#endif
 
   res = asin(sin_a_tilt);
 
- if (res > pi_d / 4.0) {
-   res = res - pi_d / 2.0;
- } else if (res < -pi_d / 4.0) {
-   res = res + pi_d / 2.0;
- }
+  if (res > pi_d / 4.0) {
+    res = res - pi_d / 2.0;
+  } else if (res < -pi_d / 4.0) {
+    res = res + pi_d / 2.0;
+  }
 
- return res;
+  return res;
 }
