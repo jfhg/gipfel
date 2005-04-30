@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.13 2005/04/30 07:58:19 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.14 2005/04/30 08:54:35 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -41,7 +41,7 @@ Panorama::Panorama() {
   a_center = 0.0;
   a_nick = 0.0;
   a_tilt = 0.0;
-  scale = 20.0;
+  scale = 500.0;
 }
 
 Panorama::~Panorama() {
@@ -135,6 +135,8 @@ Panorama::set_mountain(Mountain *m, int x, int y) {
 
 int
 Panorama::comp_params() {
+  int i;
+
   if (m1 == NULL || m2 == NULL) {
     fprintf(stderr, "Position two mountains first.\n");
     m1 = NULL;
@@ -153,13 +155,8 @@ Panorama::comp_params() {
   scale    = comp_scale(m1->alph, m2->alph, x1, x2);
   fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
   a_nick   = atan ((y1 + tan(m1->a_nick) * scale) / ( scale - y1 * tan(m1->a_nick)));
-  //  a_nick = comp_center_angle(m1->a_nick, m2->a_nick, -y1, -y2) - pi;  
   fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
 
-#if 0
-  m1 = NULL;
-  m2 = NULL;
-#endif
 
   tan_nick_view = tan(a_nick);
   tan_dir_view = tan(a_center);
@@ -169,10 +166,9 @@ Panorama::comp_params() {
   tan_dir_m2 = tan(m2->alph);
   tan_nick_m2 = tan(m2->a_nick);
 
-  newton();
-  newton();
-  newton();
-  newton();
+  for (i=0; i<8; i++) {
+    newton();
+  }
 
   a_nick = atan(tan_nick_view);
   a_center = atan(tan_dir_view);
@@ -339,19 +335,6 @@ Panorama::alpha(double phi, double lam) {
   return alph;
 }
 
-#if 0
-double 
-Panorama::center_angle(double alph_a, double alph_b, double d1, double d2) {
-  double tan_a, tan_b;
-
-  tan_a = tan(alph_a - alph_b);
-  fprintf(stderr, "tan_a %f\n", tan_a);
-  tan_b = (d2 - d1 + ((sqrt((d2*(d2 - (2.0*d1*(1.0 + (2.0 * tan_a * tan_a))))) + (d1*d1))))) / (2.0*d2*tan_a);
-
-  fprintf(stderr, "tan_b=%f\n", tan_b);
-  return alph_a + atan(tan_b);
-}
-#endif
 
 double
 Panorama::comp_center_angle(double a1, double a2, double d1, double d2) {
