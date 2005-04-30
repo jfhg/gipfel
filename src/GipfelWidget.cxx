@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.14 2005/04/30 09:42:47 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.15 2005/04/30 21:18:43 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -48,10 +48,16 @@ static Fl_Menu_Item menuitems[] = {
 };
   
 GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
+  int i;
+
   img = NULL;
   pan = new Panorama();
   cur_mountain = NULL;
   mb = NULL;
+  marker = new Mountain(0,0);
+  for (i=1; i<=3; i++) {
+    marker->append(new Mountain(i * 10, 0));
+  }
   fl_register_images();
 }
 
@@ -115,6 +121,17 @@ GipfelWidget::draw() {
     m = m->get_next_visible();
   }
 
+
+  m = marker;
+  while (m) {
+    fl_color(FL_GREEN);
+    
+    fl_xyline(center_x + m->x + x() - 3, center_y + m->y + y(), center_x + m->x + x() + 3);
+    fl_yxline(center_x + m->x + x(), center_y + m->y + y() - 3, center_y + m->y + y() + 3);
+
+    m = m->get_next();
+  }
+
   fl_pop_clip();
 }
 
@@ -131,6 +148,17 @@ GipfelWidget::set_cur_mountain(int m_x, int m_y) {
     }
 
     m = m->get_next_visible();
+  }
+
+  m = marker;
+  while (m) {
+    if (m_x - center >= m->x - 2 && m_x - center < m->x + 2) {
+      cur_mountain = m;
+      redraw();
+      return 0;
+    }
+
+    m = m->get_next();
   }
 
   cur_mountain = NULL;
@@ -187,6 +215,12 @@ GipfelWidget::set_height_dist_ratio(double r) {
 int
 GipfelWidget::comp_params() {
   pan->comp_params();
+  redraw();
+}
+
+int
+GipfelWidget::guess() {
+  pan->guess(marker);
   redraw();
 }
 

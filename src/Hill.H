@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.H,v 1.5 2005/04/14 21:15:45 hofmann Exp $"
+// "$Id: Hill.H,v 1.6 2005/04/30 21:18:43 hofmann Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,6 +42,8 @@ class Mountain {
   char *name;
  
   Mountain(const char *n, double p, double l, double h);
+
+  Mountain(int x_tmp, int y_tmp);
 
   ~Mountain();
 

@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.14 2005/04/30 09:42:47 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.15 2005/04/30 21:18:43 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -87,6 +87,12 @@ void h_d_cb(Fl_Slider* o, void*) {
 void comp_cb(Fl_Widget *, void *) {
   if (gipf) {
     gipf->comp_params();
+  }
+}
+
+void guess_cb(Fl_Widget *, void *) {
+  if (gipf) {
+    gipf->guess();
   }
 }
 
@@ -207,6 +213,8 @@ int main(int argc, char** argv) {
   t->align(FL_ALIGN_LEFT);
   Fl_Button *b = new Fl_Button(200, 60, 20, 15, "comp");
   b->callback(comp_cb);
+  Fl_Button *b1 = new Fl_Button(250, 60, 20, 15, "guess");
+  b1->callback(guess_cb);
 
   scroll = new Fl_Scroll(0, 75, win->w(), win->h()-75);
   

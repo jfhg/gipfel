@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.3 2005/04/13 21:58:31 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.4 2005/04/30 21:18:43 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -34,6 +34,18 @@ Mountain::Mountain(const char *n, double p, double l, double h) {
   alph = 0.0;
   x = 0;
   y = 0;
+  next = NULL;
+  next_visible = NULL;
+}
+
+Mountain::Mountain(int x_tmp, int y_tmp) {
+  name = "";
+  phi = 0.0;
+  lam = 0.0;
+  height = 0.0;
+  alph = 0.0;
+  x = x_tmp;
+  y = y_tmp;
   next = NULL;
   next_visible = NULL;
 }
