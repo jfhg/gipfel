@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.15 2005/04/30 21:18:43 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.16 2005/05/02 16:36:45 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -222,6 +222,12 @@ int
 GipfelWidget::guess() {
   pan->guess(marker);
   redraw();
+}
+
+int
+GipfelWidget::update() {
+  redraw();
+  Fl::wait(1.0);
 }
 
 

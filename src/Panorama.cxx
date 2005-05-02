@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.19 2005/04/30 21:41:56 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.20 2005/05/02 16:36:45 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -29,6 +29,7 @@ extern "C" {
 #include <ccmath.h>
 }
 
+#include "GipfelWidget.H"
 #include "Panorama.H"
 
 static int newton(double *tan_nick_view, 
@@ -159,9 +160,9 @@ Panorama::get_value(Mountain *p) {
   double v = 0.0, d_min, d;
 
   if (isnan(scale) || isnan(a_center) || isnan(a_tilt) || isnan(a_nick) ||
-      scale < 1000.0 || scale > 100000.0 || 
+      scale < 500.0 || scale > 100000.0 || 
       a_nick > pi_d/4.0 || a_nick < - pi_d/4.0 || 
-      a_tilt > pi_d/8.0 || a_tilt < - pi_d/8.0) {
+      a_tilt > pi_d/16.0 || a_tilt < - pi_d/16.0) {
     return 10000000.0;
   }
 
@@ -185,7 +186,10 @@ Panorama::get_value(Mountain *p) {
   return v;
 }
 
+extern GipfelWidget *gipf;
 
+
+#if 0
 int 
 Panorama::guess(Mountain *p) {
   Mountain *p1, *p2, *m_tmp1, *m_tmp2;
@@ -197,46 +201,49 @@ Panorama::guess(Mountain *p) {
   while (p1) {
     p2 = p;
     while (p2) {
-  
-      m_tmp1 = mountains;
-      while(m_tmp1) {
-	if (m_tmp1->height / (m_tmp1->dist * EARTH_RADIUS) > 
-	height_dist_ratio) {
-	  m_tmp2 = mountains;
+      if (fabs(p1->x - p2->x) + fabs(p1->y - p2->y) > 50.0) {
+	m_tmp1 = mountains;
+	while(m_tmp1) {
+	  if (m_tmp1->height / (m_tmp1->dist * EARTH_RADIUS) > 
+	      height_dist_ratio) {
+	    m_tmp2 = mountains;
 	  
-	  while(m_tmp2) {
-	    if (fabs(m_tmp1->alph - m_tmp2->alph) < pi_d / 2.0 &&
-		m_tmp2->height / (m_tmp2->dist * EARTH_RADIUS) > 
-		height_dist_ratio) {
-	      
-	      if (p1 != p2 && m_tmp1 != m_tmp2) {
+	    while(m_tmp2) {
+	      if (fabs(m_tmp1->alph - m_tmp2->alph) < pi_d / 2.0 &&
+		  m_tmp2->height / (m_tmp2->dist * EARTH_RADIUS) > 
+		  height_dist_ratio) {
 		
-		m_tmp1->x = p1->x;
-		m_tmp1->y = p1->y;
-		m1 = m_tmp1;
-		m_tmp2->x = p2->x;
-		m_tmp2->y = p2->y;
-		m2 = m_tmp2;
-		
-		comp_params();
-		
-		v = get_value(p);
-		
-		if (v < best) {
-		  best = v;
-		  a_center_best = a_center;
-		  a_nick_best = a_nick;
-		  a_tilt_best = a_tilt;
-		  scale_best = scale;
-		  fprintf(stderr, "best %f\n", best);
-		}	    
+		if (p1 != p2 && m_tmp1 != m_tmp2) {
+		  
+		  m_tmp1->x = p1->x;
+		  m_tmp1->y = p1->y;
+		  m1 = m_tmp1;
+		  m_tmp2->x = p2->x;
+		  m_tmp2->y = p2->y;
+		  m2 = m_tmp2;
+		  
+		  comp_params();
+		  
+		  v = get_value(p);
+		  
+		  if (v < best) {
+		    best = v;
+		    a_center_best = a_center;
+		    a_nick_best = a_nick;
+		    a_tilt_best = a_tilt;
+		    scale_best = scale;
+		    gipf->update();
+		    
+		    fprintf(stderr, "best %f\n", best);
+		  }	    
+		}
 	      }
-	    }
-	
-	    m_tmp2 = m_tmp2->get_next();
-	  }      
+	      
+	      m_tmp2 = m_tmp2->get_next();
+	    }      
+	  }
+	  m_tmp1 = m_tmp1->get_next();
 	}
-	m_tmp1 = m_tmp1->get_next();
       }
       p2 = p2->get_next();
     }
@@ -253,6 +260,73 @@ Panorama::guess(Mountain *p) {
   return 0;
 }
 
+#else 
+int 
+Panorama::guess(Mountain *p) {
+  Mountain *p2, *m_tmp1, *m_tmp2;
+  double best = 100000000.0, v;
+  double a_center_best, a_nick_best, a_tilt_best, scale_best;
+  int x1_sav, y1_sav;
+
+  if (m1 == NULL) {
+    fprintf(stderr, "Position one mountain first.\n");
+    return 1;
+  }
+  
+  m_tmp1 = m1;
+  x1_sav = m1->x;
+  y1_sav = m1->y;
+    
+  p2 = p;
+  while (p2) {
+    m_tmp2 = mountains;
+    while(m_tmp2) {
+      m1 = m_tmp1;
+      m1->x = x1_sav;
+      m1->y = y1_sav;
+
+      if (fabs(m1->alph - m_tmp2->alph) < pi_d / 2.0 &&
+	  m_tmp2->height / (m_tmp2->dist * EARTH_RADIUS) > 
+	  height_dist_ratio) {
+	
+	if (m1 != m_tmp2) {
+	
+	  m_tmp2->x = p2->x;
+	  m_tmp2->y = p2->y;
+	  m2 = m_tmp2;
+	  
+	  comp_params();
+	  
+	  v = get_value(p);
+	  
+	  if (v < best) {
+	    best = v;
+	    a_center_best = a_center;
+	    a_nick_best = a_nick;
+	    a_tilt_best = a_tilt;
+	    scale_best = scale;
+	    gipf->update();
+	    
+	    fprintf(stderr, "best %f\n", best);
+	  }	    
+	}
+      }
+      
+      m_tmp2 = m_tmp2->get_next();
+    }     
+    p2 = p2->get_next();
+  }
+
+  a_center = a_center_best;
+  a_nick = a_nick_best;
+  a_tilt = a_tilt_best;
+  scale = scale_best;
+  fprintf(stderr, "best %f\n", best);
+  fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
+  update_visible_mountains();
+  return 0;
+}
+#endif
 int
 Panorama::comp_params() {
 

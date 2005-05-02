@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.H,v 1.12 2005/04/30 21:18:43 hofmann Exp $"
+// "$Id: GipfelWidget.H,v 1.13 2005/05/02 16:36:45 hofmann Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -64,6 +64,8 @@ class GipfelWidget : public Fl_Widget {
   int comp_params();
 
   int guess();
+
+  int update();
 
   void draw();
 };
