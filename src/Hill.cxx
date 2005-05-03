@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.5 2005/05/03 20:04:14 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.6 2005/05/03 20:16:40 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -118,6 +118,25 @@ Mountains::add(Mountain *m1) {
   }
 
   m[num++] = m1;
+}
+
+
+static int
+comp_mountains(const void *m1, const void *m2) {
+  if (m1 && m2) {
+    return ((Mountain *)m1)->alph > ((Mountain *)m2)->alph;
+  } else {
+    return 0;
+  }  
+}
+
+void
+Mountains::sort() {
+  if (!m) {
+    return;
+  }
+
+  qsort(m, num, sizeof(class Mountain *), comp_mountains);
 }
 
 void

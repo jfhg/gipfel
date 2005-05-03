@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.21 2005/05/03 20:04:14 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.22 2005/05/03 20:16:40 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -435,6 +435,8 @@ Panorama::update_visible_mountains() {
       }
     }
   }
+
+  visible_mountains->sort();
 }
 
 double 
