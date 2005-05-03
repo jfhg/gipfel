@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.22 2005/05/03 20:16:40 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.23 2005/05/03 20:29:59 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -109,7 +109,7 @@ Panorama::load_file(const char *name) {
 
   fclose(fp);
 
-  update_visible_mountains();
+  update_angles();
   return 0;
 }
 
@@ -120,7 +120,7 @@ Panorama::set_viewpoint(const char *name) {
     return 1;
   }
 
-  update_visible_mountains();
+  update_angles();
   return 0;
 }
 
@@ -242,7 +242,7 @@ Panorama::guess(Mountains *p) {
   scale = scale_best;
   fprintf(stderr, "best %f\n", best);
   fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
-  update_visible_mountains();
+  update_coordinates();
   return 0;
 }
 
@@ -269,7 +269,7 @@ Panorama::comp_params() {
 
   optimize();
 
-  update_visible_mountains();
+  update_coordinates();
 
   return 0;
 }
@@ -340,27 +340,27 @@ Panorama::optimize() {
 void
 Panorama::set_center_angle(double a) {
   a_center = a;
-  update_visible_mountains();
+  update_coordinates();
 }
 
 void
 Panorama::set_nick_angle(double a) {
   a_nick = a;
   fprintf(stderr, "-->nick%f\n", a_nick/deg2rad);
-  update_visible_mountains();
+  update_coordinates();
 }
 
 void
 Panorama::set_tilt_angle(double a) {
   a_tilt = a;
   fprintf(stderr, "-->tilt%f\n", a_tilt/deg2rad);
-  update_visible_mountains();
+  update_coordinates();
 }
 
 void
 Panorama::set_scale(double s) {
   scale = s;
-  update_visible_mountains();
+  update_coordinates();
 }
 
 void
@@ -399,9 +399,27 @@ Panorama::get_pos(const char *name, double *phi, double *lam, double *height) {
 }
 
 void 
+Panorama::update_angles() {
+  int i;
+  Mountain *m;
+
+  for (i=0; i<mountains->get_num(); i++) {
+    m = mountains->get(i);
+ 
+    m->dist = distance(m->phi, m->lam);
+    if (m->phi != view_phi || m->lam != view_lam) {
+      
+      m->alph = alpha(m->phi, m->lam);
+      m->a_nick = nick(m->dist, m->height);
+    }
+  }
+  
+  update_visible_mountains();
+}
+
+void 
 Panorama::update_visible_mountains() {
   int i;
-  double x_tmp, y_tmp;
   Mountain *m;
 
   visible_mountains->clear();
@@ -409,34 +427,42 @@ Panorama::update_visible_mountains() {
   for (i=0; i<mountains->get_num(); i++) {
     m = mountains->get(i);
  
-    m->dist = distance(m->phi, m->lam);
     if ((m->phi != view_phi || m->lam != view_lam) &&
 	(m->height / (m->dist * EARTH_RADIUS) 
 	 > height_dist_ratio)) {
       
-      m->alph = alpha(m->phi, m->lam);
-      m->a_view = m->alph - a_center;
-      if (m->a_view > pi_d) {
-	m->a_view -= 2.0*pi_d;
-      } else if (m->a_view < -pi_d) {
-	m->a_view += 2.0*pi_d;
-      }
-      
       if (m->a_view < pi_d / 2.0 && m->a_view > - pi_d / 2.0) {
-	m->a_nick = nick(m->dist, m->height);
-	x_tmp = tan(m->a_view) * scale;
-	y_tmp = - (tan(m->a_nick - a_nick) * scale);
-	// rotate by a_tilt;
-	m->x = (int) rint(x_tmp * cos(a_tilt) - y_tmp * sin(a_tilt));
-	m->y = (int) rint(x_tmp * sin(a_tilt) + y_tmp * cos(a_tilt));
-
-
 	visible_mountains->add(m);
       }
     }
   }
 
   visible_mountains->sort();
+  update_coordinates();
+}
+
+void 
+Panorama::update_coordinates() {
+  int i;
+  double x_tmp, y_tmp;
+  Mountain *m;
+
+  for (i=0; i<visible_mountains->get_num(); i++) {
+    m = visible_mountains->get(i);
+        
+    m->a_view = m->alph - a_center;
+    if (m->a_view > pi_d) {
+      m->a_view -= 2.0*pi_d;
+    } else if (m->a_view < -pi_d) {
+      m->a_view += 2.0*pi_d;
+    }
+    
+    x_tmp = tan(m->a_view) * scale;
+    y_tmp = - (tan(m->a_nick - a_nick) * scale);
+    // rotate by a_tilt;
+    m->x = (int) rint(x_tmp * cos(a_tilt) - y_tmp * sin(a_tilt));
+    m->y = (int) rint(x_tmp * sin(a_tilt) + y_tmp * cos(a_tilt));
+  }
 }
 
 double 
