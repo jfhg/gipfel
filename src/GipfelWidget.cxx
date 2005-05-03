@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.17 2005/05/03 20:04:14 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.18 2005/05/03 21:36:39 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -117,11 +117,11 @@ GipfelWidget::draw() {
     }
     
     fl_xyline(center_x + m->x + x() - 2, center_y + m->y + y(), center_x + m->x + x() + 2);
-    fl_yxline(center_x + m->x + x(), center_y + m->y + y() - 2, center_y + m->y + y() + 2);
+    fl_yxline(center_x + m->x + x(), center_y + m->label_y + y() - 2, center_y + m->y + y() + 2);
 
     fl_draw(m->name, 
 	    center_x + m->x + x(), 
-	    center_y + m->y + y());
+	    center_y + m->label_y + y());
   }
 
   for (i=0; i<marker->get_num(); i++) {
@@ -133,6 +133,31 @@ GipfelWidget::draw() {
   }
 
   fl_pop_clip();
+}
+
+void 
+GipfelWidget::set_labels(Mountains *v) {
+  int i, j, width, height;
+  Mountain *m, *n;
+
+  fl_font(FL_HELVETICA, 8);
+
+  for (i=0; i<v->get_num(); i++) {
+    m = v->get(i);
+    
+    fl_measure(m->name, width, height);
+    
+    m->label_x = m->x + width;
+    m->label_y = m->y;
+
+    for (j=0; j<v->get_num() && j < i; j++) {
+      n = v->get(j);
+      
+      if (n->label_x >= m->x && n->label_y >= m->label_y - 1 && n->label_y <= m->label_y + height + 1) {
+	m->label_y = n->label_y - height - 1;
+      }
+    }
+  }
 }
 
 int
@@ -186,42 +211,49 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
 void
 GipfelWidget::set_center_angle(double a) {
   pan->set_center_angle(a);
+  set_labels(pan->get_visible_mountains());
   redraw();
 }
 
 void
 GipfelWidget::set_nick_angle(double a) {
   pan->set_nick_angle(a);
+  set_labels(pan->get_visible_mountains());
   redraw();
 }
 
 void
 GipfelWidget::set_tilt_angle(double a) {
   pan->set_tilt_angle(a);
+  set_labels(pan->get_visible_mountains());
   redraw();
 }
 
 void
 GipfelWidget::set_scale(double s) {
   pan->set_scale(s);
+  set_labels(pan->get_visible_mountains());
   redraw();
 }
 
 void
 GipfelWidget::set_height_dist_ratio(double r) {
   pan->set_height_dist_ratio(r);
+  set_labels(pan->get_visible_mountains());
   redraw();
 }
 
 int
 GipfelWidget::comp_params() {
   pan->comp_params();
+  set_labels(pan->get_visible_mountains());
   redraw();
 }
 
 int
 GipfelWidget::guess() {
   pan->guess(marker);
+  set_labels(pan->get_visible_mountains());
   redraw();
 }
 
