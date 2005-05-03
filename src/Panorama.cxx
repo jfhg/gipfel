@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.24 2005/05/03 20:32:20 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.25 2005/05/03 20:48:37 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -242,7 +242,7 @@ Panorama::guess(Mountains *p) {
   scale = scale_best;
   fprintf(stderr, "best %f\n", best);
   fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
-  update_coordinates();
+  update_visible_mountains();
   return 0;
 }
 
@@ -269,7 +269,7 @@ Panorama::comp_params() {
 
   optimize();
 
-  update_coordinates();
+  update_visible_mountains();
 
   return 0;
 }
@@ -340,7 +340,7 @@ Panorama::optimize() {
 void
 Panorama::set_center_angle(double a) {
   a_center = a;
-  update_coordinates();
+  update_visible_mountains();
 }
 
 void
@@ -430,7 +430,14 @@ Panorama::update_visible_mountains() {
     if ((m->phi != view_phi || m->lam != view_lam) &&
 	(m->height / (m->dist * EARTH_RADIUS) 
 	 > height_dist_ratio)) {
-      
+
+      m->a_view = m->alph - a_center;
+      if (m->a_view > pi_d) {
+	m->a_view -= 2.0*pi_d;
+      } else if (m->a_view < -pi_d) {
+	m->a_view += 2.0*pi_d;
+      }
+ 
       if (m->a_view < pi_d / 2.0 && m->a_view > - pi_d / 2.0) {
 	visible_mountains->add(m);
       }
@@ -449,14 +456,7 @@ Panorama::update_coordinates() {
 
   for (i=0; i<visible_mountains->get_num(); i++) {
     m = visible_mountains->get(i);
-        
-    m->a_view = m->alph - a_center;
-    if (m->a_view > pi_d) {
-      m->a_view -= 2.0*pi_d;
-    } else if (m->a_view < -pi_d) {
-      m->a_view += 2.0*pi_d;
-    }
-    
+           
     x_tmp = tan(m->a_view) * scale;
     y_tmp = - (tan(m->a_nick - a_nick) * scale);
     // rotate by a_tilt;
