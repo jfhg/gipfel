@@ -1,7 +1,7 @@
 // 
-// "$Id: Panorama.cxx,v 1.23 2005/05/03 20:29:59 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.24 2005/05/03 20:32:20 hofmann Exp $"
 //
-// PSEditWidget routines.
+// Panorama routines.
 //
 // Copyright 2004 by Johannes Hofmann
 //

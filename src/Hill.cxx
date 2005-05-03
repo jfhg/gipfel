@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.6 2005/05/03 20:16:40 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.7 2005/05/03 20:32:20 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -35,8 +35,6 @@ Mountain::Mountain(const char *n, double p, double l, double h) {
   alph = 0.0;
   x = 0;
   y = 0;
-  next = NULL;
-  next_visible = NULL;
 }
 
 Mountain::Mountain(int x_tmp, int y_tmp) {
@@ -47,53 +45,13 @@ Mountain::Mountain(int x_tmp, int y_tmp) {
   alph = 0.0;
   x = x_tmp;
   y = y_tmp;
-  next = NULL;
-  next_visible = NULL;
 }
 
 Mountain::~Mountain() {
-  if (next) {
-    delete(next);
-  }
-  
   if (name) {
     free(name);
   }
 }
-
-void
-Mountain::append(Mountain *m) {
-  if (next) {
-    next->append(m);
-  } else {
-    next = m;
-  }
-}
-
-Mountain *
-Mountain::get_next() {
-  return next;
-}
-
-void
-Mountain::append_visible(Mountain *m) {
-  if (next_visible) {
-    next->append_visible(m);
-  } else {
-    next_visible = m;
-  }
-}
-
-Mountain *
-Mountain::get_next_visible() {
-  return next_visible;
-}
-
-void
-Mountain::clear_next_visible() {
-  next_visible = NULL;
-}
-
 
 
 Mountains::Mountains() {
