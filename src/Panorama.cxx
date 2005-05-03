@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.20 2005/05/02 16:36:45 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.21 2005/05/03 20:04:14 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -52,10 +52,10 @@ comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
 static double pi_d, deg2rad;
 
 Panorama::Panorama() {
-  mountains = NULL;
-  visible_mountains = NULL;
   m1 = NULL;
   m2 = NULL;
+  mountains = new Mountains();
+  visible_mountains = new Mountains();
   height_dist_ratio = 0.07;
   pi_d = asin(1.0) * 2.0;
   deg2rad = pi_d / 180.0;
@@ -66,9 +66,10 @@ Panorama::Panorama() {
 }
 
 Panorama::~Panorama() {
-  if (mountains) {
-    delete(mountains);
-  }
+  visible_mountains->clear();
+  mountains->clobber();
+  delete(visible_mountains);
+  delete(mountains);
 }
 
 int
@@ -80,12 +81,9 @@ Panorama::load_file(const char *name) {
   double phi, lam, height;
   Mountain *m;
 
-  if (mountains) {
-    delete(mountains);
-  }
+  visible_mountains->clear();
+  mountains->clobber();
 
-  mountains = NULL;
-  visible_mountains = NULL;
 
   fp = fopen(name, "r");
   if (!fp) {
@@ -105,11 +103,8 @@ Panorama::load_file(const char *name) {
     height = atof(vals[5]);
 
     m = new Mountain(vals[1], phi, lam, height);
-    if (mountains) {
-      mountains->append(m);
-    } else {
-      mountains = m;
-    }
+
+    mountains->add(m);
   }
 
   fclose(fp);
@@ -129,7 +124,7 @@ Panorama::set_viewpoint(const char *name) {
   return 0;
 }
 
-Mountain * 
+Mountains * 
 Panorama::get_visible_mountains() {
   return visible_mountains;
 }
@@ -155,7 +150,8 @@ Panorama::set_mountain(Mountain *m, int x, int y) {
 }
 
 double
-Panorama::get_value(Mountain *p) {
+Panorama::get_value(Mountains *p) {
+  int i, j;
   Mountain *m;
   double v = 0.0, d_min, d;
 
@@ -166,21 +162,17 @@ Panorama::get_value(Mountain *p) {
     return 10000000.0;
   }
 
-  while (p) {
+
+  for (i=0; i<p->get_num(); i++) {
     d_min = 1000.0;
-    m = visible_mountains;
-    while (m) {
-      d = pow(p->x - m->x, 2.0) + pow(p->y - m->y, 2.0);
+    for (j=0; j<visible_mountains->get_num(); j++) {
+      d = pow(p->get(i)->x - visible_mountains->get(j)->x, 2.0) + 
+	pow(p->get(i)->y - visible_mountains->get(j)->y, 2.0);
       if (d < d_min) {
 	d_min = d;
       }
-
-      m = m->get_next_visible();
     }
-    
     v = v + d_min;
-   
-    p = p->get_next();
   }
       
   return v;
@@ -189,84 +181,14 @@ Panorama::get_value(Mountain *p) {
 extern GipfelWidget *gipf;
 
 
-#if 0
+
 int 
-Panorama::guess(Mountain *p) {
-  Mountain *p1, *p2, *m_tmp1, *m_tmp2;
-  double best = 100000000.0, v;
-  double a_center_best, a_nick_best, a_tilt_best, scale_best;
-
-  p1 = p;
-
-  while (p1) {
-    p2 = p;
-    while (p2) {
-      if (fabs(p1->x - p2->x) + fabs(p1->y - p2->y) > 50.0) {
-	m_tmp1 = mountains;
-	while(m_tmp1) {
-	  if (m_tmp1->height / (m_tmp1->dist * EARTH_RADIUS) > 
-	      height_dist_ratio) {
-	    m_tmp2 = mountains;
-	  
-	    while(m_tmp2) {
-	      if (fabs(m_tmp1->alph - m_tmp2->alph) < pi_d / 2.0 &&
-		  m_tmp2->height / (m_tmp2->dist * EARTH_RADIUS) > 
-		  height_dist_ratio) {
-		
-		if (p1 != p2 && m_tmp1 != m_tmp2) {
-		  
-		  m_tmp1->x = p1->x;
-		  m_tmp1->y = p1->y;
-		  m1 = m_tmp1;
-		  m_tmp2->x = p2->x;
-		  m_tmp2->y = p2->y;
-		  m2 = m_tmp2;
-		  
-		  comp_params();
-		  
-		  v = get_value(p);
-		  
-		  if (v < best) {
-		    best = v;
-		    a_center_best = a_center;
-		    a_nick_best = a_nick;
-		    a_tilt_best = a_tilt;
-		    scale_best = scale;
-		    gipf->update();
-		    
-		    fprintf(stderr, "best %f\n", best);
-		  }	    
-		}
-	      }
-	      
-	      m_tmp2 = m_tmp2->get_next();
-	    }      
-	  }
-	  m_tmp1 = m_tmp1->get_next();
-	}
-      }
-      p2 = p2->get_next();
-    }
-    p1 = p1->get_next();
-  }
-
-  a_center = a_center_best;
-  a_nick = a_nick_best;
-  a_tilt = a_tilt_best;
-  scale = scale_best;
-  fprintf(stderr, "best %f\n", best);
-  fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
-  update_visible_mountains();
-  return 0;
-}
-
-#else 
-int 
-Panorama::guess(Mountain *p) {
+Panorama::guess(Mountains *p) {
   Mountain *p2, *m_tmp1, *m_tmp2;
   double best = 100000000.0, v;
   double a_center_best, a_nick_best, a_tilt_best, scale_best;
   int x1_sav, y1_sav;
+  int i, j;
 
   if (m1 == NULL) {
     fprintf(stderr, "Position one mountain first.\n");
@@ -277,10 +199,10 @@ Panorama::guess(Mountain *p) {
   x1_sav = m1->x;
   y1_sav = m1->y;
     
-  p2 = p;
-  while (p2) {
-    m_tmp2 = mountains;
-    while(m_tmp2) {
+  for (i=0; i<p->get_num(); i++) {
+    p2 = p->get(i);
+    for (j=0; j<mountains->get_num(); j++) {
+      m_tmp2 = mountains->get(j);
       m1 = m_tmp1;
       m1->x = x1_sav;
       m1->y = y1_sav;
@@ -311,10 +233,7 @@ Panorama::guess(Mountain *p) {
 	  }	    
 	}
       }
-      
-      m_tmp2 = m_tmp2->get_next();
     }     
-    p2 = p2->get_next();
   }
 
   a_center = a_center_best;
@@ -326,7 +245,7 @@ Panorama::guess(Mountain *p) {
   update_visible_mountains();
   return 0;
 }
-#endif
+
 int
 Panorama::comp_params() {
 
@@ -452,11 +371,14 @@ Panorama::set_height_dist_ratio(double r) {
 
 int
 Panorama::get_pos(const char *name, double *phi, double *lam, double *height) {
-  Mountain *m = mountains;
+  int i;
   int found = 0;
   double p, l, h;
+  Mountain *m;
 
-  while (m) {
+  for (i=0; i<mountains->get_num(); i++) {
+    m = mountains->get(i);
+
     if (strcmp(m->name, name) == 0) {
       p = m->phi;
       l = m->lam;
@@ -465,8 +387,6 @@ Panorama::get_pos(const char *name, double *phi, double *lam, double *height) {
       fprintf(stderr, "Found matching entry: %s (%fm)\n", m->name, m->height);
       found++;
     }
-    
-    m = m->get_next();
   }
 
   if (found == 1) {
@@ -480,11 +400,14 @@ Panorama::get_pos(const char *name, double *phi, double *lam, double *height) {
 
 void 
 Panorama::update_visible_mountains() {
-  Mountain *m = mountains;
-  visible_mountains = NULL;
+  int i;
   double x_tmp, y_tmp;
+  Mountain *m;
 
-  while (m) {
+  visible_mountains->clear();
+
+  for (i=0; i<mountains->get_num(); i++) {
+    m = mountains->get(i);
  
     m->dist = distance(m->phi, m->lam);
     if ((m->phi != view_phi || m->lam != view_lam) &&
@@ -507,16 +430,10 @@ Panorama::update_visible_mountains() {
 	m->x = (int) rint(x_tmp * cos(a_tilt) - y_tmp * sin(a_tilt));
 	m->y = (int) rint(x_tmp * sin(a_tilt) + y_tmp * cos(a_tilt));
 
-	m->clear_next_visible();
-	if (visible_mountains) {
-	  visible_mountains->append_visible(m);
-	} else {
-	  visible_mountains = m;
-	}
+
+	visible_mountains->add(m);
       }
     }
-    
-    m = m->get_next();
   }
 }
 

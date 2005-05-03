@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.4 2005/04/30 21:18:43 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.5 2005/05/03 20:04:14 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -22,6 +22,7 @@
 //
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "Mountain.H"
@@ -91,4 +92,67 @@ Mountain::get_next_visible() {
 void
 Mountain::clear_next_visible() {
   next_visible = NULL;
+}
+
+
+
+Mountains::Mountains() {
+  fprintf(stderr, "===>huhu\n");
+  num = 0;
+  cap = 100;
+  m = (Mountain **) malloc(cap * sizeof(class Mountain *));
+}
+
+Mountains::~Mountains() {
+  if (m) {
+    free(m);
+  }
+}
+
+
+void
+Mountains::add(Mountain *m1) {
+  if (num >= cap) {
+    cap = cap?cap * 2:100;
+    m = (Mountain **) realloc(m, cap * sizeof(class Mountain *));
+  }
+
+  m[num++] = m1;
+}
+
+void
+Mountains::clear() {
+  if (m) {
+    free(m);
+    m = NULL;
+  }
+  cap = 0;
+  num = 0;
+}
+
+void
+Mountains::clobber() {
+  int i;
+  
+  for(i=0; i<get_num();i++) {
+    if (get(i)) {
+      delete(get(i));
+    }
+  }
+
+  clear();
+}
+
+int
+Mountains::get_num() {
+  return num;
+}
+
+Mountain *
+Mountains::get(int n) {
+  if (n < 0 || n >= num) {
+    return NULL;
+  } else {
+    return m[n];
+  }
 }

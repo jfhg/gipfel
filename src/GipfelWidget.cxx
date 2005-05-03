@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.16 2005/05/02 16:36:45 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.17 2005/05/03 20:04:14 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -54,9 +54,9 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   pan = new Panorama();
   cur_mountain = NULL;
   mb = NULL;
-  marker = new Mountain(0,0);
-  for (i=1; i<=3; i++) {
-    marker->append(new Mountain(i * 10, 0));
+  marker = new Mountains();
+  for (i=0; i<=3; i++) {
+    marker->add(new Mountain(i * 10, 0));
   }
   fl_register_images();
 }
@@ -92,9 +92,11 @@ GipfelWidget::set_viewpoint(const char *pos) {
 
 void 
 GipfelWidget::draw() {
+  Mountains *mnts;
   Mountain *m;
   int center_x = w() / 2;
   int center_y = h() / 2;
+  int i;
   
   if (img == NULL) {
     return;
@@ -104,8 +106,10 @@ GipfelWidget::draw() {
   img->draw(x(),y(),w(),h(),0,0);
 
   fl_font(FL_HELVETICA, 8);
-  m = pan->get_visible_mountains();
-  while (m) {
+  mnts = pan->get_visible_mountains();
+  for (i=0; i<mnts->get_num(); i++) {
+    m = mnts->get(i);
+
     if (m == cur_mountain) {
       fl_color(FL_RED);
     } else {
@@ -118,18 +122,14 @@ GipfelWidget::draw() {
     fl_draw(m->name, 
 	    center_x + m->x + x(), 
 	    center_y + m->y + y());
-    m = m->get_next_visible();
   }
 
+  for (i=0; i<marker->get_num(); i++) {
+    m = marker->get(i);
 
-  m = marker;
-  while (m) {
     fl_color(FL_GREEN);
-    
     fl_xyline(center_x + m->x + x() - 3, center_y + m->y + y(), center_x + m->x + x() + 3);
     fl_yxline(center_x + m->x + x(), center_y + m->y + y() - 3, center_y + m->y + y() + 3);
-
-    m = m->get_next();
   }
 
   fl_pop_clip();
@@ -137,28 +137,29 @@ GipfelWidget::draw() {
 
 int
 GipfelWidget::set_cur_mountain(int m_x, int m_y) {
-  Mountain *m = pan->get_visible_mountains();
+  Mountains *mnts = pan->get_visible_mountains();
+  Mountain *m;
   int center = w() / 2;
+  int i;
 
-  while (m) {
+  for (i=0; i<mnts->get_num(); i++) {
+    m = mnts->get(i); 
+
     if (m_x - center >= m->x - 2 && m_x - center < m->x + 2) {
       cur_mountain = m;
       redraw();
       return 0;
     }
-
-    m = m->get_next_visible();
   }
 
-  m = marker;
-  while (m) {
+  for (i=0; i<marker->get_num(); i++) {
+    m = marker->get(i);
+
     if (m_x - center >= m->x - 2 && m_x - center < m->x + 2) {
       cur_mountain = m;
       redraw();
       return 0;
     }
-
-    m = m->get_next();
   }
 
   cur_mountain = NULL;
