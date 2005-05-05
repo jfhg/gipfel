@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.H,v 1.12 2005/05/03 20:29:59 hofmann Exp $"
+// "$Id: Panorama.H,v 1.13 2005/05/05 15:24:43 hofmann Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,6 @@ class Panorama {
   double height_dist_ratio;
   Mountains *mountains;
   Mountains *visible_mountains;
-  Mountain *m1, *m2;
   int x1, y1, x2, y2;
   double a_center;
   double scale;
@@ -63,7 +62,7 @@ class Panorama {
 
   int get_matrix(double m[]);
 
-  int optimize();
+  int optimize(Mountain *m1, Mountain *m2);
 
   double get_value(Mountains *p);
 
@@ -80,8 +79,6 @@ class Panorama {
 
   Mountains * get_visible_mountains();
 
-  int set_mountain(Mountain *m, int x, int y);
-
   void set_center_angle(double a);
 
   void set_nick_angle(double a);
@@ -90,8 +87,8 @@ class Panorama {
 
   void set_scale(double s);
 
-  int comp_params();
+  int comp_params(Mountain *m1, Mountain *m2);
 
-  int guess(Mountains *p1);
+  int guess(Mountains *p1, Mountain *m1);
 };
 #endif

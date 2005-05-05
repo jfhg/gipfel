@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.27 2005/05/05 13:00:59 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.28 2005/05/05 15:24:43 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -52,8 +52,6 @@ comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
 static double pi_d, deg2rad;
 
 Panorama::Panorama() {
-  m1 = NULL;
-  m2 = NULL;
   mountains = new Mountains();
   visible_mountains = new Mountains();
   height_dist_ratio = 0.07;
@@ -131,26 +129,6 @@ Panorama::get_visible_mountains() {
   return visible_mountains;
 }
 
-int
-Panorama::set_mountain(Mountain *m, int x, int y) {
-  if (m1 && m2 && m != m1 && m != m2) {
-    fprintf(stderr, "Resetting mountains\n");
-    m1 = NULL;
-    m2 = NULL;
-  }
-
-  m->x = x;
-  m->y = y;
-
-  if (m1 == NULL) {
-    m1 = m;
-    fprintf(stderr, "m1=%s\n", m1->name);
-  } else if (m2 == NULL && m != m1) {
-    m2 = m;
-    fprintf(stderr, "m2=%s\n", m2->name);
-  } 
-}
-
 double
 Panorama::get_value(Mountains *p) {
   int i, j;
@@ -185,8 +163,9 @@ extern GipfelWidget *gipf;
 
 
 int 
-Panorama::guess(Mountains *p) {
+Panorama::guess(Mountains *p, Mountain *m1) {
   Mountain *p2, *m_tmp1, *m_tmp2;
+  Mountain *m2;
   double best = 100000000.0, v;
   double a_center_best, a_nick_best, a_tilt_best, scale_best;
   int x1_sav, y1_sav;
@@ -205,35 +184,35 @@ Panorama::guess(Mountains *p) {
     p2 = p->get(i);
     for (j=0; j<mountains->get_num(); j++) {
       m_tmp2 = mountains->get(j);
+
       m1 = m_tmp1;
       m1->x = x1_sav;
       m1->y = y1_sav;
 
-      if (fabs(m1->alph - m_tmp2->alph) < pi_d / 2.0 &&
-	  m_tmp2->height / (m_tmp2->dist * EARTH_RADIUS) > 
+      if (m1 == m_tmp2 ||
+	  fabs(m1->alph - m_tmp2->alph) > pi_d *0.7 ||
+	  m_tmp2->height / (m_tmp2->dist * EARTH_RADIUS) < 
 	  height_dist_ratio) {
+	continue;
+      }
+
+      m2 = m_tmp2;
+      m2->x = p2->x;
+      m2->y = p2->y;
+	  
+      comp_params(m1, m2);
+      
+      v = get_value(p);
 	
-	if (m1 != m_tmp2) {
+      if (v < best) {
+	best = v;
+	a_center_best = a_center;
+	a_nick_best = a_nick;
+	a_tilt_best = a_tilt;
+	scale_best = scale;
+	gipf->update();
 	
-	  m_tmp2->x = p2->x;
-	  m_tmp2->y = p2->y;
-	  m2 = m_tmp2;
-	  
-	  comp_params();
-	  
-	  v = get_value(p);
-	  
-	  if (v < best) {
-	    best = v;
-	    a_center_best = a_center;
-	    a_nick_best = a_nick;
-	    a_tilt_best = a_tilt;
-	    scale_best = scale;
-	    gipf->update();
-	    
-	    fprintf(stderr, "best %f\n", best);
-	  }	    
-	}
+	fprintf(stderr, "best %f\n", best);
       }
     }     
   }
@@ -249,13 +228,13 @@ Panorama::guess(Mountains *p) {
 }
 
 int
-Panorama::comp_params() {
-
-  if (m1 == NULL || m2 == NULL) {
-    fprintf(stderr, "Position two mountains first.\n");
-    m1 = NULL;
-    m2 = NULL;
-    return 1;
+Panorama::comp_params(Mountain *m1, Mountain *m2) {
+  Mountain *tmp;
+  
+  if (m1->x > m2->x) {
+    tmp = m1;
+    m1 = m2;
+    m2 = tmp;
   }
 
   x1 = m1->x;
@@ -269,7 +248,7 @@ Panorama::comp_params() {
   a_nick   = atan ((y1 + tan(m1->a_nick) * scale) / ( scale - y1 * tan(m1->a_nick)));
 
 
-  optimize();
+  optimize(m1, m2);
 
   update_visible_mountains();
 
@@ -277,7 +256,7 @@ Panorama::comp_params() {
 }
 
 int
-Panorama::optimize() {
+Panorama::optimize(Mountain *m1, Mountain *m2) {
   int i;
   double tan_nick_view, tan_dir_view, n_scale;
   double tan_nick_m1, tan_dir_m1;
@@ -296,13 +275,9 @@ Panorama::optimize() {
   tan_dir_m2 = tan(m2->alph);
   tan_nick_m2 = tan(m2->a_nick);
 
-  //  fprintf(stderr, "m1: %d, %d; m2: %d, %d\n", x1, y1, x2, y2);
   d_m1_2 = pow(x1, 2.0) + pow(y1, 2.0);
   d_m2_2 = pow(x2, 2.0) + pow(y2, 2.0);
   d_m1_m2_2 = pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0);
-
-  //  fprintf(stderr, "d_m1_2 %f, d_m2_2 %f, d_m1_m2_2 %f\n", 
-  //  d_m1_2, d_m2_2, d_m1_m2_2);
 
   for (i=0; i<5; i++) {
     newton(&tan_nick_view, &tan_dir_view, &n_scale, 
@@ -316,8 +291,9 @@ Panorama::optimize() {
   if (fabs(a_center - m1->alph) > pi_d/2.0) {
     a_center = a_center + pi_d;
   }
+
   if (a_center > 2.0 * pi_d) {
-    a_center = a_center - 2.0 *  pi_d;
+    a_center = a_center - 2.0 * pi_d;
   } else if (a_center < 0.0) {
     a_center = a_center + 2.0 * pi_d;
   }

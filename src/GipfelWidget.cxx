@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.20 2005/05/05 13:00:59 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.21 2005/05/05 15:24:43 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -55,6 +55,8 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   cur_mountain = NULL;
   mb = NULL;
   marker = new Mountains();
+  m1 = NULL;
+  m2 = NULL;
   for (i=0; i<=3; i++) {
     marker->add(new Mountain(i * 10, 0));
   }
@@ -178,6 +180,20 @@ GipfelWidget::set_cur_mountain(int m_x, int m_y) {
 
     if (m_x - center >= m->x - 2 && m_x - center < m->x + 2) {
       cur_mountain = m;
+      if (m1 != NULL && m2 != NULL) {
+	fprintf(stderr, "Resetting m1 and m2\n");
+	m1 = NULL;
+	m2 = NULL;
+      }
+
+      if (m1 == NULL) {
+	m1 = cur_mountain;
+	fprintf(stderr, "m1 = %s\n", m1->name);
+      } else if (m2 == NULL) {
+	m2 = cur_mountain;
+	fprintf(stderr, "m2 = %s\n", m2->name);
+      }
+
       redraw();
       return 0;
     }
@@ -200,7 +216,6 @@ GipfelWidget::set_cur_mountain(int m_x, int m_y) {
 
 int
 GipfelWidget::set_mountain(int m_x, int m_y) {
-  int ret;
   int center_x = w() / 2;
   int center_y = h() / 2;
 
@@ -208,10 +223,11 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
     return 1;
   }
 
-  ret = pan->set_mountain(cur_mountain, m_x - center_x, m_y - center_y);
-  
+  cur_mountain->x = m_x - center_x;
+  cur_mountain->y = m_y - center_y;
+    
   redraw();
-  return ret;
+  return 0;
 }
 
 void
@@ -251,14 +267,22 @@ GipfelWidget::set_height_dist_ratio(double r) {
 
 int
 GipfelWidget::comp_params() {
-  pan->comp_params();
+  if (m1 == NULL || m2 == NULL) {
+    fprintf(stderr, "Position m1 and m2 first.\n");
+    return 1;
+  }
+  pan->comp_params(m1, m2);
   set_labels(pan->get_visible_mountains());
   redraw();
 }
 
 int
 GipfelWidget::guess() {
-  pan->guess(marker);
+  if (m1 == NULL) {
+    fprintf(stderr, "Position m1 first.\n");
+    return 1;
+  }
+  pan->guess(marker, m1);
   set_labels(pan->get_visible_mountains());
   redraw();
 }
