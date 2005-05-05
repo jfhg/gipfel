@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.31 2005/05/05 17:37:37 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.32 2005/05/05 19:44:08 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -239,8 +239,8 @@ Panorama::comp_params(Mountain *m1, Mountain *m2) {
   
   a_center = comp_center_angle(m1->alph, m2->alph, x1, x2);
   scale    = comp_scale(m1->alph, m2->alph, x1, x2);
-  a_nick   = atan ((y1 + tan(m1->a_nick) * scale) / ( scale - y1 * tan(m1->a_nick)));
-
+  a_nick   = atan ((y1 + tan(m1->a_nick) * scale) / 
+		   (scale - y1 * tan(m1->a_nick)));
 
   optimize(m1, m2);
 
@@ -282,9 +282,9 @@ Panorama::optimize(Mountain *m1, Mountain *m2) {
   a_nick = atan(tan_nick_view);
   a_center = atan(tan_dir_view);
 
-  if (a_center > 2.0 * pi_d) {
+  if (a_center > pi_d) {
     a_center = a_center - 2.0 * pi_d;
-  } else if (a_center < 0.0) {
+  } else if (a_center < -pi_d) {
     a_center = a_center + 2.0 * pi_d;
   }
 
@@ -320,14 +320,12 @@ Panorama::set_center_angle(double a) {
 void
 Panorama::set_nick_angle(double a) {
   a_nick = a;
-  fprintf(stderr, "-->nick%f\n", a_nick/deg2rad);
   update_coordinates();
 }
 
 void
 Panorama::set_tilt_angle(double a) {
   a_tilt = a;
-  fprintf(stderr, "-->tilt%f\n", a_tilt/deg2rad);
   update_coordinates();
 }
 
@@ -513,7 +511,7 @@ Panorama::comp_center_angle(double a1, double a2, double d1, double d2) {
 
   tan_acenter = (((pow(((pow((1.0 + (tan_a1 * tan_a2)), 2.0) * ((d1 * d1) + (d2 * d2))) + (2.0 * d1 * d2 * ((2.0 * ((tan_a2 * tan_a1) - (tan_a2 * tan_a2))) - ((tan_a1 * tan_a1) * (2.0 + (tan_a2 * tan_a2))) - 1.0))), (1.0 / 2.0)) * sign1) + ((1.0 - (tan_a1 * tan_a2)) * (d1 - d2))) / (2.0 * ((d2 * tan_a2) - (d1 * tan_a1))));
   
-  return atan(tan_acenter) + pi_d;
+  return atan(tan_acenter) - pi_d;
 }
 
 double

@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.17 2005/05/05 17:37:37 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.18 2005/05/05 19:44:08 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -88,12 +88,21 @@ void h_d_cb(Fl_Slider* o, void*) {
 void comp_cb(Fl_Widget *, void *) {
   if (gipf) {
     gipf->comp_params();
+    fprintf(stderr, " == cent %f\n", gipf->get_center_angle());
+    s_center->value(gipf->get_center_angle());
+    s_nick->value(gipf->get_nick_angle());
+    s_scale->value(gipf->get_scale());
+    s_tilt->value(gipf->get_tilt_angle());
   }
 }
 
 void guess_cb(Fl_Widget *, void *) {
   if (gipf) {
     gipf->guess();
+    s_center->value(gipf->get_center_angle());
+    s_nick->value(gipf->get_nick_angle());
+    s_scale->value(gipf->get_scale());
+    s_tilt->value(gipf->get_tilt_angle());
   }
 }
 
@@ -233,7 +242,12 @@ int main(int argc, char** argv) {
     gipf->set_viewpoint(view_point);
   }
   scroll->end();  
-    
+
+  s_center->value(gipf->get_center_angle());
+  s_nick->value(gipf->get_nick_angle());
+  s_scale->value(gipf->get_scale());
+  s_tilt->value(gipf->get_tilt_angle());
+
   win->resizable(scroll);
   
   win->end();
