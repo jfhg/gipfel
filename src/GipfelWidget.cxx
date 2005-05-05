@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.22 2005/05/05 17:00:38 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.23 2005/05/05 17:37:37 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -259,6 +259,26 @@ GipfelWidget::set_scale(double s) {
   redraw();
 }
 
+double
+GipfelWidget::get_center_angle() {
+  return pan->get_center_angle();
+}
+
+double
+GipfelWidget::get_nick_angle() {
+  return pan->get_nick_angle();
+}
+
+double
+GipfelWidget::get_tilt_angle() {
+  return pan->get_tilt_angle();
+}
+
+double
+GipfelWidget::get_scale() {
+  return pan->get_scale();
+}
+
 void
 GipfelWidget::set_height_dist_ratio(double r) {
   pan->set_height_dist_ratio(r);
@@ -272,9 +292,11 @@ GipfelWidget::comp_params() {
     fprintf(stderr, "Position m1 and m2 first.\n");
     return 1;
   }
+  fl_cursor(FL_CURSOR_WAIT);
   pan->comp_params(m1, m2);
   set_labels(pan->get_visible_mountains());
   redraw();
+  fl_cursor(FL_CURSOR_DEFAULT);
 }
 
 int
@@ -283,9 +305,11 @@ GipfelWidget::guess() {
     fprintf(stderr, "Position m1 first.\n");
     return 1;
   }
+  fl_cursor(FL_CURSOR_WAIT);
   pan->guess(marker, m1);
   set_labels(pan->get_visible_mountains());
   redraw();
+  fl_cursor(FL_CURSOR_DEFAULT);
 }
 
 int

@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.16 2005/05/05 11:02:07 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.17 2005/05/05 17:37:37 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -45,7 +45,8 @@
 
 char *img_file;
 char *data_file;
-GipfelWidget *gipf;
+GipfelWidget *gipf = NULL;
+Fl_Slider *s_center = NULL, *s_nick = NULL, *s_scale = NULL, *s_tilt = NULL;
 
 void open_cb() {
   char *file = fl_file_chooser("Open File?", "*.jpeg", img_file);
@@ -166,51 +167,57 @@ int main(int argc, char** argv) {
   win = new Fl_Window(800,700);
   m = new Fl_Menu_Bar(0, 0, 800, 30);
   m->menu(menuitems);
-  Fl_Slider* a = new Fl_Slider(50, 30, 750, 15, "angle");
-  a->type(1);
-  a->box(FL_THIN_DOWN_BOX);
-  a->labelsize(10);
-  a->step(0.00001);
-  a->bounds(-3.14, 3.14);
-  a->slider(FL_UP_BOX);
-  a->callback((Fl_Callback*)angle_cb);
-  a->align(FL_ALIGN_LEFT);
-  Fl_Slider* s = new Fl_Slider(100, 45, 160, 15, "scale");
-  s->type(1);
-  s->box(FL_THIN_DOWN_BOX);
-  s->labelsize(10);
-  s->step(5.0);
-  s->bounds(0.0, 10000.0);
-  s->slider(FL_UP_BOX);
-  s->callback((Fl_Callback*)scale_cb);
-  s->align(FL_ALIGN_LEFT);
-  Fl_Slider* n = new Fl_Slider(360, 45, 160, 15, "nick");
-  n->type(1);
-  n->box(FL_THIN_DOWN_BOX);
-  n->labelsize(10);
-  n->step(0.00001);
-  n->bounds(-0.5, 0.5);
-  n->slider(FL_UP_BOX);
-  n->callback((Fl_Callback*)nick_cb);
-  n->align(FL_ALIGN_LEFT);
-  Fl_Slider* r = new Fl_Slider(620, 45, 160, 15, "height-dist");
-  r->type(1);
-  r->box(FL_THIN_DOWN_BOX);
-  r->labelsize(10);
-  r->step(-0.005);
-  r->bounds(0.2, 0.01);
-  r->slider(FL_UP_BOX);
-  r->callback((Fl_Callback*)h_d_cb);
-  r->align(FL_ALIGN_LEFT);
-  Fl_Slider* t = new Fl_Slider(50, 60, 160, 15, "tilt");
-  t->type(1);
-  t->box(FL_THIN_DOWN_BOX);
-  t->labelsize(10);
-  t->step(0.005);
-  t->bounds(-0.1, 0.1);
-  t->slider(FL_UP_BOX);
-  t->callback((Fl_Callback*)tilt_cb);
-  t->align(FL_ALIGN_LEFT);
+
+  s_center = new Fl_Slider(50, 30, 750, 15, "direction");
+  s_center->type(1);
+  s_center->box(FL_THIN_DOWN_BOX);
+  s_center->labelsize(10);
+  s_center->step(0.00001);
+  s_center->bounds(-3.14, 3.14);
+  s_center->slider(FL_UP_BOX);
+  s_center->callback((Fl_Callback*)angle_cb);
+  s_center->align(FL_ALIGN_LEFT);
+
+  s_scale = new Fl_Slider(100, 45, 160, 15, "scale");
+  s_scale->type(1);
+  s_scale->box(FL_THIN_DOWN_BOX);
+  s_scale->labelsize(10);
+  s_scale->step(5.0);
+  s_scale->bounds(0.0, 10000.0);
+  s_scale->slider(FL_UP_BOX);
+  s_scale->callback((Fl_Callback*)scale_cb);
+  s_scale->align(FL_ALIGN_LEFT);
+
+  s_nick = new Fl_Slider(360, 45, 160, 15, "nick");
+  s_nick->type(1);
+  s_nick->box(FL_THIN_DOWN_BOX);
+  s_nick->labelsize(10);
+  s_nick->step(0.00001);
+  s_nick->bounds(-0.5, 0.5);
+  s_nick->slider(FL_UP_BOX);
+  s_nick->callback((Fl_Callback*)nick_cb);
+  s_nick->align(FL_ALIGN_LEFT);
+
+  s_tilt = new Fl_Slider(50, 60, 160, 15, "tilt");
+  s_tilt->type(1);
+  s_tilt->box(FL_THIN_DOWN_BOX);
+  s_tilt->labelsize(10);
+  s_tilt->step(0.005);
+  s_tilt->bounds(-0.1, 0.1);
+  s_tilt->slider(FL_UP_BOX);
+  s_tilt->callback((Fl_Callback*)tilt_cb);
+  s_tilt->align(FL_ALIGN_LEFT);
+
+  Fl_Slider* s_height_dist = new Fl_Slider(620, 45, 160, 15, "height-dist");
+  s_height_dist->type(1);
+  s_height_dist->box(FL_THIN_DOWN_BOX);
+  s_height_dist->labelsize(10);
+  s_height_dist->step(-0.005);
+  s_height_dist->bounds(0.2, 0.01);
+  s_height_dist->slider(FL_UP_BOX);
+  s_height_dist->callback((Fl_Callback*)h_d_cb);
+  s_height_dist->align(FL_ALIGN_LEFT);
+
   Fl_Button *b = new Fl_Button(200, 60, 20, 15, "comp");
   b->callback(comp_cb);
   Fl_Button *b1 = new Fl_Button(250, 60, 20, 15, "guess");

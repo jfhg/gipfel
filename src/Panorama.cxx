@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.30 2005/05/05 17:00:38 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.31 2005/05/05 17:37:37 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -29,7 +29,6 @@ extern "C" {
 #include <ccmath.h>
 }
 
-#include "GipfelWidget.H"
 #include "Panorama.H"
 
 static int newton(double *tan_nick_view, 
@@ -158,10 +157,6 @@ Panorama::get_value(Mountains *p) {
   return v;
 }
 
-extern GipfelWidget *gipf;
-
-
-
 int 
 Panorama::guess(Mountains *p, Mountain *m1) {
   Mountain *p2, *m_tmp1, *m_tmp2;
@@ -210,7 +205,6 @@ Panorama::guess(Mountains *p, Mountain *m1) {
 	a_nick_best = a_nick;
 	a_tilt_best = a_tilt;
 	scale_best = scale;
-	gipf->update();
 	
 	fprintf(stderr, "best %f\n", best);
       }
@@ -347,6 +341,26 @@ void
 Panorama::set_height_dist_ratio(double r) {
   height_dist_ratio = r;
   update_visible_mountains();
+}
+
+double
+Panorama::get_center_angle() {
+  return a_center;
+}
+
+double
+Panorama::get_nick_angle() {
+  return a_nick;
+}
+
+double
+Panorama::get_tilt_angle() {
+  return a_tilt;
+}
+
+double
+Panorama::get_scale() {
+  return scale;
 }
 
 int
