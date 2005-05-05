@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.26 2005/05/05 11:02:07 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.27 2005/05/05 13:00:59 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -436,13 +436,14 @@ Panorama::update_visible_mountains() {
 	 > height_dist_ratio)) {
 
       m->a_view = m->alph - a_center;
+
       if (m->a_view > pi_d) {
 	m->a_view -= 2.0*pi_d;
       } else if (m->a_view < -pi_d) {
 	m->a_view += 2.0*pi_d;
       }
  
-      if (m->a_view < pi_d / 2.0 && m->a_view > - pi_d / 2.0) {
+      if (m->a_view < pi_d / 3.0 && m->a_view > - pi_d / 3.0) {
 	visible_mountains->add(m);
       }
     }

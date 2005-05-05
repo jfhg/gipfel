@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.19 2005/05/05 11:02:07 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.20 2005/05/05 13:00:59 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
