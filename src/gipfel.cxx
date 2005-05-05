@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.18 2005/05/05 19:44:08 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.19 2005/05/05 19:56:38 hofmann Exp $"
 //
 // flpsed program.
 //
@@ -40,6 +40,7 @@
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Menu_Item.H>
+#include <FL/Fl_Value_Slider.H>
 
 #include "GipfelWidget.H"
 
@@ -177,7 +178,7 @@ int main(int argc, char** argv) {
   m = new Fl_Menu_Bar(0, 0, 800, 30);
   m->menu(menuitems);
 
-  s_center = new Fl_Slider(50, 30, 750, 15, "direction");
+  s_center = new Fl_Value_Slider(50, 30, 650, 15, "direction");
   s_center->type(1);
   s_center->box(FL_THIN_DOWN_BOX);
   s_center->labelsize(10);

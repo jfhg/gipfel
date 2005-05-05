@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.23 2005/05/05 17:37:37 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.24 2005/05/05 19:56:38 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -112,8 +112,13 @@ GipfelWidget::draw() {
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i);
 
-    if (m == cur_mountain) {
+    if (m == m1 || m == m2) {
       fl_color(FL_RED);
+      fl_polygon(center_x + m->x + x(), center_y + m->y + y() - 10, 
+		 center_x + m->x + x(), center_y + m->y + y() - 20,
+		 center_x + m->x + x() + 10, center_y + m->y + y() - 15);
+      fl_yxline(center_x + m->x + x(), center_y + m->y + y(), 
+		center_y + m->y + y() - 10);
     } else {
       fl_color(FL_BLACK);
     }
