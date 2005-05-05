@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.28 2005/05/05 15:24:43 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.29 2005/05/05 16:53:02 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -288,14 +288,14 @@ Panorama::optimize(Mountain *m1, Mountain *m2) {
   a_nick = atan(tan_nick_view);
   a_center = atan(tan_dir_view);
 
-  if (fabs(a_center - m1->alph) > pi_d/2.0) {
-    a_center = a_center + pi_d;
-  }
-
   if (a_center > 2.0 * pi_d) {
     a_center = a_center - 2.0 * pi_d;
   } else if (a_center < 0.0) {
     a_center = a_center + 2.0 * pi_d;
+  }
+
+  if (fabs(a_center - m1->alph) > pi_d/2.0) {
+    a_center = a_center + pi_d;
   }
   
   scale = n_scale;
