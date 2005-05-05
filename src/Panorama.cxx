@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.29 2005/05/05 16:53:02 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.30 2005/05/05 17:00:38 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -294,6 +294,8 @@ Panorama::optimize(Mountain *m1, Mountain *m2) {
     a_center = a_center + 2.0 * pi_d;
   }
 
+  // atan(tan_dir_view) is not the only possible solution.
+  // Choose the one which is close to m1->alph.
   if (fabs(a_center - m1->alph) > pi_d/2.0) {
     a_center = a_center + pi_d;
   }

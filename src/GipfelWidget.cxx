@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.21 2005/05/05 15:24:43 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.22 2005/05/05 17:00:38 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -225,7 +225,8 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
 
   cur_mountain->x = m_x - center_x;
   cur_mountain->y = m_y - center_y;
-    
+  cur_mountain->label_y = cur_mountain->y;
+  
   redraw();
   return 0;
 }
