@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.18 2005/05/03 21:36:39 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.19 2005/05/05 11:02:07 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -68,7 +68,7 @@ GipfelWidget::load_image(const char *file) {
   if (img == NULL) {
     return 1;
   }
-
+  
   w(img->w());
   h(img->h());
 
@@ -135,6 +135,12 @@ GipfelWidget::draw() {
   fl_pop_clip();
 }
 
+
+static int 
+overlap(int m1, int n1, int m2, int n2) {
+  return m1 <= n2 && n1 >= m2; 
+}
+
 void 
 GipfelWidget::set_labels(Mountains *v) {
   int i, j, width, height;
@@ -146,14 +152,14 @@ GipfelWidget::set_labels(Mountains *v) {
     m = v->get(i);
     
     fl_measure(m->name, width, height);
-    
     m->label_x = m->x + width;
     m->label_y = m->y;
 
     for (j=0; j<v->get_num() && j < i; j++) {
       n = v->get(j);
       
-      if (n->label_x >= m->x && n->label_y >= m->label_y - 1 && n->label_y <= m->label_y + height + 1) {
+      if (overlap(m->x, m->label_x, n->x, n->label_x) &&
+	  overlap(m->label_y - height, m->label_y, n->label_y - height, n->label_y)) {
 	m->label_y = n->label_y - height - 1;
       }
     }

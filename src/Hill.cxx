@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.8 2005/05/03 21:36:39 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.9 2005/05/05 11:02:07 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -57,7 +57,7 @@ Mountain::~Mountain() {
 Mountains::Mountains() {
   num = 0;
   cap = 100;
-  m = (Mountain **) malloc(cap * sizeof(class Mountain *));
+  m = (Mountain **) malloc(cap * sizeof(Mountain *));
 }
 
 Mountains::~Mountains() {
@@ -71,7 +71,7 @@ void
 Mountains::add(Mountain *m1) {
   if (num >= cap) {
     cap = cap?cap * 2:100;
-    m = (Mountain **) realloc(m, cap * sizeof(class Mountain *));
+    m = (Mountain **) realloc(m, cap * sizeof(Mountain *));
   }
 
   m[num++] = m1;
@@ -80,9 +80,9 @@ Mountains::add(Mountain *m1) {
 
 static int
 comp_mountains(const void *n1, const void *n2) {
-  Mountain *m1 = (Mountain *)n1;
-  Mountain *m2 = (Mountain *)n2;
-
+  Mountain *m1 = *(Mountain **)n1;
+  Mountain *m2 = *(Mountain **)n2;
+  
   if (m1 && m2) {
     if (m1->alph < m2->alph) {
       return 1;
@@ -102,7 +102,7 @@ Mountains::sort() {
     return;
   }
 
-  qsort(m, num, sizeof(class Mountain *), comp_mountains);
+  qsort(m, num, sizeof(Mountain *), comp_mountains);
 }
 
 void

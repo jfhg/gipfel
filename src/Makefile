@@ -1,7 +1,7 @@
 CC=gcc
 CPP=c++
 CFLAGS=-g -I/usr/X11R6/include
-CXXFLAGS=-g -I/usr/X11R6/include -I/usr/local/include -fno-stack-protector -O3
+CXXFLAGS=-g -I/usr/X11R6/include -I/usr/local/include -fno-stack-protector 
 LDFLAGS=-g -fno-stack-protector
 
 OBJECTS=flmountains.o GipfelWidget.o Mountain.o Panorama.o

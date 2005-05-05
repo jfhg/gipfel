@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.25 2005/05/03 20:48:37 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.26 2005/05/05 11:02:07 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -110,6 +110,7 @@ Panorama::load_file(const char *name) {
   fclose(fp);
 
   update_angles();
+
   return 0;
 }
 
@@ -121,6 +122,7 @@ Panorama::set_viewpoint(const char *name) {
   }
 
   update_angles();
+
   return 0;
 }
 
@@ -413,7 +415,9 @@ Panorama::update_angles() {
       m->a_nick = nick(m->dist, m->height);
     }
   }
-  
+
+  mountains->sort();
+
   update_visible_mountains();
 }
 
@@ -444,7 +448,6 @@ Panorama::update_visible_mountains() {
     }
   }
 
-  visible_mountains->sort();
   update_coordinates();
 }
 
