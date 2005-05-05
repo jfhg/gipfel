@@ -1,5 +1,6 @@
 MIESING,Miesing,,47.6578816,11.9412954,1885
 WANK,Wank,,47.50677,11.14389,1780
+HSEEBLAS,Hoher Seeblaskogel,,47.0956001,11.0748396,3235
 KAMP,Kampenwand,,47.7545850,12.3584183,1525
 AGSSHR,Agassizhorn,,46.54662,8.1144,3946
 AGSSZJ,Agassizjoch,,46.54399,8.11724,3749
@@ -96,7 +97,6 @@ ARCHTL,Archtalkopf,,47.55764,11.19431,1927
 ARDECN,Arete des Ecandies,,46.01529,7.03942,2870
 ARICO,Arico,,28.19014,-16.52314,787.2
 ARICO P,Arico Parkplatz,,28.18752,-16.52059,819.6
-ARSPGR,Arnspitze; Große,,47.39733,11.22231,2196
 ARPLST,Arpelistock,,46.34391,7.31537,3035
 ARPETT,Arpette,,46.02913,7.08814,1640
 ARGLCC,Arrrow Glacier Camp,,-3.07239,37.33628,4868
@@ -197,7 +197,6 @@ GRMYT2,Beginn Nordabschnitt Gr. Mythen,"Totenplangg"; ab hier bei Restschnee Pic
 BGEGLK,Beginn Ostgrat Liskamm,vom Lisjoch ausgehend,45.92046,7.8501,4180
 BFDTBL,Beginn S-Grat Dent Blanche,Beginn des eigentlichen Wandflue-Grats (S-Grat) auf die Dent Blanche (Normalweg),46.02604,7.60961,3908
 BS3907,Beginn Schneegrat um P. 3907,am S-Grat auf die Dent Blanche,46.02411,7.60859,3889
-RIPWEL,Begrenzungsrippe Weilenmannrinne,,46.88774,10.22704,3085
 GHSth,bei G.H. Starzelhaus,Forstweg ins Turatal,47.31169,10.11648,1295
 BCHPSS,Beichpass,,46.43489,7.91888,3128
 BCHSPT,Beichspitza,,46.43212,7.91534,3208
@@ -252,18 +251,12 @@ BGRSTS,Bergrestaurant Tschingla,,47.14821,9.29479,1527
 BERGSEEBR,Bergseebrücke,Brücke über die Gutach im Bereich der Tribergfälle,48.12631,8.22768,778
 BGSSCH,Bergseeschijen,,46.6637,8.48576,2815
 BERGHOESS,Bergstation Hössbahn,,47.66617,14.17381,1853
-BGSTLB,Bergstation Laberbahn,Wirtshaus (lecker und preiswert),47.58612,11.10341,1670
-RTMBST,Bergstation Rotmoos,Bergstation des Rotmoos-Sessellifts im Hochzeiger Skigebiet,47.14858,10.79497,2450
-BSTSALEI,Bergstation Saléi,Bergstation der neuen (2002) Seilbahn von Vergeletto; nähe Saléi Vecchi,46.22173,8.56637,1791
-BGSSTF,Bergstation Steffisalpe,Bergstation Steffisalpebahn,47.2558,10.15914,1906
-ACNG10,Berlin Huts,,-32.63766,70.02117,-9999
 BRNDLM,Berndlalm,,47.18544,12.26041,1500
 BRNOSP,Bernina Ospizio,Bergrestaurant,46.41113,10.02196,2309
 BERTL,Bertl,,47.82004,14.16861,-9999
 BESSO,Besso,,46.07767,7.65877,3668
 GLAARG,Betreten Glacier Argentiere,,45.95247,6.98671,-9999
 BETSTEIN,Betstein,,47.60244,14.18478,1836
-BTTWG,Bettelwurf; Großer,,47.34431,11.51978,2725
 BTTWK,Bettelwurf; Kleiner,,47.34561,11.50969,2649
 BETTEN,Betten,Station,46.37142,8.07622,842
 BTKSP,Bettlerkarspitze,,47.43092,11.61767,2268
@@ -973,8 +966,6 @@ FRSCHS,Freschenhaus,,47.29847,9.77781,1840
 FRCKNS,Frickenesch,,47.46867,9.75767,518
 FRIEDR,Frieder,,47.51711,10.95883,2053
 FRDRSP,Friederspitz,,47.52186,10.95969,2049
-FRBH,Friesenberghaus,,47.0675,11.70194,2498
-FRBGHS,Friesenberghaus,,47.06757,11.70214,2498
 FRIESH,Friesenhalshöhe,,46.94972,13.77694,2246
 FRIHRD,Fritscheshardt,nicht lohnend (wenig ausgeprägt und weglos),50.66285,7.24096,318.3
 FRTZNS,Fritzens,,47.30495,11.58895,591
@@ -1051,7 +1042,6 @@ GNSHII,Ganesh II,,28.37917,85.05889,7111
 GNSHIV,Ganesh IV,,28.37139,85.06194,6945
 GANSHV,Ganesh V,,28.34528,85.08694,6986
 GNGPRN,Gangapurna,,28.63833,83.95,7455
-GANTEK,Gantekopf,,46.98806,9.99083,1958
 GANTEK,Gantekopf,,46.98825,9.99078,1958
 GAPFALP,Gapfohlalpe,,47.27572,9.76472,1607
 GALOGN,Gare de Lognagn,,45.96853,6.94347,1970
@@ -1078,7 +1068,6 @@ GUGIRI,Gaugiri,,29.04583,84.18778,6110
 GRSHNK,Gauri Shankar,,27.96583,86.33528,7134.3
 GAVIDURA,Gavidura Alpe,Alpe oberhalb von Frastanz im Saminatal,47.19033,9.6125,995
 GAZZIR,Gazzirola,,46.11796,9.07251,2116
-GHRNSP,Gehren Sp.,,47.38681,11.1351,2367
 GHRNLP,Gehrenalpe,Hittisau,47.48067,9.98425,1354
 GEHREN,Gehrenspitze,,47.34725,10.19983,1860
 GHRNSP,Gehrenspitze,,47.38667,11.13519,2367
@@ -1103,13 +1092,8 @@ GMSCHL,Gemsli; Schlappin,Bergrestaurant,46.91079,9.89943,-9999
 GEMSSP,Gemsspitze,,46.6768,8.18426,2542
 GEMST,Gemstelpass,,47.27878,10.14331,1971
 GOJANG,Geojang,,28.785,84.03278,6111
-GPTSHS,Gepatschhaus,,46.90158,10.73755,1928
-GPTSHS,Gepatschhaus,,46.90137,10.73819,1928
 HTTGERAER,Geraer Hutte,Geraer Hutte,47.04341,11.62813,2337.2
 GRBKZ,Gerberkreuz,,47.42711,11.28683,2303
-GERRAA,Gerra (Abzweig Val Mött),,46.31857,8.80509,805
-GERRKI,Gerra (Kirche),,46.31917,8.80143,845
-GERRAB,Gerra (Verzasca-Brücke),,46.31875,8.80465,799
 GRTRSP,Gertrudspitze,,46.67933,8.18377,2633
 GSCHNN,Geschinen,,46.49558,8.28076,1351
 GESERB,Geserberg,,47.50806,9.80944,939
@@ -1176,7 +1160,6 @@ GHOCHK,Gr. Hochkasten,,47.67345,14.04757,2388
 GKLAUSE,Gr. Klause,,47.80321,14.47551,-9999
 GKRAXE,Gr. Kraxenberg,,47.63622,14.04847,2198
 GPRIEL,Gr. Priel,,47.71691,14.06324,2515
-GRSKRS,Gr. Seekar Sp.,,47.40497,11.3906,2677
 GSTNBG,Gr. Steinberg,,50.92669,7.14208,132
 GWOISING,Gr. Woising,,47.71592,13.9033,2064
 GRKNGT,Gr.Kinigat,Zustieg auf Klettersteig vom Karnischen Höhenweg 403,46.67228,12.5215,2689
@@ -1308,8 +1291,6 @@ GSTEIG,Gsteig,,46.38523,7.2677,1184
 GSTTLP,Gstüatalpe,,47.19116,10.11238,1845
 GCKLST,Guckelstein,Naturdenkmal,49.8011,6.97431,-9999
 GUFFRT,Guffert,,47.54639,11.78875,2196
-GUFFRT,Guffert,,47.5463,11.78867,2195.5
-GFRTAL,Guffert Alm,,47.53467,11.75928,1023
 GUEGGERN,Güggernülli,,47.21056,9.88222,1736
 GST,Guggstein,,47.40444,9.94222,1600
 GMCHLS,Gumba Chuli (LaisPeak),,28.19167,85.81944,6256
@@ -1355,7 +1336,6 @@ HAELEK,Hälekopf,,47.38478,9.96878,1614
 HLINTR,Hall in Tirol,,47.28169,11.50702,574
 HZNTRK,Haller Zunterkopf,,47.31926,11.4843,1966
 HLLHTT,Halleranger Haus,,47.35492,11.47711,1768
-HLRNHS,Hallerangerhaus,,47.3549,11.47717,1768
 HALS,Hals,,47.6615,14.28778,-9999
 HLSRSP,Halserspitze,,47.59125,11.78133,1861
 HLSMRT,Halsmarter H.,Seilbahnstation,47.24194,11.54419,1550
@@ -1656,11 +1636,6 @@ JEGIHR,Jegihorn,,46.15148,7.97036,3206
 JENNER,Jenner,,47.57572,13.02028,1874
 JTHBHR,Jethibahurani,,29.88222,81.04361,6850
 JIRBNG,Jirbang,,28.62361,83.45167,6062
-J,Joch,richtung SSW- Hang,47.3246,10.08262,1910
-TJ01,Joch,Tupungato - Joch,-33.40438,-69.96676,2585.1
-TJ02,Joch,Tupungato - Joch,-33.39928,-69.96438,2510.8
-TJ03,Joch,Tupungato - Joch,-33.31287,-69.80424,4294.5
-TJ04,Joch,Tupungato - Joch,-33.32381,-69.77973,5161.9
 JOCHBG,Jochberg,,47.62572,11.37172,1569
 JCHGRB,Jochgruben K.,,47.09032,11.60845,2453
 JOECHLI,Jöchli,,46.98583,10.08556,2405
@@ -1707,9 +1682,7 @@ KLMTHS,Kals-Matreier-Törl-Haus,,47.07061,12.62389,1755
 KALTEHERBG,Kalte Herberge,,47.65711,14.02489,-9999
 KLTNBR,Kaltenbrunnen,,47.44222,9.87083,906
 KLTNBR,Kaltenbrunnensäge,,46.69802,8.17187,1210
-KLTWSS,Kaltwasser Spitze,,47.40279,11.45078,2732.8
-KLTWSS,Kaltwasserkar Sp.,,47.40303,11.45064,2733
-KLTWSS,Kaltwasserkarspitze,,47.40314,11.45047,2733
+KLTWSS,Kaltwasserkar Spitze,,47.40303,11.45064,2733
 KMBNPK,Kambon Peak,,28.65833,83.30694,6570
 TP10,Kamm,Tupungato - Kamm Ende,-33.32866,-69.77768,5455.8
 KAMMERSEE,Kammersee,,47.64894,13.94392,-9999
@@ -2275,7 +2248,6 @@ MTTRHR,Mitterhorn,,47.54964,12.62816,2503.3
 MITTERMOEL,Mittermölbing,,47.63186,14.17777,2322
 MTRZKG,Mitterzaiger Kogel,,47.24194,11.03565,2628
 MACHKP,Mittl. Achselkopf,,47.65391,11.48528,1681
-MTODKS,Mittl. Ödkar Sp.,,47.41258,11.42439,2745
 mSpA,Mittl. Spitalalpe,,47.30464,10.09716,1554
 OEDKARSP,Mittlere Ödkarspitze,,47.41254,11.42448,2746
 MOGGRS,Möggers,,47.56083,9.81611,923
@@ -2469,9 +2441,7 @@ NOVASP,Novaspitze,,47.18389,9.90472,2022
 NUMBUR,Numbur,,27.75417,86.57444,6957
 NUPTSE,Nup Tse,,27.96722,86.88722,7855
 NZIDRS,Nüziders,,47.17361,9.80139,560
-OWTRST,Ob. Wetterstein Sp.,,47.427,11.19098,2298
 OBGBHR,Ober Gabelhorn,,46.03861,7.66804,4063
-OBGBLH,Ober Gabelhorn,,46.0387,7.66791,4063
 OBRTBG,Ober Torberg,,46.43509,7.95544,3325
 OBRAAR,Oberaar,,46.54842,8.27624,2338
 OBRRHR,Oberaarhorn,,46.53131,8.1743,3631
@@ -2694,8 +2664,6 @@ MP15,Penidentes,Penidentes - Ausstieg (?),-33.72198,-69.9327,4613
 PNALPG,Pension Alpenrose/Grusaida,Bergrestaurant; Plattachas,46.58954,10.43167,-9999
 PRLNHD,Perlenhardt,auf dem Gipfel netter Felsblock (Stellen I),50.67318,7.26232,332.0
 PETERSB,Petersberg,Auch bekannt als "Kleiner Madron",47.71206,12.1255,858
-PETERSWHS,Petersberg Whs.,Berggasthof Riederstein am Galaun,47.71206,12.1255,858
-PETBMT,Petersberg-Mautstelle,Mautstelle der Petersberg-Straße,50.68043,7.21662,157
 PTRSGR,Petersgrat,,46.46202,7.80912,3203
 PETERSK,Petersköpfl,Großer Aussichtsturm ("Bismarckturm"); im Winter geschlossen,49.47908,8.12953,487
 PTHNGT,Pethang Tse,,27.9575,87.01556,6739
@@ -2805,7 +2773,6 @@ ZGHIM1,Platz unter Himmerich-Westwand,von hier Zugang zum Himmerich-Gipfel (kurz
 PLAYADTAB,Playa de Taburiente,Besucherzentrum,28.7231,-17.87538,785
 ACON13,Plaza Argentina Base Camp,,-32.64581,69.94472,-9999
 ACNG07,Plaza de Mulas,,-32.64732,70.05817,-9999
-PLSNSP,Pleisen Sp.,,47.40872,11.3419,2569
 PLSP,Pleisenspitze,,47.40869,11.34217,2569
 Plesch,Pleschberg,Herrliche Ausssicht; Wanderweg; etwas steil; aber problemlos; 2 Stunden Gehzeit,47.61032,14.4019,1720
 PLESSKOPF,Plessig Kopf,,47.39083,10.06472,1384
@@ -2933,47 +2900,7 @@ RSCHBR,Rauschbrunnen,,47.2791,11.34721,1088
 RAUTHHOLAR,Rauthhólar,,65.94998,-16.52688,234
 RWLPSS,Rawilpass,,46.38329,7.44254,2429
 RCHLKP,Rechelkopf,,47.72206,11.62433,1328
-RCHLKP,Rechelkopf,,47.7223,11.62471,1330
 REDSTEIN,Redstein,,47.68986,13.88689,1900
-RFALBR,Refuge Albert 1'er,CAF Sekt. Ref. du Mont Blanc,45.99674,6.98657,2706
-REFAL1,Refuge Albert 1'er,,45.99694,6.98656,2702
-STAGNU,Refuge Asco Stagnu,,42.40341,8.9227,-9999
-RFGCRL,Refuge Carrelet,,44.90583,6.31473,1909
-RFGCZN,Refuge Cézanne,,44.91792,6.4158,1874
-CIUTTU,Refuge Ciuttulu di i Mori,,42.33486,8.8681,1991
-REFARG,Réfuge d'Argentière,,45.94641,7.0046,2770
-RFGDUB,Refuge d'Ubine,Naturfreunde Frankreich,46.30666,6.74262,1740
-REFCH,Refuge de Chésery,Privat,46.19828,6.80968,1980
-RFGLBL,Refuge de Glacier Blanc,,44.93744,6.41178,2542
-RFGDAG,Refuge de L'Aigle,,45.01109,6.3245,3450
-RFGDAG,Refuge de L'Aigle,,45.01109,6.3245,3450
-ONDA,Refuge de l'Onda,,42.15237,9.07293,1430.1
-REFSEGA,Refuge de la Sega,,42.2864,9.03896,1165.9
-REFLAT,Refuge de la Tour,Privat,46.28951,7.16129,1880
-PIANA,Refuge de Petra Piana,,42.19812,9.05243,1841.9
-REFTRE,Refuge de Tre la Tete,,45.79173,6.73483,1970
-PIOBBU,Refuge del Ortu di u Piobbu,,42.46483,8.90707,-9999
-REFCON,Refuge des Conscrits,,45.78689,6.76576,2604
-RFDECR,Refuge des Ecrins,,44.94715,6.38288,3175
-RFDPTD,Refuge des Petoudes,,46.02059,7.09,2170
-RFPRMT,Refuge du Promotoire,,44.99833,6.30329,3082
-REFGIA,Refuge Giacomini,Privat,46.28951,7.16129,1893
-GOUTER,Refuge Gouter,Refuge de l'aig du Gouter,45.85327,6.82981,3816.7
-LACDE,Refuge Lac du Derborence,Privat,46.27988,7.21451,1513
-RFLCLT,Refuge Les Clots,,45.0435,6.18286,1500
-RFPLVX,Refuge Pelvoux,,44.88283,6.40559,2700
-RFP&BR,Refuge Pierre & Bérard,Gemeinde Vallorcine,46.00295,6.86873,1924
-RFPLDR,Refuge Plaine Dranse,Privat,46.217,6.79327,1650
-RTMECR,Refuge Temple Ecrins,,44.90429,6.33263,2484
-TIGHIE,Refuge Tighiettu,,42.36225,8.90916,1684.9
-CARROZZU,Refugede Carrozzu,,42.42627,8.90041,236.7
-103,Refugio Chileno,Refugio Chileno,-50.95718,-72.911,414
-REFPUNTA,Refugio de la Punta de los Roques,,28.7038,-17.84633,2057
-206,Refugio Dickson,Refugio Dickson,-50.87865,-73.075,208
-404,Refugio Grey,Refugio Grey,-51.00655,-73.18069,64
-101,Refugio Las Torres,Refugio Las Torres; Campingplatz,-50.96722,-72.87002,129
-701,Refugio Los Cuernos,Refugio Los Cuernos,-51.02396,-72.98549,91
-502,Refugio Peohe,Refugio Peohe,-51.07159,-73.09249,50
 REHM,Rehmen,Parzelle von Au,47.32222,9.99778,824
 REICHMWD P,Reichelsmühler Wand Parkplatz,,49.69255,11.32834,425.5
 RCHNHS,Reichenhaller Haus,,47.75502,12.84979,1750
@@ -3007,8 +2934,6 @@ RIED,Ried,,46.41426,7.80684,1486
 RIDRLP,Riederalp,,46.37779,8.02847,1925
 RDRFRK,Riederfurka,Bergrestaurant,46.37758,8.01755,-9999
 RDRSTN,Riederstein,,47.70417,11.79156,1207
-RIEDERSTN,Riederstein,Kapelle am Gipfel,47.70421,11.79232,1208
-RIEDERWHS,Riederstein Whs.,Berggasthof Riederstein am Galaun,47.70363,11.78845,1061
 RDSTBL,Riedstüble,,47.55778,9.805,866
 RIEDST,Riedstüble,,47.55833,9.80556,869
 RIEFBERG,Riefensberg,,47.505,9.96444,1086
@@ -3026,76 +2951,12 @@ RCSTGL,Rif Castiglioni,,46.3202,8.26182,1640
 GP-RFE,Rif. Vittorio Emanuele,,45.51259,7.22954,2737.2
 RFFLHR,Riffelhorn,,45.98109,7.75825,2928
 RIFFLE,Riffler,,49.5397,11.47505,401.1
-RAPSGR,Rifugio 12 (Dodici) Apostoli/F.lli Garbari,SAT Societá Alpinisti Tridentini,46.15064,10.84753,2480
-RAPSGR,Rifugio 12 (Dodici) Apostoli/F.lli Garbari,SAT Societá Alpinisti Tridentini,46.15064,10.84751,2480
-RFGALL,Rifugio Alpe di Lago,,46.35357,9.01983,2125
-RFBDCP,Rifugio Baita del Capriolo,Bergrestaurant,46.48828,9.44974,1961
-RFGBRN,Rifugio Barone,Besitzer: Società Escursionistica Verzaschese,46.39659,8.74877,2172
-REFBEDO,Rifugio Bedole,Rifugio Bedole - Val Genova,46.1976,10.59658,1650.8
-RFGBFL,Rifugio Buffalora,Bergrestaurant; Ofenpass-Straße; auch Chasa dal Stradin,46.64813,10.26657,1968
-RFGCAL,Rifugio Care Alto,SAT Società Alpinisti Tridentini,46.10756,10.62606,2459
-RFGCAL,Rifugio Care Alto,SAT Società Alpinisti Tridentini,46.10755,10.62606,2459
-RFGCST,Rifugio Casati,,46.46313,10.60264,3254
-BRANCA,Rifugio Cesare Branca,,46.41484,10.5838,2493
-RFCSMR,Rifugio Cesare Mores,,46.42355,8.35118,2505
-RFGCBS,Rifugio Città di Busto,,46.43403,8.36308,2482
-RTRMND,Rifugio Città di Trento al Mandrone,SAT Società Alpinisti Tridentini,46.20258,10.57119,2449
-RTRMND,Rifugio Città di Trento al Mandrone,SAT Societá Alpinisti Tridentini,46.20257,10.5712,2449
-COLDAI,Rifugio Coldai,,46.39925,12.06872,2132
-RIF CORNO,Rifugio Corno,Italien - Sette Communi,45.8049,11.53441,1276
-RFDMCH,Rifugio Damiano Chiesa,SAT Societa Alpinisti Tridentini,45.81033,10.89031,2060
-RFDMCH,Rifugio Damiano Chiesa,SAT Societá Alinisti Tridentini,45.81033,10.89031,2060
-RFTCQN,Rifugio F.F. Tucket e Quintino Sella,SAT Societá Alpinisti Tridentini,46.19203,10.88211,2271
-RFTCQN,Rifugio F.F. Tucket e Quintino Sella,SAT Societá Alpinisti Tridentini,46.19201,10.88211,2271
-RFRNCD,Rifugio Francesco Denza,SAT Societá Alpinisti Tridentini,46.24339,10.65522,2298
-RFRNCD,Rifugio Francesco Denza,SAT Societá Alpinisti Tridentini,46.15342,10.65251,2298
-GIANET,Rifugio Gianetti,Pizzo Badille; Nordkante,46.28069,9.58428,2484
-RFGRGR,Rifugio Giorgio Graffer,SAT Societa Alpinisti Tridentini,46.21956,10.88978,2261
-RFGRGR,Rifugio Giorgio Graffer,SAT Societá Alpinisti Tridentini,46.21956,10.88977,2261
-RFGVBL,Rifugio Giovanni Barba/Luciano Ferrero,Hüte des CAI Vercelli,45.90341,7.9244,2240
-RFGSGN,Rifugio Giovanni Segantini,SAT Societá Alpinisti Tridentini,46.20922,10.71083,2373
-RFGSGN,Rifugio Giovanni Segantini,SAT Societá Alpinisti Tridentini,46.20921,10.71084,2373
-RLRCCV,Rifugio Guido Larcher al Cevedale,SAT-Società Alpinisti Tridentini,46.43683,10.66633,2608
-LAVARE,Rifugio Lavaredo,Rifugio Lavaredo,46.61829,12.31195,2355.1
-RFMNTA,Rifugio Mantova al Vioz,SAT-Società Alpinisti Tridentini,46.39919,10.63586,3535
-RFMNTA,Rifugio Mantova al Vioz,SAT Società Alpinisti Tridentini,46.39918,10.63585,3535
-MRCRS,Rifugio Marco e Rosa,,46.37363,9.91048,3609
-RFGPRN,Rifugio Nino Pernici,SAT Societá Alpinisti Tridentini,45.92633,10.76875,1600
-RFGPRN,Rifugio Nino Pernici,SAT Societá Alpinisti Tridentini,45.92633,10.76876,1600
-RFGPLR,Rifugio Peller,SAT Societa Alpinisti Tridentini,46.32211,10.95267,2022
-RFGPLR,Rifugio Peller,SAT Societá Alpinisti Tridentini,46.32212,10.95266,2022
-RIFPDC,Rifugio Piano delle Creste,,46.39101,8.48695,2108
-RIFPB,Rifugio Poncione di Braga,20 Plätze; kein Telefon; Eigentum der Amici della Natura von Peccia,46.42886,8.57214,2017
-RPRSMR,Rifugio Prospero Marchetti,SAT Societá Alpinisti Tridentini,45.92114,10.96186,2012
-RPRSMR,Rifugio Prospero Marchetti,SAT Societá Alpinisti Tridentini,45.92112,10.96187,2012
-RFQNTF,Rifugio Quintino Sella al Felik,,45.9003,7.79231,3585
-RIFMAR,Rifugio Regina Margherita,,45.92726,7.87691,4554
-RFGSPT,Rifugio San Pietro,SAT Societá Alpinisti Tridentini,45.93272,10.83856,976
-RFGSPT,Rifugio San Pietro,SAT Societá Alpinisti Tridentini,45.93273,10.83854,976
-RFSAGS,Rifugio Silvio Agostini,SAT Societa Alpinisti Tridentini,46.14244,10.8695,2410
-RFSAGS,Rifugio Silvio Agostini,SAT Societá Alpinisti Tridentini,46.14243,10.86949,2410
-RFSLDR,Rifugio Silvio Dorigoni,SAT Società Alpinisti Tridentini,46.46067,10.75183,2437
-RFSLDR,Rifugio Silvio Dorigoni,SAT Società Alpinisti Tridentini,46.46066,10.75182,2437
-RFTMPD,Rifugio Tommaso Pedrotti alla Cima Tosa,SAT Societá Alpinisti Tridentini,46.15419,10.89878,2491
-RFTMPD,Rifugio Tommaso Pedrotti alla Cima Tosa,SAT Societá Alpinisti Tridentini,46.15419,10.89877,2491
-RFTRTR,Rifugio Torquato Taramelli,SAT Societá Alpinisti Tridentini,46.39461,11.74042,2046
-RFTRTR,Rifugio Torquato Taramelli,SAT Societá Alpinisti Tridentini,46.39461,11.7404,2046
-RFGVJL,Rifugio Vajolet,,46.45861,11.63272,2243
-RFGVJL,Rifugio Vajolet,,46.45861,11.63272,2243
-RFGVLF,Rifugio Val di Fumo,SAT Societá Alpinisti Tridentini,46.08447,10.5625,1997
-RFGVLF,Rifugio Val di Fumo,SAT Societá Alpinisti Tridentini,46.08447,10.56248,1997
-RIFVALSI,Rifugio Vallesinella,,46.20662,10.85141,1513
-RFVDMD,Rifugio Velo della Madonna,,46.23136,11.84267,2358
-RFVDMD,Rifugio Velo della Madonna,,46.23134,11.84265,2358
 RGKULM,Rigi-Kulm,,51.25,7.11667,332
-RGKULM,Rigi-Kulm,Bergrestaurant,47.0558,8.48391,-9999
 RIRAMITSCH,Rigler Ramitsch,,47.66686,14.26778,-9999
 MACH09,Rim,,-3.07802,37.36265,5630
 RIMPFH,Rimpfischhorn,,46.02303,7.88388,4199
-RMPFHR,Rimpfischhorn,,46.02303,7.88388,4199
 RMPFSC,Rimpfischsattel,,46.02161,7.88,3990
 RNDRBG,Rinderberg,,47.15247,11.42411,1720
-RNDRHR,Rinderhorn,,46.41358,7.65428,3448
 RNDHRN,Rinderhorn,,46.41359,7.65428,3448
 RNDRST,Rindersteig,,47.43911,11.03642,1410
 RING,Ring,,47.06643,11.22837,2310
@@ -3196,12 +3057,8 @@ RGGBRG,Ruggburg,,47.54389,9.77972,675
 RUHSTZ,Ruhsitz,,47.2925,9.48222,1368
 RUM,Rum,,47.28695,11.46036,621
 RMRALM,Rumer Alm,,47.30312,11.42178,1243
-RUMRSP,Rumer Spitze,,47.32059,11.42606,2454
-RUMRSP,Rumer Spitze,,47.32062,11.42612,2454
 RMSP,Rumerspitze,,47.32058,11.42608,2397
 RUMPLMR,Rumpelmayrreut,,47.74705,14.38122,1095
-RUNDLOCH,Rund Loch,großes Felsenfenster im NO-Grat des Gemsfairenstocks,46.87555,8.92171,2290
-Rwg,Rundweg,n. S- auf Forstweg,47.30374,10.11915,1298
 RUNGEL,Rungeletsch,,47.20392,9.6395,693
 SOhchs,S - Hang Ochshk.,Hang n. WNW queren,47.32233,10.09494,1790
 SCARLO,S. Carlo,Ausgangspunkt ins Val d'Antabia,46.40766,8.52518,940
@@ -3309,7 +3166,6 @@ SCHCHR,Scheuchzerhorn,,46.54398,8.19038,3456
 SCHCHZ,Scheuchzerjoch,,46.5458,8.20044,3070
 SCHRND,Schihörndl,,47.53647,12.65061,2286
 SCHLDN,Schildenstein,,47.59483,11.72497,1611
-SCHGRF,Schilder Grinner-Ferner,Wegschilder am Nordöstlichen Ende des Grinner-Ferner zwischen Patrolscharte und Gasillschlucht.,47.17285,10.48238,2755
 SCHILL,Schillereck,,47.80156,14.22511,-9999
 SCHLHR,Schilthorn,,46.55747,7.83481,2970
 SCHNDL,Schindlerskopf,,47.55464,11.19136,1940
@@ -3415,8 +3271,6 @@ SEBGSP,Seebergspitze,,47.466,11.67928,2085
 SBLICK,Seeblick,Bergrestaurant,46.90202,8.64438,-9999
 SFLITR,Seefeld in Tirol,,47.32876,11.1866,1200
 SFLDJC,Seefelder Joch,,47.34031,11.23975,2060
-SEEFJOCH,Seefelder Joch,Bergstation der Seilbahn von Seefeld,47.34021,11.2397,2089
-SFLDJC,Seefelder Joch,Bergstation Seilbahn,47.34029,11.23962,2074
 SFLDSP,Seefelder Spitze,,47.33278,11.2375,2221
 SEEFELDRSP,Seefelder Spitze,,47.33279,11.23754,2235
 SEEHAGELM,Seehaglmauer,,47.78887,14.31392,-9999
@@ -3468,7 +3322,7 @@ SLBRST,Silbersattel,,45.93755,7.86862,4515
 SLBSAT,Silbersattel,zwischen Nordend und Dufourspitze,45.93762,7.86849,4515
 SLBRTL,Silbertal,,47.09503,9.97694,889
 SILZ,Silz,,47.26552,10.92757,654
-SMTSBG,Simmetsberg,,47.56617,11.25358,1836
+SMTSBG,Simetsberg,,47.56617,11.25358,1836
 SMMLBG,Simmlberg,,47.36161,11.19953,1508
 SMNHME,Simnag Himal East,,28.51667,84.43694,6251
 SMPLNH,Simplonhospiz,,46.24699,8.02925,1997
@@ -3486,7 +3340,6 @@ SORNHS,Soiernhaus,,47.49401,11.34892,1616
 SNHTT,Soiernhaus,,47.49436,11.49694,1616
 SRNSCH,Soiernschneid,,47.48233,11.34194,2174
 SORNSP,Soiernspitze,,47.48153,11.35708,2259
-SORNSP,Soiernspitze,,47.48147,11.35714,2256.8
 SOELLECK,Söllereck,,47.37361,10.23722,1706
 SLSTG,Solstein; Großer,,47.30272,11.30775,2547
 SSTNK,Solstein; Kleiner,,47.30258,11.32425,2637
@@ -3507,7 +3360,6 @@ SORBUN,Soribun,,28.88472,84.17278,6328
 SPBLFL,Spaltblock Fluchthorn,hier durch,46.88952,10.22729,3273
 SNGH,Spannagel Haus,,47.08,11.67111,2531
 SPTNBC,Spätenbach,,47.37194,9.76722,842
-SPCKRS,Speckkar Sp.,,47.34637,11.48735,2621
 SPKSP,Speckkarspitze,,47.34639,11.48744,2621
 SPERING,Spering,,47.80423,14.19512,-9999
 SPHX,Sphinxstollen,Zugang zur Jungfrau-Bahn,46.54789,7.98657,3464
@@ -3577,7 +3429,6 @@ MP03,Steinmann,Steinmann,-33.80481,-70.00597,2502
 FLS15,Steinmann auf SW-Rippe Fleckistock,groß (von Ferne sichtbar),46.70132,8.49551,3000
 FLS07,Steinmann auf Weg zu Fleckistock,,46.69717,8.49454,2610
 FLS24,Steinmann S-Grat Fleckistock,,46.7063,8.49808,3345
-STWEIL,Steinmann Weilenmannrinne,unterhalb der Weilenmannrinne; von hier aus Wegspuren aufwärts durch die Rinne,46.88544,10.22735,2930
 STEIRERSEE,Steirersee,,47.59903,14.03175,1445
 STEIRERTOR,Steirertor,,47.60455,14.01783,-9999
 STESPI,Steirische Kalkspitze,,47.28335,13.62244,2447
@@ -3873,7 +3724,6 @@ VISP,Visp,,46.29409,7.88091,651
 VISSE,Visse,Station,46.30309,7.33545,1670
 VIZZAN,Vizzanova,,42.12744,9.13219,-9999
 VOCAGLIA,Vocaglia,,46.20475,8.5899,1005
-VGLKRS,Vogelkar Sp.,,47.44658,11.4112,2522
 VGKSP,Vogelkarspitze,,47.44639,11.41133,2522
 VOEGLN,Vöglen,,47.44778,9.87,828
 DESEADA1,Volcán de la Deseada,,28.56923,-17.83723,1956
