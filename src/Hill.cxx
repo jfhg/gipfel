@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.9 2005/05/05 11:02:07 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.10 2005/05/08 18:00:11 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "Mountain.H"
+#include "Hill.H"
 
 Mountain::Mountain(const char *n, double p, double l, double h) {
   name = strdup(n);

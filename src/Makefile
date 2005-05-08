@@ -4,7 +4,7 @@ CFLAGS=-g -I/usr/X11R6/include
 CXXFLAGS=-g -I/usr/X11R6/include -I/usr/local/include -fno-stack-protector 
 LDFLAGS=-g -fno-stack-protector
 
-OBJECTS=flmountains.o GipfelWidget.o Mountain.o Panorama.o
+OBJECTS=gipfel.o GipfelWidget.o Hill.o Panorama.o
 
 #%.o: %.c
 #	$(CC) -c $(CFLAGS) $*.c

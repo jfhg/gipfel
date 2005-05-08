@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.H,v 1.14 2005/05/05 17:37:37 hofmann Exp $"
+// "$Id: Panorama.H,v 1.15 2005/05/08 18:00:11 hofmann Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 #ifndef PANORAMA_H
 #define PANORAMA_H
 
-#include "Mountain.H"
+#include "Hill.H"
 
 class Panorama {
  private:

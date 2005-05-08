@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.H,v 1.10 2005/05/03 21:36:39 hofmann Exp $"
+// "$Id: Hill.H,v 1.11 2005/05/08 18:00:11 hofmann Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -21,8 +21,8 @@
 // USA.
 //
 
-#ifndef MOUNTAIN_H
-#define MOUNTAIN_H
+#ifndef HILL_H
+#define HILL_H
 
 class Mountain;
 
