@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.33 2005/05/08 17:56:48 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.34 2005/05/08 18:02:38 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -51,8 +51,8 @@ comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
 static double pi_d, deg2rad;
 
 Panorama::Panorama() {
-  mountains = new Mountains();
-  visible_mountains = new Mountains();
+  mountains = new Hills();
+  visible_mountains = new Hills();
   height_dist_ratio = 0.07;
   pi_d = asin(1.0) * 2.0;
   deg2rad = pi_d / 180.0;
@@ -76,7 +76,7 @@ Panorama::load_file(const char *name) {
   char *vals[10];
   char **ap, *bp;
   double phi, lam, height;
-  Mountain *m;
+  Hill *m;
 
   visible_mountains->clear();
   mountains->clobber();
@@ -99,7 +99,7 @@ Panorama::load_file(const char *name) {
     
     height = atof(vals[5]);
 
-    m = new Mountain(vals[1], phi, lam, height);
+    m = new Hill(vals[1], phi, lam, height);
 
     mountains->add(m);
   }
@@ -123,15 +123,15 @@ Panorama::set_viewpoint(const char *name) {
   return 0;
 }
 
-Mountains * 
+Hills * 
 Panorama::get_visible_mountains() {
   return visible_mountains;
 }
 
 double
-Panorama::get_value(Mountains *p) {
+Panorama::get_value(Hills *p) {
   int i, j;
-  Mountain *m;
+  Hill *m;
   double v = 0.0, d_min, d;
 
   if (isnan(scale) || isnan(a_center) || isnan(a_tilt) || isnan(a_nick) ||
@@ -158,9 +158,9 @@ Panorama::get_value(Mountains *p) {
 }
 
 int 
-Panorama::guess(Mountains *p, Mountain *m1) {
-  Mountain *p2, *m_tmp1, *m_tmp2;
-  Mountain *m2;
+Panorama::guess(Hills *p, Hill *m1) {
+  Hill *p2, *m_tmp1, *m_tmp2;
+  Hill *m2;
   double best = 100000000.0, v;
   double a_center_best, a_nick_best, a_tilt_best, scale_best;
   int x1_sav, y1_sav;
@@ -226,8 +226,8 @@ Panorama::guess(Mountains *p, Mountain *m1) {
 }
 
 int
-Panorama::comp_params(Mountain *m1, Mountain *m2) {
-  Mountain *tmp;
+Panorama::comp_params(Hill *m1, Hill *m2) {
+  Hill *tmp;
   double a_center_tmp, scale_tmp, a_nick_tmp;
   
   if (m1->x > m2->x) {
@@ -264,7 +264,7 @@ Panorama::comp_params(Mountain *m1, Mountain *m2) {
 }
 
 int
-Panorama::optimize(Mountain *m1, Mountain *m2) {
+Panorama::optimize(Hill *m1, Hill *m2) {
   int i;
   double tan_nick_view, tan_dir_view, n_scale;
   double tan_nick_m1, tan_dir_m1;
@@ -386,7 +386,7 @@ Panorama::get_pos(const char *name, double *phi, double *lam, double *height) {
   int i;
   int found = 0;
   double p, l, h;
-  Mountain *m;
+  Hill *m;
 
   for (i=0; i<mountains->get_num(); i++) {
     m = mountains->get(i);
@@ -413,7 +413,7 @@ Panorama::get_pos(const char *name, double *phi, double *lam, double *height) {
 void 
 Panorama::update_angles() {
   int i;
-  Mountain *m;
+  Hill *m;
 
   for (i=0; i<mountains->get_num(); i++) {
     m = mountains->get(i);
@@ -434,7 +434,7 @@ Panorama::update_angles() {
 void 
 Panorama::update_visible_mountains() {
   int i;
-  Mountain *m;
+  Hill *m;
 
   visible_mountains->clear();
 
@@ -466,7 +466,7 @@ void
 Panorama::update_coordinates() {
   int i;
   double x_tmp, y_tmp;
-  Mountain *m;
+  Hill *m;
 
   for (i=0; i<visible_mountains->get_num(); i++) {
     m = visible_mountains->get(i);

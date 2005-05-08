@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.10 2005/05/08 18:00:11 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.11 2005/05/08 18:02:38 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -27,7 +27,7 @@
 
 #include "Hill.H"
 
-Mountain::Mountain(const char *n, double p, double l, double h) {
+Hill::Hill(const char *n, double p, double l, double h) {
   name = strdup(n);
   phi = p;
   lam = l;
@@ -37,7 +37,7 @@ Mountain::Mountain(const char *n, double p, double l, double h) {
   y = 0;
 }
 
-Mountain::Mountain(int x_tmp, int y_tmp) {
+Hill::Hill(int x_tmp, int y_tmp) {
   name = "";
   phi = 0.0;
   lam = 0.0;
@@ -47,20 +47,20 @@ Mountain::Mountain(int x_tmp, int y_tmp) {
   y = y_tmp;
 }
 
-Mountain::~Mountain() {
+Hill::~Hill() {
   if (name) {
     free(name);
   }
 }
 
 
-Mountains::Mountains() {
+Hills::Hills() {
   num = 0;
   cap = 100;
-  m = (Mountain **) malloc(cap * sizeof(Mountain *));
+  m = (Hill **) malloc(cap * sizeof(Hill *));
 }
 
-Mountains::~Mountains() {
+Hills::~Hills() {
   if (m) {
     free(m);
   }
@@ -68,10 +68,10 @@ Mountains::~Mountains() {
 
 
 void
-Mountains::add(Mountain *m1) {
+Hills::add(Hill *m1) {
   if (num >= cap) {
     cap = cap?cap * 2:100;
-    m = (Mountain **) realloc(m, cap * sizeof(Mountain *));
+    m = (Hill **) realloc(m, cap * sizeof(Hill *));
   }
 
   m[num++] = m1;
@@ -80,8 +80,8 @@ Mountains::add(Mountain *m1) {
 
 static int
 comp_mountains(const void *n1, const void *n2) {
-  Mountain *m1 = *(Mountain **)n1;
-  Mountain *m2 = *(Mountain **)n2;
+  Hill *m1 = *(Hill **)n1;
+  Hill *m2 = *(Hill **)n2;
   
   if (m1 && m2) {
     if (m1->alph < m2->alph) {
@@ -97,16 +97,16 @@ comp_mountains(const void *n1, const void *n2) {
 }
 
 void
-Mountains::sort() {
+Hills::sort() {
   if (!m) {
     return;
   }
 
-  qsort(m, num, sizeof(Mountain *), comp_mountains);
+  qsort(m, num, sizeof(Hill *), comp_mountains);
 }
 
 void
-Mountains::clear() {
+Hills::clear() {
   if (m) {
     free(m);
     m = NULL;
@@ -116,7 +116,7 @@ Mountains::clear() {
 }
 
 void
-Mountains::clobber() {
+Hills::clobber() {
   int i;
   
   for(i=0; i<get_num();i++) {
@@ -129,12 +129,12 @@ Mountains::clobber() {
 }
 
 int
-Mountains::get_num() {
+Hills::get_num() {
   return num;
 }
 
-Mountain *
-Mountains::get(int n) {
+Hill *
+Hills::get(int n) {
   if (n < 0 || n >= num) {
     return NULL;
   } else {

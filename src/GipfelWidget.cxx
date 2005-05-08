@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.24 2005/05/05 19:56:38 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.25 2005/05/08 18:02:38 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -54,11 +54,11 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   pan = new Panorama();
   cur_mountain = NULL;
   mb = NULL;
-  marker = new Mountains();
+  marker = new Hills();
   m1 = NULL;
   m2 = NULL;
   for (i=0; i<=3; i++) {
-    marker->add(new Mountain(i * 10, 0));
+    marker->add(new Hill(i * 10, 0));
   }
   fl_register_images();
 }
@@ -94,8 +94,8 @@ GipfelWidget::set_viewpoint(const char *pos) {
 
 void 
 GipfelWidget::draw() {
-  Mountains *mnts;
-  Mountain *m;
+  Hills *mnts;
+  Hill *m;
   int center_x = w() / 2;
   int center_y = h() / 2;
   int i;
@@ -149,9 +149,9 @@ overlap(int m1, int n1, int m2, int n2) {
 }
 
 void 
-GipfelWidget::set_labels(Mountains *v) {
+GipfelWidget::set_labels(Hills *v) {
   int i, j, width, height;
-  Mountain *m, *n;
+  Hill *m, *n;
 
   fl_font(FL_HELVETICA, 8);
 
@@ -175,8 +175,8 @@ GipfelWidget::set_labels(Mountains *v) {
 
 int
 GipfelWidget::set_cur_mountain(int m_x, int m_y) {
-  Mountains *mnts = pan->get_visible_mountains();
-  Mountain *m;
+  Hills *mnts = pan->get_visible_mountains();
+  Hill *m;
   int center = w() / 2;
   int i;
 
