@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.32 2005/05/05 19:44:08 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.33 2005/05/08 17:56:48 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -211,12 +211,16 @@ Panorama::guess(Mountains *p, Mountain *m1) {
     }     
   }
 
-  a_center = a_center_best;
-  a_nick = a_nick_best;
-  a_tilt = a_tilt_best;
-  scale = scale_best;
-  fprintf(stderr, "best %f\n", best);
-  fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
+  if (best < 4000.0) {
+    a_center = a_center_best;
+    a_nick = a_nick_best;
+    a_tilt = a_tilt_best;
+    scale = scale_best;
+    fprintf(stderr, "best %f\n", best);
+    fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
+  } else {
+    fprintf(stderr, "No solution found.\n");
+  }
   update_visible_mountains();
   return 0;
 }
@@ -224,6 +228,7 @@ Panorama::guess(Mountains *p, Mountain *m1) {
 int
 Panorama::comp_params(Mountain *m1, Mountain *m2) {
   Mountain *tmp;
+  double a_center_tmp, scale_tmp, a_nick_tmp;
   
   if (m1->x > m2->x) {
     tmp = m1;
@@ -237,16 +242,25 @@ Panorama::comp_params(Mountain *m1, Mountain *m2) {
   x2 = m2->x;
   y2 = m2->y;
   
-  a_center = comp_center_angle(m1->alph, m2->alph, x1, x2);
-  scale    = comp_scale(m1->alph, m2->alph, x1, x2);
-  a_nick   = atan ((y1 + tan(m1->a_nick) * scale) / 
-		   (scale - y1 * tan(m1->a_nick)));
+  a_center_tmp = comp_center_angle(m1->alph, m2->alph, x1, x2);
+  scale_tmp    = comp_scale(m1->alph, m2->alph, x1, x2);
+  a_nick_tmp   = atan ((y1 + tan(m1->a_nick) * scale) / 
+		       (scale - y1 * tan(m1->a_nick)));
 
-  optimize(m1, m2);
+  if (isnan(a_center_tmp) || isnan(scale_tmp) || isnan(a_nick_tmp)) {
+    return 1;
+  } else {
+    
+    a_center = a_center_tmp;
+    scale    = scale_tmp;
+    a_nick   = a_nick_tmp;
 
-  update_visible_mountains();
+    optimize(m1, m2);
 
-  return 0;
+    update_visible_mountains();
+
+    return 0;
+  }
 }
 
 int
@@ -279,36 +293,42 @@ Panorama::optimize(Mountain *m1, Mountain *m2) {
 	   d_m1_2, d_m2_2, d_m1_m2_2);
   }
 
-  a_nick = atan(tan_nick_view);
-  a_center = atan(tan_dir_view);
+  if (isnan(tan_dir_view) || isnan(tan_nick_view) || 
+      isnan(tan_dir_view) || isnan(n_scale)) {
+    fprintf(stderr, "No solution found.\n");
+    return 1;
+  } else {
 
-  if (a_center > pi_d) {
-    a_center = a_center - 2.0 * pi_d;
-  } else if (a_center < -pi_d) {
-    a_center = a_center + 2.0 * pi_d;
-  }
-
-  // atan(tan_dir_view) is not the only possible solution.
-  // Choose the one which is close to m1->alph.
-  if (fabs(a_center - m1->alph) > pi_d/2.0) {
-    a_center = a_center + pi_d;
-  }
+    a_nick = atan(tan_nick_view);
+    a_center = atan(tan_dir_view);
+    
+    if (a_center > pi_d) {
+      a_center = a_center - 2.0 * pi_d;
+    } else if (a_center < -pi_d) {
+      a_center = a_center + 2.0 * pi_d;
+    }
+    
+    // atan(tan_dir_view) is not the only possible solution.
+    // Choose the one which is close to m1->alph.
+    if (fabs(a_center - m1->alph) > pi_d/2.0) {
+      a_center = a_center + pi_d;
+    }
   
-  scale = n_scale;
+    scale = n_scale;
 
-  // use the point with greater distance from center for tilt computation 
-  if (d_m1_2 > d_m2_2) {
+    // use the point with greater distance from center for tilt computation 
+    if (d_m1_2 > d_m2_2) {
       a_tilt = comp_tilt(tan_nick_view, tan_dir_view, n_scale, 
 			 tan_nick_m1, tan_dir_m1,
 			 (double) x1, (double) y1);
-  } else {
-    a_tilt = comp_tilt(tan_nick_view, tan_dir_view, n_scale, 
-		       tan_nick_m2, tan_dir_m2,
-		       (double) x2, (double) y2);
-  }
-
+    } else {
+      a_tilt = comp_tilt(tan_nick_view, tan_dir_view, n_scale, 
+			 tan_nick_m2, tan_dir_m2,
+			 (double) x2, (double) y2);
+    }
  
-  return 0;
+    return 0;
+  }
 }
 
 void
