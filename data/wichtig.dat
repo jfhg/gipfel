@@ -1,3 +1,4 @@
+BNDKTNHOCH,HochBenediktenwand,,47.65325,11.46544,20000
 MIESING,Miesing,,47.6578816,11.9412954,1885
 WANK,Wank,,47.50677,11.14389,1780
 HSEEBLAS,Hoher Seeblaskogel,,47.0956001,11.0748396,3235
@@ -292,7 +293,6 @@ BIRNHR,Birnhorn,,47.47492,12.73377,2634
 BSCHOF,Bischof,,47.54047,11.17636,2033
 BSCHFS,Bischofskappe,ein Fels in der Form einer Bischofsmütze,49.87655,6.28862,-9999
 BSCHFS,Bischofsmütze,Naturdenkmal,49.91954,7.12166,-9999
-BISHR,Bishorn,,46.11794,7.71494,4153
 BISHRN,Bishorn,,46.11776,7.71481,4153
 BVBGMS,Biv Biagio Musso,,45.9326,7.2851,3664
 BVCSRF,Biv Cesare Fiorio,,45.90157,7.05983,2729
@@ -328,7 +328,6 @@ BLBSKP,Bleibiskopf,Nur zu Fuß oder per Mountain Bike zu erreichen.,50.24655,8.53
 BLCHHR,Bleicherhorn,,47.47056,10.14028,1669
 BLENSFELS,Blenser Felsen,kleines Felsmassiv mit Gipfelkreuz oberhalb von Blens; in der Karte als Jufferley bezeichnet,50.66206,6.48762,293
 BLNHRN,Blinnenhorn,auch Corno Cieco,46.42574,8.32066,3374
-BLNNHR,Blinnenhorn,,46.42584,8.30778,3374
 MP02,Blöcke,Blockiges Umfeld,-33.80774,-70.00783,2456
 BLCKFL,Blockfeld,Naturdenkmal,50.24828,6.77954,-9999
 BLCRSZ,Blockfeld Roßbüsch,am Nordhang des Roßbüsches; Naturdenkmal,50.27135,6.61965,-9999
@@ -910,7 +909,6 @@ FSCHRS,Fieschersattel,,46.54897,8.06475,3923
 FSCHRT,Fieschertal,,46.42726,8.1418,1108
 FLDRPF,Filderchöpf,,47.27979,9.39248,1761
 FNCVRG,Finca Es Verger,Parkmöglichkeit für Castell d'Alaro (von hier nicht auf Weg direkt zum Castell; da in 2003 gesperrt); zu Fuß oder mit Auto (holprig) die Straße; die im Bogen nach NW hochzieht,39.72949,2.78848,560
-FNSTHR,Finsteraarhorn,,46.53728,8.12615,4274
 FNSTRH,Finsteraarhorn,,46.53728,8.12628,4274
 FNSTHR,Finsteraarrothorn,,46.5178,8.14845,3530
 FRNKPF,Firnkopf,,29.90111,81.45833,6736
@@ -1250,7 +1248,6 @@ GRSGHR,Gross Grünhorn,,46.53199,8.07772,4044
 GRSSHR,Gross Sidelhorn,,46.54106,8.28551,2879
 GRSMLS,Gross Simelistock,,46.68186,8.18106,2482
 GRSWHR,Gross Wannenhorn,,46.49382,8.09707,3906
-GRFISH,Gross-Fiescherhorn,,46.55133,8.06126,4049
 GSCHOBERB,Großschoberbaueralm,,47.66214,14.49823,1027
 GSCHEIBE,Grosse Scheibe,,47.6363,14.14353,1848
 GROSSEE,Grossee,See,47.59992,13.99511,-9999
@@ -1492,18 +1489,15 @@ HCHWSS,Hochwasser,,47.39603,11.05539,2744
 HCHWCH,Hochwechsel,,47.5295,15.91467,1743
 HOCHWEIS,Hochweiß,,47.62956,14.00711,2158
 HCHWHS,Hochweisssteinhaus,,46.64305,12.7402,1868
-HCHWHS,Hochweißsteinhaus,ÖAV Sekt. Austria,46.64305,12.7402,1868
 HCHWHS,Hochwildehaus,,46.80488,10.98822,2883
 HCHZND,Hochzinoedl,,47.56533,14.66617,2191
 HCKNLP,Hockenalp,,46.41079,7.76546,2048
 HCKNHR,Hockenhorn,,46.42857,7.74397,3293
 HOFALM,Hofalm,,47.64982,14.37121,1335
 HOFRSP,Höferspitze,,47.27402,10.10156,2131
-Hoefsp,Höferspitze,,47.27393,10.10157,2131
 HFSTNL,Hofstättenalpe,,47.38372,9.83431,1231
 HOFSTALP,Hofstättenalpe,,47.33261,9.89808,1192
 HHBGHR,Hohberghorn,,46.11247,7.85383,4219
-HBGJCH,Hohbergjoch,,46.11211,7.85654,4142
 HHBURG,Hohe Burg,,47.07493,11.37765,2198
 HFRLG,Hohe Fürlegg,,47.14145,12.36226,3244
 HHKRCH,Hohe Kirche,,47.03283,11.60762,2634
@@ -2864,7 +2858,6 @@ RAFNHR,Räfenhorn,,46.63366,8.16485,3259
 RFNJCH,Räfenjoch,,46.64233,8.15922,3052
 RFFLSP,Raffel Sp.,,47.44497,11.36471,2323
 RAGAZ,Ragazerblanken,,47.305,9.8525,2051
-RINRHR,Rainerhorn,,47.10084,12.36394,3560
 RNRHRN,Rainerhorn,,47.10083,12.36414,3559
 RNRTRL,Rainertörl,,47.10271,12.35761,3415
 RTSRAL,Raitiser Alm,,47.20327,11.35215,1553
@@ -2905,11 +2898,9 @@ REHM,Rehmen,Parzelle von Au,47.32222,9.99778,824
 REICHMWD P,Reichelsmühler Wand Parkplatz,,49.69255,11.32834,425.5
 RCHNHS,Reichenhaller Haus,,47.75502,12.84979,1750
 REICHENST,Reichenstein,,47.66202,13.88663,1912
-RNRTRL,Reinertörl,,47.103,12.35754,3422
 RNRTBG,Reinertsberg,Naturdenkmal,50.28137,6.7991,610
 RSSLSP,Reissende Lahn-Spitze,,47.48,11.34431,2209
 RTHSFL,Reith bei Seefeld,,47.2982,11.20462,1130
-RTHRSP,Reither Spitze,,47.32323,11.23595,2374
 REITHERSP,Reitherspitze,,47.32313,11.23592,2367
 RLSARP,Relais d'Arpette,,46.02059,7.09,2170
 RLLSCK,Rellseck,,47.10725,9.89167,1487
@@ -3271,7 +3262,6 @@ SEBGSP,Seebergspitze,,47.466,11.67928,2085
 SBLICK,Seeblick,Bergrestaurant,46.90202,8.64438,-9999
 SFLITR,Seefeld in Tirol,,47.32876,11.1866,1200
 SFLDJC,Seefelder Joch,,47.34031,11.23975,2060
-SFLDSP,Seefelder Spitze,,47.33278,11.2375,2221
 SEEFELDRSP,Seefelder Spitze,,47.33279,11.23754,2235
 SEEHAGELM,Seehaglmauer,,47.78887,14.31392,-9999
 SEEHAU,Seehaus,Wirtshaus am Almsee,47.74465,13.95264,589
@@ -3315,11 +3305,9 @@ SIEN,Sien Spitze,,47.38528,10.0175,1600
 SIGHNL,Sighignola,,45.96793,8.99319,1314
 SIGIST,Sigistal,,47.61708,14.05072,-9999
 SIGISTALH,Sigistalhöhe,,47.61622,14.04997,-9999
-SGNKUP,Signalkuppe,gleichzeitig Cap. Margherita,45.92689,7.87687,4554.0
 SGNLKP,Signalkuppe,,45.9269,7.87691,4554
 SLBRTZ,Silberritzepass,,46.36715,7.35508,2720
 SLBRST,Silbersattel,,45.93755,7.86862,4515
-SLBSAT,Silbersattel,zwischen Nordend und Dufourspitze,45.93762,7.86849,4515
 SLBRTL,Silbertal,,47.09503,9.97694,889
 SILZ,Silz,,47.26552,10.92757,654
 SMTSBG,Simetsberg,,47.56617,11.25358,1836
@@ -3332,33 +3320,24 @@ SINKOR,Sinkor,,27.93194,86.54639,6380
 SSTRNS,Sistrans,,47.23746,11.44597,919
 STCHCH,Sita Chuchura,,28.78333,83.48528,6611
 SIXBLANC,Six Blanc,,46.03746,7.18524,2440
-HSHCHW,Skihaus Hochwang,Bergrestaurant,46.8543,9.66517,1958
-SHSTPP,Skihaus Tga; Piz Platta,Bergrestaurant,46.51044,9.59068,1919
-SKOGAFOSS,Skógafoss Parkplatz,Campingplatz; Ausgangspunkt für die sehr schöne Wanderung entlang der Skógar.,63.52932,-19.5128,24
-S-BERI,Slap Beri (Wasserfall),Slap Beri (Beri Wasserfall) 34 m hoher Wasserfall.,46.18371,13.76495,366.4
 SORNHS,Soiernhaus,,47.49401,11.34892,1616
-SNHTT,Soiernhaus,,47.49436,11.49694,1616
 SRNSCH,Soiernschneid,,47.48233,11.34194,2174
 SORNSP,Soiernspitze,,47.48153,11.35708,2259
 SOELLECK,Söllereck,,47.37361,10.23722,1706
 SLSTG,Solstein; Großer,,47.30272,11.30775,2547
 SSTNK,Solstein; Kleiner,,47.30258,11.32425,2637
 SLSTHS,Solsteinhaus,,47.30814,11.28829,1805
-SLSHTT,Solsteinhaus,,47.30811,11.28828,1805
 SOMADAPALO,Somada de El Palo,Aussichtspunkt,28.71843,-17.87637,785
 SMERLH,Sommerloch/Räterichsboden,Klettergebiet am Grimselpaß/Plaisierführer Schweiz West,46.57794,8.32475,1866
 SONDACH,Sonderdach,,47.39406,9.93169,1208
 SNKLSP,Sonklarspitze,,46.95508,11.16597,3450
 SNBGLM,Sonnbergalm,,47.67883,11.68047,1485
 SNKBGS,Sonnenkopf Bergstation,,47.11083,10.05556,1832
-SNKPBG,Sonnenkopfbahn Bergstation,,47.11083,10.05556,1832
 SNNNSP,Sonnenspitze,,47.17161,11.57437,2620
 SNJH,Sonnjoch,,47.4125,11.60511,2458
 SONNLEITST,Sonnleitstein,,47.67236,14.02594,2177
 SOERG,Sörg,westl. St. Veit a.d. Glan,46.76306,14.27593,-9999
 SORBUN,Soribun,,28.88472,84.17278,6328
-SPBLFL,Spaltblock Fluchthorn,hier durch,46.88952,10.22729,3273
-SNGH,Spannagel Haus,,47.08,11.67111,2531
 SPTNBC,Spätenbach,,47.37194,9.76722,842
 SPKSP,Speckkarspitze,,47.34639,11.48744,2621
 SPERING,Spering,,47.80423,14.19512,-9999
