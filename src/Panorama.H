@@ -1,9 +1,7 @@
 // 
-// "$Id: Panorama.H,v 1.16 2005/05/08 18:02:38 hofmann Exp $"
+// "$Id: Panorama.H,v 1.17 2005/05/10 17:05:32 hofmann Exp $"
 //
-// X11 header file for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 2004 by Johannes Hofmann
+// Copyright 2005 by Johannes Hofmann
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

@@ -1,9 +1,9 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.26 2005/05/10 17:00:57 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.27 2005/05/10 17:05:32 hofmann Exp $"
 //
-// PSEditWidget routines.
+// GipfelWidget routines.
 //
-// Copyright 2004 by Johannes Hofmann
+// Copyright 2005 by Johannes Hofmann
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

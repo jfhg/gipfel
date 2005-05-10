@@ -1,9 +1,9 @@
 // 
-// "$Id: gipfel.cxx,v 1.21 2005/05/10 16:46:14 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.22 2005/05/10 17:05:32 hofmann Exp $"
 //
 // gipfel program.
 //
-// Copyright 2004 by Johannes Hofmann
+// Copyright 2005 by Johannes Hofmann
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public
@@ -114,15 +114,18 @@ void guess_cb(Fl_Widget *, void *) {
 }
 
 void about_cb() {
-  fl_message("flpsed -- a pseudo PostScript editor\n"
-	     "(c) Johannes Hofmann 2004, 2005\n\n"
-	     "PostScript is a registered trademark of Adobe Systems");
+  fl_message("gipfel -- and you know what you see.\n"
+	     "(c) Johannes Hofmann 2005\n");
+
 }
 
 Fl_Menu_Item menuitems[] = {
   { "&File",              0, 0, 0, FL_SUBMENU },
-  { "&Quit", FL_CTRL + 'q', (Fl_Callback *)quit_cb, 0 },
+    { "&Quit", FL_CTRL + 'q', (Fl_Callback *)quit_cb, 0 },
   {0},
+  { "&Help", 0, 0, 0, FL_SUBMENU },
+    { "About",  0, (Fl_Callback *)about_cb },
+  { 0 },
   { 0 }
 };
 
