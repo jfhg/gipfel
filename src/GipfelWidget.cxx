@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.29 2005/05/10 18:45:29 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.30 2005/05/10 19:05:51 hofmann Exp $"
 //
 // GipfelWidget routines.
 //
@@ -198,13 +198,15 @@ int
 GipfelWidget::set_cur_mountain(int m_x, int m_y) {
   Hills *mnts = pan->get_visible_mountains();
   Hill *m;
-  int center = w() / 2;
+  int center_x = w() / 2;
+  int center_y = h() / 2;
   int i;
 
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i); 
 
-    if (m_x - center >= m->x - 2 && m_x - center < m->x + 2) {
+    if (m_x - center_x >= m->x - 2 && m_x - center_x < m->x + 2 &&
+	m_y - center_y >= m->y - 2 && m_y - center_y < m->y + 2) {
       cur_mountain = m;
       if (m1 != NULL && m2 != NULL) {
 	fprintf(stderr, "Resetting m1 and m2\n");
@@ -228,7 +230,8 @@ GipfelWidget::set_cur_mountain(int m_x, int m_y) {
   for (i=0; i<marker->get_num(); i++) {
     m = marker->get(i);
 
-    if (m_x - center >= m->x - 2 && m_x - center < m->x + 2) {
+    if (m_x - center_x >= m->x - 2 && m_x - center_x < m->x + 2 &&
+	m_y - center_y >= m->y - 2 && m_y - center_y < m->y + 2) {
       cur_mountain = m;
       redraw();
       return 0;
