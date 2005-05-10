@@ -1,0 +1,133 @@
+======
+gipfel
+======
+
+gipfel is a tool to find the names of mountains or points of interest
+on a picture.
+It uses a database containing names and GPS data. With the given viewpoint
+(the point from which the picture was taken) and two known mountains
+on the picture, gipfel can compute all parameters needed to compute the
+positions of other mountains on the picture.
+Additionally, gipfel can try to guess these parameter if only one mountain
+is known on the picture. In this case, a few other peaks need to be marked,
+but it is not necassary to know their names.
+gipfel can also be used to play around with the parameters manually. But be
+warned: It is pretty difficult to find the right parameters for a given
+picture manually.
+
+
+Requirements
+============
+- gipfel works on UNIX-like system (e.g. Linux, *BSD and probably others).
+- You need fltk-1.1.x from www.fltk.org.
+- You need the ccmath library (http://freshmeat.net/projects/ccmath/).
+
+
+Installation
+============
+- Unpack the tar file and run ./configure; make; make install
+
+
+The Data File
+=============
+As stated before, gipfel needs GPS input data. The input data must be
+an ASCII file with one line per mountain / point of interest.
+Each line must contain the following values separated by a comma:
+
+<SHORTNAME>,<NAME>,<DESCRIPTION>,<LATITUDE>,<LONGITUDE>,<HEIGHT>
+
+<SHORTNAME> and <DESCRIPTION> may be left empty.
+
+The following line is a valid example:
+SMTSBG,Simetsberg,,47.56617,11.25358,1836
+
+Fortunately, there is a great website http://www.alpin-koordinaten.de, where
+you can download a suitable file containg quite a lot of data mostly 
+concerning the alps:
+Click on the "Suchen" button and the click on the diskette symbol below
+the first table then select "Fugawi 3 TXT" format and click on "Download".
+
+The resulting file has already the right syntax for gipfel, but contains
+some duplicate entries. Use:
+sort -u -t , -k 2,2 <infile> > <outfile> 
+to remove these duplicate entries.
+
+Obviously you can easily add your own entries to the data file or add them
+to the database at http://www.alpin-koordinaten.de.
+
+
+Running
+=======
+
+To start gipfel, enter 
+
+gipfel -v <viewpoint> -d <datafile> <image>
+
+Where <viewpoint> is the name of the location from which the picture has
+been taken. This name must be found exactly in the datafile.
+<datafile> is the file conatining the GPS data.
+<image> is the actual picture in JPEG format.
+
+You should now see a control window and the actual picture.
+You can now use the controls in the control window to modify the view
+paramaters. These are:
+- View direction
+- Nick angle
+- Tilt angle
+- Scale 
+- Visibility
+
+Play around with these parameters, until you see the names of one or two 
+mountains, which you already recognize on the picture.
+Now click on the small cross at the left of the name to mark it and drag
+them to the position of the mountain on the picture.
+The marked mountains should now have a red flag.
+If you have positioned two mountains, you can now click on the "comp" button
+in the control window. 
+If you have only marked one mountain, you need to mark other peaks on the 
+picture using the green flags which you find at the center of the picture.
+Make sure, that the one marked mountain has a red flag containing a "1" if 
+it has a "2" in its flag, just keep clicking on it until it changes to a "1".
+Then click on the "guess" button. If the result is disapointing, try to adjust
+the visibility parameter as only visible mountains are taken into account
+during the "guess"-process.
+
+
+Troubleshooting
+===============
+
+- Obviously gipfel can only be as good as its input data. If there is now 
+data about the mountains on your picture, you are out of luck...
+But as the data file format is pretty simple and GPS receivers are common, 
+you can build up your own datafile.
+
+- gipfel only works with full normal unmodified pictures taken with a 
+non-distorting standard objektive. Stitched panorama pictures will not work!
+
+
+Commercial Application
+======================
+
+If you are interested in a commercial application of the methods used in
+gipfel, feel free to contact me.
+
+
+Acknowledgements
+================
+
+Thanks to the guys from http://www.alpin-koordinaten.de for their public
+GPS database. 
+Also have look at their other site http://www.alpen-panoramen.de/ !
+I also want to thank my brother Martin Hofmann for his tips and the
+discussions.
+
+
+DISCLAIMER
+==========
+gipfel must NOT be used for real navigation. You should not rely on the 
+results of gipfel.
+
+
+Johannes Hofmann
+(Johannes.Hofmann@gmx.de)
+May 10, 2005
