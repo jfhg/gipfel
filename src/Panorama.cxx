@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.34 2005/05/08 18:02:38 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.35 2005/05/10 16:46:14 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -333,19 +333,19 @@ Panorama::optimize(Hill *m1, Hill *m2) {
 
 void
 Panorama::set_center_angle(double a) {
-  a_center = a;
+  a_center = a * deg2rad;
   update_visible_mountains();
 }
 
 void
 Panorama::set_nick_angle(double a) {
-  a_nick = a;
+  a_nick = a * deg2rad;
   update_coordinates();
 }
 
 void
 Panorama::set_tilt_angle(double a) {
-  a_tilt = a;
+  a_tilt = a * deg2rad;
   update_coordinates();
 }
 
@@ -363,17 +363,17 @@ Panorama::set_height_dist_ratio(double r) {
 
 double
 Panorama::get_center_angle() {
-  return a_center;
+  return a_center / deg2rad;
 }
 
 double
 Panorama::get_nick_angle() {
-  return a_nick;
+  return a_nick / deg2rad;
 }
 
 double
 Panorama::get_tilt_angle() {
-  return a_tilt;
+  return a_tilt / deg2rad;
 }
 
 double

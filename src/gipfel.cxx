@@ -1,7 +1,7 @@
 // 
-// "$Id: gipfel.cxx,v 1.20 2005/05/08 17:56:48 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.21 2005/05/10 16:46:14 hofmann Exp $"
 //
-// flpsed program.
+// gipfel program.
 //
 // Copyright 2004 by Johannes Hofmann
 //
@@ -40,14 +40,20 @@
 #include <FL/Fl_Int_Input.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_Value_Slider.H>
+#include <FL/Fl_Valuator.H>
+#include <FL/Fl_Dial.H>
 
 #include "GipfelWidget.H"
 
 char *img_file;
 char *data_file;
 GipfelWidget *gipf = NULL;
-Fl_Slider *s_center = NULL, *s_nick = NULL, *s_scale = NULL, *s_tilt = NULL;
+Fl_Dial *s_center = NULL;
+Fl_Slider *s_nick = NULL, *s_scale = NULL, *s_tilt = NULL;
+
+void quit_cb() {
+  exit(0);
+}
 
 void open_cb() {
   char *file = fl_file_chooser("Open File?", "*.jpeg", img_file);
@@ -115,34 +121,100 @@ void about_cb() {
 
 Fl_Menu_Item menuitems[] = {
   { "&File",              0, 0, 0, FL_SUBMENU },
-    { "&Open File...",    FL_CTRL + 'o', (Fl_Callback *)open_cb },
+  { "&Quit", FL_CTRL + 'q', (Fl_Callback *)quit_cb, 0 },
   {0},
   { 0 }
 };
-  
 
 void usage() {
   fprintf(stderr,
-	  "usage: flpsed [-hbd] [-t <tag>=<value>] [<infile>] [<outfile>]\n"
-	  "   -h                 print this message\n"
-	  "   -b                 batch mode (no gui)\n"
-	  "   -d                 dump tags and values from a document\n"
-	  "                      to stdout (this implies -b)\n"
-	  "   -t <tag>=<value>   set text to <value> where tag is <tag>\n"
-	  "   <infile>           optional input file; in batch mode if no\n"
-	  "                      input file is given, input is read from stdin\n"
-	  "   <outfile>          optional output file for batch mode; if no\n"
-	  "                      output file is given, output is written to stdout\n");
+	  "usage: gipfel -v <viewpoint> [-d <datafile>] <image>\n"
+	  "   -v <viewpoint>  Set point from which the picture was taken.\n"
+	  "                   This must be a string that unambiguously \n"
+	  "                   matches the name of an entry in the data file.\n"
+	  "   -d <datafile>   Use <datafile> instead of default file.\n"
+	  "      <image>      JPEG file to use.\n");
 }
 
+Fl_Window * 
+create_control_window() {
+  Fl_Menu_Bar *m;
+  Fl_Window *win = new Fl_Window(400,250);
+  m = new Fl_Menu_Bar(0, 0, 400, 30);
+  m->menu(menuitems);
+
+  s_center = new Fl_Dial(40, 60, 150, 150, NULL);
+  s_center->type(FL_LINE_DIAL);
+  s_center->labelsize(10);
+  s_center->step(0.001);
+  s_center->bounds(0.0, 360.0);
+  s_center->angles(180, 540);
+  s_center->callback((Fl_Callback*)angle_cb);
+
+  Fl_Box *north = new Fl_Box(95, 40, 40, 20, "North");
+  Fl_Box *south = new Fl_Box(95, 210, 40, 20, "South");
+  Fl_Box *east = new Fl_Box(190, 125, 40, 20, "East");
+  Fl_Box *west = new Fl_Box(0, 125, 40, 20, "West");
+
+
+  s_scale = new Fl_Slider(235, 60, 160, 15, "Scale");
+  s_scale->type(1);
+  s_scale->box(FL_THIN_DOWN_BOX);
+  s_scale->labelsize(10);
+  s_scale->step(5.0);
+  s_scale->bounds(0.0, 10000.0);
+  s_scale->slider(FL_UP_BOX);
+  s_scale->callback((Fl_Callback*)scale_cb);
+  s_scale->align(FL_ALIGN_TOP);
+
+  s_nick = new Fl_Slider(235, 90, 160, 15, "Nick");
+  s_nick->type(1);
+  s_nick->box(FL_THIN_DOWN_BOX);
+  s_nick->labelsize(10);
+  s_nick->step(0.001);
+  s_nick->bounds(-20.0, 20.0);
+  s_nick->slider(FL_UP_BOX);
+  s_nick->callback((Fl_Callback*)nick_cb);
+  s_nick->align(FL_ALIGN_TOP);
+
+  s_tilt = new Fl_Slider(235, 120, 160, 15, "Tilt");
+  s_tilt->type(1);
+  s_tilt->box(FL_THIN_DOWN_BOX);
+  s_tilt->labelsize(10);
+  s_tilt->step(0.001);
+  s_tilt->bounds(-10.0, 10.0);
+  s_tilt->slider(FL_UP_BOX);
+  s_tilt->callback((Fl_Callback*)tilt_cb);
+  s_tilt->align(FL_ALIGN_TOP);
+
+  Fl_Slider* s_height_dist = new Fl_Slider(235, 150, 160, 15, "Visibility");
+  s_height_dist->type(1);
+  s_height_dist->box(FL_THIN_DOWN_BOX);
+  s_height_dist->labelsize(10);
+  s_height_dist->step(-0.005);
+  s_height_dist->bounds(0.2, 0.01);
+  s_height_dist->slider(FL_UP_BOX);
+  s_height_dist->callback((Fl_Callback*)h_d_cb);
+  s_height_dist->align(FL_ALIGN_TOP);
+
+  Fl_Button *b = new Fl_Button(240, 180, 50, 15, "comp");
+  b->color(FL_RED);
+  b->callback(comp_cb);
+  Fl_Button *b1 = new Fl_Button(320, 180, 50, 15, "guess");
+  b1->callback(guess_cb);
+  b1->color(FL_GREEN);
+
+  win->end();
+  return win;
+}
 
 int main(int argc, char** argv) {
   char c, *sep, *tmp, **my_argv;
   char *view_point = NULL;
   int err, bflag = 0, dflag = 0, my_argc;
-  Fl_Window *win;
+  Fl_Window *control_win, *view_win;
   Fl_Scroll *scroll;
-  Fl_Menu_Bar *m;
+
   
   err = 0;
   while ((c = getopt(argc, argv, "d:v:")) != EOF) {
@@ -174,68 +246,12 @@ int main(int argc, char** argv) {
     img_file = my_argv[0];
   }
 
-  win = new Fl_Window(800,700);
-  m = new Fl_Menu_Bar(0, 0, 800, 30);
-  m->menu(menuitems);
+  control_win = create_control_window();
 
-  s_center = new Fl_Value_Slider(50, 30, 650, 15, "Direction");
-  s_center->type(1);
-  s_center->box(FL_THIN_DOWN_BOX);
-  s_center->labelsize(10);
-  s_center->step(0.00001);
-  s_center->bounds(-3.14, 3.14);
-  s_center->slider(FL_UP_BOX);
-  s_center->callback((Fl_Callback*)angle_cb);
-  s_center->align(FL_ALIGN_LEFT);
-
-  s_scale = new Fl_Slider(100, 45, 160, 15, "Scale");
-  s_scale->type(1);
-  s_scale->box(FL_THIN_DOWN_BOX);
-  s_scale->labelsize(10);
-  s_scale->step(5.0);
-  s_scale->bounds(0.0, 10000.0);
-  s_scale->slider(FL_UP_BOX);
-  s_scale->callback((Fl_Callback*)scale_cb);
-  s_scale->align(FL_ALIGN_LEFT);
-
-  s_nick = new Fl_Slider(360, 45, 160, 15, "Nick");
-  s_nick->type(1);
-  s_nick->box(FL_THIN_DOWN_BOX);
-  s_nick->labelsize(10);
-  s_nick->step(0.00001);
-  s_nick->bounds(-0.5, 0.5);
-  s_nick->slider(FL_UP_BOX);
-  s_nick->callback((Fl_Callback*)nick_cb);
-  s_nick->align(FL_ALIGN_LEFT);
-
-  s_tilt = new Fl_Slider(50, 60, 160, 15, "Tilt");
-  s_tilt->type(1);
-  s_tilt->box(FL_THIN_DOWN_BOX);
-  s_tilt->labelsize(10);
-  s_tilt->step(0.005);
-  s_tilt->bounds(-0.1, 0.1);
-  s_tilt->slider(FL_UP_BOX);
-  s_tilt->callback((Fl_Callback*)tilt_cb);
-  s_tilt->align(FL_ALIGN_LEFT);
-
-  Fl_Slider* s_height_dist = new Fl_Slider(620, 45, 160, 15, "Visibility");
-  s_height_dist->type(1);
-  s_height_dist->box(FL_THIN_DOWN_BOX);
-  s_height_dist->labelsize(10);
-  s_height_dist->step(-0.005);
-  s_height_dist->bounds(0.2, 0.01);
-  s_height_dist->slider(FL_UP_BOX);
-  s_height_dist->callback((Fl_Callback*)h_d_cb);
-  s_height_dist->align(FL_ALIGN_LEFT);
-
-  Fl_Button *b = new Fl_Button(200, 60, 20, 15, "comp");
-  b->callback(comp_cb);
-  Fl_Button *b1 = new Fl_Button(250, 60, 20, 15, "guess");
-  b1->callback(guess_cb);
-
-  scroll = new Fl_Scroll(0, 75, win->w(), win->h()-75);
+  view_win = new Fl_Window(700, 500);
+  scroll = new Fl_Scroll(0, 0, view_win->w(), view_win->h());
   
-  gipf = new GipfelWidget(0,75,500,500);
+  gipf = new GipfelWidget(0,0,700,500);
 
   gipf->load_image(img_file);
   gipf->load_data(data_file);
@@ -249,10 +265,11 @@ int main(int argc, char** argv) {
   s_scale->value(gipf->get_scale());
   s_tilt->value(gipf->get_tilt_angle());
 
-  win->resizable(scroll);
+  view_win->resizable(scroll);
   
-  win->end();
-  win->show(1, argv); 
+  view_win->end();
+  view_win->show(1, argv); 
+  control_win->show(1, argv); 
   
   return Fl::run();
 }
