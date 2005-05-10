@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.12 2005/05/10 17:05:32 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.13 2005/05/10 17:16:54 hofmann Exp $"
 //
 // Hill routines.
 //
@@ -24,8 +24,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include "Hill.H"
+
+static double pi_d, deg2rad;
 
 Hill::Hill(const char *n, double p, double l, double h) {
   name = strdup(n);
@@ -58,7 +61,47 @@ Hills::Hills() {
   num = 0;
   cap = 100;
   m = (Hill **) malloc(cap * sizeof(Hill *));
+
+  pi_d = asin(1.0) * 2.0;
+  deg2rad = pi_d / 180.0;
 }
+
+int
+Hills::load(const char *file) {
+  FILE *fp;
+  char buf[4000];
+  char *vals[10];
+  char **ap, *bp;
+  double phi, lam, height;
+  Hill *m;
+
+  fp = fopen(file, "r");
+  if (!fp) {
+    perror("fopen");
+    return 1;
+  }
+  
+  while (fgets(buf, sizeof(buf), fp)) {
+    bp = buf;
+    for (ap = vals; (*ap = strsep(&bp, ",")) != NULL;)
+      if (++ap >= &vals[10])
+	break;
+
+    phi = atof(vals[3]) * deg2rad;
+    lam = atof(vals[4]) * deg2rad;
+    
+    height = atof(vals[5]);
+
+    m = new Hill(vals[1], phi, lam, height);
+
+    add(m);
+  }
+
+  fclose(fp);
+
+  return 0;
+}
+
 
 Hills::~Hills() {
   if (m) {

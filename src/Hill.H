@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.H,v 1.13 2005/05/10 17:05:32 hofmann Exp $"
+// "$Id: Hill.H,v 1.14 2005/05/10 17:16:54 hofmann Exp $"
 //
 // Copyright 2005 by Johannes Hofmann
 //
@@ -55,6 +55,8 @@ class Hills {
   Hills();
 
   ~Hills();
+
+  int load(const char *file);
 
   void add(Hill *m);
 

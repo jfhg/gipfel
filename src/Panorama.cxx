@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.37 2005/05/10 17:06:50 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.38 2005/05/10 17:16:54 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -69,42 +69,15 @@ Panorama::~Panorama() {
   delete(mountains);
 }
 
+
 int
 Panorama::load_file(const char *name) {
-  FILE *fp;
-  char buf[4000];
-  char *vals[10];
-  char **ap, *bp;
-  double phi, lam, height;
-  Hill *m;
-
   visible_mountains->clear();
   mountains->clobber();
-
-
-  fp = fopen(name, "r");
-  if (!fp) {
-    perror("fopen");
+  
+  if (mountains->load(name) != 0) {
     return 1;
   }
-  
-  while (fgets(buf, sizeof(buf), fp)) {
-    bp = buf;
-    for (ap = vals; (*ap = strsep(&bp, ",")) != NULL;)
-      if (++ap >= &vals[10])
-	break;
-
-    phi = atof(vals[3]) * deg2rad;
-    lam = atof(vals[4]) * deg2rad;
-    
-    height = atof(vals[5]);
-
-    m = new Hill(vals[1], phi, lam, height);
-
-    mountains->add(m);
-  }
-
-  fclose(fp);
 
   update_angles();
 
