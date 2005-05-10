@@ -104,9 +104,11 @@ you can build up your own datafile.
 - gipfel only works with full normal unmodified pictures taken with a 
 non-distorting standard objektive. Stitched panorama pictures will not work!
 
+- I have no idea, whether gipfel works correctly on pictures taken on
+the southern hemisphere, but I would appreciate any feedback about it.
 
-Commercial Application
-======================
+Commercial Applications
+=======================
 
 If you are interested in a commercial application of the methods used in
 gipfel, feel free to contact me.
@@ -117,6 +119,8 @@ Acknowledgements
 
 Thanks to the guys from http://www.alpin-koordinaten.de for their public
 GPS database. 
+Thanks to Carsten Clasohm for his great gallery at http://www.clasohm.com/.
+His pictures are good test cases for gipfel!
 Also have look at their other site http://www.alpen-panoramen.de/ !
 I also want to thank my brother Martin Hofmann for his tips and the
 discussions.
