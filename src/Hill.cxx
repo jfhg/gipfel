@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.13 2005/05/10 17:16:54 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.14 2005/05/10 18:12:47 hofmann Exp $"
 //
 // Hill routines.
 //
@@ -83,18 +83,21 @@ Hills::load(const char *file) {
   
   while (fgets(buf, sizeof(buf), fp)) {
     bp = buf;
+    memset(vals, 0, sizeof(vals));
     for (ap = vals; (*ap = strsep(&bp, ",")) != NULL;)
       if (++ap >= &vals[10])
 	break;
 
-    phi = atof(vals[3]) * deg2rad;
-    lam = atof(vals[4]) * deg2rad;
-    
-    height = atof(vals[5]);
+    if (vals[1] && vals[3] && vals[4] && vals[5]) {
+      phi = atof(vals[3]) * deg2rad;
+      lam = atof(vals[4]) * deg2rad;
+      
+      height = atof(vals[5]);
 
-    m = new Hill(vals[1], phi, lam, height);
+      m = new Hill(vals[1], phi, lam, height);
 
-    add(m);
+      add(m);
+    }
   }
 
   fclose(fp);

@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.39 2005/05/10 17:57:11 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.40 2005/05/10 18:12:47 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -187,7 +187,6 @@ Panorama::guess(Hills *p, Hill *m1) {
     a_nick = a_nick_best;
     a_tilt = a_tilt_best;
     scale = scale_best;
-    fprintf(stderr, "best %f\n", best);
   } else {
     fprintf(stderr, "No solution found.\n");
   }
