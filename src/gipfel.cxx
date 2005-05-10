@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.22 2005/05/10 17:05:32 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.23 2005/05/10 17:57:11 hofmann Exp $"
 //
 // gipfel program.
 //
@@ -32,6 +32,8 @@
 #include <errno.h>
 #include <signal.h>
 
+#include "../config.h"
+
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Scroll.H>
@@ -49,7 +51,15 @@ char *img_file;
 char *data_file;
 GipfelWidget *gipf = NULL;
 Fl_Dial *s_center = NULL;
-Fl_Slider *s_nick = NULL, *s_scale = NULL, *s_tilt = NULL;
+Fl_Slider *s_nick = NULL, *s_scale = NULL, *s_tilt = NULL, *s_height_dist;
+
+void set_valuators() {
+  s_center->value(gipf->get_center_angle());
+  s_nick->value(gipf->get_nick_angle());
+  s_scale->value(gipf->get_scale());
+  s_tilt->value(gipf->get_tilt_angle());
+  s_height_dist->value(gipf->get_height_dist_ratio());
+}
 
 void quit_cb() {
   exit(0);
@@ -95,27 +105,21 @@ void h_d_cb(Fl_Slider* o, void*) {
 void comp_cb(Fl_Widget *, void *) {
   if (gipf) {
     gipf->comp_params();
-    fprintf(stderr, " == cent %f\n", gipf->get_center_angle());
-    s_center->value(gipf->get_center_angle());
-    s_nick->value(gipf->get_nick_angle());
-    s_scale->value(gipf->get_scale());
-    s_tilt->value(gipf->get_tilt_angle());
+    set_valuators();
   }
 }
 
 void guess_cb(Fl_Widget *, void *) {
   if (gipf) {
     gipf->guess();
-    s_center->value(gipf->get_center_angle());
-    s_nick->value(gipf->get_nick_angle());
-    s_scale->value(gipf->get_scale());
-    s_tilt->value(gipf->get_tilt_angle());
+    set_valuators();
   }
 }
 
 void about_cb() {
   fl_message("gipfel -- and you know what you see.\n"
-	     "(c) Johannes Hofmann 2005\n");
+	     "Version %s\n\n"
+	     "(c) Johannes Hofmann 2005\n", VERSION);
 
 }
 
@@ -131,11 +135,11 @@ Fl_Menu_Item menuitems[] = {
 
 void usage() {
   fprintf(stderr,
-	  "usage: gipfel -v <viewpoint> [-d <datafile>] <image>\n"
+	  "usage: gipfel -v <viewpoint> -d <datafile> <image>\n"
 	  "   -v <viewpoint>  Set point from which the picture was taken.\n"
 	  "                   This must be a string that unambiguously \n"
 	  "                   matches the name of an entry in the data file.\n"
-	  "   -d <datafile>   Use <datafile> instead of default file.\n"
+	  "   -d <datafile>   Use <datafile> for GPS data.\n"
 	  "      <image>      JPEG file to use.\n");
 }
 
@@ -190,7 +194,7 @@ create_control_window() {
   s_tilt->callback((Fl_Callback*)tilt_cb);
   s_tilt->align(FL_ALIGN_TOP);
 
-  Fl_Slider* s_height_dist = new Fl_Slider(235, 150, 160, 15, "Visibility");
+  s_height_dist = new Fl_Slider(235, 150, 160, 15, "Visibility");
   s_height_dist->type(1);
   s_height_dist->box(FL_THIN_DOWN_BOX);
   s_height_dist->labelsize(10);
@@ -237,10 +241,6 @@ int main(int argc, char** argv) {
     }
   }
   
-  if (err) {
-    usage();
-    exit(1);
-  }
 
   my_argc = argc - optind;
   my_argv = argv + optind;
@@ -248,6 +248,12 @@ int main(int argc, char** argv) {
   if (my_argc >= 1) {
     img_file = my_argv[0];
   }
+
+  if (data_file == NULL || view_point == NULL || img_file == NULL || err) {
+    usage();
+    exit(1);
+  }
+
 
   control_win = create_control_window();
 
@@ -263,10 +269,7 @@ int main(int argc, char** argv) {
   }
   scroll->end();  
 
-  s_center->value(gipf->get_center_angle());
-  s_nick->value(gipf->get_nick_angle());
-  s_scale->value(gipf->get_scale());
-  s_tilt->value(gipf->get_tilt_angle());
+  set_valuators();
 
   view_win->resizable(scroll);
   

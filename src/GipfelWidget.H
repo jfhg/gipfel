@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.H,v 1.19 2005/05/10 17:05:32 hofmann Exp $"
+// "$Id: GipfelWidget.H,v 1.20 2005/05/10 17:57:11 hofmann Exp $"
 //
 // Copyright 2005 by Johannes Hofmann
 //
@@ -68,6 +68,8 @@ class GipfelWidget : public Fl_Widget {
   double get_tilt_angle();
 
   double get_scale();
+
+  double get_height_dist_ratio();
   
   void set_height_dist_ratio(double r);
   

@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.38 2005/05/10 17:16:54 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.39 2005/05/10 17:57:11 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -59,7 +59,7 @@ Panorama::Panorama() {
   a_center = 0.0;
   a_nick = 0.0;
   a_tilt = 0.0;
-  scale = 500.0;
+  scale = 3500.0;
 }
 
 Panorama::~Panorama() {
@@ -178,8 +178,6 @@ Panorama::guess(Hills *p, Hill *m1) {
 	a_nick_best = a_nick;
 	a_tilt_best = a_tilt;
 	scale_best = scale;
-	
-	fprintf(stderr, "best %f\n", best);
       }
     }     
   }
@@ -190,7 +188,6 @@ Panorama::guess(Hills *p, Hill *m1) {
     a_tilt = a_tilt_best;
     scale = scale_best;
     fprintf(stderr, "best %f\n", best);
-    fprintf(stderr, "center = %f, scale = %f, nick=%f\n", a_center /deg2rad, scale, a_nick/deg2rad);
   } else {
     fprintf(stderr, "No solution found.\n");
   }
@@ -352,6 +349,11 @@ Panorama::get_tilt_angle() {
 double
 Panorama::get_scale() {
   return scale;
+}
+
+double
+Panorama::get_height_dist_ratio() {
+  return height_dist_ratio;
 }
 
 int
@@ -539,10 +541,6 @@ Panorama::nick(double dist, double height) {
 
 
 
-//
-//
-//
-
 static int
 get_matrix(double m[], 
 	   double tan_nick_view, double tan_dir_view, double n_scale,
@@ -592,9 +590,6 @@ static int opt_step(double *tan_nick_view,
   f_x0[1] = d_m2_2 - (pow((*tan_nick_view-tan_nick_m2),2.0)/pow((tan_nick_m2**tan_nick_view+1),2.0)+pow((*tan_dir_view-tan_dir_m2),2.0)/pow((tan_dir_m2**tan_dir_view+1),2.0))*pow(*n_scale, 2.0);
 
   f_x0[2] = d_m1_m2_2 - (pow((- (((*tan_dir_view - tan_dir_m1) * *n_scale) / (tan_dir_m1 * *tan_dir_view + 1.0)) + (((*tan_dir_view - tan_dir_m2) * *n_scale) / (tan_dir_m2 * *tan_dir_view + 1))), 2.0) + pow((- (((*tan_nick_view - tan_nick_m1) * *n_scale) / (tan_nick_m1 * *tan_nick_view + 1)) + ((*tan_nick_view - tan_nick_m2) * *n_scale) / (tan_nick_m2 * *tan_nick_view + 1)), 2.0));
-
-  //  fprintf(stderr, "f_x0[0] %f, f_x0[1] %f, f_x0[2] %f\n", 
-  //	  f_x0[0], f_x0[1], f_x0[2]);
 
   x0[0] = *tan_nick_view;
   x0[1] = *tan_dir_view;

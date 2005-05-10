@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.27 2005/05/10 17:05:32 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.28 2005/05/10 17:57:11 hofmann Exp $"
 //
 // GipfelWidget routines.
 //
@@ -299,6 +299,11 @@ GipfelWidget::get_scale() {
   return pan->get_scale();
 }
 
+double
+GipfelWidget::get_height_dist_ratio() {
+  return pan->get_height_dist_ratio();
+}
+
 void
 GipfelWidget::set_height_dist_ratio(double r) {
   pan->set_height_dist_ratio(r);
@@ -349,7 +354,6 @@ GipfelWidget::handle(int event) {
          
       mark_x = Fl::event_x()-x();
       mark_y = Fl::event_y()-y();
-      fprintf(stderr, "x %d, y %d\n", mark_x, mark_y);
       set_cur_mountain(mark_x, mark_y);
 
       Fl::focus(this);

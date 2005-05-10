@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.H,v 1.17 2005/05/10 17:05:32 hofmann Exp $"
+// "$Id: Panorama.H,v 1.18 2005/05/10 17:57:11 hofmann Exp $"
 //
 // Copyright 2005 by Johannes Hofmann
 //
@@ -92,6 +92,8 @@ class Panorama {
   double get_tilt_angle();
 
   double get_scale();
+
+  double get_height_dist_ratio();
 
   int comp_params(Hill *m1, Hill *m2);
 
