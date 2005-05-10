@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.28 2005/05/10 17:57:11 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.29 2005/05/10 18:45:29 hofmann Exp $"
 //
 // GipfelWidget routines.
 //
@@ -84,12 +84,18 @@ GipfelWidget::load_image(const char *file) {
 
 int
 GipfelWidget::load_data(const char *file) {
-  return pan->load_file(file);
+  int r;
+  r = pan->load_file(file);
+  return r;
 }
 
 int
 GipfelWidget::set_viewpoint(const char *pos) {
-  return pan->set_viewpoint(pos);
+  int r;
+
+  r = pan->set_viewpoint(pos);
+  set_labels(pan->get_visible_mountains());
+  return r;
 }
 
 static void

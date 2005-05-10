@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.41 2005/05/10 18:33:40 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.42 2005/05/10 18:45:29 hofmann Exp $"
 //
 // Panorama routines.
 //
