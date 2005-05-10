@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.36 2005/05/10 17:05:32 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.37 2005/05/10 17:06:50 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -31,14 +31,14 @@ extern "C" {
 
 #include "Panorama.H"
 
-static int newton(double *tan_nick_view, 
-		  double *tan_dir_view,
-		  double *n_scale,
-		  double tan_dir_m1,
-		  double tan_nick_m1,
-		  double tan_dir_m2,
-		  double tan_nick_m2,
-		  double d_m1_2, double d_m2_2, double d_m1_m2_2);
+static int opt_step(double *tan_nick_view, 
+		    double *tan_dir_view,
+		    double *n_scale,
+		    double tan_dir_m1,
+		    double tan_nick_m1,
+		    double tan_dir_m2,
+		    double tan_nick_m2,
+		    double d_m1_2, double d_m2_2, double d_m1_m2_2);
 
 static double
 comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
@@ -288,9 +288,9 @@ Panorama::optimize(Hill *m1, Hill *m2) {
   d_m1_m2_2 = pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0);
 
   for (i=0; i<5; i++) {
-    newton(&tan_nick_view, &tan_dir_view, &n_scale, 
-	   tan_dir_m1, tan_nick_m1, tan_dir_m2, tan_nick_m2,
-	   d_m1_2, d_m2_2, d_m1_m2_2);
+    opt_step(&tan_nick_view, &tan_dir_view, &n_scale, 
+	     tan_dir_m1, tan_nick_m1, tan_dir_m2, tan_nick_m2,
+	     d_m1_2, d_m2_2, d_m1_m2_2);
   }
 
   if (isnan(tan_dir_view) || isnan(tan_nick_view) || 
@@ -598,14 +598,14 @@ get_matrix(double m[],
 }
 
 
-static int newton(double *tan_nick_view, 
-		  double *tan_dir_view,
-		  double *n_scale,
-		  double tan_dir_m1,
-		  double tan_nick_m1,
-		  double tan_dir_m2,
-		  double tan_nick_m2,
-		  double d_m1_2, double d_m2_2, double d_m1_m2_2) {
+static int opt_step(double *tan_nick_view, 
+		    double *tan_dir_view,
+		    double *n_scale,
+		    double tan_dir_m1,
+		    double tan_nick_m1,
+		    double tan_dir_m2,
+		    double tan_nick_m2,
+		    double d_m1_2, double d_m2_2, double d_m1_m2_2) {
   double a[9];
   double b[3];
   double a_x0[3], f_x0 [3], x0[3];
