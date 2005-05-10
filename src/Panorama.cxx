@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.40 2005/05/10 18:12:47 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.41 2005/05/10 18:33:40 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -167,7 +167,7 @@ Panorama::guess(Hills *p, Hill *m1) {
       m2 = m_tmp2;
       m2->x = p2->x;
       m2->y = p2->y;
-	  
+
       comp_params(m1, m2);
       
       v = get_value(p);
