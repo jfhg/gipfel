@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.25 2005/05/08 18:02:38 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.26 2005/05/10 17:00:57 hofmann Exp $"
 //
 // PSEditWidget routines.
 //
@@ -46,7 +46,7 @@ static Fl_Menu_Item menuitems[] = {
   {0},
   { 0 }
 };
-  
+
 GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   int i;
 
@@ -92,6 +92,21 @@ GipfelWidget::set_viewpoint(const char *pos) {
   return pan->set_viewpoint(pos);
 }
 
+static void
+draw_flag(int x, int y, char *s) {
+  Fl_Color c = fl_color();
+
+  fl_polygon(x, y - 10, x, y - 20, x + 10, y - 15);
+  fl_yxline(x, y, y - 10);
+  
+
+  if (s) {
+    fl_color(FL_WHITE);
+    fl_draw(s, x , y - 12);
+    fl_color(c);
+  }	
+}
+
 void 
 GipfelWidget::draw() {
   Hills *mnts;
@@ -112,13 +127,12 @@ GipfelWidget::draw() {
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i);
 
-    if (m == m1 || m == m2) {
+    if (m == m1) {
       fl_color(FL_RED);
-      fl_polygon(center_x + m->x + x(), center_y + m->y + y() - 10, 
-		 center_x + m->x + x(), center_y + m->y + y() - 20,
-		 center_x + m->x + x() + 10, center_y + m->y + y() - 15);
-      fl_yxline(center_x + m->x + x(), center_y + m->y + y(), 
-		center_y + m->y + y() - 10);
+      draw_flag(center_x + m->x + x(), center_y + m->y + y(), "1");
+    } else if (m == m2) {
+      fl_color(FL_RED);
+      draw_flag(center_x + m->x + x(), center_y + m->y + y(), "2");
     } else {
       fl_color(FL_BLACK);
     }
@@ -137,6 +151,7 @@ GipfelWidget::draw() {
     fl_color(FL_GREEN);
     fl_xyline(center_x + m->x + x() - 3, center_y + m->y + y(), center_x + m->x + x() + 3);
     fl_yxline(center_x + m->x + x(), center_y + m->y + y() - 3, center_y + m->y + y() + 3);
+    draw_flag(center_x + m->x + x(), center_y + m->y + y(), NULL);
   }
 
   fl_pop_clip();
