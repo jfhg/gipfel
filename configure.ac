@@ -7,9 +7,9 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/Panorama.H])
 AC_CONFIG_HEADER(config.h)
 
-CPPFLAGS="-g -I/usr/local/include"
-CXXFLAGS="-g -I/usr/local/include"
-LDFLAGS="-g"
+CPPFLAGS="-g -I/usr/local/include $CPPFLAGS"
+CXXFLAGS="-g -I/usr/local/include $CXXFLAGS"
+LDFLAGS="-g $LDFLAGS"
 
 # Checks for programs.
 AC_PROG_CXX
