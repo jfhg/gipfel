@@ -69,8 +69,8 @@ been taken. This name must be found exactly in the datafile.
 <image> is the actual picture in JPEG format.
 
 You should now see a control window and the actual picture.
-You can now use the controls in the control window to modify the view
-paramaters. These are:
+You can use the controls in the control window to modify the view
+parameters. These are:
 - View direction
 - Nick angle
 - Tilt angle
@@ -81,7 +81,7 @@ Play around with these parameters, until you see the names of one or two
 mountains, which you already recognize on the picture.
 Now click on the small cross at the left of the name to mark it and drag
 them to the position of the mountain on the picture.
-The marked mountains should now have a red flag.
+The marked mountains should have a red flag.
 If you have positioned two mountains, you can now click on the "comp" button
 in the control window. 
 If you have only marked one mountain, you need to mark other peaks on the 
@@ -96,7 +96,7 @@ during the "guess"-process.
 Troubleshooting
 ===============
 
-- Obviously gipfel can only be as good as its input data. If there is now 
+- Obviously gipfel can only be as good as its input data. If there is no 
 data about the mountains on your picture, you are out of luck...
 But as the data file format is pretty simple and GPS receivers are common, 
 you can build up your own datafile.
