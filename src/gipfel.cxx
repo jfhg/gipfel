@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.23 2005/05/10 17:57:11 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.24 2005/05/17 09:20:39 hofmann Exp $"
 //
 // gipfel program.
 //
@@ -43,7 +43,8 @@
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Valuator.H>
-#include <FL/Fl_Dial.H>
+#include <FL/Fl_Value_Slider.H>
+#include "Fl_Value_Dial.H"
 
 #include "GipfelWidget.H"
 
@@ -150,7 +151,7 @@ create_control_window() {
   m = new Fl_Menu_Bar(0, 0, 400, 30);
   m->menu(menuitems);
 
-  s_center = new Fl_Dial(40, 60, 150, 150, NULL);
+  s_center = new Fl_Value_Dial(40, 60, 150, 150, NULL);
   s_center->type(FL_LINE_DIAL);
   s_center->labelsize(10);
   s_center->step(0.001);
@@ -164,7 +165,7 @@ create_control_window() {
   Fl_Box *west = new Fl_Box(0, 125, 40, 20, "West");
 
 
-  s_scale = new Fl_Slider(235, 60, 160, 15, "Scale");
+  s_scale = new Fl_Value_Slider(235, 60, 160, 15, "Scale");
   s_scale->type(1);
   s_scale->box(FL_THIN_DOWN_BOX);
   s_scale->labelsize(10);
@@ -174,7 +175,7 @@ create_control_window() {
   s_scale->callback((Fl_Callback*)scale_cb);
   s_scale->align(FL_ALIGN_TOP);
 
-  s_nick = new Fl_Slider(235, 90, 160, 15, "Nick");
+  s_nick = new Fl_Value_Slider(235, 90, 160, 15, "Nick (deg.)");
   s_nick->type(1);
   s_nick->box(FL_THIN_DOWN_BOX);
   s_nick->labelsize(10);
@@ -184,7 +185,7 @@ create_control_window() {
   s_nick->callback((Fl_Callback*)nick_cb);
   s_nick->align(FL_ALIGN_TOP);
 
-  s_tilt = new Fl_Slider(235, 120, 160, 15, "Tilt");
+  s_tilt = new Fl_Value_Slider(235, 120, 160, 15, "Tilt (deg.)");
   s_tilt->type(1);
   s_tilt->box(FL_THIN_DOWN_BOX);
   s_tilt->labelsize(10);
@@ -194,7 +195,7 @@ create_control_window() {
   s_tilt->callback((Fl_Callback*)tilt_cb);
   s_tilt->align(FL_ALIGN_TOP);
 
-  s_height_dist = new Fl_Slider(235, 150, 160, 15, "Visibility");
+  s_height_dist = new Fl_Value_Slider(235, 150, 160, 15, "Visibility");
   s_height_dist->type(1);
   s_height_dist->box(FL_THIN_DOWN_BOX);
   s_height_dist->labelsize(10);

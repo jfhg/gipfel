@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.30 2005/05/10 19:05:51 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.31 2005/05/17 09:20:38 hofmann Exp $"
 //
 // GipfelWidget routines.
 //
@@ -186,8 +186,12 @@ GipfelWidget::set_labels(Hills *v) {
     for (j=0; j<v->get_num() && j < i; j++) {
       n = v->get(j);
       
-      if (overlap(m->x, m->label_x, n->x, n->label_x) &&
-	  overlap(m->label_y - height, m->label_y, n->label_y - height, n->label_y)) {
+      // Check for overlapping labels and
+      // overlaps between labels and peak markers
+      if ((overlap(m->x, m->label_x, n->x, n->label_x) &&
+	   overlap(m->label_y - height, m->label_y, n->label_y - height, n->label_y)) ||
+	  (overlap(m->x, m->label_x, n->x - 2, n->x + 2) &&
+	   overlap(m->label_y - height, m->label_y, n->y - 2, n->y + 2))) {
 	m->label_y = n->label_y - height - 1;
       }
     }
