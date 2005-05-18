@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Dial.cxx,v 1.1 2005/05/17 09:20:38 hofmann Exp $"
+// "$Id: Fl_Value_Dial.cxx,v 1.2 2005/05/18 11:34:30 hofmann Exp $"
 //
 // Value dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,37 @@ void Fl_Value_Dial::draw() {
   char buf[128];
   format(buf);
   fl_font(textfont(), textsize());
-  //  draw_box(FL_DOWN_BOX,bxx,byy,35,fl_height(),color());
+
   fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
   fl_draw(buf, bxx, byy + fl_height() - 2, bww, bhh, FL_ALIGN_TOP);
+}
+
+int Fl_Value_Dial::handle(int event) {  
+  switch (event) {
+  case FL_KEYBOARD :
+    switch (Fl::event_key()) {
+    case FL_Left:
+      handle_drag(clamp(increment(value(),-1)));
+      handle_release();
+      return 1;
+    case FL_Right:
+      handle_drag(clamp(increment(value(),1)));
+      handle_release();
+      return 1;
+    default:
+      return 0;
+    }
+    break; 
+  case FL_FOCUS :
+  case FL_UNFOCUS :
+    if (Fl::visible_focus()) {
+      redraw();
+      return 1;
+    } else return 0;
+  case FL_ENTER :
+  case FL_LEAVE :
+    return 1;
+  default:
+    return Fl_Dial::handle(event);
+  }
 }

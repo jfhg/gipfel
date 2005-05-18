@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.24 2005/05/17 09:20:39 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.25 2005/05/18 11:34:30 hofmann Exp $"
 //
 // gipfel program.
 //
@@ -154,7 +154,7 @@ create_control_window() {
   s_center = new Fl_Value_Dial(40, 60, 150, 150, NULL);
   s_center->type(FL_LINE_DIAL);
   s_center->labelsize(10);
-  s_center->step(0.001);
+  s_center->step(0.01);
   s_center->bounds(0.0, 360.0);
   s_center->angles(180, 540);
   s_center->callback((Fl_Callback*)angle_cb);
@@ -179,7 +179,7 @@ create_control_window() {
   s_nick->type(1);
   s_nick->box(FL_THIN_DOWN_BOX);
   s_nick->labelsize(10);
-  s_nick->step(0.001);
+  s_nick->step(0.01);
   s_nick->bounds(-20.0, 20.0);
   s_nick->slider(FL_UP_BOX);
   s_nick->callback((Fl_Callback*)nick_cb);
@@ -189,7 +189,7 @@ create_control_window() {
   s_tilt->type(1);
   s_tilt->box(FL_THIN_DOWN_BOX);
   s_tilt->labelsize(10);
-  s_tilt->step(0.001);
+  s_tilt->step(0.01);
   s_tilt->bounds(-10.0, 10.0);
   s_tilt->slider(FL_UP_BOX);
   s_tilt->callback((Fl_Callback*)tilt_cb);
@@ -199,7 +199,7 @@ create_control_window() {
   s_height_dist->type(1);
   s_height_dist->box(FL_THIN_DOWN_BOX);
   s_height_dist->labelsize(10);
-  s_height_dist->step(-0.005);
+  s_height_dist->step(-0.002);
   s_height_dist->bounds(0.2, 0.01);
   s_height_dist->slider(FL_UP_BOX);
   s_height_dist->callback((Fl_Callback*)h_d_cb);

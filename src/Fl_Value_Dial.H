@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Dial.H,v 1.1 2005/05/17 09:20:38 hofmann Exp $"
+// "$Id: Fl_Value_Dial.H,v 1.2 2005/05/18 11:34:30 hofmann Exp $"
 //
 // Value dial header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,21 +29,23 @@
 #include <FL/Fl_Dial.H>
 
 class Fl_Value_Dial : public Fl_Dial {
-    uchar textfont_, textsize_;
-    unsigned textcolor_;
-public:
-    void draw();
-    Fl_Value_Dial(int x,int y,int w,int h, const char *l = 0);
-    Fl_Font textfont() const {return (Fl_Font)textfont_;}
-    void textfont(uchar s) {textfont_ = s;}
-    uchar textsize() const {return textsize_;}
-    void textsize(uchar s) {textsize_ = s;}
-    Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
-    void textcolor(unsigned s) {textcolor_ = s;}
+  uchar textfont_, textsize_;
+  unsigned textcolor_;
+ public:
+  void draw();
+  int handle(int event);
+  
+  Fl_Value_Dial(int x,int y,int w,int h, const char *l = 0);
+  Fl_Font textfont() const {return (Fl_Font)textfont_;}
+  void textfont(uchar s) {textfont_ = s;}
+  uchar textsize() const {return textsize_;}
+  void textsize(uchar s) {textsize_ = s;}
+  Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
+  void textcolor(unsigned s) {textcolor_ = s;}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Value_Dial.H,v 1.1 2005/05/17 09:20:38 hofmann Exp $".
+// End of "$Id: Fl_Value_Dial.H,v 1.2 2005/05/18 11:34:30 hofmann Exp $".
 //
