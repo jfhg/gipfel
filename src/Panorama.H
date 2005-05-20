@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.H,v 1.18 2005/05/10 17:57:11 hofmann Exp $"
+// "$Id: Panorama.H,v 1.19 2005/05/20 13:34:39 hofmann Exp $"
 //
 // Copyright 2005 by Johannes Hofmann
 //
@@ -27,6 +27,7 @@
 class Panorama {
  private:
   double view_phi, view_lam, view_height;
+  char *view_name;
   double height_dist_ratio;
   Hills *mountains;
   Hills *visible_mountains;
@@ -85,6 +86,14 @@ class Panorama {
 
   void set_scale(double s);
 
+  void set_view_lat(double v);
+
+  void set_view_long(double v);
+
+  void set_view_height(double v);
+
+  const char * get_viewpoint();  
+
   double get_center_angle();
 
   double get_nick_angle();
@@ -94,6 +103,12 @@ class Panorama {
   double get_scale();
 
   double get_height_dist_ratio();
+  
+  double get_view_lat();
+
+  double get_view_long();
+
+  double get_view_height();
 
   int comp_params(Hill *m1, Hill *m2);
 

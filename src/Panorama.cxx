@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.42 2005/05/10 18:45:29 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.43 2005/05/20 13:34:39 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -60,6 +60,7 @@ Panorama::Panorama() {
   a_nick = 0.0;
   a_tilt = 0.0;
   scale = 3500.0;
+  view_name = NULL;
 }
 
 Panorama::~Panorama() {
@@ -90,6 +91,13 @@ Panorama::set_viewpoint(const char *name) {
     fprintf(stderr, "Could not find exactly one entry for %s.\n");
     return 1;
   }
+
+  if (view_name) {
+    free(view_name);
+    view_name = NULL;
+  }
+
+  view_name = strdup(name);
 
   update_angles();
 
@@ -330,6 +338,29 @@ Panorama::set_height_dist_ratio(double r) {
   update_visible_mountains();
 }
 
+void
+Panorama::set_view_lat(double v) {
+  view_lam = v * deg2rad;
+  update_angles();
+}
+
+void
+Panorama::set_view_long(double v) {
+  view_phi = v * deg2rad;
+  update_angles();
+}
+
+void
+Panorama::set_view_height(double v) {
+  view_height = v;
+  update_angles();
+}
+
+const char *
+Panorama::get_viewpoint() {
+  return view_name;
+}
+
 double
 Panorama::get_center_angle() {
   return a_center / deg2rad;
@@ -353,6 +384,21 @@ Panorama::get_scale() {
 double
 Panorama::get_height_dist_ratio() {
   return height_dist_ratio;
+}
+
+double
+Panorama::get_view_lat() {
+  return view_lam / deg2rad;
+}
+
+double
+Panorama::get_view_long() {
+  return view_phi / deg2rad;
+}
+
+double
+Panorama::get_view_height() {
+  return view_height;
 }
 
 int

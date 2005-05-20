@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.H,v 1.20 2005/05/10 17:57:11 hofmann Exp $"
+// "$Id: GipfelWidget.H,v 1.21 2005/05/20 13:34:39 hofmann Exp $"
 //
 // Copyright 2005 by Johannes Hofmann
 //
@@ -61,6 +61,16 @@ class GipfelWidget : public Fl_Widget {
 
   void set_scale(double s);
 
+  void set_height_dist_ratio(double r);
+
+  void set_view_lat(double v);
+
+  void set_view_long(double v);
+
+  void set_view_height(double v);
+  
+  const char * get_viewpoint();
+
   double get_center_angle();
 
   double get_nick_angle();
@@ -70,8 +80,12 @@ class GipfelWidget : public Fl_Widget {
   double get_scale();
 
   double get_height_dist_ratio();
-  
-  void set_height_dist_ratio(double r);
+
+  double get_view_lat();
+
+  double get_view_long();
+
+  double get_view_height();
   
   int comp_params();
 

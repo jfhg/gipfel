@@ -1,5 +1,5 @@
 // 
-// "$Id: gipfel.cxx,v 1.25 2005/05/18 11:34:30 hofmann Exp $"
+// "$Id: gipfel.cxx,v 1.26 2005/05/20 13:34:39 hofmann Exp $"
 //
 // gipfel program.
 //
@@ -44,6 +44,7 @@
 #include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Valuator.H>
 #include <FL/Fl_Value_Slider.H>
+#include <FL/Fl_Value_Input.H>
 #include "Fl_Value_Dial.H"
 
 #include "GipfelWidget.H"
@@ -53,13 +54,19 @@ char *data_file;
 GipfelWidget *gipf = NULL;
 Fl_Dial *s_center = NULL;
 Fl_Slider *s_nick = NULL, *s_scale = NULL, *s_tilt = NULL, *s_height_dist;
+Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
+Fl_Box *b_viewpoint;
 
-void set_valuators() {
+void set_values() {
   s_center->value(gipf->get_center_angle());
   s_nick->value(gipf->get_nick_angle());
   s_scale->value(gipf->get_scale());
   s_tilt->value(gipf->get_tilt_angle());
   s_height_dist->value(gipf->get_height_dist_ratio());
+  i_view_lat->value(gipf->get_view_lat());
+  i_view_long->value(gipf->get_view_long());
+  i_view_height->value(gipf->get_view_height());
+  b_viewpoint->label(gipf->get_viewpoint());
 }
 
 void quit_cb() {
@@ -75,45 +82,63 @@ void open_cb() {
 
 void scale_cb(Fl_Slider* o, void*) {
   if (gipf) {
-    gipf->set_scale((double)(o->value()));
+    gipf->set_scale(o->value());
   }
 }
 
 void angle_cb(Fl_Slider* o, void*) {
   if (gipf) {
-    gipf->set_center_angle((double)(o->value()));
+    gipf->set_center_angle(o->value());
   }
 }
 
 void nick_cb(Fl_Slider* o, void*) {
   if (gipf) {
-    gipf->set_nick_angle((double)(o->value()));
+    gipf->set_nick_angle(o->value());
   }
 }
 
 void tilt_cb(Fl_Slider* o, void*) {
   if (gipf) {
-    gipf->set_tilt_angle((double)(o->value()));
+    gipf->set_tilt_angle(o->value());
   }
 }
 
 void h_d_cb(Fl_Slider* o, void*) {
   if (gipf) {
-    gipf->set_height_dist_ratio((double)(o->value()));
+    gipf->set_height_dist_ratio(o->value());
+  }
+}
+
+void view_lat_cb(Fl_Value_Input* o, void*) {
+  if (gipf) {
+    gipf->set_view_lat(o->value());
+  }
+}
+
+void view_long_cb(Fl_Value_Input* o, void*) {
+  if (gipf) {
+    gipf->set_view_long(o->value());
+  }
+}
+
+void view_height_cb(Fl_Value_Input* o, void*) {
+  if (gipf) {
+    gipf->set_view_height(o->value());
   }
 }
 
 void comp_cb(Fl_Widget *, void *) {
   if (gipf) {
     gipf->comp_params();
-    set_valuators();
+    set_values();
   }
 }
 
 void guess_cb(Fl_Widget *, void *) {
   if (gipf) {
     gipf->guess();
-    set_valuators();
+    set_values();
   }
 }
 
@@ -147,7 +172,7 @@ void usage() {
 Fl_Window * 
 create_control_window() {
   Fl_Menu_Bar *m;
-  Fl_Window *win = new Fl_Window(400,250);
+  Fl_Window *win = new Fl_Window(400,350);
   m = new Fl_Menu_Bar(0, 0, 400, 30);
   m->menu(menuitems);
 
@@ -199,12 +224,36 @@ create_control_window() {
   s_height_dist->type(1);
   s_height_dist->box(FL_THIN_DOWN_BOX);
   s_height_dist->labelsize(10);
-  s_height_dist->step(-0.002);
+  s_height_dist->step(-0.001);
   s_height_dist->bounds(0.2, 0.01);
   s_height_dist->slider(FL_UP_BOX);
   s_height_dist->callback((Fl_Callback*)h_d_cb);
   s_height_dist->align(FL_ALIGN_TOP);
 
+  // Viewpoint Stuff
+
+  b_viewpoint = new Fl_Box(FL_DOWN_BOX, 30, 255, 300, 80, "");
+  b_viewpoint->align(FL_ALIGN_TOP);
+
+  i_view_lat = new Fl_Value_Input(40, 270, 100, 20, "Latitude");
+  i_view_lat->labelsize(10);
+  i_view_lat->align(FL_ALIGN_TOP);
+  i_view_lat->when(FL_WHEN_ENTER_KEY);
+  i_view_lat->callback((Fl_Callback*)view_lat_cb);
+
+  i_view_long = new Fl_Value_Input(200, 270, 100, 20, "Longitude");
+  i_view_long->labelsize(10);
+  i_view_long->align(FL_ALIGN_TOP);
+  i_view_long->when(FL_WHEN_ENTER_KEY);
+  i_view_long->callback((Fl_Callback*)view_long_cb);
+
+  i_view_height = new Fl_Value_Input(40, 310, 80, 20, "Height");
+  i_view_height->labelsize(10);
+  i_view_height->align(FL_ALIGN_TOP);
+  i_view_height->when(FL_WHEN_ENTER_KEY);
+  i_view_height->callback((Fl_Callback*)view_height_cb);
+
+  // Buttons
   Fl_Button *b = new Fl_Button(240, 180, 50, 15, "comp");
   b->color(FL_RED);
   b->callback(comp_cb);
@@ -270,7 +319,7 @@ int main(int argc, char** argv) {
   }
   scroll->end();  
 
-  set_valuators();
+  set_values();
 
   view_win->resizable(scroll);
   

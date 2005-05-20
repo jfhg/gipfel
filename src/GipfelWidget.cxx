@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.31 2005/05/17 09:20:38 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.32 2005/05/20 13:34:39 hofmann Exp $"
 //
 // GipfelWidget routines.
 //
@@ -317,9 +317,50 @@ GipfelWidget::get_height_dist_ratio() {
   return pan->get_height_dist_ratio();
 }
 
+const char *
+GipfelWidget::get_viewpoint() {
+  return pan->get_viewpoint();
+}
+
+double
+GipfelWidget::get_view_lat() {
+  return pan->get_view_lat();
+}
+
+double
+GipfelWidget::get_view_long() {
+  return pan->get_view_long();
+}
+
+double
+GipfelWidget::get_view_height() {
+  return pan->get_view_height();
+}
+
 void
 GipfelWidget::set_height_dist_ratio(double r) {
   pan->set_height_dist_ratio(r);
+  set_labels(pan->get_visible_mountains());
+  redraw();
+}
+
+void
+GipfelWidget::set_view_lat(double v) {
+  pan->set_view_lat(v);
+  set_labels(pan->get_visible_mountains());
+  redraw();
+}
+
+void
+GipfelWidget::set_view_long(double v) {
+  pan->set_view_long(v);
+  set_labels(pan->get_visible_mountains());
+  redraw();
+}
+
+void
+GipfelWidget::set_view_height(double v) {
+  pan->set_view_height(v);
   set_labels(pan->get_visible_mountains());
   redraw();
 }
