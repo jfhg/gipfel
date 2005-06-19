@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.43 2005/05/20 13:34:39 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.44 2005/06/19 16:54:02 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -80,6 +80,8 @@ Panorama::load_file(const char *name) {
     return 1;
   }
 
+  mountains->mark_duplicates(0.00001);
+  
   update_angles();
 
   return 0;

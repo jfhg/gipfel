@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.14 2005/05/10 18:12:47 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.15 2005/06/19 16:54:02 hofmann Exp $"
 //
 // Hill routines.
 //
@@ -38,6 +38,7 @@ Hill::Hill(const char *n, double p, double l, double h) {
   alph = 0.0;
   x = 0;
   y = 0;
+  duplicate = 0;
 }
 
 Hill::Hill(int x_tmp, int y_tmp) {
@@ -105,6 +106,31 @@ Hills::load(const char *file) {
   return 0;
 }
 
+void Hills::mark_duplicates(double dist) {
+  Hill *m, *n;
+  int i, j;
+  
+  sort_phi();
+
+  for(i=0; i<get_num();i++) {
+    m = get(i);
+    
+    if (m) {
+      j = i + 1;
+      n = get(j);
+      while (n && fabs(n->phi - m->phi) <= dist) {
+	//	fprintf(stderr, "%s %f %f   %s %f %f\n", m->name, m->phi, m->lam, n->name, n->phi, n->lam);
+	if (fabs(n->lam - m->lam) <= dist) {
+	  fprintf(stderr, "Duplicate: %s <=> %s\n", m->name, n->name);
+	  n->duplicate = 1;
+	}
+	j = j + 1;
+	n = get(j);
+      }
+    }
+  }
+}
+
 
 Hills::~Hills() {
   if (m) {
@@ -142,6 +168,24 @@ comp_mountains(const void *n1, const void *n2) {
   }  
 }
 
+static int
+comp_mountains_phi(const void *n1, const void *n2) {
+  Hill *m1 = *(Hill **)n1;
+  Hill *m2 = *(Hill **)n2;
+  
+  if (m1 && m2) {
+    if (m1->phi < m2->phi) {
+      return 1;
+    } else if (m1->phi > m2->phi) {
+      return -1;
+    } else {
+      return 0;
+    }
+  } else {
+    return 0;
+  }  
+}
+
 void
 Hills::sort() {
   if (!m) {
@@ -149,6 +193,15 @@ Hills::sort() {
   }
 
   qsort(m, num, sizeof(Hill *), comp_mountains);
+}
+
+void
+Hills::sort_phi() {
+  if (!m) {
+    return;
+  }
+
+  qsort(m, num, sizeof(Hill *), comp_mountains_phi);
 }
 
 void

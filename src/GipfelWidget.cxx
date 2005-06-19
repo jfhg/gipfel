@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.32 2005/05/20 13:34:39 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.33 2005/06/19 16:54:02 hofmann Exp $"
 //
 // GipfelWidget routines.
 //
@@ -133,6 +133,10 @@ GipfelWidget::draw() {
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i);
 
+    if (m->duplicate) {
+      continue;
+    }
+
     if (m == m1) {
       fl_color(FL_RED);
       draw_flag(center_x + m->x + x(), center_y + m->y + y(), "1");
@@ -179,6 +183,10 @@ GipfelWidget::set_labels(Hills *v) {
   for (i=0; i<v->get_num(); i++) {
     m = v->get(i);
     
+    if (m->duplicate) {
+      continue;
+    }
+
     fl_measure(m->name, width, height);
     m->label_x = m->x + width;
     m->label_y = m->y;
@@ -186,6 +194,10 @@ GipfelWidget::set_labels(Hills *v) {
     for (j=0; j<v->get_num() && j < i; j++) {
       n = v->get(j);
       
+      if (n->duplicate) {
+	continue;
+      }
+
       // Check for overlapping labels and
       // overlaps between labels and peak markers
       if ((overlap(m->x, m->label_x, n->x, n->label_x) &&

@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.H,v 1.14 2005/05/10 17:16:54 hofmann Exp $"
+// "$Id: Hill.H,v 1.15 2005/06/19 16:54:02 hofmann Exp $"
 //
 // Copyright 2005 by Johannes Hofmann
 //
@@ -37,6 +37,7 @@ class Hill {
   int x, y;
   int label_x, label_y;
   char *name;
+  int duplicate;
  
   Hill(const char *n, double p, double l, double h);
 
@@ -58,7 +59,11 @@ class Hills {
 
   int load(const char *file);
 
+  void mark_duplicates(double dist);
+
   void add(Hill *m);
+
+  void sort_phi();
 
   void sort();
   
