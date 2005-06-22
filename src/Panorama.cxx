@@ -1,5 +1,5 @@
 // 
-// "$Id: Panorama.cxx,v 1.44 2005/06/19 16:54:02 hofmann Exp $"
+// "$Id: Panorama.cxx,v 1.45 2005/06/22 19:47:20 hofmann Exp $"
 //
 // Panorama routines.
 //
@@ -52,6 +52,7 @@ static double pi_d, deg2rad;
 
 Panorama::Panorama() {
   mountains = new Hills();
+  close_mountains = new Hills();
   visible_mountains = new Hills();
   height_dist_ratio = 0.07;
   pi_d = asin(1.0) * 2.0;
@@ -104,6 +105,11 @@ Panorama::set_viewpoint(const char *name) {
   update_angles();
 
   return 0;
+}
+
+Hills * 
+Panorama::get_close_mountains() {
+  return close_mountains;
 }
 
 Hills * 
@@ -160,17 +166,14 @@ Panorama::guess(Hills *p, Hill *m1) {
     
   for (i=0; i<p->get_num(); i++) {
     p2 = p->get(i);
-    for (j=0; j<mountains->get_num(); j++) {
-      m_tmp2 = mountains->get(j);
+    for (j=0; j<close_mountains->get_num(); j++) {
+      m_tmp2 = close_mountains->get(j);
 
       m1 = m_tmp1;
       m1->x = x1_sav;
       m1->y = y1_sav;
 
-      if (m1 == m_tmp2 ||
-	  fabs(m1->alph - m_tmp2->alph) > pi_d *0.7 ||
-	  m_tmp2->height / (m_tmp2->dist * EARTH_RADIUS) < 
-	  height_dist_ratio) {
+      if (m1 == m_tmp2 || fabs(m1->alph - m_tmp2->alph) > pi_d *0.7) {
 	continue;
       }
 
@@ -337,7 +340,7 @@ Panorama::set_scale(double s) {
 void
 Panorama::set_height_dist_ratio(double r) {
   height_dist_ratio = r;
-  update_visible_mountains();
+  update_close_mountains();
 }
 
 void
@@ -450,6 +453,27 @@ Panorama::update_angles() {
 
   mountains->sort();
 
+  update_close_mountains();
+}
+
+void 
+Panorama::update_close_mountains() {
+  int i;
+  Hill *m;
+
+  close_mountains->clear();
+
+  for (i=0; i<mountains->get_num(); i++) {
+    m = mountains->get(i);
+ 
+    if ((m->phi != view_phi || m->lam != view_lam) &&
+	(m->height / (m->dist * EARTH_RADIUS) 
+	 > height_dist_ratio)) {
+
+      close_mountains->add(m);
+    }
+  }
+
   update_visible_mountains();
 }
 
@@ -460,24 +484,19 @@ Panorama::update_visible_mountains() {
 
   visible_mountains->clear();
 
-  for (i=0; i<mountains->get_num(); i++) {
-    m = mountains->get(i);
- 
-    if ((m->phi != view_phi || m->lam != view_lam) &&
-	(m->height / (m->dist * EARTH_RADIUS) 
-	 > height_dist_ratio)) {
+  for (i=0; i<close_mountains->get_num(); i++) {
+    m = close_mountains->get(i);
 
-      m->a_view = m->alph - a_center;
+    m->a_view = m->alph - a_center;
 
-      if (m->a_view > pi_d) {
-	m->a_view -= 2.0*pi_d;
-      } else if (m->a_view < -pi_d) {
-	m->a_view += 2.0*pi_d;
-      }
+    if (m->a_view > pi_d) {
+      m->a_view -= 2.0*pi_d;
+    } else if (m->a_view < -pi_d) {
+      m->a_view += 2.0*pi_d;
+    }
  
-      if (m->a_view < pi_d / 3.0 && m->a_view > - pi_d / 3.0) {
-	visible_mountains->add(m);
-      }
+    if (m->a_view < pi_d / 3.0 && m->a_view > - pi_d / 3.0) {
+      visible_mountains->add(m);
     }
   }
 

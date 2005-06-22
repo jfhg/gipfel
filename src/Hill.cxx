@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.15 2005/06/19 16:54:02 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.16 2005/06/22 19:47:20 hofmann Exp $"
 //
 // Hill routines.
 //
@@ -119,9 +119,7 @@ void Hills::mark_duplicates(double dist) {
       j = i + 1;
       n = get(j);
       while (n && fabs(n->phi - m->phi) <= dist) {
-	//	fprintf(stderr, "%s %f %f   %s %f %f\n", m->name, m->phi, m->lam, n->name, n->phi, n->lam);
 	if (fabs(n->lam - m->lam) <= dist) {
-	  fprintf(stderr, "Duplicate: %s <=> %s\n", m->name, n->name);
 	  n->duplicate = 1;
 	}
 	j = j + 1;

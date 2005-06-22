@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.H,v 1.21 2005/05/20 13:34:39 hofmann Exp $"
+// "$Id: GipfelWidget.H,v 1.22 2005/06/22 19:47:19 hofmann Exp $"
 //
 // Copyright 2005 by Johannes Hofmann
 //
@@ -43,6 +43,8 @@ class GipfelWidget : public Fl_Widget {
   int set_mountain(int m_x, int m_y);
 
   void set_labels(Hills *v);
+
+  void update_menuitems(Hills *h);
   
  public:
   GipfelWidget(int X,int Y,int W, int H);

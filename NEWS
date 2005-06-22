@@ -1,5 +1,9 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.0.2
+ - Added simple duplicate GPS entry elimation.
+ - Show parameter values in control window.
+
 gipfel-0.0.1
- - initial verion.
+ - Initial version.

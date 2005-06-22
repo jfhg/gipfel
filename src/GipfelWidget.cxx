@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.33 2005/06/19 16:54:02 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.34 2005/06/22 19:47:19 hofmann Exp $"
 //
 // GipfelWidget routines.
 //
@@ -40,12 +40,7 @@
 
 #include "GipfelWidget.H"
 
-static Fl_Menu_Item menuitems[] = {
-  { "&File",              0, 0, 0, FL_SUBMENU },
-    { "&Open File...",    FL_CTRL + 'o', NULL},
-  {0},
-  { 0 }
-};
+static Fl_Menu_Item *menuitems;
 
 GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   int i;
@@ -349,10 +344,38 @@ GipfelWidget::get_view_height() {
   return pan->get_view_height();
 }
 
+
+void 
+GipfelWidget::update_menuitems(Hills *h) {
+  int i,j;
+  
+  if (menuitems) {
+    free(menuitems);
+    menuitems = NULL;
+  }
+
+  menuitems = (Fl_Menu_Item*) calloc(h->get_num(), sizeof(Fl_Menu_Item) + 1);
+  j = 0;
+  for (i=0; i<h->get_num(); i++) {
+    if (h->get(i)->duplicate) {
+      continue;
+    }
+    menuitems[j++].text = h->get(i)->name;
+  }
+  mb->menu(menuitems);
+
+}
+
 void
 GipfelWidget::set_height_dist_ratio(double r) {
+  Hills *h;
+
   pan->set_height_dist_ratio(r);
-  set_labels(pan->get_visible_mountains());
+  h = pan->get_visible_mountains();
+  set_labels(h);
+  
+  menuitems = (Fl_Menu_Item*) calloc(h->get_num(), sizeof(Fl_Menu_Item) + 1);
+  update_menuitems(pan->get_close_mountains());
   redraw();
 }
 
