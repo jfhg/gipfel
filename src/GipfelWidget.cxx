@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.34 2005/06/22 19:47:19 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.35 2005/06/22 20:40:35 hofmann Exp $"
 //
 // GipfelWidget routines.
 //
@@ -348,7 +348,9 @@ GipfelWidget::get_view_height() {
 void 
 GipfelWidget::update_menuitems(Hills *h) {
   int i,j;
-  
+  Hills *h_sort = new Hills(h);
+  h_sort->sort_name();
+
   if (menuitems) {
     free(menuitems);
     menuitems = NULL;
@@ -356,14 +358,15 @@ GipfelWidget::update_menuitems(Hills *h) {
 
   menuitems = (Fl_Menu_Item*) calloc(h->get_num(), sizeof(Fl_Menu_Item) + 1);
   j = 0;
-  for (i=0; i<h->get_num(); i++) {
-    if (h->get(i)->duplicate) {
+  for (i=0; i<h_sort->get_num(); i++) {
+    if (h_sort->get(i)->duplicate) {
       continue;
     }
-    menuitems[j++].text = h->get(i)->name;
+    menuitems[j++].text = h_sort->get(i)->name;
   }
   mb->menu(menuitems);
 
+  delete h_sort;
 }
 
 void

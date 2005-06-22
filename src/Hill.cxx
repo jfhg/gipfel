@@ -1,5 +1,5 @@
 // 
-// "$Id: Hill.cxx,v 1.16 2005/06/22 19:47:20 hofmann Exp $"
+// "$Id: Hill.cxx,v 1.17 2005/06/22 20:40:35 hofmann Exp $"
 //
 // Hill routines.
 //
@@ -62,6 +62,16 @@ Hills::Hills() {
   num = 0;
   cap = 100;
   m = (Hill **) malloc(cap * sizeof(Hill *));
+
+  pi_d = asin(1.0) * 2.0;
+  deg2rad = pi_d / 180.0;
+}
+
+Hills::Hills(const Hills *h) {
+  num = h->num;
+  cap = h->cap;
+  m = (Hill **) malloc(cap * sizeof(Hill *));
+  memcpy(m, h->m, cap * sizeof(Hill *));
 
   pi_d = asin(1.0) * 2.0;
   deg2rad = pi_d / 180.0;
@@ -184,6 +194,18 @@ comp_mountains_phi(const void *n1, const void *n2) {
   }  
 }
 
+static int
+comp_mountains_name(const void *n1, const void *n2) {
+  Hill *m1 = *(Hill **)n1;
+  Hill *m2 = *(Hill **)n2;
+  
+  if (m1 && m2) {
+    return strcmp(m1->name, m2->name);
+  } else {
+    return 0;
+  }  
+}
+
 void
 Hills::sort() {
   if (!m) {
@@ -200,6 +222,15 @@ Hills::sort_phi() {
   }
 
   qsort(m, num, sizeof(Hill *), comp_mountains_phi);
+}
+
+void
+Hills::sort_name() {
+  if (!m) {
+    return;
+  }
+
+  qsort(m, num, sizeof(Hill *), comp_mountains_name);
 }
 
 void
