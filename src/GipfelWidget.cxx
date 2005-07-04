@@ -1,5 +1,5 @@
 // 
-// "$Id: GipfelWidget.cxx,v 1.35 2005/06/22 20:40:35 hofmann Exp $"
+// "$Id: GipfelWidget.cxx,v 1.36 2005/07/04 17:39:32 hofmann Exp $"
 //
 // GipfelWidget routines.
 //
@@ -123,7 +123,7 @@ GipfelWidget::draw() {
   fl_push_clip(x(), y(), w(), h());
   img->draw(x(),y(),w(),h(),0,0);
 
-  fl_font(FL_HELVETICA, 8);
+  fl_font(FL_HELVETICA, 10);
   mnts = pan->get_visible_mountains();
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i);
@@ -173,7 +173,7 @@ GipfelWidget::set_labels(Hills *v) {
   int i, j, width, height;
   Hill *m, *n;
 
-  fl_font(FL_HELVETICA, 8);
+  fl_font(FL_HELVETICA, 10);
 
   for (i=0; i<v->get_num(); i++) {
     m = v->get(i);
