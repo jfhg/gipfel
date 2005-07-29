@@ -129,7 +129,8 @@ void Hills::mark_duplicates(double dist) {
       j = i + 1;
       n = get(j);
       while (n && fabs(n->phi - m->phi) <= dist) {
-	if (fabs(n->lam - m->lam) <= dist) {
+	if (fabs(n->lam - m->lam) <= dist && 
+            fabs(n->height - m->height) <= 50.0 ) {
 	  n->duplicate = 1;
 	}
 	j = j + 1;

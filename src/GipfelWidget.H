@@ -45,9 +45,11 @@ class GipfelWidget : public Fl_Widget {
   void set_labels(Hills *v);
 
   void update_menuitems(Hills *h);
-  
+
  public:
   GipfelWidget(int X,int Y,int W, int H);
+
+  void menu_cb(Hill *hill);
 
   int load_image(const char *file);
 

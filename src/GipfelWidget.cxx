@@ -30,6 +30,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <math.h>
 
 #include <FL/Fl.H>
 #include <FL/Fl_Menu_Item.H>
@@ -41,10 +42,13 @@
 #include "GipfelWidget.H"
 
 static Fl_Menu_Item *menuitems;
+static double pi_d, deg2rad;
 
 GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   int i;
 
+  pi_d = asin(1.0) * 2.0;
+  deg2rad = pi_d / 180.0;
   img = NULL;
   pan = new Panorama();
   cur_mountain = NULL;
@@ -344,6 +348,23 @@ GipfelWidget::get_view_height() {
   return pan->get_view_height();
 }
 
+void 
+GipfelWidget::menu_cb(Hill* hill) {
+  if (hill) {
+    set_center_angle(hill->alph / deg2rad);
+    if (!m1 || (m1 && m2)) {
+      m1 = hill;
+    } else {
+      m2 = hill;
+    }
+  }
+}
+
+void
+static_menu_cb(Fl_Widget *o, void *f) {
+  Hill *hill = (Hill*) ((Fl_Menu_*)o)->mvalue()->user_data();
+  ((GipfelWidget *)f)->menu_cb(hill);
+}
 
 void 
 GipfelWidget::update_menuitems(Hills *h) {
@@ -362,9 +383,13 @@ GipfelWidget::update_menuitems(Hills *h) {
     if (h_sort->get(i)->duplicate) {
       continue;
     }
-    menuitems[j++].text = h_sort->get(i)->name;
+    menuitems[j].text = h_sort->get(i)->name;
+    menuitems[j].user_data(h_sort->get(i));
+    j++;
   }
+
   mb->menu(menuitems);
+  mb->callback((Fl_Callback*) static_menu_cb, this);
 
   delete h_sort;
 }

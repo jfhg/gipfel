@@ -225,7 +225,7 @@ create_control_window() {
   s_height_dist->box(FL_THIN_DOWN_BOX);
   s_height_dist->labelsize(10);
   s_height_dist->step(-0.001);
-  s_height_dist->bounds(0.2, 0.01);
+  s_height_dist->bounds(0.1, 0.01);
   s_height_dist->slider(FL_UP_BOX);
   s_height_dist->callback((Fl_Callback*)h_d_cb);
   s_height_dist->align(FL_ALIGN_TOP);
