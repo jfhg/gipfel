@@ -73,19 +73,23 @@ Panorama::~Panorama() {
 
 
 int
-Panorama::load_file(const char *name) {
-  visible_mountains->clear();
-  mountains->clobber();
-  
+Panorama::load_data(const char *name) {
   if (mountains->load(name) != 0) {
     return 1;
   }
 
   mountains->mark_duplicates(0.00001);
-  
   update_angles();
 
   return 0;
+}
+
+void
+Panorama::add_hills(Hills *h) {
+  mountains->add(h);
+
+  mountains->mark_duplicates(0.00001);
+  update_angles();
 }
 
 int
@@ -173,7 +177,8 @@ Panorama::guess(Hills *p, Hill *m1) {
       m1->x = x1_sav;
       m1->y = y1_sav;
 
-      if (m1 == m_tmp2 || fabs(m1->alph - m_tmp2->alph) > pi_d *0.7) {
+      if (m_tmp2->flags & HILL_TRACK_POINT || 
+          m1 == m_tmp2 || fabs(m1->alph - m_tmp2->alph) > pi_d *0.7) {
 	continue;
       }
 
@@ -466,9 +471,10 @@ Panorama::update_close_mountains() {
   for (i=0; i<mountains->get_num(); i++) {
     m = mountains->get(i);
  
-    if ((m->phi != view_phi || m->lam != view_lam) &&
-	(m->height / (m->dist * EARTH_RADIUS) 
-	 > height_dist_ratio)) {
+    if (m->flags & HILL_TRACK_POINT ||
+        ((m->phi != view_phi || m->lam != view_lam) &&
+	 (m->height / (m->dist * EARTH_RADIUS) 
+	 > height_dist_ratio))) {
 
       close_mountains->add(m);
     }
@@ -497,6 +503,9 @@ Panorama::update_visible_mountains() {
  
     if (m->a_view < pi_d / 3.0 && m->a_view > - pi_d / 3.0) {
       visible_mountains->add(m);
+      m->flags |= HILL_VISIBLE;
+    } else {
+      m->flags &= ~HILL_VISIBLE;
     }
   }
 

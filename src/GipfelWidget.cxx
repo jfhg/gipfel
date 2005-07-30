@@ -59,6 +59,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   for (i=0; i<=3; i++) {
     marker->add(new Hill(i * 10, 0));
   }
+  track_points = NULL;
   fl_register_images();
 }
 
@@ -83,9 +84,27 @@ GipfelWidget::load_image(const char *file) {
 
 int
 GipfelWidget::load_data(const char *file) {
-  int r;
-  r = pan->load_file(file);
-  return r;
+  return pan->load_data(file);
+}
+
+int
+GipfelWidget::load_track(const char *file) {
+  track_points = new Hills();
+
+  if (track_points->load(file) != 0) {
+    delete track_points;
+    track_points = NULL;
+    return 1;
+  }
+
+  for (int i=0; i<track_points->get_num(); i++) {
+    track_points->get(i)->flags |= HILL_TRACK_POINT;
+  }
+
+  pan->add_hills(track_points);  
+  redraw();
+  
+  return 0;
 }
 
 int
@@ -126,13 +145,14 @@ GipfelWidget::draw() {
 
   fl_push_clip(x(), y(), w(), h());
   img->draw(x(),y(),w(),h(),0,0);
-
+  
+  /* hills */
   fl_font(FL_HELVETICA, 10);
   mnts = pan->get_visible_mountains();
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i);
 
-    if (m->duplicate) {
+    if (m->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
       continue;
     }
 
@@ -154,6 +174,7 @@ GipfelWidget::draw() {
 	    center_y + m->label_y + y());
   }
 
+  /* markers */
   for (i=0; i<marker->get_num(); i++) {
     m = marker->get(i);
 
@@ -161,6 +182,24 @@ GipfelWidget::draw() {
     fl_xyline(center_x + m->x + x() - 3, center_y + m->y + y(), center_x + m->x + x() + 3);
     fl_yxline(center_x + m->x + x(), center_y + m->y + y() - 3, center_y + m->y + y() + 3);
     draw_flag(center_x + m->x + x(), center_y + m->y + y(), NULL);
+  }
+
+  /* track */
+  if (track_points && track_points->get_num() >= 1) {
+    int last_x, last_y, last_initialized = 0;
+
+    fl_color(FL_RED);
+    for (i=1; i<track_points->get_num(); i++) {
+      if (last_initialized) {
+        fl_line(center_x + x() + last_x, 
+                center_y + y() + last_y, 
+                center_x + x() + track_points->get(i)->x, 
+                center_y + y() + track_points->get(i)->y);
+      }
+      last_x = track_points->get(i)->x;
+      last_y = track_points->get(i)->y;
+      last_initialized++;
+    }
   }
 
   fl_pop_clip();
@@ -182,7 +221,7 @@ GipfelWidget::set_labels(Hills *v) {
   for (i=0; i<v->get_num(); i++) {
     m = v->get(i);
     
-    if (m->duplicate) {
+    if (m->flags & HILL_DUPLICATE) {
       continue;
     }
 
@@ -193,7 +232,7 @@ GipfelWidget::set_labels(Hills *v) {
     for (j=0; j<v->get_num() && j < i; j++) {
       n = v->get(j);
       
-      if (n->duplicate) {
+      if (n->flags & HILL_DUPLICATE) {
 	continue;
       }
 
@@ -380,7 +419,7 @@ GipfelWidget::update_menuitems(Hills *h) {
   menuitems = (Fl_Menu_Item*) calloc(h->get_num(), sizeof(Fl_Menu_Item) + 1);
   j = 0;
   for (i=0; i<h_sort->get_num(); i++) {
-    if (h_sort->get(i)->duplicate) {
+    if (h_sort->get(i)->flags & HILL_DUPLICATE) {
       continue;
     }
     menuitems[j].text = h_sort->get(i)->name;

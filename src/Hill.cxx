@@ -38,7 +38,7 @@ Hill::Hill(const char *n, double p, double l, double h) {
   alph = 0.0;
   x = 0;
   y = 0;
-  duplicate = 0;
+  flags = 0;
 }
 
 Hill::Hill(int x_tmp, int y_tmp) {
@@ -131,7 +131,7 @@ void Hills::mark_duplicates(double dist) {
       while (n && fabs(n->phi - m->phi) <= dist) {
 	if (fabs(n->lam - m->lam) <= dist && 
             fabs(n->height - m->height) <= 50.0 ) {
-	  n->duplicate = 1;
+	  n->flags |= HILL_DUPLICATE;
 	}
 	j = j + 1;
 	n = get(j);
@@ -158,6 +158,12 @@ Hills::add(Hill *m1) {
   m[num++] = m1;
 }
 
+void
+Hills::add(Hills *h) {
+  for(int i=0; i<h->get_num(); i++) {
+    add(h->get(i));
+  }
+}
 
 static int
 comp_mountains(const void *n1, const void *n2) {

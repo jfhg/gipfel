@@ -31,6 +31,7 @@ class GipfelWidget : public Fl_Widget {
   Fl_Image *img;
   Hill *cur_mountain;
   Hills *marker;
+  Hills *track_points;
   Hill *m1, *m2;
   Panorama *pan;
   Fl_Menu_Button *mb;
@@ -54,6 +55,8 @@ class GipfelWidget : public Fl_Widget {
   int load_image(const char *file);
 
   int load_data(const char *file);
+
+  int load_track(const char *file);
 
   int set_viewpoint(const char *pos);
 

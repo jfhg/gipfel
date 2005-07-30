@@ -80,6 +80,11 @@ void open_cb() {
   }  
 }
 
+void track_cb() {
+  char *file = fl_file_chooser("Track File?", NULL, NULL);
+  gipf->load_track(file);
+}
+
 void scale_cb(Fl_Slider* o, void*) {
   if (gipf) {
     gipf->set_scale(o->value());
@@ -151,6 +156,7 @@ void about_cb() {
 
 Fl_Menu_Item menuitems[] = {
   { "&File",              0, 0, 0, FL_SUBMENU },
+    { "Load &Track", FL_CTRL + 't', (Fl_Callback *)track_cb, 0 },
     { "&Quit", FL_CTRL + 'q', (Fl_Callback *)quit_cb, 0 },
   {0},
   { "&Help", 0, 0, 0, FL_SUBMENU },

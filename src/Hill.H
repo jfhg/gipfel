@@ -22,6 +22,11 @@
 #ifndef HILL_H
 #define HILL_H
 
+
+#define HILL_DUPLICATE   0x01 
+#define HILL_TRACK_POINT 0x02 
+#define HILL_VISIBLE     0x04 
+
 class Hill;
 
 class Hill {
@@ -37,7 +42,7 @@ class Hill {
   int x, y;
   int label_x, label_y;
   char *name;
-  int duplicate;
+  int flags;
  
   Hill(const char *n, double p, double l, double h);
 
@@ -64,6 +69,8 @@ class Hills {
   void mark_duplicates(double dist);
 
   void add(Hill *m);
+
+  void add(Hills *h);
 
   void sort_phi();
 

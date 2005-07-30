@@ -73,7 +73,9 @@ class Panorama {
 
   ~Panorama();
   
-  int load_file(const char *name);
+  int load_data(const char *name);
+
+  void add_hills(Hills *h);
 
   int set_viewpoint(const char *pos);  
 
