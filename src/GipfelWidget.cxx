@@ -232,7 +232,7 @@ GipfelWidget::set_labels(Hills *v) {
     for (j=0; j<v->get_num() && j < i; j++) {
       n = v->get(j);
       
-      if (n->flags & HILL_DUPLICATE) {
+      if (n->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
 	continue;
       }
 
