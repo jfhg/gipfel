@@ -313,12 +313,18 @@ int main(int argc, char** argv) {
 
   control_win = create_control_window();
 
-  view_win = new Fl_Window(700, 500);
+  view_win = new Fl_Window(800, 600);
   scroll = new Fl_Scroll(0, 0, view_win->w(), view_win->h());
   
-  gipf = new GipfelWidget(0,0,700,500);
+  gipf = new GipfelWidget(0,0,800,600);
 
   gipf->load_image(img_file);
+  if (gipf->w() < 1024 && gipf->h() < 768) {
+    view_win->size(gipf->w(), gipf->h());
+    scroll->size(gipf->w(), gipf->h());
+  }
+
+
   gipf->load_data(data_file);
   if (view_point) {
     gipf->set_viewpoint(view_point);
