@@ -189,6 +189,7 @@ GipfelWidget::draw() {
     int last_x, last_y, last_initialized = 0;
 
     fl_color(FL_RED);
+    fl_line_style(FL_SOLID, 2);
     for (i=1; i<track_points->get_num(); i++) {
       if (last_initialized) {
         fl_line(center_x + x() + last_x, 
@@ -200,6 +201,7 @@ GipfelWidget::draw() {
       last_y = track_points->get(i)->y;
       last_initialized++;
     }
+    fl_line_style(0);
   }
 
   fl_pop_clip();
@@ -217,19 +219,19 @@ GipfelWidget::set_labels(Hills *v) {
   Hill *m, *n;
 
   fl_font(FL_HELVETICA, 10);
+  height = fl_height();
 
   for (i=0; i<v->get_num(); i++) {
     m = v->get(i);
     
-    if (m->flags & HILL_DUPLICATE) {
+    if (m->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
       continue;
     }
 
-    fl_measure(m->name, width, height);
+    width = (int) ceilf(fl_width(m->name));
     m->label_x = m->x + width;
     m->label_y = m->y;
-
-    for (j=0; j<v->get_num() && j < i; j++) {
+    for (j=0; j < i; j++) {
       n = v->get(j);
       
       if (n->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
