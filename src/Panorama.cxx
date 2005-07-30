@@ -349,13 +349,13 @@ Panorama::set_height_dist_ratio(double r) {
 }
 
 void
-Panorama::set_view_lat(double v) {
+Panorama::set_view_long(double v) {
   view_lam = v * deg2rad;
   update_angles();
 }
 
 void
-Panorama::set_view_long(double v) {
+Panorama::set_view_lat(double v) {
   view_phi = v * deg2rad;
   update_angles();
 }
@@ -397,12 +397,12 @@ Panorama::get_height_dist_ratio() {
 }
 
 double
-Panorama::get_view_lat() {
+Panorama::get_view_long() {
   return view_lam / deg2rad;
 }
 
 double
-Panorama::get_view_long() {
+Panorama::get_view_lat() {
   return view_phi / deg2rad;
 }
 
