@@ -77,6 +77,8 @@ class Panorama {
 
   void add_hills(Hills *h);
 
+  void remove_trackpoints();
+
   int set_viewpoint(const char *pos);  
 
   void set_height_dist_ratio(double r);

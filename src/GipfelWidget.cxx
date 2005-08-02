@@ -94,6 +94,12 @@ GipfelWidget::load_data(const char *file) {
 
 int
 GipfelWidget::load_track(const char *file) {
+  if (track_points) {
+    pan->remove_trackpoints();
+    track_points->clobber();
+    delete track_points;
+  }
+
   track_points = new Hills();
 
   if (track_points->load(file) != 0) {

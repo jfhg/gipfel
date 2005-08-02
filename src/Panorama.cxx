@@ -92,6 +92,23 @@ Panorama::add_hills(Hills *h) {
   update_angles();
 }
 
+void
+Panorama::remove_trackpoints() {
+  Hills *h_new = new Hills();
+  Hill *m;
+
+  for(int i=0; i<mountains->get_num(); i++) {
+    m = mountains->get(i);
+    if (! (m->flags & HILL_TRACK_POINT)) {
+      h_new->add(m);
+    }
+  }
+ 
+  delete mountains;
+  mountains = h_new;
+}
+ 
+
 int
 Panorama::set_viewpoint(const char *name) {
   if (get_pos(name, &view_phi, &view_lam, &view_height) != 1) {
