@@ -101,7 +101,6 @@ Panorama::set_viewpoint(const char *name) {
 
   if (view_name) {
     free(view_name);
-    view_name = NULL;
   }
 
   view_name = strdup(name);

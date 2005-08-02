@@ -84,7 +84,12 @@ GipfelWidget::load_image(const char *file) {
 
 int
 GipfelWidget::load_data(const char *file) {
-  return pan->load_data(file);
+  int r;
+
+  r = pan->load_data(file);
+  update_menuitems(pan->get_close_mountains());
+
+  return r;
 }
 
 int
@@ -113,6 +118,8 @@ GipfelWidget::set_viewpoint(const char *pos) {
 
   r = pan->set_viewpoint(pos);
   set_labels(pan->get_visible_mountains());
+  update_menuitems(pan->get_close_mountains());
+
   return r;
 }
 
@@ -260,6 +267,9 @@ GipfelWidget::set_cur_mountain(int m_x, int m_y) {
 
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i); 
+    if (m->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
+      continue;
+    }
 
     if (m_x - center_x >= m->x - 2 && m_x - center_x < m->x + 2 &&
 	m_y - center_y >= m->y - 2 && m_y - center_y < m->y + 2) {
@@ -415,13 +425,12 @@ GipfelWidget::update_menuitems(Hills *h) {
 
   if (menuitems) {
     free(menuitems);
-    menuitems = NULL;
   }
 
   menuitems = (Fl_Menu_Item*) calloc(h->get_num(), sizeof(Fl_Menu_Item) + 1);
   j = 0;
   for (i=0; i<h_sort->get_num(); i++) {
-    if (h_sort->get(i)->flags & HILL_DUPLICATE) {
+    if (h_sort->get(i)->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
       continue;
     }
     menuitems[j].text = h_sort->get(i)->name;
@@ -443,7 +452,6 @@ GipfelWidget::set_height_dist_ratio(double r) {
   h = pan->get_visible_mountains();
   set_labels(h);
   
-  menuitems = (Fl_Menu_Item*) calloc(h->get_num(), sizeof(Fl_Menu_Item) + 1);
   update_menuitems(pan->get_close_mountains());
   redraw();
 }
