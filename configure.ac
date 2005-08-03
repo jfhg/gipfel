@@ -13,6 +13,7 @@ LDFLAGS="-g $LDFLAGS"
 
 # Checks for programs.
 AC_PROG_CXX
+AC_PROG_CC
 
 AC_LANG_CPLUSPLUS
 

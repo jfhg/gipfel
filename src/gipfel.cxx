@@ -85,6 +85,11 @@ void track_cb() {
   gipf->load_track(file);
 }
 
+void save_cb() {
+  char *file = fl_file_chooser("Save Image As?", NULL, NULL);
+  gipf->save_image(file);
+}
+
 void scale_cb(Fl_Slider* o, void*) {
   if (gipf) {
     gipf->set_scale(o->value());
@@ -156,6 +161,7 @@ void about_cb() {
 
 Fl_Menu_Item menuitems[] = {
   { "&File",              0, 0, 0, FL_SUBMENU },
+    { "&Save Image", FL_CTRL + 's', (Fl_Callback *)save_cb, 0 },
     { "Load &Track", FL_CTRL + 't', (Fl_Callback *)track_cb, 0 },
     { "&Quit", FL_CTRL + 'q', (Fl_Callback *)quit_cb, 0 },
   {0},
@@ -305,7 +311,7 @@ int main(int argc, char** argv) {
     img_file = my_argv[0];
   }
 
-  if (data_file == NULL || view_point == NULL || img_file == NULL || err) {
+  if (data_file == NULL || img_file == NULL || err) {
     usage();
     exit(1);
   }
@@ -316,14 +322,12 @@ int main(int argc, char** argv) {
   view_win = new Fl_Window(800, 600);
   scroll = new Fl_Scroll(0, 0, view_win->w(), view_win->h());
   
-  gipf = new GipfelWidget(0,0,800,600);
-
+  gipf = new GipfelWidget(0,0,50,50);
   gipf->load_image(img_file);
   if (gipf->w() < 1024 && gipf->h() < 768) {
     view_win->size(gipf->w(), gipf->h());
     scroll->size(gipf->w(), gipf->h());
   }
-
 
   gipf->load_data(data_file);
   if (view_point) {

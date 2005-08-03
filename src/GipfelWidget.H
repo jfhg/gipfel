@@ -35,6 +35,7 @@ class GipfelWidget : public Fl_Widget {
   Hill *m1, *m2;
   Panorama *pan;
   Fl_Menu_Button *mb;
+  char *img_file;
 
 
   int handle(int event);
@@ -52,7 +53,9 @@ class GipfelWidget : public Fl_Widget {
 
   void menu_cb(Hill *hill);
 
-  int load_image(const char *file);
+  int load_image(char *file);
+
+  int save_image(char *file);
 
   int load_data(const char *file);
 

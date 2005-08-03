@@ -39,6 +39,7 @@
 #include <FL/fl_draw.H>
 #include <FL/x.H>
 
+#include "util.h"
 #include "GipfelWidget.H"
 
 static Fl_Menu_Item *menuitems;
@@ -56,6 +57,8 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   marker = new Hills();
   m1 = NULL;
   m2 = NULL;
+  img_file = NULL;
+
   for (i=0; i<=3; i++) {
     marker->add(new Hill(i * 10, 0));
   }
@@ -63,30 +66,141 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   fl_register_images();
 }
 
+#define GIPFEL_FORMAT "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, scale %lf"
+
 int
-GipfelWidget::load_image(const char *file) {
-  img = new Fl_JPEG_Image(file);
+GipfelWidget::load_image(char *file) {
+  char * args[32];
+  FILE *p;
+  pid_t pid;
+  char buf[1024];
+  double lo, la, he, dir, ni, ti, sc;
+  int status;
+  Fl_Image *new_img;
+
+  new_img = new Fl_JPEG_Image(file);
   
-  if (img == NULL) {
+  if (new_img == NULL) {
     return 1;
   }
+
+  if (img) {
+    delete img;
+  } 
+
+  img = new_img;
   
-  w(img->w());
-  h(img->h());
+  if (img_file) {
+    free(img_file);
+  }
+
+  img_file = strdup(file);
+
+  h(img->h());  
+  w(img->w());  
 
   mb = new Fl_Menu_Button(x(),y(),w()+x(),h()+y(),"&popup");
   mb->type(Fl_Menu_Button::POPUP3);
   mb->box(FL_NO_BOX);
   mb->menu(menuitems);
 
+// try to retrieve gipfel data from JPEG comment section
+  args[0] = "rdjpgcom";
+  args[1] = file;
+  args[2] = NULL;
+  
+  p = pexecvp(args[0], args, &pid, "r");
+
+  if (p) {
+    while (fgets(buf, sizeof(buf), p) != NULL) {
+      if (sscanf(buf, GIPFEL_FORMAT, &lo, &la, &he, &dir, &ni, &ti, &sc) == 7) {
+        set_view_long(lo);
+        set_view_lat(la);
+        set_view_height(he);
+        set_center_angle(dir);
+        set_nick_angle(ni);
+        set_tilt_angle(ti);
+        set_scale(sc);
+        
+	break;
+      }
+    }
+    fclose(p);
+    waitpid(pid, &status, 0); 
+    if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 126) {
+      fprintf(stderr, "%s not found\n", args[0]);
+    }
+  }
+
   return 0;
 }
+
+int
+GipfelWidget::save_image(char *file) {
+  char * args[32];
+  FILE *p, *out;
+  pid_t pid;
+  char buf[1024];
+  int status;
+  size_t n;
+
+  if (img_file == NULL) {
+    fprintf(stderr, "Nothing to save\n");
+    return 1;
+  }
+
+  out = fopen(file, "w");
+  if (out == NULL) {
+    perror("fopen");
+    return 1;
+  }
+
+  snprintf(buf, sizeof(buf), GIPFEL_FORMAT, 
+    get_view_long(), 
+    get_view_lat(), 
+    get_view_height(), 
+    get_center_angle(), 
+    get_nick_angle(), 
+    get_tilt_angle(), 
+    get_scale());
+
+// try to save gipfel data in JPEG comment section
+  args[0] = "wrjpgcom";
+  args[1] = "-replace";
+  args[2] = "-comment";
+  args[3] = buf;
+  args[4] = img_file;
+  args[5] = NULL;
+
+  p = pexecvp(args[0], args, &pid, "r");
+
+  if (p) {
+    while ((n = fread(buf, 1, sizeof(buf), p)) != 0) {
+      if (fwrite(buf, 1, n, out) != n) {
+        perror("fwrite");
+        fclose(out);
+        fclose(p);
+        waitpid(pid, &status, 0);
+       }
+    }
+    fclose(p);
+    waitpid(pid, &status, 0);
+    if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 126) {
+      fprintf(stderr, "%s not found\n", args[0]);
+    }
+  }
+
+  fclose(out);
+  return 0;
+}
+
 
 int
 GipfelWidget::load_data(const char *file) {
   int r;
 
   r = pan->load_data(file);
+  set_labels(pan->get_visible_mountains());
   update_menuitems(pan->get_close_mountains());
 
   return r;
@@ -452,11 +566,8 @@ GipfelWidget::update_menuitems(Hills *h) {
 
 void
 GipfelWidget::set_height_dist_ratio(double r) {
-  Hills *h;
-
   pan->set_height_dist_ratio(r);
-  h = pan->get_visible_mountains();
-  set_labels(h);
+  set_labels(pan->get_visible_mountains());
   
   update_menuitems(pan->get_close_mountains());
   redraw();
