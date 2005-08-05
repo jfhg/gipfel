@@ -232,7 +232,7 @@ int
 Panorama::comp_params(Hill *m1, Hill *m2) {
   Hill *tmp;
   double a_center_tmp, scale_tmp, a_nick_tmp;
-  
+
   if (m1->x > m2->x) {
     tmp = m1;
     m1 = m2;
@@ -304,17 +304,17 @@ Panorama::optimize(Hill *m1, Hill *m2) {
 
     a_nick = atan(tan_nick_view);
     a_center = atan(tan_dir_view);
-    
-    if (a_center > pi_d) {
+
+    if (a_center > 2.0 * pi_d) {
       a_center = a_center - 2.0 * pi_d;
-    } else if (a_center < -pi_d) {
+    } else if (a_center < 0.0) {
       a_center = a_center + 2.0 * pi_d;
     }
-    
+
     // atan(tan_dir_view) is not the only possible solution.
     // Choose the one which is close to m1->alph.
     if (fabs(a_center - m1->alph) > pi_d/2.0) {
-      a_center = a_center + pi_d;
+     a_center = a_center + pi_d;
     }
   
     scale = n_scale;
@@ -590,14 +590,28 @@ Panorama::alpha(double phi, double lam) {
 double
 Panorama::comp_center_angle(double a1, double a2, double d1, double d2) {
   double sign1 = 1.0;
-  double tan_acenter, tan_a1, tan_a2;
+  double tan_acenter, tan_a1, tan_a2, a_center;
 
   tan_a1 = tan(a1);
   tan_a2 = tan(a2);
 
   tan_acenter = (((pow(((pow((1.0 + (tan_a1 * tan_a2)), 2.0) * ((d1 * d1) + (d2 * d2))) + (2.0 * d1 * d2 * ((2.0 * ((tan_a2 * tan_a1) - (tan_a2 * tan_a2))) - ((tan_a1 * tan_a1) * (2.0 + (tan_a2 * tan_a2))) - 1.0))), (1.0 / 2.0)) * sign1) + ((1.0 - (tan_a1 * tan_a2)) * (d1 - d2))) / (2.0 * ((d2 * tan_a2) - (d1 * tan_a1))));
-  
-  return atan(tan_acenter) - pi_d;
+
+  a_center = atan(tan_acenter);
+
+  if (a_center > 2.0 * pi_d) {
+     a_center = a_center - 2.0 * pi_d;
+  } else if (a_center < 0.0) {
+     a_center = a_center + 2.0 * pi_d;
+  }
+
+  // atan(tan_dir_view) is not the only possible solution.
+  // Choose the one which is close to m1->alph.
+  if (fabs(a_center - a1) > pi_d/2.0) {
+    a_center = a_center + pi_d;
+  }
+
+  return a_center; 
 }
 
 double
