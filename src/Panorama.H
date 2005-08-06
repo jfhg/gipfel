@@ -24,6 +24,11 @@
 
 #include "Hill.H"
 
+typedef enum {
+  PROJECTION_NORMAL    = 0,
+  PROJECTION_PANORAMIC = 1
+} Projection_t;
+
 class Panorama {
  private:
   double view_phi, view_lam, view_height;
@@ -37,6 +42,7 @@ class Panorama {
   double scale;
   double a_nick;
   double a_tilt;
+  Projection_t projection;
  
   int get_pos(const char *name, double *phi, double *lam, double *height);
 
@@ -67,6 +73,10 @@ class Panorama {
   int optimize(Hill *m1, Hill *m2);
 
   double get_value(Hills *p);
+
+  void set_projection(Projection_t mode);
+
+  Projection_t get_projection();
 
  public:
   Panorama();
