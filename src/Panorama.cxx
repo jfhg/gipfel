@@ -25,38 +25,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-extern "C" {
-#include <ccmath.h>
-}
 
 #include "Panorama.H"
-
-static int opt_step(double *tan_nick_view, 
-		    double *tan_dir_view,
-		    double *n_scale,
-		    double tan_dir_m1,
-		    double tan_nick_m1,
-		    double tan_dir_m2,
-		    double tan_nick_m2,
-		    double d_m1_2, double d_m2_2, double d_m1_m2_2);
-static int opt_step_panoramic(double *tan_nick_view, 
-		    double *dir_view,
-		    double *n_scale,
-		    double dir_m1,
-		    double tan_nick_m1,
-		    double dir_m2,
-		    double tan_nick_m2,
-		    double d_m1_2, double d_m2_2, double d_m1_m2_2);
-
-static double
-comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
-	  double tan_nick_m, double tan_dir_m,
-	  double x, double y);
-
+#include "ProjectionTangential.H"
 
 #define EARTH_RADIUS 6371010.0
-
-static double pi_d, deg2rad;
 
 Panorama::Panorama() {
   mountains = new Hills();
@@ -65,12 +38,12 @@ Panorama::Panorama() {
   height_dist_ratio = 0.07;
   pi_d = asin(1.0) * 2.0;
   deg2rad = pi_d / 180.0;
-  a_center = 0.0;
-  a_nick = 0.0;
-  a_tilt = 0.0;
-  scale = 3500.0;
+  parms.a_center = 0.0;
+  parms.a_nick = 0.0;
+  parms.a_tilt = 0.0;
+  parms.scale = 3500.0;
   view_name = NULL;
-  projection = PROJECTION_PANORAMIC;
+  proj = new ProjectionTangential();
 }
 
 Panorama::~Panorama() {
@@ -79,7 +52,6 @@ Panorama::~Panorama() {
   delete(visible_mountains);
   delete(mountains);
 }
-
 
 int
 Panorama::load_data(const char *name) {
@@ -152,10 +124,10 @@ Panorama::get_value(Hills *p) {
   Hill *m;
   double v = 0.0, d_min, d;
 
-  if (isnan(scale) || isnan(a_center) || isnan(a_tilt) || isnan(a_nick) ||
-      scale < 500.0 || scale > 100000.0 || 
-      a_nick > pi_d/4.0 || a_nick < - pi_d/4.0 || 
-      a_tilt > pi_d/16.0 || a_tilt < - pi_d/16.0) {
+  if (isnan(parms.scale) || isnan(parms.a_center) || isnan(parms.a_tilt) || isnan(parms.a_nick) ||
+      parms.scale < 500.0 || parms.scale > 100000.0 || 
+      parms.a_nick > pi_d/4.0 || parms.a_nick < - pi_d/4.0 || 
+      parms.a_tilt > pi_d/16.0 || parms.a_tilt < - pi_d/16.0) {
     return 10000000.0;
   }
 
@@ -217,19 +189,19 @@ Panorama::guess(Hills *p, Hill *m1) {
 	
       if (v < best) {
 	best = v;
-	a_center_best = a_center;
-	a_nick_best = a_nick;
-	a_tilt_best = a_tilt;
-	scale_best = scale;
+	a_center_best = parms.a_center;
+	a_nick_best = parms.a_nick;
+	a_tilt_best = parms.a_tilt;
+	scale_best = parms.scale;
       }
     }     
   }
 
   if (best < 4000.0) {
-    a_center = a_center_best;
-    a_nick = a_nick_best;
-    a_tilt = a_tilt_best;
-    scale = scale_best;
+    parms.a_center = a_center_best;
+    parms.a_nick = a_nick_best;
+    parms.a_tilt = a_tilt_best;
+    parms.scale = scale_best;
   } else {
     fprintf(stderr, "No solution found.\n");
   }
@@ -239,149 +211,34 @@ Panorama::guess(Hills *p, Hill *m1) {
 
 int
 Panorama::comp_params(Hill *m1, Hill *m2) {
-  Hill *tmp;
-  double a_center_tmp, scale_tmp, a_nick_tmp;
+  int ret;
 
-  if (m1->x > m2->x) {
-    tmp = m1;
-    m1 = m2;
-    m2 = tmp;
-  }
-
-  x1 = m1->x;
-  y1 = m1->y;
-
-  x2 = m2->x;
-  y2 = m2->y;
-  
-  a_center_tmp = comp_center_angle(m1->alph, m2->alph, x1, x2);
-  scale_tmp    = comp_scale(m1->alph, m2->alph, x1, x2);
-  a_nick_tmp   = atan ((y1 + tan(m1->a_nick) * scale) / 
-		       (scale - y1 * tan(m1->a_nick)));
-
-  if (isnan(a_center_tmp) || isnan(scale_tmp) || isnan(a_nick_tmp)) {
-    return 1;
-  } else {
-    
-    a_center = a_center_tmp;
-    scale    = scale_tmp;
-    a_nick   = a_nick_tmp;
-
-    optimize(m1, m2);
-
-    update_visible_mountains();
-
-    return 0;
-  }
-}
-
-int
-Panorama::optimize(Hill *m1, Hill *m2) {
-  int i;
-  double tan_nick_view, tan_dir_view, dir_view, n_scale;
-  double tan_nick_m1, tan_dir_m1;
-  double tan_nick_m2, tan_dir_m2;
-  double d_m1_2, d_m2_2, d_m1_m2_2;
-
-  d_m1_2 = pow(x1, 2.0) + pow(y1, 2.0);
-  d_m2_2 = pow(x2, 2.0) + pow(y2, 2.0);
-  d_m1_m2_2 = pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0);
-
-  tan_nick_view = tan(a_nick);
-  tan_dir_view = tan(a_center);
-  dir_view = a_center;
-  n_scale = scale;
-  tan_dir_m1 = tan(m1->alph);
-  tan_nick_m1 = tan(m1->a_nick);
-  tan_dir_m2 = tan(m2->alph);
-  tan_nick_m2 = tan(m2->a_nick);
-
-  d_m1_2 = pow(x1, 2.0) + pow(y1, 2.0);
-  d_m2_2 = pow(x2, 2.0) + pow(y2, 2.0);
-  d_m1_m2_2 = pow(x1 - x2, 2.0) + pow(y1 - y2, 2.0);
-
-  if (projection == PROJECTION_NORMAL) {
-    for (i=0; i<5; i++) {
-      opt_step(&tan_nick_view, &tan_dir_view, &n_scale, 
-	     tan_dir_m1, tan_nick_m1, tan_dir_m2, tan_nick_m2,
-	     d_m1_2, d_m2_2, d_m1_m2_2);
-    }
-
-    if (isnan(tan_dir_view) || isnan(tan_nick_view) || isnan(n_scale)) {
-      fprintf(stderr, "No solution found.\n");
-      return 1;
-    }
-
-    a_center = atan(tan_dir_view);
-
-  } else if (projection = PROJECTION_PANORAMIC) {
-
-    for (i=0; i<5; i++) {
-      opt_step_panoramic(&tan_nick_view, &dir_view, &n_scale, 
-	     m1->alph, tan_nick_m1, m2->alph, tan_nick_m2,
-	     d_m1_2, d_m2_2, d_m1_m2_2);
-    }
-
-    if (isnan(dir_view) || isnan(tan_nick_view) || isnan(n_scale)) {
-      fprintf(stderr, "No solution found.\n");
-      return 1;
-    }
-
-    a_center = dir_view;
-    tan_dir_view = tan(a_center); // needed for tilt computation
-  }
-
-  a_nick = atan(tan_nick_view);
-
-  if (a_center > 2.0 * pi_d) {
-    a_center = a_center - 2.0 * pi_d;
-  } else if (a_center < 0.0) {
-    a_center = a_center + 2.0 * pi_d;
-  }
-
-  // atan(tan_dir_view) is not the only possible solution.
-  // Choose the one which is close to m1->alph.
-  if (fabs(a_center - m1->alph) > pi_d/2.0) {
-   a_center = a_center + pi_d;
-  }
-  
-  scale = n_scale;
-
-  // use the point with greater distance from center for tilt computation 
-  if (d_m1_2 > d_m2_2) {
-    a_tilt = comp_tilt(tan_nick_view, tan_dir_view, n_scale, 
-                       tan_nick_m1, tan_dir_m1,
-		       (double) x1, (double) y1);
-  } else {
-    a_tilt = comp_tilt(tan_nick_view, tan_dir_view, n_scale, 
-	 tan_nick_m2, tan_dir_m2,
-	 (double) x2, (double) y2);
-  }
- 
-  return 0;
+  ret = proj->comp_params(m1, m2, &parms);
+  update_angles();
+  return ret;
 }
 
 void
 Panorama::set_center_angle(double a) {
-  a_center = a * deg2rad;
+  parms.a_center = a * deg2rad;
   update_visible_mountains();
 }
 
 void
 Panorama::set_nick_angle(double a) {
-  a_nick = a * deg2rad;
+  parms.a_nick = a * deg2rad;
   update_coordinates();
 }
 
 void
 Panorama::set_tilt_angle(double a) {
-  a_tilt = a * deg2rad;
+  parms.a_tilt = a * deg2rad;
   update_coordinates();
 }
 
 void
 Panorama::set_scale(double s) {
-  scale = s;
+  parms.scale = s;
   update_coordinates();
 }
 
@@ -409,11 +266,6 @@ Panorama::set_view_height(double v) {
   update_angles();
 }
 
-void
-Panorama::set_projection(Projection_t mode) {
-  projection = mode;
-}
-
 const char *
 Panorama::get_viewpoint() {
   return view_name;
@@ -421,22 +273,22 @@ Panorama::get_viewpoint() {
 
 double
 Panorama::get_center_angle() {
-  return a_center / deg2rad;
+  return parms.a_center / deg2rad;
 }
 
 double
 Panorama::get_nick_angle() {
-  return a_nick / deg2rad;
+  return parms.a_nick / deg2rad;
 }
 
 double
 Panorama::get_tilt_angle() {
-  return a_tilt / deg2rad;
+  return parms.a_tilt / deg2rad;
 }
 
 double
 Panorama::get_scale() {
-  return scale;
+  return parms.scale;
 }
 
 double
@@ -457,11 +309,6 @@ Panorama::get_view_lat() {
 double
 Panorama::get_view_height() {
   return view_height;
-}
-
-Projection_t
-Panorama::get_projection() {
-  return projection;
 }
 
 int
@@ -546,7 +393,7 @@ Panorama::update_visible_mountains() {
   for (i=0; i<close_mountains->get_num(); i++) {
     m = close_mountains->get(i);
 
-    m->a_view = m->alph - a_center;
+    m->a_view = m->alph - parms.a_center;
 
     if (m->a_view > pi_d) {
       m->a_view -= 2.0*pi_d;
@@ -565,25 +412,14 @@ Panorama::update_visible_mountains() {
   update_coordinates();
 }
 
-void 
+void
 Panorama::update_coordinates() {
-  int i;
-  double x_tmp, y_tmp;
   Hill *m;
 
-  for (i=0; i<visible_mountains->get_num(); i++) {
+  for (int i=0; i<visible_mountains->get_num(); i++) {
     m = visible_mountains->get(i);
-
-    if (projection == PROJECTION_NORMAL) { 
-      x_tmp = tan(m->a_view) * scale;
-    } else if (projection == PROJECTION_PANORAMIC) {
-      x_tmp = m->a_view * scale;
-    }
-    y_tmp = - (tan(m->a_nick - a_nick) * scale);
-
-    // rotate by a_tilt;
-    m->x = (int) rint(x_tmp * cos(a_tilt) - y_tmp * sin(a_tilt));
-    m->y = (int) rint(x_tmp * sin(a_tilt) + y_tmp * cos(a_tilt));
+    
+    proj->set_coordinates(m, &parms);
   }
 }
 
@@ -630,47 +466,6 @@ Panorama::alpha(double phi, double lam) {
 
 
 double
-Panorama::comp_center_angle(double a1, double a2, double d1, double d2) {
-  double sign1 = 1.0;
-  double tan_acenter, tan_a1, tan_a2, a_center;
-
-  tan_a1 = tan(a1);
-  tan_a2 = tan(a2);
-
-  tan_acenter = (((pow(((pow((1.0 + (tan_a1 * tan_a2)), 2.0) * ((d1 * d1) + (d2 * d2))) + (2.0 * d1 * d2 * ((2.0 * ((tan_a2 * tan_a1) - (tan_a2 * tan_a2))) - ((tan_a1 * tan_a1) * (2.0 + (tan_a2 * tan_a2))) - 1.0))), (1.0 / 2.0)) * sign1) + ((1.0 - (tan_a1 * tan_a2)) * (d1 - d2))) / (2.0 * ((d2 * tan_a2) - (d1 * tan_a1))));
-
-  a_center = atan(tan_acenter);
-
-  if (a_center > 2.0 * pi_d) {
-     a_center = a_center - 2.0 * pi_d;
-  } else if (a_center < 0.0) {
-     a_center = a_center + 2.0 * pi_d;
-  }
-
-  // atan(tan_dir_view) is not the only possible solution.
-  // Choose the one which is close to m1->alph.
-  if (fabs(a_center - a1) > pi_d/2.0) {
-    a_center = a_center + pi_d;
-  }
-
-  return a_center; 
-}
-
-double
-Panorama::comp_scale(double a1, double a2, double d1, double d2) {
-  double sign1 = 1.0;
-  double sc, tan_a1, tan_a2;
-  
-  tan_a1 = tan(a1);
-  tan_a2 = tan(a2);
-  
-  sc = ((((1.0 + (tan_a1 * tan_a2)) * (d1 - d2)) - (sign1 * pow((((1.0 + pow((tan_a1 * tan_a2), 2.0)) * ((d1 * d1) + (d2 * d2))) + (2.0 * ((tan_a1 * tan_a2 * pow((d1 + d2), 2.0)) - (d1 * d2 * (((tan_a1 * tan_a1) * (2.0 + (tan_a2 * tan_a2))) + 1.0 + (2.0 * (tan_a2 * tan_a2))))))), (1.0 / 2.0)))) / (2.0 * (tan_a1 - tan_a2)));
-
-  return sc;
-}
-
-
-double
 Panorama::nick(double dist, double height) {
   double a, b, c;
   double beta;
@@ -684,171 +479,3 @@ Panorama::nick(double dist, double height) {
   return beta - pi_d / 2.0;
 }
 
-
-static int
-get_matrix_panoramic(double m[],
-           double tan_nick_view, double dir_view, double scale,
-           double dir_m1, double tan_nick_m1,
-           double dir_m2, double tan_nick_m2) {
-
-
-m[0] = (2.0 * (scale * scale) * (tan_nick_view - tan_nick_m1) * ((tan_nick_m1 * tan_nick_m1) + 1.0) / pow(((tan_nick_m1 * tan_nick_view) + 1.0), 3.0));
-m[1] = (2.0 * (scale * scale) * (dir_m1 - dir_view));
-m[2] = (2.0 * scale * (pow(((tan_nick_view - tan_nick_m1) / ((tan_nick_m1 * tan_nick_view) + 1.0)), 2.0) - pow((dir_view - dir_m1), 2.0)));
-
-m[3] = (2.0 * (scale * scale) * (tan_nick_view - tan_nick_m2) * ((tan_nick_m2 * tan_nick_m2) + 1.0) / pow(((tan_nick_m2 * tan_nick_view) + 1.0), 3.0));
-m[4] = (2.0 * (scale * scale) * (dir_m2 - dir_view));
-m[5] =  (2.0 * scale * (pow(((tan_nick_view - tan_nick_m2) / ((tan_nick_m2 * tan_nick_view) + 1.0)), 2.0) - pow((dir_view - dir_m2), 2.0)));
-
-m[6] = (2.0 * (scale * scale) * ((pow(tan_nick_m1, 3.0) * ((2.0 * tan_nick_m2 * (pow(tan_nick_view, 3.0) + tan_nick_view)) + 1.0)) + pow(tan_nick_m2, 3.0) - (pow(tan_nick_view, 4.0) * tan_nick_m2 * pow((tan_nick_m1 - tan_nick_m2), 2.0)) - (2.0 * (tan_nick_m2 * tan_nick_m2) * (tan_nick_view + pow(tan_nick_view, 3.0))) + (tan_nick_m1 * ((2.0 * (pow(tan_nick_view, 3.0) + tan_nick_view) * (pow(tan_nick_m2, 3.0) + (2.0 * tan_nick_m2))) - (pow(tan_nick_view, 4.0) * pow((tan_nick_m1 - tan_nick_m2), 2.0)) - (tan_nick_m2 * tan_nick_m2))) - ((tan_nick_m1 * tan_nick_m1) * ((2.0 * (pow(tan_nick_view, 3.0) + tan_nick_view) * (1.0 + (2.0 * (tan_nick_m2 * tan_nick_m2)))) + tan_nick_m2))) / pow(((1.0 + (tan_nick_m1 * tan_nick_view)) * (1.0 + (tan_nick_view * tan_nick_m2))), 3.0));
-
-m[7] = 0.0;
-
-m[8] = (-2.0 * scale * (pow(((1.0 + (tan_nick_view * tan_nick_view)) * (tan_nick_m1 - tan_nick_m2) / ((1.0 + (tan_nick_view * tan_nick_m1)) * (1.0 + (tan_nick_view * tan_nick_m2)))), 2.0) + pow((dir_m2 - dir_m1), 2.0)));
-
-
-return 0;
-}
-
-
-static int
-get_matrix(double m[], 
-	   double tan_nick_view, double tan_dir_view, double n_scale,
-	   double tan_dir_m1, double tan_nick_m1,
-	   double tan_dir_m2, double tan_nick_m2) {
-  
-  m[0] = pow(n_scale,2.0)*(1.0/pow((tan_nick_m1*tan_nick_view + 1.0),2.0)*(2.0*tan_nick_m1 - 2.0 * tan_nick_view) + 2.0*tan_nick_m1*pow((tan_nick_m1 - tan_nick_view), 2.0)/pow((tan_nick_m1*tan_nick_view + 1.0), 3.0));
-
-  m[1] = pow(n_scale, 2.0) *(1.0/pow((tan_dir_m1*tan_dir_view + 1.0), 2.0) * (2.0*tan_dir_m1 - 2.0*tan_dir_view) + 2.0*tan_dir_m1*pow((tan_dir_m1 - tan_dir_view),2.0) / pow((tan_dir_m1*tan_dir_view + 1.0), 3.0));
-
-  m[2] = -2.0*n_scale*(pow((tan_dir_m1 - tan_dir_view), 2.0)/pow((tan_dir_m1*tan_dir_view + 1.0), 2.0) + pow((tan_nick_m1 - tan_nick_view), 2.0)/pow((tan_nick_m1*tan_nick_view + 1.0), 2.0));
-
-  m[3] = pow(n_scale, 2.0)*(1.0/pow((tan_nick_m2*tan_nick_view + 1.0), 2.0)*(2.0*tan_nick_m2 - 2.0*tan_nick_view) + 2.0*tan_nick_m2*pow((tan_nick_m2 - tan_nick_view), 2.0)/pow((tan_nick_m2*tan_nick_view + 1.0), 3.0));
-
-  m[4] = pow(n_scale, 2.0)*(1.0/pow((tan_dir_m2*tan_dir_view + 1.0), 2.0)*(2.0*tan_dir_m2 - 2.0*tan_dir_view) + 2.0*tan_dir_m2*pow((tan_dir_m2 - tan_dir_view), 2.0)/pow((tan_dir_m2*tan_dir_view + 1.0), 3.0));
-
-  m[5] = -2.0*n_scale*(pow((tan_dir_m2 - tan_dir_view), 2.0)/pow((tan_dir_m2*tan_dir_view + 1.0), 2.0) + pow((tan_nick_m2 - tan_nick_view), 2.0)/pow((tan_nick_m2*tan_nick_view + 1.0), 2.0));
-
-  m[6] = 2.0*(n_scale*(tan_nick_m1 - tan_nick_view)/(tan_nick_m1*tan_nick_view + 1.0) - n_scale*(tan_nick_m2 - tan_nick_view)/(tan_nick_m2*tan_nick_view + 1.0))*(n_scale/(tan_nick_m1*tan_nick_view + 1.0) - n_scale/(tan_nick_m2*tan_nick_view + 1.0) + tan_nick_m1*n_scale*(tan_nick_m1 - tan_nick_view)/pow((tan_nick_m1*tan_nick_view + 1.0), 2.0) - tan_nick_m2*n_scale*(tan_nick_m2 - tan_nick_view)/pow((tan_nick_m2*tan_nick_view + 1.0),2.0));
-
-  m[7] = 2.0*(n_scale*(tan_dir_m1 - tan_dir_view)/(tan_dir_m1*tan_dir_view + 1.0) - n_scale*(tan_dir_m2 - tan_dir_view)/(tan_dir_m2*tan_dir_view + 1.0))*(n_scale/(tan_dir_m1*tan_dir_view + 1.0) - n_scale/(tan_dir_m2*tan_dir_view + 1.0) + tan_dir_m1*n_scale*(tan_dir_m1 - tan_dir_view)/pow((tan_dir_m1*tan_dir_view + 1.0), 2.0) - tan_dir_m2*n_scale*(tan_dir_m2 - tan_dir_view)/pow((tan_dir_m2*tan_dir_view + 1.0), 2.0));
-
-  m[8] = - 2.0*(n_scale*(tan_dir_m1 - tan_dir_view)/(tan_dir_m1*tan_dir_view + 1.0) - n_scale*(tan_dir_m2 - tan_dir_view)/(tan_dir_m2*tan_dir_view + 1.0))*((tan_dir_m1 - tan_dir_view)/(tan_dir_m1*tan_dir_view + 1.0) - (tan_dir_m2 - tan_dir_view)/(tan_dir_m2*tan_dir_view + 1.0)) - 2.0*(n_scale*(tan_nick_m1 - tan_nick_view)/(tan_nick_m1*tan_nick_view + 1.0) - n_scale*(tan_nick_m2 - tan_nick_view)/(tan_nick_m2*tan_nick_view + 1.0))*((tan_nick_m1 - tan_nick_view)/(tan_nick_m1*tan_nick_view + 1.0) - (tan_nick_m2 - tan_nick_view)/(tan_nick_m2*tan_nick_view + 1.0));
-
-  return 0;
-}
-
-static int opt_step_panoramic(double *tan_nick_view,
-                    double *dir_view,
-                    double *scale,
-                    double dir_m1,
-                    double tan_nick_m1,
-                    double dir_m2,
-                    double tan_nick_m2,
-                    double d_m1_2, double d_m2_2, double d_m1_m2_2) {
-  double a[9];
-  double b[3];
-  double a_x0[3], f_x0[3], x0[3];
-  int ret;
-
-  get_matrix_panoramic(a, *tan_nick_view, *dir_view, *scale,
-             dir_m1, tan_nick_m1, dir_m2, tan_nick_m2);
-
-  f_x0[0] = d_m1_2 - (pow(((*dir_view - dir_m1) * *scale), 2.0) + pow(((*tan_nick_view - tan_nick_m1) * *scale / ((tan_nick_m1 * *tan_nick_view) + 1.0)), 2.0));
-  f_x0[1] = d_m2_2 - (pow(((*dir_view - dir_m2) * *scale), 2.0) + pow(((*tan_nick_view - tan_nick_m2) * *scale / ((tan_nick_m2 * *tan_nick_view) + 1.0)), 2.0));
-  f_x0[2] = d_m1_m2_2 - (pow((((*tan_nick_view - tan_nick_m2) * *scale / ((tan_nick_m2 * *tan_nick_view) + 1.0)) - ((*tan_nick_view - tan_nick_m1) * *scale / ((tan_nick_m1 * *tan_nick_view) + 1.0))), 2.0) + pow((((*dir_view - dir_m1) * *scale) - ((*dir_view - dir_m2) * *scale)), 2.0));
-
-
-fprintf(stderr, "%f %f %f\n", f_x0[0], f_x0[1], f_x0[2]);
-  x0[0] = *tan_nick_view;
-  x0[1] = *dir_view;
-  x0[2] = *scale;
-
-  rmmult(a_x0, a, x0, 3, 3, 1);
-
-  b[0] = a_x0[0] - f_x0[0];
-  b[1] = a_x0[1] - f_x0[1];
-  b[2] = a_x0[2] - f_x0[2];
-
-  ret = solv(a, b, 3);
-fprintf(stderr, "ret=%d\n", ret);
-  *tan_nick_view = b[0];
-  *dir_view      = b[1];
-  *scale         = b[2];
-
-  return 0;
-}
-
-
-static int opt_step(double *tan_nick_view, 
-		    double *tan_dir_view,
-		    double *n_scale,
-		    double tan_dir_m1,
-		    double tan_nick_m1,
-		    double tan_dir_m2,
-		    double tan_nick_m2,
-		    double d_m1_2, double d_m2_2, double d_m1_m2_2) {
-  double a[9];
-  double b[3];
-  double a_x0[3], f_x0 [3], x0[3];
-  int ret;
-
-  get_matrix(a, *tan_nick_view, *tan_dir_view, *n_scale, 
-	     tan_dir_m1, tan_nick_m1, tan_dir_m2, tan_nick_m2);
-
-  f_x0[0] = d_m1_2 - (pow((*tan_nick_view-tan_nick_m1),2.0)/pow((tan_nick_m1**tan_nick_view+1), 2.0)+pow((*tan_dir_view-tan_dir_m1),2.0)/pow((tan_dir_m1**tan_dir_view+1),2.0))*pow(*n_scale, 2.0);
-
-  f_x0[1] = d_m2_2 - (pow((*tan_nick_view-tan_nick_m2),2.0)/pow((tan_nick_m2**tan_nick_view+1),2.0)+pow((*tan_dir_view-tan_dir_m2),2.0)/pow((tan_dir_m2**tan_dir_view+1),2.0))*pow(*n_scale, 2.0);
-
-  f_x0[2] = d_m1_m2_2 - (pow((- (((*tan_dir_view - tan_dir_m1) * *n_scale) / (tan_dir_m1 * *tan_dir_view + 1.0)) + (((*tan_dir_view - tan_dir_m2) * *n_scale) / (tan_dir_m2 * *tan_dir_view + 1))), 2.0) + pow((- (((*tan_nick_view - tan_nick_m1) * *n_scale) / (tan_nick_m1 * *tan_nick_view + 1)) + ((*tan_nick_view - tan_nick_m2) * *n_scale) / (tan_nick_m2 * *tan_nick_view + 1)), 2.0));
-
-  x0[0] = *tan_nick_view;
-  x0[1] = *tan_dir_view;
-  x0[2] = *n_scale;
-
-  rmmult(a_x0, a, x0, 3, 3, 1);
-    
-  b[0] = a_x0[0] - f_x0[0];
-  b[1] = a_x0[1] - f_x0[1];
-  b[2] = a_x0[2] - f_x0[2];
-
-  ret = solv(a, b, 3);
-
-  *tan_nick_view = b[0];
-  *tan_dir_view  = b[1];
-  *n_scale       = b[2];
-
-  return 0;
-}
-
-
-static double
-comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
-	  double tan_nick_m, double tan_dir_m,
-	  double x, double y) {
-  double y_tmp, x_tmp, sin_a_tilt1, sin_a_tilt2, sin_a_tilt, res;
-
-  y_tmp = - (((tan_nick_view - tan_nick_m) * n_scale) / 
-	     (tan_nick_m * tan_nick_view + 1));
-  x_tmp = - (((tan_dir_view - tan_dir_m) * n_scale) / 
-	     (tan_dir_m * tan_dir_view + 1));
-
-
-  sin_a_tilt1 = - (y * - pow(x*x + y*y - y_tmp*y_tmp, 0.5) - x * y_tmp) /
-    (x*x + y*y);
-
-  sin_a_tilt2 = - (y * pow(x*x + y*y - y_tmp*y_tmp, 0.5) - x * y_tmp) / 
-    (x*x + y*y);
-
-  sin_a_tilt = fabs(sin_a_tilt1) < fabs(sin_a_tilt2)?sin_a_tilt1:sin_a_tilt2;
-
-  res = asin(sin_a_tilt);
-
-  if (res > pi_d / 4.0) {
-    res = res - pi_d / 2.0;
-  } else if (res < -pi_d / 4.0) {
-    res = res + pi_d / 2.0;
-  }
-
-  return res;
-}

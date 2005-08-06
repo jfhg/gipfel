@@ -1,0 +1,39 @@
+// 
+// "$Id: Panorama.H,v 1.20 2005/06/22 19:47:20 hofmann Exp $"
+//
+// Copyright 2005 by Johannes Hofmann
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Library General Public
+// License as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Library General Public License for more details.
+//
+// You should have received a copy of the GNU Library General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA.
+//
+
+#ifndef PROJECTION_H
+#define PROJECTION_H
+
+#include "Hill.H"
+#include "ViewParams.H"
+
+class Projection {
+ protected:
+  double pi_d;
+
+ public:
+  Projection();
+
+  virtual void set_coordinates(Hill *m, const ViewParams *parms);
+  
+  virtual int comp_params(Hill *m1, Hill *m2, ViewParams *parms);
+};
+#endif

@@ -5,12 +5,16 @@ gipfel_SOURCES = \
 	util.c \
 	GipfelWidget.cxx \
 	Panorama.cxx \
+	Projection.cxx \
+	ProjectionTangential.cxx \
 	Hill.cxx \
 	Fl_Value_Dial.cxx
 
 noinst_HEADERS = \
 	GipfelWidget.H \
 	Panorama.H \
+	Projection.H \
+	ProjectionTangential.H \
 	Hill.H \
 	Fl_Value_Dial.H \
 	util.h
