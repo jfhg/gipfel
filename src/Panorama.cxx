@@ -214,7 +214,7 @@ Panorama::comp_params(Hill *m1, Hill *m2) {
   int ret;
 
   ret = proj->comp_params(m1, m2, &parms);
-  update_angles();
+  update_visible_mountains();
   return ret;
 }
 
