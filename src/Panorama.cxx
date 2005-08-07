@@ -28,6 +28,7 @@
 
 #include "Panorama.H"
 #include "ProjectionTangential.H"
+#include "ProjectionSphaeric.H"
 
 #define EARTH_RADIUS 6371010.0
 
@@ -43,7 +44,7 @@ Panorama::Panorama() {
   parms.a_tilt = 0.0;
   parms.scale = 3500.0;
   view_name = NULL;
-  proj = new ProjectionTangential();
+  proj = new ProjectionSphaeric();
 }
 
 Panorama::~Panorama() {

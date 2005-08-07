@@ -7,6 +7,7 @@ gipfel_SOURCES = \
 	Panorama.cxx \
 	Projection.cxx \
 	ProjectionTangential.cxx \
+	ProjectionSphaeric.cxx \
 	Hill.cxx \
 	Fl_Value_Dial.cxx
 
@@ -15,6 +16,7 @@ noinst_HEADERS = \
 	Panorama.H \
 	Projection.H \
 	ProjectionTangential.H \
+	ProjectionSphaeric.H \
 	Hill.H \
 	Fl_Value_Dial.H \
 	util.h
