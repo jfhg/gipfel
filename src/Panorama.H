@@ -31,6 +31,7 @@ class Panorama {
   double view_phi, view_lam, view_height;
   char *view_name;
   double height_dist_ratio;
+  double view_angle;
   Hills *mountains;
   Hills *close_mountains;
   Hills *visible_mountains;

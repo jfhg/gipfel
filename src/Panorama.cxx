@@ -39,6 +39,7 @@ Panorama::Panorama() {
   height_dist_ratio = 0.07;
   pi_d = asin(1.0) * 2.0;
   deg2rad = pi_d / 180.0;
+  view_angle = pi_d / 2.0;
   parms.a_center = 0.0;
   parms.a_nick = 0.0;
   parms.a_tilt = 0.0;
@@ -402,7 +403,7 @@ Panorama::update_visible_mountains() {
       m->a_view += 2.0*pi_d;
     }
  
-    if (m->a_view < pi_d / 3.0 && m->a_view > - pi_d / 3.0) {
+    if (m->a_view < view_angle && m->a_view > - view_angle) {
       visible_mountains->add(m);
       m->flags |= HILL_VISIBLE;
     } else {
