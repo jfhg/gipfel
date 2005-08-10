@@ -39,13 +39,12 @@ Panorama::Panorama() {
   height_dist_ratio = 0.07;
   pi_d = asin(1.0) * 2.0;
   deg2rad = pi_d / 180.0;
-  view_angle = pi_d / 2.0;
   parms.a_center = 0.0;
   parms.a_nick = 0.0;
   parms.a_tilt = 0.0;
   parms.scale = 3500.0;
   view_name = NULL;
-  proj = new ProjectionSphaeric();
+  set_projection(PROJECTION_TANGENTIAL);
 }
 
 Panorama::~Panorama() {
@@ -268,6 +267,26 @@ Panorama::set_view_height(double v) {
   update_angles();
 }
 
+void
+Panorama::set_projection(Projection_t p) {
+  projection_type = p;
+   
+  if (proj) {
+    delete proj;
+  }
+
+  switch(projection_type) {
+    case PROJECTION_TANGENTIAL:
+      proj = new ProjectionTangential();
+      view_angle = pi_d / 3.0;
+      break;
+    case PROJECTION_SPHAERIC:
+      proj = new ProjectionSphaeric();
+      view_angle = pi_d / 2.0;
+      break;
+  }
+}
+
 const char *
 Panorama::get_viewpoint() {
   return view_name;
@@ -311,6 +330,11 @@ Panorama::get_view_lat() {
 double
 Panorama::get_view_height() {
   return view_height;
+}
+
+Projection_t
+Panorama::get_projection() {
+  return projection_type;
 }
 
 int

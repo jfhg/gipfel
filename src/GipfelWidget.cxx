@@ -474,6 +474,18 @@ GipfelWidget::set_scale(double s) {
   redraw();
 }
 
+void
+GipfelWidget::set_projection(Projection_t p) {
+  pan->set_projection(p);
+  set_labels(pan->get_visible_mountains());
+  redraw();
+}
+
+Projection_t
+GipfelWidget::get_projection() {
+  return pan->get_projection();
+}
+
 double
 GipfelWidget::get_center_angle() {
   return pan->get_center_angle();

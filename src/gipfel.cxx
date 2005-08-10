@@ -138,6 +138,16 @@ void view_height_cb(Fl_Value_Input* o, void*) {
   }
 }
 
+void proj_cb(Fl_Value_Input* o, void*d) {
+  if (gipf) {
+    if(d == NULL) {
+      gipf->set_projection(PROJECTION_TANGENTIAL);
+    } else {
+      gipf->set_projection(PROJECTION_SPHAERIC);
+    }
+  }
+}
+
 void comp_cb(Fl_Widget *, void *) {
   if (gipf) {
     gipf->comp_params();
@@ -164,6 +174,10 @@ Fl_Menu_Item menuitems[] = {
     { "&Save Image", FL_CTRL + 's', (Fl_Callback *)save_cb, 0 },
     { "Load &Track", FL_CTRL + 't', (Fl_Callback *)track_cb, 0 },
     { "&Quit", FL_CTRL + 'q', (Fl_Callback *)quit_cb, 0 },
+  {0},
+  { "&Option",              0, 0, 0, FL_SUBMENU },
+    { "Normal Projection", 0, (Fl_Callback *)proj_cb, (void *)0, FL_MENU_RADIO|FL_MENU_VALUE},
+    { "Panoramic Projection", 0, (Fl_Callback *)proj_cb, (void *)1, FL_MENU_RADIO},
   {0},
   { "&Help", 0, 0, 0, FL_SUBMENU },
     { "About",  0, (Fl_Callback *)about_cb },

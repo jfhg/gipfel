@@ -96,6 +96,10 @@ class GipfelWidget : public Fl_Widget {
   double get_view_long();
 
   double get_view_height();
+
+  Projection_t get_projection();
+
+  void set_projection(Projection_t p);
   
   int comp_params();
 
