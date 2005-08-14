@@ -88,104 +88,82 @@ void track_cb() {
 
 void save_cb() {
   char *file = fl_file_chooser("Save Image As?", NULL, NULL);
-  gipf->save_image(file);
+  if (file) {
+    gipf->save_image(file);
+  }
 }
 
 void scale_cb(Fl_Slider* o, void*) {
-  if (gipf) {
-    gipf->set_scale(o->value());
-  }
+  gipf->set_scale(o->value());
 }
 
 void angle_cb(Fl_Slider* o, void*) {
-  if (gipf) {
-    gipf->set_center_angle(o->value());
-  }
+  gipf->set_center_angle(o->value());
 }
 
 void nick_cb(Fl_Slider* o, void*) {
-  if (gipf) {
-    gipf->set_nick_angle(o->value());
-  }
+  gipf->set_nick_angle(o->value());
 }
 
 void tilt_cb(Fl_Slider* o, void*) {
-  if (gipf) {
-    gipf->set_tilt_angle(o->value());
-  }
+  gipf->set_tilt_angle(o->value());
 }
 
 void h_d_cb(Fl_Slider* o, void*) {
-  if (gipf) {
-    gipf->set_height_dist_ratio(o->value());
-  }
+  gipf->set_height_dist_ratio(o->value());
 }
 
 void view_lat_cb(Fl_Value_Input* o, void*) {
-  if (gipf) {
-    gipf->set_view_lat(o->value());
-  }
+  gipf->set_view_lat(o->value());
 }
 
 void view_long_cb(Fl_Value_Input* o, void*) {
-  if (gipf) {
-    gipf->set_view_long(o->value());
-  }
+  gipf->set_view_long(o->value());
 }
 
 void view_height_cb(Fl_Value_Input* o, void*) {
-  if (gipf) {
-    gipf->set_view_height(o->value());
-  }
+  gipf->set_view_height(o->value());
 }
 
 void viewpoint_cb(Fl_Value_Input* o, void*) {
-  if (gipf) {
-    Fl_Search_Chooser *sc = new Fl_Search_Chooser("Choose Viewpoint");
-    Hills *h_sort = new Hills(gipf->get_mountains());
-    h_sort->sort_name();
+  Fl_Search_Chooser *sc = new Fl_Search_Chooser("Choose Viewpoint");
+  Hills *h_sort = new Hills(gipf->get_mountains());
+  h_sort->sort_name();
 
-    for (int i=0; i<h_sort->get_num(); i++) {
-      Hill *m = h_sort->get(i);
-      if (m->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
-        continue;
-      }
-      sc->add(m->name, m);
+  for (int i=0; i<h_sort->get_num(); i++) {
+    Hill *m = h_sort->get(i);
+    if (m->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
+      continue;
     }
-
-    sc->show();
-    while (sc->shown()) {
-      Fl::wait();
-    }
-
-    gipf->set_viewpoint((Hill*) sc->data());
-    delete sc;
-    set_values();
+    sc->add(m->name, m);
   }
+
+  sc->show();
+  while (sc->shown()) {
+    Fl::wait();
+  }
+
+  gipf->set_viewpoint((Hill*) sc->data());
+  delete sc;
+  set_values();
 }
 
 void proj_cb(Fl_Value_Input* o, void*d) {
-  if (gipf) {
-    if(d == NULL) {
-      gipf->set_projection(PROJECTION_TANGENTIAL);
-    } else {
-      gipf->set_projection(PROJECTION_SPHAERIC);
-    }
+  if(d == NULL) {
+    gipf->set_projection(PROJECTION_TANGENTIAL);
+  } else {
+    gipf->set_projection(PROJECTION_SPHAERIC);
   }
 }
 
 void comp_cb(Fl_Widget *, void *) {
-  if (gipf) {
-    gipf->comp_params();
-    set_values();
-  }
+  gipf->comp_params();
+  set_values();
 }
 
 void guess_cb(Fl_Widget *, void *) {
-  if (gipf) {
-    gipf->guess();
-    set_values();
-  }
+  gipf->guess();
+  set_values();
 }
 
 void about_cb() {
