@@ -9,7 +9,8 @@ gipfel_SOURCES = \
 	ProjectionTangential.cxx \
 	ProjectionSphaeric.cxx \
 	Hill.cxx \
-	Fl_Value_Dial.cxx
+	Fl_Value_Dial.cxx \
+	Fl_Search_Chooser.cxx
 
 noinst_HEADERS = \
 	GipfelWidget.H \
@@ -19,4 +20,5 @@ noinst_HEADERS = \
 	ProjectionSphaeric.H \
 	Hill.H \
 	Fl_Value_Dial.H \
+	Fl_Search_Chooser.H \
 	util.h

@@ -213,7 +213,7 @@ comp_mountains_name(const void *n1, const void *n2) {
   Hill *m2 = *(Hill **)n2;
   
   if (m1 && m2) {
-    return strcmp(m1->name, m2->name);
+    return strcasecmp(m1->name, m2->name);
   } else {
     return 0;
   }  

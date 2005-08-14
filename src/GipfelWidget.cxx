@@ -37,8 +37,8 @@
 #include <FL/Fl_Shared_Image.H>
 #include <FL/Fl_JPEG_Image.H>
 #include <FL/fl_draw.H>
-#include <FL/x.H>
 
+#include "Fl_Search_Chooser.H"
 #include "util.h"
 #include "GipfelWidget.H"
 
@@ -241,6 +241,13 @@ GipfelWidget::set_viewpoint(const char *pos) {
   update_menuitems(pan->get_close_mountains());
 
   return r;
+}
+
+void
+GipfelWidget::set_viewpoint(const Hill *m) {
+  pan->set_viewpoint(m);
+  set_labels(pan->get_visible_mountains());
+  update_menuitems(pan->get_close_mountains());
 }
 
 static void
@@ -604,6 +611,11 @@ GipfelWidget::set_view_height(double v) {
   pan->set_view_height(v);
   set_labels(pan->get_visible_mountains());
   redraw();
+}
+
+Hills*
+GipfelWidget::get_mountains() {
+  return pan->get_mountains();
 }
 
 int

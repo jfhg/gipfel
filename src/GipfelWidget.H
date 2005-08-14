@@ -63,6 +63,8 @@ class GipfelWidget : public Fl_Widget {
 
   int set_viewpoint(const char *pos);
 
+  void set_viewpoint(const Hill *m);
+
   void set_center_angle(double a);
 
   void set_nick_angle(double a);
@@ -100,7 +102,9 @@ class GipfelWidget : public Fl_Widget {
   Projection_t get_projection();
 
   void set_projection(Projection_t p);
-  
+
+  Hills *get_mountains();
+
   int comp_params();
 
   int guess();

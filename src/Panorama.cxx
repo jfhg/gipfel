@@ -93,20 +93,40 @@ Panorama::remove_trackpoints() {
 
 int
 Panorama::set_viewpoint(const char *name) {
-  if (get_pos(name, &view_phi, &view_lam, &view_height) != 1) {
+  Hill *m = get_pos(name);
+  if (m == NULL) {
     fprintf(stderr, "Could not find exactly one entry for %s.\n");
     return 1;
   }
+
+  set_viewpoint(m);
+  return 0;
+}
+
+void
+Panorama::set_viewpoint(const Hill *m) {
+  if (m == NULL) {
+    return;
+  }
+ 
+  view_phi = m->phi;
+  view_lam = m->lam;
+  view_height = m->height;
+ 
 
   if (view_name) {
     free(view_name);
   }
 
-  view_name = strdup(name);
+  view_name = strdup(m->name);
 
   update_angles();
+}
 
-  return 0;
+
+Hills * 
+Panorama::get_mountains() {
+  return mountains;
 }
 
 Hills * 
@@ -337,33 +357,28 @@ Panorama::get_projection() {
   return projection_type;
 }
 
-int
-Panorama::get_pos(const char *name, double *phi, double *lam, double *height) {
+Hill *
+Panorama::get_pos(const char *name) {
   int i;
   int found = 0;
   double p, l, h;
-  Hill *m;
+  Hill *m, *ret;
 
   for (i=0; i<mountains->get_num(); i++) {
     m = mountains->get(i);
 
     if (strcmp(m->name, name) == 0) {
-      p = m->phi;
-      l = m->lam;
-      h = m->height;
-
+      ret = m;
       fprintf(stderr, "Found matching entry: %s (%fm)\n", m->name, m->height);
       found++;
     }
   }
 
   if (found == 1) {
-    *phi    = p;
-    *lam    = l;
-    *height = h;
+    return ret;
   }
 
-  return found;
+  return NULL;
 }
 
 void 

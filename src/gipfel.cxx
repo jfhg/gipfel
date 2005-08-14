@@ -46,6 +46,7 @@
 #include <FL/Fl_Value_Slider.H>
 #include <FL/Fl_Value_Input.H>
 #include "Fl_Value_Dial.H"
+#include "Fl_Search_Chooser.H"
 
 #include "GipfelWidget.H"
 
@@ -138,6 +139,31 @@ void view_height_cb(Fl_Value_Input* o, void*) {
   }
 }
 
+void viewpoint_cb(Fl_Value_Input* o, void*) {
+  if (gipf) {
+    Fl_Search_Chooser *sc = new Fl_Search_Chooser("Choose Viewpoint");
+    Hills *h_sort = new Hills(gipf->get_mountains());
+    h_sort->sort_name();
+
+    for (int i=0; i<h_sort->get_num(); i++) {
+      Hill *m = h_sort->get(i);
+      if (m->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
+        continue;
+      }
+      sc->add(m->name, m);
+    }
+
+    sc->show();
+    while (sc->shown()) {
+      Fl::wait();
+    }
+
+    gipf->set_viewpoint((Hill*) sc->data());
+    delete sc;
+    set_values();
+  }
+}
+
 void proj_cb(Fl_Value_Input* o, void*d) {
   if (gipf) {
     if(d == NULL) {
@@ -171,6 +197,7 @@ void about_cb() {
 
 Fl_Menu_Item menuitems[] = {
   { "&File",              0, 0, 0, FL_SUBMENU },
+    { "&Viewpoint", FL_CTRL + 'v', (Fl_Callback *)viewpoint_cb, 0 },
     { "&Save Image", FL_CTRL + 's', (Fl_Callback *)save_cb, 0 },
     { "Load &Track", FL_CTRL + 't', (Fl_Callback *)track_cb, 0 },
     { "&Quit", FL_CTRL + 'q', (Fl_Callback *)quit_cb, 0 },
@@ -187,7 +214,7 @@ Fl_Menu_Item menuitems[] = {
 
 void usage() {
   fprintf(stderr,
-	  "usage: gipfel -v <viewpoint> -d <datafile> <image>\n"
+	  "usage: gipfel [-v <viewpoint>] [-d <datafile>] <image>\n"
 	  "   -v <viewpoint>  Set point from which the picture was taken.\n"
 	  "                   This must be a string that unambiguously \n"
 	  "                   matches the name of an entry in the data file.\n"

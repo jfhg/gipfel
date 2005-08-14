@@ -45,7 +45,7 @@ class Panorama {
   Projection *proj;
   Projection_t projection_type;
  
-  int get_pos(const char *name, double *phi, double *lam, double *height);
+  Hill * get_pos(const char *name);
 
   void update_angles();
 
@@ -90,7 +90,11 @@ class Panorama {
 
   int set_viewpoint(const char *pos);  
 
+  void set_viewpoint(const Hill *m);  
+
   void set_height_dist_ratio(double r);
+
+  Hills * get_mountains();
 
   Hills * get_close_mountains();
 
