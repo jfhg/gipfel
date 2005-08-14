@@ -45,10 +45,11 @@
 #include <FL/Fl_Valuator.H>
 #include <FL/Fl_Value_Slider.H>
 #include <FL/Fl_Value_Input.H>
+
 #include "Fl_Value_Dial.H"
 #include "Fl_Search_Chooser.H"
-
 #include "GipfelWidget.H"
+#include "choose_hill.H"
 
 char *img_file;
 char *data_file;
@@ -126,26 +127,11 @@ void view_height_cb(Fl_Value_Input* o, void*) {
 }
 
 void viewpoint_cb(Fl_Value_Input* o, void*) {
-  Fl_Search_Chooser *sc = new Fl_Search_Chooser("Choose Viewpoint");
-  Hills *h_sort = new Hills(gipf->get_mountains());
-  h_sort->sort_name();
-
-  for (int i=0; i<h_sort->get_num(); i++) {
-    Hill *m = h_sort->get(i);
-    if (m->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
-      continue;
-    }
-    sc->add(m->name, m);
+  Hill *m = choose_hill(gipf->get_mountains(), "Choose Viewpoint");
+  if (m) {
+    gipf->set_viewpoint(m);
+    set_values();
   }
-
-  sc->show();
-  while (sc->shown()) {
-    Fl::wait();
-  }
-
-  gipf->set_viewpoint((Hill*) sc->data());
-  delete sc;
-  set_values();
 }
 
 void proj_cb(Fl_Value_Input* o, void*d) {

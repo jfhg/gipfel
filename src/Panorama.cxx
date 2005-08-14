@@ -112,7 +112,6 @@ Panorama::set_viewpoint(const Hill *m) {
   view_phi = m->phi;
   view_lam = m->lam;
   view_height = m->height;
- 
 
   if (view_name) {
     free(view_name);
