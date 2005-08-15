@@ -32,8 +32,6 @@
 #include <errno.h>
 #include <signal.h>
 
-#include "../config.h"
-
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Scroll.H>
