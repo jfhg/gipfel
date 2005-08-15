@@ -68,7 +68,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   fl_register_images();
 }
 
-#define GIPFEL_FORMAT "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, scale %lf"
+#define GIPFEL_FORMAT "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, scale %lfi, projection type %d"
 
 int
 GipfelWidget::load_image(char *file) {
@@ -78,6 +78,7 @@ GipfelWidget::load_image(char *file) {
   char buf[1024];
   double lo, la, he, dir, ni, ti, sc;
   int status;
+  Projection_t pt = PROJECTION_TANGENTIAL;
   Fl_Image *new_img;
 
   new_img = new Fl_JPEG_Image(file);
@@ -115,7 +116,7 @@ GipfelWidget::load_image(char *file) {
 
   if (p) {
     while (fgets(buf, sizeof(buf), p) != NULL) {
-      if (sscanf(buf, GIPFEL_FORMAT, &lo, &la, &he, &dir, &ni, &ti, &sc) == 7) {
+      if (sscanf(buf, GIPFEL_FORMAT, &lo, &la, &he, &dir, &ni, &ti, &sc, &pt) >= 7) {
         set_view_long(lo);
         set_view_lat(la);
         set_view_height(he);
@@ -123,6 +124,7 @@ GipfelWidget::load_image(char *file) {
         set_nick_angle(ni);
         set_tilt_angle(ti);
         set_scale(sc);
+        set_projection(pt);
         
 	break;
       }
@@ -164,7 +166,8 @@ GipfelWidget::save_image(char *file) {
     get_center_angle(), 
     get_nick_angle(), 
     get_tilt_angle(), 
-    get_scale());
+    get_scale(),
+    (int) get_projection());
 
 // try to save gipfel data in JPEG comment section
   args[0] = "wrjpgcom";
