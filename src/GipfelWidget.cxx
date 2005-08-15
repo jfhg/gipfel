@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <math.h>
@@ -147,11 +148,25 @@ GipfelWidget::save_image(char *file) {
   char buf[1024];
   int status;
   size_t n;
+  struct stat in_stat, out_stat;
 
   if (img_file == NULL) {
     fprintf(stderr, "Nothing to save\n");
     return 1;
   }
+
+  if (stat(img_file, &in_stat) != 0) {
+    perror("stat");
+    return 1;
+  }
+
+  if (stat(file, &out_stat) == 0) {
+    if (in_stat.st_ino == out_stat.st_ino) {
+      fprintf(stderr, "Input image %s and output image %s are the same file\n",
+        img_file, file);
+      return 1;
+    }
+  } 
 
   out = fopen(file, "w");
   if (out == NULL) {
