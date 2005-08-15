@@ -340,9 +340,6 @@ int main(int argc, char** argv) {
   }
 
   gipf->load_data(data_file);
-  if (view_point) {
-    gipf->set_viewpoint(view_point);
-  }
   scroll->end();  
 
   set_values();
@@ -352,6 +349,12 @@ int main(int argc, char** argv) {
   view_win->end();
   view_win->show(1, argv); 
   control_win->show(1, argv); 
+
+  if (view_point) {
+    gipf->set_viewpoint(view_point);
+  } else if (gipf->get_view_lat() == 0.0 && gipf->get_view_long() == 0.0) {
+    viewpoint_cb(NULL, NULL);
+  }
   
   return Fl::run();
 }
