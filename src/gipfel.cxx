@@ -50,9 +50,17 @@
 #include "Fl_Search_Chooser.H"
 #include "GipfelWidget.H"
 #include "choose_hill.H"
+#include "../config.h"
+
+#ifndef DATADIR
+#define DATADIR "/usr/local/share"
+#endif
+
+#define DEFAULT_DATAFILE DATADIR "/" PACKAGE_NAME "/alpinkoordinaten.dat"
 
 char *img_file;
-char *data_file;
+char *data_file = DEFAULT_DATAFILE;
+
 GipfelWidget *gipf = NULL;
 Fl_Dial *s_center = NULL;
 Fl_Slider *s_nick = NULL, *s_scale = NULL, *s_tilt = NULL, *s_height_dist;
@@ -321,7 +329,7 @@ int main(int argc, char** argv) {
     exit(1);
   }
 
-
+fprintf(stderr, "%s\n", data_file);
   control_win = create_control_window();
 
   view_win = new Fl_Window(800, 600);

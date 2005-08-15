@@ -7,7 +7,7 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/Panorama.H])
 AC_CONFIG_HEADER(config.h)
 
-CPPFLAGS="-g -I/usr/local/include $CPPFLAGS"
+CPPFLAGS="-g -I/usr/local/include -DDATADIR=\\\"$datadir\\\" $CPPFLAGS"
 CXXFLAGS="-g -I/usr/local/include $CXXFLAGS"
 LDFLAGS="-g $LDFLAGS"
 
