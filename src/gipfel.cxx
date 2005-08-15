@@ -327,7 +327,6 @@ int main(int argc, char** argv) {
     exit(1);
   }
 
-fprintf(stderr, "%s\n", data_file);
   control_win = create_control_window();
 
   view_win = new Fl_Window(800, 600);
