@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Button.H>
 #include "Fl_Search_Chooser.H"
@@ -86,13 +87,14 @@ Fl_Search_Chooser::Fl_Search_Chooser(const char *title) {
   Fl_Group *g = new Fl_Group(10, 10, w->w() - 10, w->h() - 10);
   sb = new Fl_Search_Browser(g->x(), g->y(), g->w() , g->h() - 100, NULL);
   sb->type(FL_HOLD_BROWSER);
-  Fl_Input *in = new Fl_Input(g->x(), g->h() - 80, g->w()-10, 20);
+  Fl_Input *in = new Fl_Input(g->x()+50, g->h()-80, g->w()-80, 20, "Search");
   in->callback((Fl_Callback*) input_cb, this);
   in->when(FL_WHEN_CHANGED);
   Fl_Button *cancel_b = new Fl_Button(g->w()-200, g->h()-30, 80, 20, "Cancel");
   cancel_b->callback((Fl_Callback*) cancel_cb, this);
   Fl_Button *ok_b = new Fl_Button(g->w()-100, g->h()-30, 80, 20, "Ok");
   ok_b->callback((Fl_Callback*) ok_cb, this);
+  Fl::focus(in);
   g->end();
   w->end();
 }
