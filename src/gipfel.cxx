@@ -32,8 +32,6 @@
 #include <errno.h>
 #include <signal.h>
 
-#include "../config.h"
-
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Scroll.H>
@@ -329,7 +327,6 @@ int main(int argc, char** argv) {
     exit(1);
   }
 
-fprintf(stderr, "%s\n", data_file);
   control_win = create_control_window();
 
   view_win = new Fl_Window(800, 600);
@@ -343,9 +340,6 @@ fprintf(stderr, "%s\n", data_file);
   }
 
   gipf->load_data(data_file);
-  if (view_point) {
-    gipf->set_viewpoint(view_point);
-  }
   scroll->end();  
 
   set_values();
@@ -355,6 +349,12 @@ fprintf(stderr, "%s\n", data_file);
   view_win->end();
   view_win->show(1, argv); 
   control_win->show(1, argv); 
+
+  if (view_point) {
+    gipf->set_viewpoint(view_point);
+  } else if (gipf->get_view_lat() == 0.0 && gipf->get_view_long() == 0.0) {
+    viewpoint_cb(NULL, NULL);
+  }
   
   return Fl::run();
 }
