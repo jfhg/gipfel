@@ -2,6 +2,10 @@ gipfel ChangeLog
 =================
 
 gipfel-0.0.2
+ - Display GPS-tracks.
+ - Load/save perspective data from/to JPEG comment section.
+ - Add experimental panorama support.
+ - Add default data file from www.alpin-koordinaten.de
  - Added simple duplicate GPS entry elimation.
  - Show parameter values in control window.
 
