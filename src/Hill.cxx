@@ -102,7 +102,6 @@ Hills::load(const char *file) {
     if (vals[1] && vals[3] && vals[4] && vals[5]) {
       phi = atof(vals[3]) * deg2rad;
       lam = atof(vals[4]) * deg2rad;
-      
       height = atof(vals[5]);
 
       m = new Hill(vals[1], phi, lam, height);
