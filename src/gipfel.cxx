@@ -82,7 +82,7 @@ void quit_cb() {
 }
 
 void open_cb() {
-  char *file = fl_file_chooser("Open File?", "*.jpeg", img_file);
+  char *file = fl_file_chooser("Open File?", "*.jpg", img_file);
   if(file != NULL) {
 
   }  
