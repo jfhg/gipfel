@@ -30,6 +30,11 @@ class Projection {
   double pi_d;
 
  public:
+  typedef enum {
+    TANGENTIAL = 0,
+    SPHAERIC   = 1
+  } Projection_t;
+
   Projection();
 
   virtual void set_coordinates(Hill *m, const ViewParams *parms);

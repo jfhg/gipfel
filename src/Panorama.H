@@ -27,10 +27,6 @@
 #include "ViewParams.H"
 
 
-typedef enum {
-  PROJECTION_TANGENTIAL = 0,
-  PROJECTION_SPHAERIC   = 1
-} Projection_t;
 
 class Panorama {
  private:
@@ -42,8 +38,8 @@ class Panorama {
   Hills *close_mountains;
   Hills *visible_mountains;
   ViewParams parms;
-  Projection *proj;
-  Projection_t projection_type;
+  Projection::Projection *proj;
+  Projection::Projection_t projection_type;
  
   Hill * get_pos(const char *name);
 
@@ -136,8 +132,8 @@ class Panorama {
 
   int guess(Hills *p1, Hill *m1);
 
-  Projection_t get_projection();
+  Projection::Projection_t get_projection();
 
-  void set_projection(Projection_t p);
+  void set_projection(Projection::Projection_t p);
 };
 #endif

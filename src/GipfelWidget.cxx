@@ -79,7 +79,7 @@ GipfelWidget::load_image(char *file) {
   char buf[1024];
   double lo, la, he, dir, ni, ti, sc;
   int status;
-  Projection_t pt = PROJECTION_TANGENTIAL;
+  Projection::Projection_t pt = Projection::TANGENTIAL;
   Fl_Image *new_img;
 
   new_img = new Fl_JPEG_Image(file);
@@ -499,13 +499,13 @@ GipfelWidget::set_scale(double s) {
 }
 
 void
-GipfelWidget::set_projection(Projection_t p) {
+GipfelWidget::set_projection(Projection::Projection_t p) {
   pan->set_projection(p);
   set_labels(pan->get_visible_mountains());
   redraw();
 }
 
-Projection_t
+Projection::Projection_t
 GipfelWidget::get_projection() {
   return pan->get_projection();
 }

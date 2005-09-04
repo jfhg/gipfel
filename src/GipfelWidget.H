@@ -97,9 +97,9 @@ class GipfelWidget : public Fl_Widget {
 
   double get_view_height();
 
-  Projection_t get_projection();
+  Projection::Projection_t get_projection();
 
-  void set_projection(Projection_t p);
+  void set_projection(Projection::Projection_t p);
 
   Hills *get_mountains();
 

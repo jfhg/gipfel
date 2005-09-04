@@ -142,9 +142,9 @@ void viewpoint_cb(Fl_Value_Input* o, void*) {
 
 void proj_cb(Fl_Value_Input* o, void*d) {
   if(d == NULL) {
-    gipf->set_projection(PROJECTION_TANGENTIAL);
+    gipf->set_projection(Projection::TANGENTIAL);
   } else {
-    gipf->set_projection(PROJECTION_SPHAERIC);
+    gipf->set_projection(Projection::SPHAERIC);
   }
 }
 
