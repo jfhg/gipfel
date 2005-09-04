@@ -23,16 +23,18 @@
 #define HILL_H
 
 
-#define HILL_DUPLICATE   0x01 
-#define HILL_TRACK_POINT 0x02 
-#define HILL_VISIBLE     0x04 
-
 class Hill;
 
 class Hill {
  private:
 
  public:
+  typedef enum {
+    DUPLICATE   = 0x01,
+    TRACK_POINT = 0x02,
+    VISIBLE     = 0x04
+  } flags_t;
+
   double phi, lam;
   double height;
   double alph;

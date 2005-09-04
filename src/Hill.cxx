@@ -124,7 +124,7 @@ void Hills::mark_duplicates(double dist) {
   for(i=0; i<get_num();i++) {
     m = get(i);
     
-    if (m->flags & HILL_TRACK_POINT) {
+    if (m->flags & Hill::TRACK_POINT) {
       continue;
     }
 
@@ -132,10 +132,10 @@ void Hills::mark_duplicates(double dist) {
       j = i + 1;
       n = get(j);
       while (n && fabs(n->phi - m->phi) <= dist) {
-        if (! n->flags & HILL_DUPLICATE) {
+        if (! n->flags & Hill::DUPLICATE) {
 	  if (fabs(n->lam - m->lam) <= dist && 
               fabs(n->height - m->height) <= 50.0 ) {
-	    n->flags |= HILL_DUPLICATE;
+	    n->flags |= Hill::DUPLICATE;
 	  }
         }
 	j = j + 1;

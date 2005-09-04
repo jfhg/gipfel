@@ -242,7 +242,7 @@ GipfelWidget::load_track(const char *file) {
   }
 
   for (int i=0; i<track_points->get_num(); i++) {
-    track_points->get(i)->flags |= HILL_TRACK_POINT;
+    track_points->get(i)->flags |= Hill::TRACK_POINT;
   }
 
   pan->add_hills(track_points);  
@@ -303,7 +303,7 @@ GipfelWidget::draw() {
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i);
 
-    if (m->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
+    if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
       continue;
     }
 
@@ -375,7 +375,7 @@ GipfelWidget::set_labels(Hills *v) {
   for (i=0; i<v->get_num(); i++) {
     m = v->get(i);
     
-    if (m->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
+    if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
       continue;
     }
 
@@ -385,7 +385,7 @@ GipfelWidget::set_labels(Hills *v) {
     for (j=0; j < i; j++) {
       n = v->get(j);
       
-      if (n->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
+      if (n->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
 	continue;
       }
 
@@ -411,7 +411,7 @@ GipfelWidget::set_cur_mountain(int m_x, int m_y) {
 
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i); 
-    if (m->flags & (HILL_DUPLICATE | HILL_TRACK_POINT)) {
+    if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
       continue;
     }
 

@@ -81,7 +81,7 @@ Panorama::remove_trackpoints() {
 
   for(int i=0; i<mountains->get_num(); i++) {
     m = mountains->get(i);
-    if (! (m->flags & HILL_TRACK_POINT)) {
+    if (! (m->flags & Hill::TRACK_POINT)) {
       h_new->add(m);
     }
   }
@@ -194,7 +194,7 @@ Panorama::guess(Hills *p, Hill *m1) {
       m1->x = x1_sav;
       m1->y = y1_sav;
 
-      if (m_tmp2->flags & HILL_TRACK_POINT || 
+      if (m_tmp2->flags & Hill::TRACK_POINT || 
           m1 == m_tmp2 || fabs(m1->alph - m_tmp2->alph) > pi_d *0.7) {
 	continue;
       }
@@ -411,7 +411,7 @@ Panorama::update_close_mountains() {
   for (i=0; i<mountains->get_num(); i++) {
     m = mountains->get(i);
  
-    if (m->flags & HILL_TRACK_POINT ||
+    if (m->flags & Hill::TRACK_POINT ||
         ((m->phi != view_phi || m->lam != view_lam) &&
 	 (m->height / (m->dist * EARTH_RADIUS) 
 	 > height_dist_ratio))) {
@@ -443,9 +443,9 @@ Panorama::update_visible_mountains() {
  
     if (m->a_view < view_angle && m->a_view > - view_angle) {
       visible_mountains->add(m);
-      m->flags |= HILL_VISIBLE;
+      m->flags |= Hill::VISIBLE;
     } else {
-      m->flags &= ~HILL_VISIBLE;
+      m->flags &= ~Hill::VISIBLE;
     }
   }
 
