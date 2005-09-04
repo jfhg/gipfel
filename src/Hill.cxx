@@ -95,9 +95,11 @@ Hills::load(const char *file) {
   while (fgets(buf, sizeof(buf), fp)) {
     bp = buf;
     memset(vals, 0, sizeof(vals));
-    for (ap = vals; (*ap = strsep(&bp, ",")) != NULL;)
-      if (++ap >= &vals[10])
+    for (ap = vals; (*ap = strsep(&bp, ",")) != NULL;) {
+      if (++ap >= &vals[10]) {
 	break;
+      }
+    }
 
     if (vals[1] && vals[3] && vals[4] && vals[5]) {
       phi = atof(vals[3]) * deg2rad;
