@@ -90,6 +90,22 @@ Then click on the "guess" button. If the result is disapointing, try to adjust
 the visibility parameter as only visible mountains are taken into account
 during the "guess"-process.
 
+GPS Tracks
+==========
+
+Once you have determined the right parameters using the procedure described
+above, you can load GPS tracks and display them on the picture. Use the
+File->Load Track menu item. GPS tracks should be text files containing
+one line per waypoint. Each line should be of the form:
+
+<LATITUDE>,<LONGITUDE>,<HEIGHT>
+
+Loading and Saving Images
+=========================
+
+gipfel allows to save the image paramters in the comment section of 
+the JPEG image. Use the File->Save Image menu item. 
+Note, that in the saved image all previous JPEG comments are removed.
 
 Troubleshooting
 ===============
