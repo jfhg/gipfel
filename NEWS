@@ -9,6 +9,7 @@ gipfel-0.1.0
  - Added simple duplicate GPS entry elimation.
  - Show parameter values in control window.
  - Choose viewpoint via GUI.
+ - Improved label placement.
 
 gipfel-0.0.1
  - Initial version.
