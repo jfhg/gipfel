@@ -304,6 +304,7 @@ Panorama::set_projection(Projection::Projection_t p) {
       view_angle = pi_d / 2.0;
       break;
   }
+  update_angles();
 }
 
 const char *
