@@ -165,22 +165,17 @@ void about_cb() {
 
 }
 
-Fl_Menu_Item menuitems[] = {
-  { "&File",              0, 0, 0, FL_SUBMENU },
-    { "&Viewpoint", FL_CTRL + 'v', (Fl_Callback *)viewpoint_cb, 0 },
-    { "&Save Image", FL_CTRL + 's', (Fl_Callback *)save_cb, 0 },
-    { "Load &Track", FL_CTRL + 't', (Fl_Callback *)track_cb, 0 },
-    { "&Quit", FL_CTRL + 'q', (Fl_Callback *)quit_cb, 0 },
-  {0},
-  { "&Option",              0, 0, 0, FL_SUBMENU },
-    { "Normal Projection", 0, (Fl_Callback *)proj_cb, (void *)0, FL_MENU_RADIO|FL_MENU_VALUE},
-    { "Panoramic Projection", 0, (Fl_Callback *)proj_cb, (void *)1, FL_MENU_RADIO},
-  {0},
-  { "&Help", 0, 0, 0, FL_SUBMENU },
-    { "About",  0, (Fl_Callback *)about_cb },
-  { 0 },
-  { 0 }
-};
+void fill_menubar(Fl_Menu_Bar* mb) {
+  mb->add("&File/&Viewpoint", FL_CTRL+'v', (Fl_Callback*)viewpoint_cb);
+  mb->add("&File/&Save Image", FL_CTRL+'s', (Fl_Callback*)save_cb);
+  mb->add("&File/Load &Track", FL_CTRL+'t', (Fl_Callback*)track_cb);
+  mb->add("&File/&Quit", FL_CTRL+'q', (Fl_Callback*)quit_cb);
+
+  mb->add("&Option/Normal Projection", NULL,  (Fl_Callback *)proj_cb, (void *)0, FL_MENU_RADIO|FL_MENU_VALUE);
+  mb->add("&Option/Panoramic Projection", NULL,  (Fl_Callback *)proj_cb, (void *)1, FL_MENU_RADIO);
+
+  mb->add("&Help/About", NULL, (Fl_Callback*)about_cb);
+}
 
 void usage() {
   fprintf(stderr,
@@ -197,7 +192,7 @@ create_control_window() {
   Fl_Menu_Bar *m;
   Fl_Window *win = new Fl_Window(400,350);
   m = new Fl_Menu_Bar(0, 0, 400, 30);
-  m->menu(menuitems);
+  fill_menubar(m);
 
   s_center = new Fl_Value_Dial(40, 60, 150, 150, NULL);
   s_center->type(FL_LINE_DIAL);
