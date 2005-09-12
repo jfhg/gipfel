@@ -85,6 +85,7 @@ Hills::load(const char *file) {
   char **ap, *bp;
   double phi, lam, height;
   Hill *m;
+  int n;
 
   fp = fopen(file, "r");
   if (!fp) {
@@ -95,18 +96,30 @@ Hills::load(const char *file) {
   while (fgets(buf, sizeof(buf), fp)) {
     bp = buf;
     memset(vals, 0, sizeof(vals));
+    n = 0;
     for (ap = vals; (*ap = strsep(&bp, ",")) != NULL;) {
+      n++;
       if (++ap >= &vals[10]) {
 	break;
       }
     }
 
-    if (vals[1] && vals[3] && vals[4] && vals[5]) {
+    // standard format including name and description
+    if (n == 6 && vals[1] && vals [3] && vals[4] && vals[5]) {
       phi = atof(vals[3]) * deg2rad;
       lam = atof(vals[4]) * deg2rad;
       height = atof(vals[5]);
 
       m = new Hill(vals[1], phi, lam, height);
+
+      add(m);
+    // track point format
+    } else if (n == 3 && vals[0] && vals[1] && vals[2]) {
+      phi = atof(vals[0]) * deg2rad;
+      lam = atof(vals[1]) * deg2rad;
+      height = atof(vals[2]);
+
+      m = new Hill("", phi, lam, height);
 
       add(m);
     }
