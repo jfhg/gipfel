@@ -4,19 +4,20 @@ gipfel ChangeLog
 gipfel-0.1.0
  - Display of GPS-tracks.
    GPS-tracks e.g. those that can be downloaded from www.alpin-koordinaten.de
-   or self-recored ones, can be projected on your digital images!
+   ("Fugawi 3 TXT" format) or self-recored ones, can be projected 
+   on your digital images!
  - Load/save perspective data from/to JPEG comment section.
    This means, that you can create and share "gipfel-enabled" images. 
    Whenever you want, you can use these images and e.g. display your 
    GPS-tracks on them, without further fiddling to find the view parameters.
- - Add experimental support for panorama images.
+ - Experimental support for panorama images.
    gipfel can now handle images with panoramic projection. Check the
    "Options" menu entry.
- - Add default data file from www.alpin-koordinaten.de
+ - Data file from www.alpin-koordinaten.de
    With the kind permission of the guys from www.alpin-koordinaten.de, the
    gipfel tarball now contains a default datafile with more than 6000 entries
    from around the world.
- - Added simple duplicate GPS entry elimation.
+ - Duplicate GPS entry elimation.
  - Show parameter values in control window.
    No need to choose your viewpoint on the commandline. Use the new 
    "peak-choosing" widget to find your viewpoint interactively.
