@@ -64,6 +64,7 @@ Fl_Dial *s_center = NULL;
 Fl_Slider *s_nick = NULL, *s_scale = NULL, *s_tilt = NULL, *s_height_dist;
 Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
 Fl_Box *b_viewpoint;
+Fl_Menu_Bar *mb;
 
 void set_values() {
   s_center->value(gipf->get_center_angle());
@@ -75,6 +76,13 @@ void set_values() {
   i_view_long->value(gipf->get_view_long());
   i_view_height->value(gipf->get_view_height());
   b_viewpoint->label(gipf->get_viewpoint());
+  if (gipf->get_projection() == Projection::TANGENTIAL) {
+    mb->mode(7, FL_MENU_RADIO|FL_MENU_VALUE);
+    mb->mode(8, FL_MENU_RADIO);
+  } else {
+    mb->mode(8, FL_MENU_RADIO|FL_MENU_VALUE);
+    mb->mode(7, FL_MENU_RADIO);
+  }
 }
 
 void quit_cb() {
@@ -171,8 +179,9 @@ void fill_menubar(Fl_Menu_Bar* mb) {
   mb->add("&File/Load &Track", FL_CTRL+'t', (Fl_Callback*)track_cb);
   mb->add("&File/&Quit", FL_CTRL+'q', (Fl_Callback*)quit_cb);
 
+
   mb->add("&Option/Normal Projection", NULL,  (Fl_Callback *)proj_cb, (void *)0, FL_MENU_RADIO|FL_MENU_VALUE);
-  mb->add("&Option/Panoramic Projection", NULL,  (Fl_Callback *)proj_cb, (void *)1, FL_MENU_RADIO);
+mb->add("&Option/Panoramic Projection", NULL,  (Fl_Callback *)proj_cb, (void *)1, FL_MENU_RADIO);
 
   mb->add("&Help/About", NULL, (Fl_Callback*)about_cb);
 }
@@ -189,10 +198,9 @@ void usage() {
 
 Fl_Window * 
 create_control_window() {
-  Fl_Menu_Bar *m;
   Fl_Window *win = new Fl_Window(400,350);
-  m = new Fl_Menu_Bar(0, 0, 400, 30);
-  fill_menubar(m);
+  mb = new Fl_Menu_Bar(0, 0, 400, 30);
+  fill_menubar(mb);
 
   s_center = new Fl_Value_Dial(40, 60, 150, 150, NULL);
   s_center->type(FL_LINE_DIAL);
