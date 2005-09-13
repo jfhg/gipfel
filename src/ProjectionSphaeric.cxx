@@ -74,9 +74,7 @@ ProjectionSphaeric::comp_params(Hill *m1, Hill *m2, ViewParams *parms) {
   i = a_tilt_diff[0]<a_tilt_diff[1]?0:1; // Choose solution where difference
                                          // of tilt angels is smaller.
 
-fprintf(stderr, "===> %lf %lf %d\n", a_tilt_diff[0], a_tilt_diff[1], i);
   if (a_tilt_diff[i] < 10000.0) {  
-fprintf(stderr, "setting values\n");
     parms->a_center = a_center_tmp[i];
     parms->scale    = scale_tmp;
     parms->a_nick   = a_nick_tmp[i];
