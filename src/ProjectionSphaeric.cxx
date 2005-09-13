@@ -27,8 +27,11 @@
 int
 ProjectionSphaeric::comp_params(Hill *m1, Hill *m2, ViewParams *parms) {
   Hill *tmp;
-  double a_center_tmp, scale_tmp, a_nick_tmp;
+  double a_center_tmp[2], scale_tmp, a_nick_tmp[2];
+  double a_tilt_tmp[2], a_tilt_diff[2];
+  double a_tilt1, a_tilt2;
   double d_m1_2, d_m2_2, d_m1_m2_2;
+  int i;
 
   if (m1->x > m2->x) {
     tmp = m1;
@@ -40,26 +43,47 @@ ProjectionSphaeric::comp_params(Hill *m1, Hill *m2, ViewParams *parms) {
   d_m2_2 = pow(m2->x, 2.0) + pow(m2->y, 2.0);
   d_m1_m2_2 = pow(m1->x - m2->x, 2.0) + pow(m1->y - m2->y, 2.0);
 
-  scale_tmp    = comp_scale(m1, m2, d_m1_m2_2);
-  a_center_tmp = comp_dir_view(m1, m2, d_m1_2, d_m2_2, scale_tmp);
-  a_nick_tmp   = comp_nick_view(m1, m2, d_m1_2, scale_tmp, a_center_tmp);
+  scale_tmp = comp_scale(m1, m2, d_m1_m2_2);
 
-  if (isnan(a_center_tmp) || isnan(scale_tmp) || isnan(a_nick_tmp)) {
-    return 1;
-  } else {
-    
-    parms->a_center = a_center_tmp;
-    parms->scale    = scale_tmp;
-    parms->a_nick   = a_nick_tmp;
+  for(i=0; i<2; i++) { // we need to try two solutions ...
+    a_tilt_diff[i] = 10000.0; // initialize to a high value
 
-    // use the point with greater distance from center for tilt computation 
-    if (d_m1_2 > d_m2_2) {
-      parms->a_tilt = comp_tilt_view(m1, scale_tmp, a_center_tmp, a_nick_tmp);
+    a_center_tmp[i] = comp_dir_view(m1, m2, d_m1_2, d_m2_2, scale_tmp,
+      i==0?1.0:-1.0);
+    a_nick_tmp[i]  = comp_nick_view(m1, m2, d_m1_2, scale_tmp, a_center_tmp[i]);
+
+    if (isnan(a_center_tmp[i]) || isnan(scale_tmp) || isnan(a_nick_tmp[i])) {
+      ;
     } else {
-      parms->a_tilt = comp_tilt_view(m2, scale_tmp, a_center_tmp, a_nick_tmp);
-    }
+      a_tilt1 = comp_tilt_view(m1, scale_tmp, a_center_tmp[i], a_nick_tmp[i]);
+      a_tilt2 = comp_tilt_view(m2, scale_tmp, a_center_tmp[i], a_nick_tmp[i]);
+      
+      if (!isnan(a_tilt1) && !isnan(a_tilt2)) {
+        a_tilt_diff[i] = fabs(a_tilt1 - a_tilt2);
+      }
 
+      // use the point with greater distance from center for tilt computation 
+      if (d_m1_2 > d_m2_2) {
+        a_tilt_tmp[i] = a_tilt1;
+      } else {
+        a_tilt_tmp[i] = a_tilt2;
+      }
+    }
+  }
+
+  i = a_tilt_diff[0]<a_tilt_diff[1]?0:1; // Choose solution where difference
+                                         // of tilt angels is smaller.
+
+fprintf(stderr, "===> %lf %lf %d\n", a_tilt_diff[0], a_tilt_diff[1], i);
+  if (a_tilt_diff[i] < 10000.0) {  
+fprintf(stderr, "setting values\n");
+    parms->a_center = a_center_tmp[i];
+    parms->scale    = scale_tmp;
+    parms->a_nick   = a_nick_tmp[i];
+    parms->a_tilt   = a_tilt_tmp[i];
     return 0;
+  } else {
+    return 1;
   }
 }
 
@@ -86,9 +110,10 @@ ProjectionSphaeric::comp_scale(Hill *m1, Hill *m2, double d_m1_m2_2) {
   return  (pow((d_m1_m2_2 / ((dir_m2 * dir_m2) - (2.0 * ((dir_m2 * dir_m1) + (nick_m2 * nick_m1))) + (nick_m2 * nick_m2) + (dir_m1 * dir_m1) + (nick_m1 * nick_m1))), (1.0 / 2.0)) * sign1); 
 }
 
+// using the sign3 parameter one can choose between the two possible solutions
+// sign3 must be 1.0 or -1.0
 double
-ProjectionSphaeric::comp_dir_view(Hill *m1, Hill *m2, double d_m1_2, double d_m2_2, double scale) {
-  double sign3 = 1.0;
+ProjectionSphaeric::comp_dir_view(Hill *m1, Hill *m2, double d_m1_2, double d_m2_2, double scale, double sign3) {
   double dir_view;
   double nick_m1 = m1->a_nick;
   double nick_m2 = m2->a_nick;

@@ -27,7 +27,7 @@ class ProjectionSphaeric : public Projection {
  private:
 
   double comp_scale(Hill *m1, Hill *m2, double d_m1_m2_2);
-  double comp_dir_view(Hill *m1, Hill *m2, double d_m1_2, double d_m2_2, double scale);
+  double comp_dir_view(Hill *m1, Hill *m2, double d_m1_2, double d_m2_2, double scale, double sign3);
   double comp_nick_view(Hill *m1, Hill *m2, double d_m1_2, double scale, double dir_view);
   double comp_tilt_view(Hill *m, double scale, double dir_view, double nick_view);
 
