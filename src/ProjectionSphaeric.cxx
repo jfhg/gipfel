@@ -72,7 +72,7 @@ ProjectionSphaeric::comp_params(Hill *m1, Hill *m2, ViewParams *parms) {
   }
 
   i = a_tilt_diff[0]<a_tilt_diff[1]?0:1; // Choose solution where difference
-                                         // of tilt angels is smaller.
+                                         // of tilt angles is smaller.
 
   if (a_tilt_diff[i] < 10000.0) {  
     parms->a_center = a_center_tmp[i];
