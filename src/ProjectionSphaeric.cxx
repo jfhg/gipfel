@@ -24,6 +24,8 @@
 
 #include "ProjectionSphaeric.H"
 
+#define TILT_DIFF_UNDEF 100000.0
+
 int
 ProjectionSphaeric::comp_params(Hill *m1, Hill *m2, ViewParams *parms) {
   Hill *tmp;
@@ -46,7 +48,7 @@ ProjectionSphaeric::comp_params(Hill *m1, Hill *m2, ViewParams *parms) {
   scale_tmp = comp_scale(m1, m2, d_m1_m2_2);
 
   for(i=0; i<2; i++) { // we need to try two solutions ...
-    a_tilt_diff[i] = 10000.0; // initialize to a high value
+    a_tilt_diff[i] = TILT_DIFF_UNDEF; // initialize to a high value
 
     a_center_tmp[i] = comp_dir_view(m1, m2, d_m1_2, d_m2_2, scale_tmp,
       i==0?1.0:-1.0);
@@ -74,7 +76,7 @@ ProjectionSphaeric::comp_params(Hill *m1, Hill *m2, ViewParams *parms) {
   i = a_tilt_diff[0]<a_tilt_diff[1]?0:1; // Choose solution where difference
                                          // of tilt angles is smaller.
 
-  if (a_tilt_diff[i] < 10000.0) {  
+  if (a_tilt_diff[i] != TILT_DIFF_UNDEF) {  
     parms->a_center = a_center_tmp[i];
     parms->scale    = scale_tmp;
     parms->a_nick   = a_nick_tmp[i];
