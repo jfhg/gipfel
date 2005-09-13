@@ -24,13 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <signal.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <signal.h>
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
@@ -169,7 +163,9 @@ void guess_cb(Fl_Widget *, void *) {
 void about_cb() {
   fl_message("gipfel -- and you know what you see.\n"
 	     "Version %s\n\n"
-	     "(c) Johannes Hofmann 2005\n", VERSION);
+	     "(c) Johannes Hofmann 2005\n\n"
+             "Default datafile by http://www.alpin-koordinaten.de\n",
+             VERSION);
 
 }
 
