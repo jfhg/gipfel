@@ -20,6 +20,7 @@ noinst_HEADERS = \
 	ProjectionTangential.H \
 	ProjectionSphaeric.H \
 	Hill.H \
+	ViewParams.H \
 	Fl_Value_Dial.H \
 	Fl_Search_Chooser.H \
 	choose_hill.H \
