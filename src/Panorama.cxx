@@ -57,6 +57,7 @@ Panorama::~Panorama() {
 int
 Panorama::load_data(const char *name) {
   if (mountains->load(name) != 0) {
+    fprintf(stderr, "Could not load datafile %s\n", name);
     return 1;
   }
 
