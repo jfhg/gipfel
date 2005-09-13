@@ -71,11 +71,11 @@ void set_values() {
   i_view_height->value(gipf->get_view_height());
   b_viewpoint->label(gipf->get_viewpoint());
   if (gipf->get_projection() == Projection::TANGENTIAL) {
-    mb->mode(7, FL_MENU_RADIO|FL_MENU_VALUE);
-    mb->mode(8, FL_MENU_RADIO);
-  } else {
     mb->mode(8, FL_MENU_RADIO|FL_MENU_VALUE);
-    mb->mode(7, FL_MENU_RADIO);
+    mb->mode(9, FL_MENU_RADIO);
+  } else {
+    mb->mode(9, FL_MENU_RADIO|FL_MENU_VALUE);
+    mb->mode(8, FL_MENU_RADIO);
   }
 }
 
@@ -86,7 +86,8 @@ void quit_cb() {
 void open_cb() {
   char *file = fl_file_chooser("Open File?", "*.jpg", img_file);
   if(file != NULL) {
-
+    gipf->load_image(file);
+    set_values();
   }  
 }
 
@@ -170,8 +171,9 @@ void about_cb() {
 }
 
 void fill_menubar(Fl_Menu_Bar* mb) {
-  mb->add("&File/&Viewpoint", FL_CTRL+'v', (Fl_Callback*)viewpoint_cb);
+  mb->add("&File/L&oad Image", FL_CTRL+'o', (Fl_Callback*)open_cb);
   mb->add("&File/&Save Image", FL_CTRL+'s', (Fl_Callback*)save_cb);
+  mb->add("&File/Choose &Viewpoint", FL_CTRL+'v', (Fl_Callback*)viewpoint_cb);
   mb->add("&File/Load &Track", FL_CTRL+'t', (Fl_Callback*)track_cb);
   mb->add("&File/&Quit", FL_CTRL+'q', (Fl_Callback*)quit_cb);
 
@@ -184,7 +186,7 @@ mb->add("&Option/Panoramic Projection", NULL,  (Fl_Callback *)proj_cb, (void *)1
 
 void usage() {
   fprintf(stderr,
-	  "usage: gipfel [-v <viewpoint>] [-d <datafile>] <image>\n"
+	  "usage: gipfel [-v <viewpoint>] [-d <datafile>] [<image>]\n"
 	  "   -v <viewpoint>  Set point from which the picture was taken.\n"
 	  "                   This must be a string that unambiguously \n"
 	  "                   matches the name of an entry in the data file.\n"
@@ -321,7 +323,7 @@ int main(int argc, char** argv) {
     img_file = my_argv[0];
   }
 
-  if (data_file == NULL || img_file == NULL || err) {
+  if (data_file == NULL || err) {
     usage();
     exit(1);
   }
@@ -331,8 +333,10 @@ int main(int argc, char** argv) {
   view_win = new Fl_Window(800, 600);
   scroll = new Fl_Scroll(0, 0, view_win->w(), view_win->h());
   
-  gipf = new GipfelWidget(0,0,50,50);
-  gipf->load_image(img_file);
+  gipf = new GipfelWidget(0,0,800,600);
+  if (img_file) {
+    gipf->load_image(img_file);
+  }
   if (gipf->w() < 1024 && gipf->h() < 768) {
     view_win->size(gipf->w(), gipf->h());
     scroll->size(gipf->w(), gipf->h());
@@ -351,7 +355,8 @@ int main(int argc, char** argv) {
 
   if (view_point) {
     gipf->set_viewpoint(view_point);
-  } else if (gipf->get_view_lat() == 0.0 && gipf->get_view_long() == 0.0) {
+  } else if (img_file && 
+             gipf->get_view_lat()==0.0 && gipf->get_view_long()==0.0) {
     viewpoint_cb(NULL, NULL);
   }
   
