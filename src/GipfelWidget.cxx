@@ -318,11 +318,11 @@ GipfelWidget::draw() {
     }
     
     fl_xyline(center_x + m->x + x() - 2, center_y + m->y + y(), center_x + m->x + x() + 2);
-    fl_yxline(center_x + m->x + x(), center_y + m->label_y + y() - 2, center_y + m->y + y() + 2);
+    fl_yxline(center_x + m->x + x(), center_y + m->y + m->label_y + y() - 2, center_y + m->y + y() + 2);
 
     fl_draw(m->name, 
 	    center_x + m->x + x(), 
-	    center_y + m->label_y + y());
+	    center_y + m->y + m->label_y + y());
   }
 
   /* markers */
@@ -380,8 +380,8 @@ GipfelWidget::set_labels(Hills *v) {
     }
 
     width = (int) ceilf(fl_width(m->name));
-    m->label_x = m->x + width;
-    m->label_y = m->y;
+    m->label_x = width;
+    m->label_y = 0;
     for (j=0; j < i; j++) {
       n = v->get(j);
       
@@ -391,11 +391,11 @@ GipfelWidget::set_labels(Hills *v) {
 
       // Check for overlapping labels and
       // overlaps between labels and peak markers
-      if ((overlap(m->x, m->label_x, n->x, n->label_x) &&
-	   overlap(m->label_y - height, m->label_y, n->label_y - height, n->label_y)) ||
-	  (overlap(m->x, m->label_x, n->x - 2, n->x + 2) &&
-	   overlap(m->label_y - height, m->label_y, n->y - 2, n->y + 2))) {
-	m->label_y = n->label_y - height - 1;
+      if ((overlap(m->x, m->x + m->label_x, n->x, n->x + n->label_x) &&
+	   overlap(m->y + m->label_y - height, m->y + m->label_y, n->y + n->label_y - height, n->y + n->label_y)) ||
+	  (overlap(m->x, m->x + m->label_x, n->x - 2, n->x + 2) &&
+	   overlap(m->y + m->label_y - height, m->y + m->label_y, n->y - 2, n->y + 2))) {
+	m->label_y = n->y + n->label_y - m->y - height - 1;
       }
     }
   }
@@ -464,7 +464,7 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
 
   cur_mountain->x = m_x - center_x;
   cur_mountain->y = m_y - center_y;
-  cur_mountain->label_y = cur_mountain->y;
+  cur_mountain->label_y = 0;
   
   redraw();
   return 0;
