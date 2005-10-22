@@ -44,6 +44,11 @@
 #include "util.h"
 #include "GipfelWidget.H"
 
+#define CROSS_SIZE 2
+
+
+#define MAX(A,B) ((A)>(B)?(A):(B))
+
 static double pi_d, deg2rad;
 
 static void center_cb(Fl_Widget *o, void *f);
@@ -317,8 +322,8 @@ GipfelWidget::draw() {
       fl_color(FL_BLACK);
     }
     
-    fl_xyline(center_x + m->x + x() - 2, center_y + m->y + y(), center_x + m->x + x() + 2);
-    fl_yxline(center_x + m->x + x(), center_y + m->y + m->label_y + y() - 2, center_y + m->y + y() + 2);
+    fl_xyline(center_x + m->x + x() - CROSS_SIZE, center_y + m->y + y(), center_x + m->x + x() + CROSS_SIZE);
+    fl_yxline(center_x + m->x + x(), center_y + m->y + m->label_y + y() - CROSS_SIZE, center_y + m->y + y() + CROSS_SIZE);
 
     fl_draw(m->name, 
 	    center_x + m->x + x(), 
@@ -330,8 +335,8 @@ GipfelWidget::draw() {
     m = marker->get(i);
 
     fl_color(FL_GREEN);
-    fl_xyline(center_x + m->x + x() - 3, center_y + m->y + y(), center_x + m->x + x() + 3);
-    fl_yxline(center_x + m->x + x(), center_y + m->y + y() - 3, center_y + m->y + y() + 3);
+    fl_xyline(center_x + m->x + x() - CROSS_SIZE * 2, center_y + m->y + y(), center_x + m->x + x() + CROSS_SIZE * 2);
+    fl_yxline(center_x + m->x + x(), center_y + m->y + y() - CROSS_SIZE * 2, center_y + m->y + y() + CROSS_SIZE * 2);
     draw_flag(center_x + m->x + x(), center_y + m->y + y(), NULL);
   }
 
@@ -455,6 +460,7 @@ GipfelWidget::set_cur_mountain(int m_x, int m_y) {
 
 int
 GipfelWidget::set_mountain(int m_x, int m_y) {
+  int old_x, old_y, old_label_y;
   int center_x = w() / 2;
   int center_y = h() / 2;
 
@@ -462,11 +468,23 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
     return 1;
   }
 
+  old_x = cur_mountain->x;
+  old_y = cur_mountain->y;
+  old_label_y = cur_mountain->label_y;
+
   cur_mountain->x = m_x - center_x;
   cur_mountain->y = m_y - center_y;
   cur_mountain->label_y = 0;
-  
-  redraw();
+ 
+  damage(4, center_x + x() + old_x - CROSS_SIZE - 1,
+            center_y + y() + old_y + old_label_y - CROSS_SIZE - 20,
+            MAX(20, cur_mountain->label_x) + 2,
+            MAX(20, old_label_y) + 22 ); 
+  damage(4, center_x + x() + cur_mountain->x - CROSS_SIZE - 1,
+            center_y + y() + cur_mountain->y + cur_mountain->label_y - CROSS_SIZE - 20,
+            MAX(20, cur_mountain->label_x) + 2,
+            MAX(20, cur_mountain->label_y) + 22 ); 
+ 
   return 0;
 }
 
