@@ -48,18 +48,21 @@ ProjectionTangential::comp_params(Hill *m1, Hill *m2, ViewParams *parms) {
   Hill *tmp;
   double a_center_tmp, scale_tmp, a_nick_tmp;
 
-  if (m1->x > m2->x) {
+  scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
+  if (isnan(scale_tmp) || scale_tmp < 0.0) {
+    // try again with mountains swapped
     tmp = m1;
     m1 = m2;
     m2 = tmp;
+    scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
   }
 
   a_center_tmp = comp_center_angle(m1->alph, m2->alph, m1->x, m2->x);
-  scale_tmp    = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
   a_nick_tmp   = atan ((m1->y + tan(m1->a_nick) * parms->scale) / 
 		       (parms->scale - m1->y * tan(m1->a_nick)));
 
-  if (isnan(a_center_tmp) || isnan(scale_tmp) || isnan(a_nick_tmp)) {
+  if (isnan(a_center_tmp) || isnan(scale_tmp) ||
+      scale_tmp < 0.0 || isnan(a_nick_tmp)) {
     return 1;
   } else {
     
@@ -178,7 +181,7 @@ double
 ProjectionTangential::comp_scale(double a1, double a2, double d1, double d2) {
   double sign1 = 1.0;
   double sc, tan_a1, tan_a2;
-  
+
   tan_a1 = tan(a1);
   tan_a2 = tan(a2);
   
