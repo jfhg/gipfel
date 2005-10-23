@@ -476,13 +476,13 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
   cur_mountain->y = m_y - center_y;
   cur_mountain->label_y = 0;
  
-  damage(4, center_x + x() + old_x - CROSS_SIZE - 1,
-            center_y + y() + old_y + old_label_y - CROSS_SIZE - 20,
-            MAX(20, cur_mountain->label_x) + 2,
+  damage(4, center_x + x() + old_x - 2*CROSS_SIZE - 1,
+            center_y + y() + old_y + old_label_y - 2*CROSS_SIZE - 20,
+            MAX(20, cur_mountain->label_x) + 2*CROSS_SIZE + 2,
             MAX(20, old_label_y) + 22 ); 
-  damage(4, center_x + x() + cur_mountain->x - CROSS_SIZE - 1,
-            center_y + y() + cur_mountain->y + cur_mountain->label_y - CROSS_SIZE - 20,
-            MAX(20, cur_mountain->label_x) + 2,
+  damage(4, center_x + x() + cur_mountain->x - 2*CROSS_SIZE - 1,
+            center_y + y() + cur_mountain->y + cur_mountain->label_y - 2*CROSS_SIZE - 20,
+            MAX(20, cur_mountain->label_x) + 2*CROSS_SIZE + 2,
             MAX(20, cur_mountain->label_y) + 22 ); 
  
   return 0;
