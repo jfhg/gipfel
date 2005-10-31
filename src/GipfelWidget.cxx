@@ -347,6 +347,10 @@ GipfelWidget::draw() {
     fl_color(FL_RED);
     fl_line_style(FL_SOLID, 2);
     for (i=1; i<track_points->get_num(); i++) {
+      if (!(track_points->get(i)->flags & Hill::VISIBLE)) {
+        continue;
+      }
+
       if (last_initialized) {
         fl_line(center_x + x() + last_x, 
                 center_y + y() + last_y, 
