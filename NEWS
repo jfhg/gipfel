@@ -1,6 +1,11 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.1.1
+ - Don't try to display invisible trackpoints.
+ - Fix bug in "Normal Projection" code for wide angle images.
+ - Avoid complete redraw when moving mountains to reduce flicker.
+
 gipfel-0.1.0
  - Display of GPS-tracks.
    GPS-tracks e.g. those that can be downloaded from www.alpin-koordinaten.de
