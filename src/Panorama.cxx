@@ -302,7 +302,7 @@ Panorama::set_projection(Projection::Projection_t p) {
       break;
     case Projection::SPHAERIC:
       proj = new ProjectionSphaeric();
-      view_angle = pi_d / 2.0;
+      view_angle = pi_d * 2.0;
       break;
   }
   update_angles();
