@@ -341,16 +341,16 @@ GipfelWidget::draw() {
   }
 
   /* track */
-  if (track_points && track_points->get_num() >= 1) {
+  if (track_points && track_points->get_num() > 0) {
     int last_x, last_y, last_initialized = 0;
 
     fl_color(FL_RED);
-    fl_line_style(FL_SOLID, 2);
     for (i=1; i<track_points->get_num(); i++) {
       if (!(track_points->get(i)->flags & Hill::VISIBLE)) {
         continue;
       }
 
+      fl_line_style(FL_SOLID, get_track_width(track_points->get(i)));
       if (last_initialized) {
         fl_line(center_x + x() + last_x, 
                 center_y + y() + last_y, 
@@ -661,6 +661,12 @@ GipfelWidget::update() {
   Fl::wait(1.0);
 }
 
+int
+GipfelWidget::get_track_width(Hill *m) {
+  double dist = pan->get_real_distance(m);
+
+  return MAX(10000.0 / dist, 1.0);
+}
 
 int
 GipfelWidget::handle(int event) {

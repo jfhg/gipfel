@@ -128,6 +128,10 @@ class Panorama {
 
   double get_view_height();
 
+  double get_earth_radius(Hill *m);
+
+  double get_real_distance(Hill *m);
+
   int comp_params(Hill *m1, Hill *m2);
 
   int guess(Hills *p1, Hill *m1);

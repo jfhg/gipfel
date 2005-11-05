@@ -415,7 +415,7 @@ Panorama::update_close_mountains() {
  
     if (m->flags & Hill::TRACK_POINT ||
         ((m->phi != view_phi || m->lam != view_lam) &&
-	 (m->height / (m->dist * EARTH_RADIUS) 
+	 (m->height / (m->dist * get_earth_radius(m)) 
 	 > height_dist_ratio))) {
 
       close_mountains->add(m);
@@ -519,5 +519,22 @@ Panorama::nick(double dist, double height) {
   beta = acos((-(b*b) + (a*a) + (c*c))/(2 * a * c));
   
   return beta - pi_d / 2.0;
+}
+
+double
+Panorama::get_earth_radius(Hill *m) {
+  return EARTH_RADIUS;
+}
+
+double
+Panorama::get_real_distance(Hill *m) {
+  double a, b, c, gam;
+
+  a = view_height + get_earth_radius(m); // using m here is not quite right
+  b = m->height + get_earth_radius(m); 
+  gam = m->dist;
+
+  c = sqrt(pow(a, 2.0) + pow(b, 2.0) - 2.0 * a * b * cos(gam));
+  return c;
 }
 

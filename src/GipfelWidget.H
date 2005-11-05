@@ -46,6 +46,8 @@ class GipfelWidget : public Fl_Widget {
 
   void set_labels(Hills *v);
 
+  int get_track_width(Hill *m);
+
  public:
   GipfelWidget(int X,int Y,int W, int H);
 
