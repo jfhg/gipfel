@@ -318,6 +318,8 @@ GipfelWidget::draw() {
     } else if (m == m2) {
       fl_color(FL_RED);
       draw_flag(center_x + m->x + x(), center_y + m->y + y(), "2");
+    } else if (m->flags & Hill::HIDDEN) {
+      fl_color(FL_BLUE);
     } else {
       fl_color(FL_BLACK);
     }

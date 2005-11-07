@@ -50,6 +50,8 @@ class Panorama {
   void update_close_mountains();
 
   void update_visible_mountains();
+ 
+  void mark_hidden();
 
   double distance(double phi, double lam);
 

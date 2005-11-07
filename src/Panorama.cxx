@@ -398,9 +398,48 @@ Panorama::update_angles() {
     }
   }
 
+
   mountains->sort();
 
   update_close_mountains();
+}
+
+
+void
+Panorama::mark_hidden() {
+  int i, j;
+  Hill *m, *n;
+  double hide_val;
+ 
+   
+  for (i=0; i<visible_mountains->get_num(); i++) {
+    m = visible_mountains->get(i);
+    if (m->flags & Hill::DUPLICATE) {
+      continue;
+    }
+    for (j=0; j<visible_mountains->get_num(); j++) {
+      n = visible_mountains->get(j);
+      
+      if (n->flags & Hill::DUPLICATE) {
+        continue;
+      }
+      if (m == n || fabs(m->a_view - n->a_view > pi_d / 2.0)) {
+        continue;
+      }
+      if (m->dist < n->dist || m->a_nick > n->a_nick) {
+        continue;
+      }
+
+      hide_val = (n->a_nick - m->a_nick) / fabs(m->a_view - n->a_view);
+      if (hide_val > 5.0) {
+        m->flags |= Hill::HIDDEN;
+
+fprintf(stderr, "%s %f %f %s %f %f => %f\n", m->name, m->dist, m->a_nick, n->name, n->dist, n->a_nick, hide_val);
+      }
+    }
+
+  }
+
 }
 
 void 
@@ -451,6 +490,7 @@ Panorama::update_visible_mountains() {
     }
   }
 
+  mark_hidden();
   update_coordinates();
 }
 
