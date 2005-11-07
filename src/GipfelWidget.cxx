@@ -66,6 +66,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   m1 = NULL;
   m2 = NULL;
   img_file = NULL;
+  track_width = 500.0;
 
   for (i=0; i<=3; i++) {
     marker->add(new Hill(i * 10, 0));
@@ -343,20 +344,23 @@ GipfelWidget::draw() {
   /* track */
   if (track_points && track_points->get_num() > 0) {
     int last_x, last_y, last_initialized = 0;
-
+    
     fl_color(FL_RED);
     for (i=1; i<track_points->get_num(); i++) {
       if (!(track_points->get(i)->flags & Hill::VISIBLE)) {
         continue;
       }
 
-      fl_line_style(FL_SOLID, get_track_width(track_points->get(i)));
+      fl_line_style(FL_SOLID|FL_CAP_ROUND|FL_JOIN_ROUND,
+                    get_rel_track_width(track_points->get(i)));
       if (last_initialized) {
-        fl_line(center_x + x() + last_x, 
-                center_y + y() + last_y, 
-                center_x + x() + track_points->get(i)->x, 
-                center_y + y() + track_points->get(i)->y);
+        fl_begin_line();
+        fl_vertex(center_x + x() + last_x, center_y + y() + last_y);
+        fl_vertex(center_x + x() + track_points->get(i)->x, 
+                  center_y + y() + track_points->get(i)->y);
+        fl_end_line();
       }
+
       last_x = track_points->get(i)->x;
       last_y = track_points->get(i)->y;
       last_initialized++;
@@ -662,10 +666,16 @@ GipfelWidget::update() {
 }
 
 int
-GipfelWidget::get_track_width(Hill *m) {
+GipfelWidget::get_rel_track_width(Hill *m) {
   double dist = pan->get_real_distance(m);
 
-  return MAX(10000.0 / dist, 1.0);
+  return MAX((pan->get_scale() * track_width) / (dist * 10.0), 1.0);
+}
+
+void
+GipfelWidget::set_track_width(double w) {
+  track_width = w;
+  redraw();
 }
 
 int

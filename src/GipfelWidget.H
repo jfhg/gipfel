@@ -36,7 +36,7 @@ class GipfelWidget : public Fl_Widget {
   Panorama *pan;
   Fl_Menu_Button *mb;
   char *img_file;
-
+  double track_width;
 
   int handle(int event);
 
@@ -46,7 +46,7 @@ class GipfelWidget : public Fl_Widget {
 
   void set_labels(Hills *v);
 
-  int get_track_width(Hill *m);
+  int get_rel_track_width(Hill *m);
 
  public:
   GipfelWidget(int X,int Y,int W, int H);
@@ -98,6 +98,8 @@ class GipfelWidget : public Fl_Widget {
   double get_view_long();
 
   double get_view_height();
+
+  void set_track_width(double w);
 
   Projection::Projection_t get_projection();
 

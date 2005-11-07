@@ -55,7 +55,7 @@ char *data_file = DEFAULT_DATAFILE;
 
 GipfelWidget *gipf = NULL;
 Fl_Dial *s_center = NULL;
-Fl_Slider *s_nick = NULL, *s_scale = NULL, *s_tilt = NULL, *s_height_dist;
+Fl_Slider *s_nick, *s_scale, *s_tilt, *s_height_dist, *s_track_width;
 Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
 Fl_Box *b_viewpoint;
 Fl_Menu_Bar *mb;
@@ -133,6 +133,10 @@ void view_long_cb(Fl_Value_Input* o, void*) {
 
 void view_height_cb(Fl_Value_Input* o, void*) {
   gipf->set_view_height(o->value());
+}
+
+void track_width_cb(Fl_Value_Input* o, void*) {
+  gipf->set_track_width(o->value());
 }
 
 void viewpoint_cb(Fl_Value_Input* o, void*) {
@@ -254,6 +258,16 @@ create_control_window() {
   s_height_dist->callback((Fl_Callback*)h_d_cb);
   s_height_dist->align(FL_ALIGN_TOP);
 
+  s_track_width = new Fl_Value_Slider(235, 180, 160, 15, "Track Width");
+  s_track_width->type(1);
+  s_track_width->box(FL_THIN_DOWN_BOX);
+  s_track_width->labelsize(10);
+  s_track_width->step(1.0);
+  s_track_width->bounds(1.0, 2000.0);
+  s_track_width->slider(FL_UP_BOX);
+  s_track_width->callback((Fl_Callback*)track_width_cb);
+  s_track_width->align(FL_ALIGN_TOP);
+
   // Viewpoint Stuff
 
   b_viewpoint = new Fl_Box(FL_DOWN_BOX, 30, 255, 300, 80, "");
@@ -278,10 +292,10 @@ create_control_window() {
   i_view_height->callback((Fl_Callback*)view_height_cb);
 
   // Buttons
-  Fl_Button *b = new Fl_Button(240, 180, 50, 15, "comp");
+  Fl_Button *b = new Fl_Button(240, 210, 50, 15, "comp");
   b->color(FL_RED);
   b->callback(comp_cb);
-  Fl_Button *b1 = new Fl_Button(320, 180, 50, 15, "guess");
+  Fl_Button *b1 = new Fl_Button(320, 210, 50, 15, "guess");
   b1->callback(guess_cb);
   b1->color(FL_GREEN);
 
