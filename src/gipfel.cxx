@@ -353,7 +353,7 @@ int main(int argc, char** argv) {
 
   // The Fl_Group is used to avoid FL_DAMAGE_ALL in Fl_Scroll::position 
   Fl_Group *g = new Fl_Group(0, 0, view_win->w(), view_win->h()); 
-
+  view_win->resizable(g);
   scroll = new Fl_Scroll(0, 0, view_win->w(), view_win->h());
   
   gipf = new GipfelWidget(0,0,800,600);
