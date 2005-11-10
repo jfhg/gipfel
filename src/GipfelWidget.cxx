@@ -418,6 +418,10 @@ GipfelWidget::set_labels(Hills *v) {
 	continue;
       }
 
+      if (!show_hidden && (n->flags & Hill::HIDDEN)) {
+        continue;
+      }
+
       // Check for overlapping labels and
       // overlaps between labels and peak markers
       if ((overlap(m->x, m->x + m->label_x, n->x, n->x + n->label_x) &&
