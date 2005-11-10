@@ -66,6 +66,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   m1 = NULL;
   m2 = NULL;
   img_file = NULL;
+  track_width = 500.0;
 
   for (i=0; i<=3; i++) {
     marker->add(new Hill(i * 10, 0));
@@ -308,7 +309,7 @@ GipfelWidget::draw() {
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i);
 
-    if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
+    if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT|Hill::HIDDEN)) {
       continue;
     }
 
@@ -343,22 +344,30 @@ GipfelWidget::draw() {
   }
 
   /* track */
-  if (track_points && track_points->get_num() >= 1) {
+  if (track_points && track_points->get_num() > 0) {
     int last_x, last_y, last_initialized = 0;
-
-    fl_color(FL_RED);
-    fl_line_style(FL_SOLID, 2);
+    
     for (i=1; i<track_points->get_num(); i++) {
       if (!(track_points->get(i)->flags & Hill::VISIBLE)) {
         continue;
       }
 
-      if (last_initialized) {
-        fl_line(center_x + x() + last_x, 
-                center_y + y() + last_y, 
-                center_x + x() + track_points->get(i)->x, 
-                center_y + y() + track_points->get(i)->y);
+      if (track_points->get(i)->flags & Hill::HIDDEN) {
+        fl_color(FL_BLUE);
+      } else {
+        fl_color(FL_RED);
       }
+
+      fl_line_style(FL_SOLID|FL_CAP_ROUND|FL_JOIN_ROUND,
+                    get_rel_track_width(track_points->get(i)));
+      if (last_initialized) {
+        fl_begin_line();
+        fl_vertex(center_x + x() + last_x, center_y + y() + last_y);
+        fl_vertex(center_x + x() + track_points->get(i)->x, 
+                  center_y + y() + track_points->get(i)->y);
+        fl_end_line();
+      }
+
       last_x = track_points->get(i)->x;
       last_y = track_points->get(i)->y;
       last_initialized++;
@@ -386,7 +395,7 @@ GipfelWidget::set_labels(Hills *v) {
   for (i=0; i<v->get_num(); i++) {
     m = v->get(i);
     
-    if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
+    if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT|Hill::HIDDEN)) {
       continue;
     }
 
@@ -606,6 +615,14 @@ GipfelWidget::set_height_dist_ratio(double r) {
 }
 
 void
+GipfelWidget::set_hide_value(double h) {
+  pan->set_hide_value(h);
+  set_labels(pan->get_visible_mountains());
+  
+  redraw();
+}
+
+void
 GipfelWidget::set_view_lat(double v) {
   pan->set_view_lat(v);
   set_labels(pan->get_visible_mountains());
@@ -663,6 +680,18 @@ GipfelWidget::update() {
   Fl::wait(1.0);
 }
 
+int
+GipfelWidget::get_rel_track_width(Hill *m) {
+  double dist = pan->get_real_distance(m);
+
+  return MAX((pan->get_scale() * track_width) / (dist * 10.0), 1.0);
+}
+
+void
+GipfelWidget::set_track_width(double w) {
+  track_width = w;
+  redraw();
+}
 
 int
 GipfelWidget::handle(int event) {

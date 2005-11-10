@@ -34,6 +34,7 @@ class Panorama {
   char *view_name;
   double height_dist_ratio;
   double view_angle;
+  double hide_value;
   Hills *mountains;
   Hills *close_mountains;
   Hills *visible_mountains;
@@ -92,6 +93,8 @@ class Panorama {
 
   void set_height_dist_ratio(double r);
 
+  void set_hide_value(double h);
+
   Hills * get_mountains();
 
   Hills * get_close_mountains();
@@ -129,6 +132,10 @@ class Panorama {
   double get_view_long();
 
   double get_view_height();
+
+  double get_earth_radius(Hill *m);
+
+  double get_real_distance(Hill *m);
 
   int comp_params(Hill *m1, Hill *m2);
 

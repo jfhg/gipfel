@@ -37,6 +37,7 @@ Panorama::Panorama() {
   close_mountains = new Hills();
   visible_mountains = new Hills();
   height_dist_ratio = 0.07;
+  hide_value = 1.0;
   pi_d = asin(1.0) * 2.0;
   deg2rad = pi_d / 180.0;
   parms.a_center = 0.0;
@@ -404,23 +405,31 @@ Panorama::update_angles() {
   update_close_mountains();
 }
 
+void
+Panorama::set_hide_value(double h) {
+  hide_value = h;
+  update_visible_mountains();
+}
 
 void
 Panorama::mark_hidden() {
   int i, j;
   Hill *m, *n;
-  double hide_val;
- 
+  double h;
    
   for (i=0; i<visible_mountains->get_num(); i++) {
     m = visible_mountains->get(i);
+
+    m->flags &= ~Hill::HIDDEN;
+
     if (m->flags & Hill::DUPLICATE) {
       continue;
     }
+
     for (j=0; j<visible_mountains->get_num(); j++) {
       n = visible_mountains->get(j);
       
-      if (n->flags & Hill::DUPLICATE) {
+      if (n->flags & Hill::DUPLICATE || n->flags & Hill::TRACK_POINT) {
         continue;
       }
       if (m == n || fabs(m->a_view - n->a_view > pi_d / 2.0)) {
@@ -430,11 +439,9 @@ Panorama::mark_hidden() {
         continue;
       }
 
-      hide_val = (n->a_nick - m->a_nick) / fabs(m->a_view - n->a_view);
-      if (hide_val > 5.0) {
+      h = (n->a_nick - m->a_nick) / fabs(m->a_view - n->a_view);
+      if (isinf(h) || h > hide_value) {
         m->flags |= Hill::HIDDEN;
-
-fprintf(stderr, "%s %f %f %s %f %f => %f\n", m->name, m->dist, m->a_nick, n->name, n->dist, n->a_nick, hide_val);
       }
     }
 
@@ -454,7 +461,7 @@ Panorama::update_close_mountains() {
  
     if (m->flags & Hill::TRACK_POINT ||
         ((m->phi != view_phi || m->lam != view_lam) &&
-	 (m->height / (m->dist * EARTH_RADIUS) 
+	 (m->height / (m->dist * get_earth_radius(m)) 
 	 > height_dist_ratio))) {
 
       close_mountains->add(m);
@@ -559,5 +566,22 @@ Panorama::nick(double dist, double height) {
   beta = acos((-(b*b) + (a*a) + (c*c))/(2 * a * c));
   
   return beta - pi_d / 2.0;
+}
+
+double
+Panorama::get_earth_radius(Hill *m) {
+  return EARTH_RADIUS;
+}
+
+double
+Panorama::get_real_distance(Hill *m) {
+  double a, b, c, gam;
+
+  a = view_height + get_earth_radius(m); // using m here is not quite right
+  b = m->height + get_earth_radius(m); 
+  gam = m->dist;
+
+  c = sqrt(pow(a, 2.0) + pow(b, 2.0) - 2.0 * a * b * cos(gam));
+  return c;
 }
 
