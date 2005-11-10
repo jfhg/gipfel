@@ -90,9 +90,9 @@ Fl_Search_Chooser::Fl_Search_Chooser(const char *title) {
   Fl_Input *in = new Fl_Input(g->x()+50, g->h()-80, g->w()-80, 20, "Search");
   in->callback((Fl_Callback*) input_cb, this);
   in->when(FL_WHEN_CHANGED);
-  Fl_Button *cancel_b = new Fl_Button(g->w()-200, g->h()-30, 80, 20, "Cancel");
+  Fl_Button *cancel_b = new Fl_Button(g->w()-200, g->h()-30, 80, 25, "Cancel");
   cancel_b->callback((Fl_Callback*) cancel_cb, this);
-  Fl_Button *ok_b = new Fl_Button(g->w()-100, g->h()-30, 80, 20, "Ok");
+  Fl_Button *ok_b = new Fl_Button(g->w()-100, g->h()-30, 80, 25, "Ok");
   ok_b->callback((Fl_Callback*) ok_cb, this);
   Fl::focus(in);
   g->end();
