@@ -292,10 +292,10 @@ create_control_window() {
   i_view_height->callback((Fl_Callback*)view_height_cb);
 
   // Buttons
-  Fl_Button *b = new Fl_Button(240, 210, 50, 15, "comp");
+  Fl_Button *b = new Fl_Button(240, 210, 60, 20, "comp");
   b->color(FL_RED);
   b->callback(comp_cb);
-  Fl_Button *b1 = new Fl_Button(320, 210, 50, 15, "guess");
+  Fl_Button *b1 = new Fl_Button(320, 210, 60, 20, "guess");
   b1->callback(guess_cb);
   b1->color(FL_GREEN);
 
