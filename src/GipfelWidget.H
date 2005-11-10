@@ -37,6 +37,7 @@ class GipfelWidget : public Fl_Widget {
   Fl_Menu_Button *mb;
   char *img_file;
   double track_width;
+  int show_hidden;
 
   int handle(int event);
 
@@ -76,6 +77,8 @@ class GipfelWidget : public Fl_Widget {
   void set_height_dist_ratio(double r);
 
   void set_hide_value(double h);
+
+  void set_show_hidden(int h);
 
   void set_view_lat(double v);
 

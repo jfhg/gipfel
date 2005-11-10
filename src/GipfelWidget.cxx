@@ -67,6 +67,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   m2 = NULL;
   img_file = NULL;
   track_width = 500.0;
+  show_hidden = 0;
 
   for (i=0; i<=3; i++) {
     marker->add(new Hill(i * 10, 0));
@@ -309,7 +310,11 @@ GipfelWidget::draw() {
   for (i=0; i<mnts->get_num(); i++) {
     m = mnts->get(i);
 
-    if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT|Hill::HIDDEN)) {
+    if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT)) {
+      continue;
+    }
+
+    if (!show_hidden && (m->flags & Hill::HIDDEN)) {
       continue;
     }
 
@@ -395,7 +400,11 @@ GipfelWidget::set_labels(Hills *v) {
   for (i=0; i<v->get_num(); i++) {
     m = v->get(i);
     
-    if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT|Hill::HIDDEN)) {
+    if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT)) {
+      continue;
+    }
+
+    if (!show_hidden && (m->flags & Hill::HIDDEN)) {
       continue;
     }
 
@@ -622,6 +631,14 @@ GipfelWidget::set_hide_value(double h) {
   redraw();
 }
 
+void
+GipfelWidget::set_show_hidden(int h) {
+  show_hidden = h;
+  set_labels(pan->get_visible_mountains());
+  
+  redraw();
+
+}
 void
 GipfelWidget::set_view_lat(double v) {
   pan->set_view_lat(v);
