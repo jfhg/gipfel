@@ -345,7 +345,12 @@ int main(int argc, char** argv) {
     exit(1);
   }
 
-  Fl::scheme("plastic");
+  Fl::get_system_colors();
+  if (getenv("FLTK_SCHEME")) {
+    Fl::scheme(NULL);
+  } else {
+    Fl::scheme("plastic");
+  }
 
   control_win = create_control_window();
 
