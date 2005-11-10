@@ -263,7 +263,8 @@ create_control_window() {
   s_track_width->box(FL_THIN_DOWN_BOX);
   s_track_width->labelsize(10);
   s_track_width->step(1.0);
-  s_track_width->bounds(1.0, 2000.0);
+  s_track_width->bounds(1.0, 500.0);
+  s_track_width->value(200.0);
   s_track_width->slider(FL_UP_BOX);
   s_track_width->callback((Fl_Callback*)track_width_cb);
   s_track_width->align(FL_ALIGN_TOP);

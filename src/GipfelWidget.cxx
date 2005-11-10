@@ -66,7 +66,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   m1 = NULL;
   m2 = NULL;
   img_file = NULL;
-  track_width = 500.0;
+  track_width = 200.0;
   show_hidden = 0;
 
   for (i=0; i<=3; i++) {
