@@ -93,7 +93,9 @@ void open_cb() {
 
 void track_cb() {
   char *file = fl_file_chooser("Track File?", NULL, NULL);
-  gipf->load_track(file);
+  if (gipf->load_track(file) == 0) {
+    s_track_width->activate();
+  }
 }
 
 void save_cb() {
@@ -268,7 +270,7 @@ create_control_window() {
   s_track_width->slider(FL_UP_BOX);
   s_track_width->callback((Fl_Callback*)track_width_cb);
   s_track_width->align(FL_ALIGN_TOP);
-
+  s_track_width->deactivate();
   // Viewpoint Stuff
 
   b_viewpoint = new Fl_Box(FL_DOWN_BOX, 30, 255, 300, 80, "");
