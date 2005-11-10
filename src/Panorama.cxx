@@ -37,7 +37,7 @@ Panorama::Panorama() {
   close_mountains = new Hills();
   visible_mountains = new Hills();
   height_dist_ratio = 0.07;
-  hide_value = 1.0;
+  hide_value = 1.2;
   pi_d = asin(1.0) * 2.0;
   deg2rad = pi_d / 180.0;
   parms.a_center = 0.0;
