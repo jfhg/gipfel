@@ -342,9 +342,15 @@ int main(int argc, char** argv) {
     exit(1);
   }
 
+  Fl::scheme("plastic");
+
   control_win = create_control_window();
 
   view_win = new Fl_Window(800, 600);
+
+  // The Fl_Group is used to avoid FL_DAMAGE_ALL in Fl_Scroll::position 
+  Fl_Group *g = new Fl_Group(0, 0, view_win->w(), view_win->h()); 
+
   scroll = new Fl_Scroll(0, 0, view_win->w(), view_win->h());
   
   gipf = new GipfelWidget(0,0,800,600);
