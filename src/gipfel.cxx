@@ -157,6 +157,10 @@ void proj_cb(Fl_Value_Input* o, void*d) {
   }
 }
 
+void hidden_cb(Fl_Menu_* o, void*d) {
+  gipf->set_show_hidden(o->mvalue()->value()); 
+}
+
 void comp_cb(Fl_Widget *, void *) {
   gipf->comp_params();
   set_values();
@@ -184,10 +188,13 @@ void fill_menubar(Fl_Menu_Bar* mb) {
   mb->add("&File/&Quit", FL_CTRL+'q', (Fl_Callback*)quit_cb);
 
 
-  mb->add("&Option/Normal Projection", NULL, (Fl_Callback *)proj_cb, 
+  mb->add("&Projection/Normal Projection", NULL, (Fl_Callback *)proj_cb, 
           (void *)0, FL_MENU_RADIO|FL_MENU_VALUE);
-  mb->add("&Option/Panoramic Projection", NULL, (Fl_Callback *)proj_cb, 
+  mb->add("&Projection/Panoramic Projection", NULL, (Fl_Callback *)proj_cb, 
           (void *)1, FL_MENU_RADIO);
+
+  mb->add("&Option/Show Hidden Peaks", NULL, (Fl_Callback *) hidden_cb, 
+          (void *)0, FL_MENU_TOGGLE);
 
   mb->add("&Help/About", NULL, (Fl_Callback*)about_cb);
 }
