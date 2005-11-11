@@ -412,13 +412,13 @@ Panorama::set_hide_value(double h) {
 }
 
 void
-Panorama::mark_hidden() {
+Panorama::mark_hidden(Hills *hills) {
   int i, j;
   Hill *m, *n;
   double h;
    
-  for (i=0; i<visible_mountains->get_num(); i++) {
-    m = visible_mountains->get(i);
+  for (i=0; i<hills->get_num(); i++) {
+    m = hills->get(i);
 
     m->flags &= ~Hill::HIDDEN;
 
@@ -426,20 +426,20 @@ Panorama::mark_hidden() {
       continue;
     }
 
-    for (j=0; j<visible_mountains->get_num(); j++) {
-      n = visible_mountains->get(j);
+    for (j=0; j<hills->get_num(); j++) {
+      n = hills->get(j);
       
       if (n->flags & Hill::DUPLICATE || n->flags & Hill::TRACK_POINT) {
         continue;
       }
-      if (m == n || fabs(m->a_view - n->a_view > pi_d / 2.0)) {
+      if (m == n || fabs(m->alph - n->alph > pi_d / 2.0)) {
         continue;
       }
       if (m->dist < n->dist || m->a_nick > n->a_nick) {
         continue;
       }
 
-      h = (n->a_nick - m->a_nick) / fabs(m->a_view - n->a_view);
+      h = (n->a_nick - m->a_nick) / fabs(m->alph - n->alph);
       if (isinf(h) || h > hide_value) {
         m->flags |= Hill::HIDDEN;
       }
@@ -468,6 +468,7 @@ Panorama::update_close_mountains() {
     }
   }
 
+  mark_hidden(close_mountains);
   update_visible_mountains();
 }
 
@@ -497,7 +498,6 @@ Panorama::update_visible_mountains() {
     }
   }
 
-  mark_hidden();
   update_coordinates();
 }
 
