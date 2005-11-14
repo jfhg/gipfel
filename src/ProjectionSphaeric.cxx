@@ -29,8 +29,7 @@
 int
 ProjectionSphaeric::comp_params(const Hill *m1, const Hill *m2, ViewParams *parms) {
   const Hill *m_tmp;
-  Hill *tmp_m1;
-  Hill *tmp_m2;
+  double tmp_x, tmp_y;
   double val;
   ViewParams best, tmp;
   double best_val = BEST_UNDEF;
@@ -67,14 +66,11 @@ ProjectionSphaeric::comp_params(const Hill *m1, const Hill *m2, ViewParams *parm
           isnan(tmp.a_nick) || isnan(tmp.a_tilt)) {
         ;
       } else {
-        tmp_m1 = new Hill(*m1);
-        tmp_m2 = new Hill(*m2);
-        set_coordinates(tmp_m1, &tmp);
-        set_coordinates(tmp_m2, &tmp);
-        val = sqrt(pow(tmp_m1->x - m1->x, 2.0) + pow(tmp_m1->y - m1->y, 2.0)); 
-        val += sqrt(pow(tmp_m2->x - m2->x, 2.0) + pow(tmp_m2->y - m2->y, 2.0));
-        delete(tmp_m1);
-        delete(tmp_m2);
+        set_coordinates(m1, &tmp, &tmp_x, &tmp_y);
+        val = sqrt(pow(tmp_x - m1->x, 2.0) + pow(tmp_y - m1->y, 2.0)); 
+        set_coordinates(m2, &tmp, &tmp_x, &tmp_y);
+        val += sqrt(pow(tmp_x - m2->x, 2.0) + pow(tmp_y - m2->y, 2.0)); 
+
         if (val < best_val) {	
           best_val = val;
           best = tmp;
@@ -95,13 +91,25 @@ void
 ProjectionSphaeric::set_coordinates(Hill *m, const ViewParams *parms) {
   double x_tmp, y_tmp;
 
+  set_coordinates(m, parms, &x_tmp, &y_tmp);
+
+  m->x = (int) rint(x_tmp);
+  m->y = (int) rint(y_tmp);
+}
+
+void 
+ProjectionSphaeric::set_coordinates(const Hill *m, const ViewParams *parms,
+                                    double *x, double *y) {
+  double x_tmp, y_tmp;
+
   x_tmp = m->a_view * parms->scale;
   y_tmp = - (m->a_nick - parms->a_nick) * parms->scale;
 
   // rotate by a_tilt;
-  m->x = (int) rint(x_tmp * cos(parms->a_tilt) - y_tmp * sin(parms->a_tilt));
-  m->y = (int) rint(x_tmp * sin(parms->a_tilt) + y_tmp * cos(parms->a_tilt));
+  *x = x_tmp * cos(parms->a_tilt) - y_tmp * sin(parms->a_tilt);
+  *y = x_tmp * sin(parms->a_tilt) + y_tmp * cos(parms->a_tilt);
 }
+
 
 double
 ProjectionSphaeric::comp_scale(const Hill *m1, const Hill *m2, double d_m1_m2_2) {
