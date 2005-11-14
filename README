@@ -106,6 +106,10 @@ one line per waypoint. Each line should be of the form:
 
 <LATITUDE>,<LONGITUDE>,<HEIGHT>
 
+GPS tracks are displayed with variable width depending on the distance 
+of the way points from the current view point and the scale value. 
+You can also modify the width using the "Track Width" slider.
+
 
 Loading and Saving Images
 =========================
@@ -113,6 +117,20 @@ Loading and Saving Images
 gipfel allows to save the image paramters in the comment section of 
 the JPEG image. Use the File->Save Image menu item. 
 Note, that in the saved image all previous JPEG comments are removed.
+If you open an image containing gipfel image parameters, they are 
+automatcally set.
+
+
+Hidden Object Detection
+=======================
+
+gipfel tries to identify objects in its database, that are hidden by others.
+This is done by assuming that every object/peak has the form of a cone 
+with a fixed steapness. If such imaginary cone would hide the view to a
+point in the database, gipfel marks it as hidden. Hidden objects are
+not shown by default, but you can enable the display of hidden objects using
+the Option->Show Hidden menu entry. Hidden objects and hidden GPS way points
+are displayed in blue.
 
 
 Troubleshooting
@@ -162,4 +180,4 @@ results of gipfel.
 
 Johannes Hofmann
 (Johannes.Hofmann@gmx.de)
-Oct 31, 2005
+Nov 14, 2005

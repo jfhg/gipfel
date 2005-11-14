@@ -193,7 +193,7 @@ void fill_menubar(Fl_Menu_Bar* mb) {
   mb->add("&Projection/Panoramic Projection", NULL, (Fl_Callback *)proj_cb, 
           (void *)1, FL_MENU_RADIO);
 
-  mb->add("&Option/Show Hidden Peaks", NULL, (Fl_Callback *) hidden_cb, 
+  mb->add("&Option/Show Hidden", NULL, (Fl_Callback *) hidden_cb, 
           (void *)0, FL_MENU_TOGGLE);
 
   mb->add("&Help/About", NULL, (Fl_Callback*)about_cb);

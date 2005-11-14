@@ -1,6 +1,12 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.1.2
+ - Fix bugs for "Normal Projection" and "Panoramic Projection" mode.
+ - Add variable width display of GPS tracks.
+ - Add heuristics for hidden object detection.
+ - Switch to fltk "plastic" scheme as it looks better.
+
 gipfel-0.1.1
  - Don't try to display invisible trackpoints.
  - Fix bug in "Normal Projection" code for wide angle images.
