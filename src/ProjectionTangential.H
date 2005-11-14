@@ -31,6 +31,8 @@ class ProjectionTangential : public Projection {
 
   double comp_scale(double alph_a, double alph_b, double d1, double d2);
 
+  double angle_dist(double a1, double a2);
+
   int optimize(const Hill *m1, const Hill *m2, ViewParams *parms);
 
  public:

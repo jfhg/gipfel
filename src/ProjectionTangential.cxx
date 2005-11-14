@@ -76,6 +76,27 @@ ProjectionTangential::comp_params(const Hill *m1, const Hill *m2, ViewParams *pa
   }
 }
 
+double 
+ProjectionTangential::angle_dist(double a1, double a2) {
+  double ret;
+
+  a1 = fmod(a1, 2.0 * pi_d); 
+  if (a1 < 0.0) {
+    a1 = a1 + 2.0 * pi_d;
+  }
+  a2 = fmod(a2, 2.0 * pi_d); 
+  if (a2 < 0.0) {
+    a2 = a2 + 2.0 * pi_d;
+  }
+
+  ret = fabs(a1 - a2);
+  if (ret > pi_d) {
+    ret = 2.0 * pi_d - ret;
+  } 
+
+  return ret;
+}
+
 int
 ProjectionTangential::optimize(const Hill *m1, const Hill *m2, ViewParams *parms) {
   int i;
@@ -118,10 +139,10 @@ ProjectionTangential::optimize(const Hill *m1, const Hill *m2, ViewParams *parms
 
   // atan(tan_dir_view) is not the only possible solution.
   // Choose the one which is close to m1->alph.
-  if (fabs(parms->a_center - m1->alph) > pi_d/2.0) {
+  if (angle_dist(parms->a_center, m1->alph) > pi_d/2.0) {
    parms->a_center = parms->a_center + pi_d;
   }
-  
+
   parms->scale = n_scale;
 
   // use the point with greater distance from center for tilt computation 
