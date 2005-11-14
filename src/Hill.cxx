@@ -41,6 +41,22 @@ Hill::Hill(const char *n, double p, double l, double h) {
   flags = 0;
 }
 
+Hill::Hill(const Hill& h) {
+  name = strdup(h.name);
+  phi = h.phi;
+  lam = h.lam;
+  height = h.height;
+  alph = h.alph;
+  a_view = h.a_view;
+  a_view = h.a_view;
+  dist = h.dist;
+  x = h.x;
+  y = h.y;
+  label_x = h.label_x;
+  label_y = h.label_y;
+  flags = h.flags;
+}
+
 Hill::Hill(int x_tmp, int y_tmp) {
   name = "";
   phi = 0.0;

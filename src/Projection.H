@@ -39,6 +39,6 @@ class Projection {
 
   virtual void set_coordinates(Hill *m, const ViewParams *parms);
   
-  virtual int comp_params(Hill *m1, Hill *m2, ViewParams *parms);
+  virtual int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
 };
 #endif

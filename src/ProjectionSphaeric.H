@@ -26,14 +26,14 @@
 class ProjectionSphaeric : public Projection {
  private:
 
-  double comp_scale(Hill *m1, Hill *m2, double d_m1_m2_2);
-  double comp_dir_view(Hill *m1, Hill *m2, double d_m1_2, double d_m2_2, double scale, double sign3);
-  double comp_nick_view(Hill *m1, Hill *m2, double d_m1_2, double scale, double dir_view);
-  double comp_tilt_view(Hill *m, double scale, double dir_view, double nick_view);
+  double comp_scale(const Hill *m1, const Hill *m2, double d_m1_m2_2);
+  double comp_dir_view(const Hill *m1, const Hill *m2, double d_m1_2, double d_m2_2, double scale, double sign3);
+  double comp_nick_view(const Hill *m1, const Hill *m2, double d_m1_2, double scale, double dir_view, double sign1);
+  double comp_tilt_view(const Hill *m, double scale, double dir_view, double nick_view);
 
  public:
   void set_coordinates(Hill *m, const ViewParams *parms);
   
-  int comp_params(Hill *m1, Hill *m2, ViewParams *parms);
+  int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
 };
 #endif

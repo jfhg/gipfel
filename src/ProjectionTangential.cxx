@@ -44,8 +44,8 @@ comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
 	  double x, double y, double pi_d);
 
 int
-ProjectionTangential::comp_params(Hill *m1, Hill *m2, ViewParams *parms) {
-  Hill *tmp;
+ProjectionTangential::comp_params(const Hill *m1, const Hill *m2, ViewParams *parms) {
+  const Hill *tmp;
   double a_center_tmp, scale_tmp, a_nick_tmp;
 
   scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
@@ -77,7 +77,7 @@ ProjectionTangential::comp_params(Hill *m1, Hill *m2, ViewParams *parms) {
 }
 
 int
-ProjectionTangential::optimize(Hill *m1, Hill *m2, ViewParams *parms) {
+ProjectionTangential::optimize(const Hill *m1, const Hill *m2, ViewParams *parms) {
   int i;
   double tan_nick_view, tan_dir_view, n_scale;
   double tan_nick_m1, tan_dir_m1;

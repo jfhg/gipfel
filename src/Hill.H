@@ -49,6 +49,8 @@ class Hill {
  
   Hill(const char *n, double p, double l, double h);
 
+  Hill(const Hill& h);
+
   Hill(int x_tmp, int y_tmp);
 
   ~Hill();  

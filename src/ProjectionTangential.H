@@ -31,11 +31,11 @@ class ProjectionTangential : public Projection {
 
   double comp_scale(double alph_a, double alph_b, double d1, double d2);
 
-  int optimize(Hill *m1, Hill *m2, ViewParams *parms);
+  int optimize(const Hill *m1, const Hill *m2, ViewParams *parms);
 
  public:
   void set_coordinates(Hill *m, const ViewParams *parms);
   
-  int comp_params(Hill *m1, Hill *m2, ViewParams *parms);
+  int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
 };
 #endif
