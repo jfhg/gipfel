@@ -5,7 +5,7 @@ gipfel-0.1.2
  - Fix bugs for "Normal Projection" and "Panoramic Projection" mode.
    Panorama mode now works with the great view from Mount Everest by
    Roddy Mackenzie (google for mackenzie everest panorama).
- - Add variable width display of GPS tracks.
+ - Add variable width display of GPS tracks (depending on the distance).
  - Add heuristics for hidden object detection.
  - Switch to fltk "plastic" scheme as it looks better.
 
