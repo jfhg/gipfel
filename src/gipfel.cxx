@@ -374,10 +374,9 @@ int main(int argc, char** argv) {
   if (img_file) {
     gipf->load_image(img_file);
   }
-  if (gipf->w() < 1024 && gipf->h() < 768) {
-    view_win->size(gipf->w(), gipf->h());
-    scroll->size(gipf->w(), gipf->h());
-  }
+
+  view_win->size(gipf->w(), gipf->h());
+  scroll->size(gipf->w(), gipf->h());
 
   gipf->load_data(data_file);
   scroll->end();  
