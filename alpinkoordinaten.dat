@@ -3,6 +3,18 @@
 # and included in the gipfel tarball with the kind permission of
 # www.alpin-koordinaten.de
 #
+HNKST1,1. Hinkelstein,,50.69708,6.46826,260
+KaDr1,1. Kardrittel,weiter n. S,47.29074,10.13071,1852
+MWKAJ1,1st Mweka Junction,,-3.11842,37.37322,-9999
+ACON07,1st view of Aconcagua,,-32.63722,69.83825,-9999
+2EICHN,2 Eichen,Naturdenkmal,50.27069,6.67408,-9999
+KaDr2,2. Kardrittel,weiter n. WSW,47.28801,10.13147,2034
+MWKAJ2,2nd Mweka Junction,,-3.12131,37.37185,-9999
+3ZINNE,3 Zinnen (Frankenjura),,49.67196,11.29128,460.9
+3ZINNH,3-Zinnen-Hütte,3-Zinnen-Hütte,46.63682,12.31039,2413
+HINKST3,3. Hinkelstein,,50.69769,6.46887,244
+3RDCLT,3rd class to top,3rd class to top,36.57849,-118.29431,-9999
+HINKST4,4. Hinkelstein,,50.69806,6.46956,250
 ANHTDF,A Neuve Hütte (Dufour),SAC Hütte,45.94882,7.06686,2735
 ARBIWK,Aarbiwak,Biwak,46.55547,8.1522,2731
 AARLEY,Aarley,Gipfel; Basaltfelsen mit Dankeskreuz oberhalb von Üderdorf in 557 m Höhe mit herrlichen Blick herab auf den Ort; in der Winterzeit ist das Kreuz beleuchtet.,50.15832,6.79386,557
@@ -13,6 +25,7 @@ ABENDLT,Abendleite,,49.8024,11.30244,331.9
 ABNFLU,Äbeni Flue,,46.50797,7.95353,3962
 ABI,Abi,,27.95833,86.79278,6081
 ABSAM,Absam,,47.29579,11.50155,632
+RELCHA,Abseilstelle Aiguille du Chardonnet,Erste Abseilstelle auf dem Normalweg / Abstiegsweg von der Aiguille du Chardonnet. 2 weitere Relais folgen. Höhenangabe ungefähr.,45.96856,6.99825,3650
 AzGha,Abz. große Halde,Lichtung n. N folgen,47.31484,10.09918,1408
 AbStzw,Abzw. Starzelweg,zum Starzelhaus,47.31082,10.12048,1239
 AbWb,Abzw. Wbg.,weiter a. Derrenbach,47.30508,10.10799,1358
@@ -22,6 +35,7 @@ AZGFT2,Abzweig  Guffert Südkante 2,,47.5398,11.79157,1712.1
 ABZBDW,Abzweig Bernadeinweg,hier wird der Fahrweg verlassen/erreicht,47.44719,11.06381,1638
 ABRICO,Abzweig Bricola,möglicher Abzweig nach Bricola (ohne Wegweiser) von der asphaltierten Straße (Fahrverbot) oberhalb des Parkplatzes von Ferpècle,46.05966,7.55033,1890
 ABCOLORES,Abzweig Cascada de Colores,,28.70769,-17.88044,484
+ABZWG,Abzweig Combin de Corbassiere,Über Schutt auf den höhergelegen Gletscherarm. Rechts rauscht ein Bach mit Schmelzwasser (je nach Temperatur),45.97252,7.29543,2941
 ABZWEUGST,Abzweig Eugenienstein,Abzweig vom Hauptwanderweg in Richtung Eugenienstein (Westen),50.70305,6.44894,252
 GRUNWG,Abzweig Europaweg-Gruengartenweg,Wegweiser (ins Tal Richtung Wildi),46.09681,7.80137,2267
 EUKINH,Abzweig Europaweg-Kinhütte,Wegweiser,46.09123,7.79985,2286
@@ -29,12 +43,14 @@ FUEGOWG,Abzweig Fuego,Weggabelung,28.52126,-17.83571,1218
 ABGALT,Abzweig Galtür,Wegweiser; hier ab von der Fahrstraße zwischen Galtür und Jamtalhütte; um auf schönem Weg Richtung Galtür zu gehen,46.89503,10.17448,2022
 ABGRKI,Abzweig Gruengartenweg-Kinhüttenweg,,46.09344,7.79472,2051
 AZGFT1,Abzweig Guffert Südkante 1,,47.52717,11.79154,1196.9
+AZWHLFLS,Abzweig Hohler Fels,Mit Beschilderung nach Arzlohe und Förrenbach,49.48769,11.49902,405.1
 TP06,Abzweig Lager 5,Tupungato - Abzweig zum Lager 5,-33.31675,-69.79267,4835.3
 ABLESR,Abzweig Les Rosses,bei einem Warnschild wegen Hochwasser-Gefahr,46.05855,7.55446,1985
 PFADB,Abzweig Pfad / Forststr.,Hier zweigt der Pfad zur Weitalpspitze vom Forstweg ab.,47.53844,10.88011,1191
 ABRCSP,Abzweig Richtung Königsspitze,unterhalb Rifugio Casati bzw. Langenferner Joch,46.46163,10.59736,3022
 WGRIEDERST,Abzweig Riederstein,,47.70416,11.79331,1187
 ABZSTB,Abzweig Stuibensee,von hier südwärts ansteigend,47.43443,11.07628,1522
+P2311,Abzweig zum Hochgall,,46.92412,12.11517,2322
 QSOVGL,Abzweig zur Quelle der Sovaglia,,45.93394,9.00323,681
 ABZWGN,Abzweigung,,47.35444,9.895,1026
 ABZWGN,Abzweigung,,47.35528,9.89583,1224
@@ -60,6 +76,7 @@ ADLSFL,Adelsfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/moun
 ADLRPS,Adlerpass,zwischen Strahlhorn und Rimpfischhorn,46.01827,7.88768,3790
 ADLRSR,Adlersruhe,Standort der Erzherzog-Johann-Hütte,47.07028,12.70194,3454
 ADMNHS,Admonter Haus,,47.63177,14.49141,1725
+ADMNHS,Admonter Haus,Hütte der ÖAV Sekt. Admont,47.63167,14.49139,1725
 ADMHS,Admonter Haus,Aufstieg von Hall/Kirche oder Buchauer Sattel,47.63178,14.4914,1725
 ADMONTERH,Admonter Haus,,47.63185,14.4917,1723
 RCHNST,Admonter Reichenstein,,47.54932,14.54353,2222.9
@@ -83,6 +100,7 @@ AGLDCB,Aiguille de la Cabane,,46.00657,7.06801,2999
 AGLDLT,Aiguille de la Tsa,,46.02154,7.52218,3668
 AGLDVR,Aiguille de la Verappe,,45.9828,7.03359,3519
 AGRNMN,Aiguille des Grands Montets,,45.94815,6.96021,3297
+AIGCHA,Aiguille du Chardonnet,Höhe gemäss IGN Karte.,45.96883,7.00139,3824
 AGCHRD,Aiguille du Chardonnet,,45.96882,7.00144,3824
 AGLJVL,Aiguille Javelle,,45.98526,7.04209,3400
 APRTSC,Aiguille Purtscheller,,45.99144,7.01236,3475
@@ -93,6 +111,7 @@ AGLSDT,Aiguilles du Tour,,45.9944,7.01014,3540
 AGLRGA,Aiguilles Rouges d'Arolla,,46.05549,7.43347,3646
 AIPLHU,Aiplhütte,Jagdhütte,47.6177,14.25376,-9999
 AIPLSP,Aiplspitz,Aiplspitz Gipfelkreuz,47.67318,11.92368,1758
+LGRPLA,Ajuani,,-16.18325,-68.32549,4617
 ALLGHT,Al Legn Hütte,Private Hütte,46.12222,8.66598,1804
 ALBGHT,Albagno Hütte,Private Hütte,46.22262,8.95509,1870
 ALBKL7,Albaumer Klippen,hohe Felsgruppe,51.05939,8.12965,535
@@ -156,6 +175,7 @@ BOEDELE,Alpenhotel Bödele,,47.42222,9.80889,1148
 ALPWHS,Alpenrose-Wirtshaus,,47.41997,12.23765,1534
 ALPNHT,Alpenrosehütte,Hütte der DAV Sekt. Schorndorf,47.41998,12.23765,1534
 ALPNRS,Alpenrösli,Bergrestaurant,46.99825,9.85786,1775
+AVWAND,Alpenvereinswand,,50.02701,11.10906,458.1
 ALPHOF,Alphof,Gasthof in Mellau-Roßstelle,47.32889,9.88528,1390
 ALPHBL,Alphubel,,46.06278,7.86405,4206
 ALPHBL,Alphubel,,46.06287,7.86405,4206
@@ -170,6 +190,7 @@ ALPSTC,Alpistock,,46.5948,8.28192,2890
 ALPJA,Alpja-Alm, ,46.16031,7.83128,2102.5
 ALPKOPF,Alpkopf,,47.32906,9.77514,1788
 ALPLHS,Alplhaus,,47.34197,11.01737,1506
+ALPRECHTAL,Alprechtalm,,47.01881,12.10031,2017.8
 ZUNGRT,Alpspitz N-Grat,,47.43697,11.04852,2096.7
 ALPSPBAHN,Alpspitzbahn Bergstation,,47.43912,11.05101,2026.3
 ALPSP,Alpspitze,,47.42952,11.04777,2627.3
@@ -182,12 +203,15 @@ MUSTHT,Alte Musterstein-Hütte,jetzt Privathütte,47.41197,11.14417,1992
 ALTELS,Altels,,46.42891,7.67841,3629
 AHT"S",Altels-Hütte "Sunnbühl",Selbstversorgerhütte der SAC-Sektion Altels,46.45614,7.64787,1940
 ALTNHR,Altenahr (Ortskern),Abzweigung B 267 / B 257 (Aufstieg zur Burg Are),50.51703,6.99214,171
+ALTFRTZ,Alter Fritz,,49.49047,11.58677,349
 KRW,Altes Kraftwerk im Reintal,,47.44543,11.11037,-9999
 ALTFLS,Altfels,Felsformation; Naturdenkmal,49.56127,6.57201,310
 ALTKNG,Altkönig,Wunderschöne Aussicht auf das Rhein-Main Gebiet. Erreichbar per Mountain Bike oder zu Fuß,50.21251,8.48152,798
+ALTWYB,Altwybersummer,Südrouten am Hagelstock (2181 m) ,46.91524,8.68123,1930
 ALVIER,Alvier,Bergrestaurant,47.1096,9.4143,2345
 ALZSHT,Alzasca Hütte,SAC Hütte,46.27129,8.58929,1734
 Bgr,am Bachgraben,weiter n. E,47.29654,10.12231,1420
+GLRAND,Am Gletscherrand durch Felsen,Am Gletscherrand über den Fels höhersteigen,45.96916,7.28506,3246.1
 AMDBLM,Ama Dablam,,27.86167,86.86389,6812
 AMBGHT,Amberger Hütte,,47.04234,11.07396,2135
 AMBGHT,Amberger Hütte,Hütter der DAV Sekt.Amberg,47.04235,11.07397,2135
@@ -204,6 +228,7 @@ AMPFST,Ampferstein,,47.17445,11.31324,2556
 AMSTHT,Amstettner Hütte,,47.88641,14.77068,1005
 AMSTHT,Amstettner Hütte,,47.88642,14.77067,1005
 ANDBUCH,Andelsbuch,,47.41331,9.89622,613
+ANDERLD,Anderland,Von Doos am Therapiezentrum vorbei ins Aufseßtal ca. 15 Min laufen. Das Massiv steht oberhalb einer Linkskurve 10 m rechts des Weges. Darunter befindet sich eine Bank,49.8163,11.29074,316.1
 ANEBOS,Anebos,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1938,7.9826,482
 ANENHT,Anenhütte,Private Hütte,46.45445,7.91163,2355
 ANGLLM,Angelalm,,47.67287,11.94632,1299
@@ -245,6 +270,7 @@ ASCHHT,Anton-Schosser-Hütte,ÖAV Hütte,47.90783,14.40482,1157
 ANTRPA,Antronapass,,46.03752,8.02027,2838
 ANZHTB,Anzana Hütte (Gde. Brusio),Private Hütte,46.23073,10.07505,2050
 VLVST1,AP Valvestino,Ausgangspunkt Für Tour Valvestino (Mose Bike guide),45.74583,10.59054,699.2
+APCHPS,Apachela Pass,,-16.21301,-68.27059,4911
 ARKMTS,Arakam Tse,,27.92,86.7675,6423
 ARNKCH,Araniko Chuli,,29.17639,83.65694,6034
 ARBNBW,Arbenbiwak,,46.03133,7.66517,3224
@@ -253,8 +279,10 @@ ARDECN,Arete des Ecandies,,46.01529,7.03942,2870
 ARGNHT,Argentière Hütte,CAF-Hütte,45.94635,7.00472,2771
 ARICO,Arico,,28.19014,-16.52314,787.2
 ARICO P,Arico Parkplatz,,28.18752,-16.52059,819.6
+ARNTZL,Arnitzalm,private Almhütte,46.96655,12.49995,1848
 ARSPGR,Arnspitze; Große,,47.39733,11.22231,2196
 ARNSHT,Arnspitzhütte,,47.39561,11.22633,1930
+ARNST,Arnsteingrat ?,Nach Frankenjura.com recht schwierig zu finden. Wie wahr !  Kann jemand bestätigen; ob das auch der Arnsteingrat ist ?,50.04877,11.20387,433.1
 ARPLST,Arpelistock,,46.34391,7.31537,3035
 ARPETT,Arpette,,46.02913,7.08814,1640
 ARGLCC,Arrrow Glacier Camp,,-3.07239,37.33628,4868
@@ -285,6 +313,7 @@ AWEGG4,auf Weg ins Eggerofetälchen,,46.37689,8.29903,2490
 AWEGG5,auf Weg ins Eggerofetälchen,,46.3779,8.30203,2542
 AWEGG7,auf Weg zur Eggerscharte,,46.37927,8.3097,2682
 AUFGHACKT,Aufghackt,,47.69247,13.99975,-9999
+AUFSTLSW,Aufseßtal Südwand,Von Doos auf dem Wanderweg das Aufseßtal (gelbkreis) laufen. Nach etwas 15 min steht rechts des Weges das freistehende Anderland. 200 m später (links kleine Blöcke) zweigt rechts ein Pfad ab; dern nach wenigen Metern an der Wand endet.,49.81632,11.28898,314.9
 AGSBRB,Augsburger Biwak,,47.16704,10.44785,2608
 AGSBRB,Augsburger Biwak,Biwak Schachter der DAV Sekt. Augsburg am Augsburger Höhenweg,47.16705,10.44785,2608
 AGSBHT,Augsburger Hütte,,47.16645,10.4936,2300
@@ -349,7 +378,8 @@ BAIEN,Baien,,47.38056,9.8875,631
 BRKRSP,Baierkarspitze,,47.50244,11.38614,1909
 BALALB,Baita Alpe Albion,einfache immer zugängliche Hütte; 4 -5 Lager,46.18518,9.13955,1890
 BITBSG,Baita Segala,,45.84023,10.77471,1268.8
-BLDRSC,Balderschwang,,47.46639,10.10444,1044
+BLDRSC,Balderschwang,,47.46552,-175.88949,1044
+BLDRSC,Balderschwanger Alpe,bei Balderschwang,47.47299,-175.88312,1370
 BLSMHT,Balismatt Hütte,Private Hütte,46.96301,8.18987,-9999
 BALUSP,Ballunspitze,,46.9554,10.13524,2671
 BLSPKR,Ballunspitze,Gipfelkreuz; welches etwas vorgelagert steht und über eine luftige Kletterstelle (II) zu erreichen ist,46.95541,10.13534,2671
@@ -359,9 +389,11 @@ BLMHRN,Balmhorn,Balmhorn höchster Punkt,46.42493,7.69349,3699.1
 BLMHRN,Balmhorn Gipfelkreuz,Balmhorn Gipfelkreuz,46.42475,7.69357,3689.9
 BLHRHT,Balmhorn Hütte,SAC Hütte,46.45111,7.6897,1995
 BLHRHT,Balmhornhütte,,46.45093,7.68944,1956
+BLHRHT,Balmhornhütte,Hütte der SAC Sekt. Atels,46.45129,7.68957,1956
 BLTSCH,Baltschiderlicka,,46.40497,7.9112,3219
 BLTSHT,Baltschieder Hütte,SAC Hütte,46.39498,7.88979,2783
 BLTSCH,Baltschiederklause,,46.39489,7.88966,2783
+BLTSCH,Baltschiederklause,Hütte der SAC Sekt. Blümlisalp am Südhanbg des Jägerhorns,46.39507,7.88979,2783
 BMBGHT,Bamberger Hütte (neue),,47.30878,12.1503,1756
 PDCBANDANF,Band Anfang (Pizzo della Croce),Beginn des Grasbandes; das eine Umgehung des steilen Gipfelaufbaus zulässt. Dadurch ist eine Überschreitung des Gipfels von P. 1662 kommend möglich.,46.21408,8.6439,1763
 PDCBANDEND,Band Ende (Pizzo della Croce),Ende des Grasbandes; das eine Umgehung des steilen Gipfelaufbaus zulässt. Dadurch ist eine Überschreitung des Gipfels von P. 1662 kommend möglich.,46.21414,8.64263,1766
@@ -381,12 +413,14 @@ BAERENK,Bärenkopf,,47.30047,10.13603,2080
 BRNKPF,Bärenkopf,,47.41458,11.71194,1991
 BAERENKOPF,Bärenkopf,,47.64353,14.11692,1404
 BRNGPF,Bärenkopf (Gipfelkreuz),Gipfelkreuz Bärenkopf,47.41488,11.71239,1991
+BAERENLUEG,Bärenluegscharte,,46.96268,12.12334,2859.9
 BRNTWR,Bärentalwächter,,50.05279,11.26121,394.1
 BRGLST,Bärglistock,,46.61492,8.14071,3656
 Bgthu,Bärgunthütte,Forstweg weiter,47.29293,10.11312,1391
 BARIONE,Barione,,46.20114,8.63441,821
 BRMRHT,Barmer Hütte,,46.91706,12.16895,2610
 BRMRHT,Barmer Hütte,Hütte der DAV Sekt. Barmen,46.91707,12.16895,2610
+BRMRHT,Barmer Hütte,Hütte der DAV Sekt. Barmen,46.91694,12.16889,2591
 BAERNE,Bärnegg,,47.63722,14.21714,1930
 BRONHT,Barone Hütte,Private Hütte,46.39569,8.74875,2172
 MACH06,Barranco Camp,,-3.09567,37.32962,3983
@@ -466,6 +500,7 @@ HOHENHEWEN,Berg und Burg Hohenhewen,idyllisch gelegene Burgruine auf einem ehema
 BG&HSM,Berg- & Skihaus Mattwald,Selbstversorgerhütte des Skiclub Clariden/Lindthal,46.95266,8.99475,1582
 BG&HSE,Berg- & Skihaus Schabell-Empächli,Selbstversorgerhütte des Ski Club Elm,46.92115,9.15405,1480
 BGHTER,Berg- und Skihütte Erbs (Erbsalp),Hütte des Ski Club Elm,46.90869,9.11426,1696
+BGHSMG,Bergasthaus Meglisalp,privates Berggasthaus,47.25523,9.38507,1520
 BERGBLUMEN,Bergblumengarten,,47.76072,12.86921,737.9
 BRGKGL,Berger Kogel,,46.99457,12.38217,2656
 BGRWCK,Berger Wacken,Ausgedehntes Felsmassiv inmitten eines märchenhaften Eichenwaldes. Der Quarzitwacken ist einer der schönsten seiner Art im Hunsrück. Vor rund 200 Jahren soll hier Schinderhannes in einer seitlichen Nischenhöhle genächtigt haben.  Das Teilstück "Langer Wacken" ist rd. 200 m lang; bis zu 15 m hoch und 20 m breit. Die Entstehung  der  Wacken geht zurück bis in das Zeitalter des Perm ( vor 250 Millionen Jahren). In der Erdkruste bildeten sich mächtige Spalten. Bei der Abkühlung  eingedrungener heißer kieselsäurereicher Lösungen entstanden Quarzgänge Diese  boten  der  späteren Abtragung mehr Widerstand als die umgebenden weicheren sandigen Tonschiefer. Dadurch bildete sich eine beeindruckende Felsklippe. Auf  der  Nordwestseite befindet sich  ein  fünf Meter tiefer Hohlraum; die Schinderhanneshöhle. Hier soll ein Lagerplatz des Räuberhauptmann gewesen sein. (http://www.berglicht.de/index.html),49.7757,6.96347,467
@@ -476,9 +511,11 @@ TOLLA,Bergerie de Tolla,,42.17179,9.09771,1011
 TRAMIZZ,Bergerie de Tramizzole,,42.24696,8.99473,1427.1
 BERTULA,Bergerie de Tula,,42.32586,8.86753,-9999
 VACCAGH,Bergerie de Vaccag ia,,42.23694,8.97408,1620.9
+BGRSHT,Bergerseehütte,private Hütte,46.90538,12.36145,2182
 BGFRHS,Bergfrieden; Klubhaus,Private Hütte,46.77094,8.28179,-9999
 BGFRHT,Bergfriedhütte,,46.89004,13.4665,1800
 BGFRHT,Bergfriedhütte,ÖAV Hütte,46.89003,13.4665,1800
+BGGSMS,Berggastaus Mesmer,privates Berggasthaus,47.26389,9.375,1613
 BGGHSK,Berggasthaus Biel-Kinzig,,46.89579,8.70828,1649
 BGHSBR,Berggasthaus Brunnialp-Beizli,,46.82871,8.7584,1402
 BGHSFR,Berggasthaus Fronalpstock,,47.07331,9.09314,1330
@@ -486,12 +523,15 @@ BGHSGR,Berggasthaus Gerlosstein,Privates Berggasthaus an der Gerlossteinwand,47.
 BGGHSH,Berggasthaus Haggenegg,,47.05161,8.68339,1414
 BGHSBG,Berggasthaus Kronberg,Bergrestaurant,47.29149,9.3283,1663
 BGGHSL,Berggasthaus Lehmen,,47.29823,9.37662,968
+BGGHSM,Berggasthaus Mesmer,privates Berggasthaus,47.25884,9.36828,1613
 BGGHSM,Berggasthaus Murgsee,Bergrestaurant,47.03896,9.15716,1825
 BGHSHT,Berggasthaus Murgsee (Fischerhütte),privates Berghaus,47.03896,9.15729,1817
 BGHSMS,Berggasthaus Musenalp,,46.88178,8.54593,1486
 BGGHSR,Berggasthaus Ratzi,,46.88545,8.73237,1511
 BGHSSC,Berggasthaus Scheidegg,privat,47.29948,9.35361,1352
 BGHSSN,Berggasthaus Sennisalp,Bergrestaurant,47.11905,9.37155,1397
+BGHSST,Berggasthaus Staubern,privates Berggastaus,47.26,9.45304,1751
+BGGHST,Berggasthaus Tierwies,privates Berggasthaus,47.24859,9.32972,2085
 BGHSZR,Berggasthaus Zervreila,Bergrestaurant,46.57785,9.12295,1840
 BGHSWL,Berghaus Äscher-Wildkirchli,Bergrestaurant; auch Aescher-Wildkirchli,47.28334,9.41425,1455
 BGHSBN,Berghaus Bannalpsee,privat,46.86989,8.42802,1598
@@ -502,6 +542,7 @@ BGHSEG,Berghaus Eggli,Private Hütte,47.32096,9.46553,1192
 BGHSEN,Berghaus Engstlenalp,privates Berghaus,46.77622,8.34472,1834
 BGHSFL,Berghaus Flue (Fluhalp),Bergrestaurant,46.01277,7.81098,2618
 BGHSGG,Berghaus Gfellalp (Gfällalp),privat,46.43979,7.71931,1850
+BGHSGR,Berghaus Griesalp,privates Berghaus,46.54718,7.76133,1407
 BGHSHM,Berghaus Heimeli,Bergrestaurant,46.81552,9.76799,1831
 BGHSHM,Berghaus Heimelig,privates Berghaus auf der Bannalp östl. der Bergstation Oberrickenbach- Chrüzhütte,46.87159,8.44012,1720
 BGHSHM,Berghaus Heimischgarten,privates Berghaus am Gsponser Höhenweg,46.16035,7.93808,2100
@@ -514,6 +555,7 @@ BGHSOB,Berghaus Oberaar,privat,46.54353,8.27387,2338
 BGHSHT,Berghaus Ochsenhütte,Private Hütte,47.1638,9.24217,1677
 BGHSPR,Berghaus Pirigen,Bergrestaurant,46.83237,9.70491,1773
 BGHSKS,Berghaus Piz Kesch,Privates Berghaus,46.64584,9.8275,1822
+BGHSSC,Berghaus Schwarzwaldalp,Privates Berghaus,46.68068,8.14051,1454
 BGHSST,Berghaus Stafelalp,Bergrestaurant,46.76957,9.78439,1894
 BGHSSV,Berghaus Suvretta,Privates Berghaus,46.55899,9.84467,1815
 BGHSUR,Berghaus Urnerstafel,privates Berggasthaus auf der Bannalp,46.86887,8.44283,1690
@@ -529,6 +571,7 @@ BGHTLN,Berghotel Langis,Bergrestaurant,46.89325,8.12624,-9999
 BGHTPP,Berghotel Piz Platta,Privates Berghotel,46.52175,9.6554,1977
 BGSCBG,Berghotel Schönhalden-Flumserberg,,47.06259,9.33106,1484
 BGBHRT,Bergkegel mit Burgruine Hartelstein,Naturdenkmal,50.23438,6.53174,552
+BERGLER,Berglerturm,,49.81597,11.29346,376.1
 BGGSHS,Bergli; Gasthaus,Bergrestaurant,46.909,8.97921,-9999
 BGLIHT,Berglihütte,SAC Hütte,46.56675,8.02061,3299
 BGRABG,Bergrestaurant Alpenrösli-Mullerenberg,,47.08613,9.1017,1189
@@ -540,6 +583,7 @@ BRGSHT,Bergseehütte,SAC-Hütte,46.65735,8.48476,2370
 BGSSCH,Bergseeschijen,,46.6637,8.48576,2815
 BERGHOESS,Bergstation Hössbahn,,47.66617,14.17381,1853
 BGSTLB,Bergstation Laberbahn,Wirtshaus (lecker und preiswert),47.58612,11.10341,1670
+BGSRXS,Bergstation Raxseilban,,47.71723,15.77748,1547
 RTMBST,Bergstation Rotmoos,Bergstation des Rotmoos-Sessellifts im Hochzeiger Skigebiet,47.14858,10.79497,2450
 BSTSALEI,Bergstation Saléi,Bergstation der neuen (2002) Seilbahn von Vergeletto; nähe Saléi Vecchi,46.22173,8.56637,1791
 BGSSTF,Bergstation Steffisalpe,Bergstation Steffisalpebahn,47.2558,10.15914,1906
@@ -552,14 +596,17 @@ BRNDLM,Berndlalm,,47.18544,12.26041,1500
 BRNDLM,Berndlalm,Private Hütte im Obersulzbachtal,47.18545,12.26042,1500
 BRNDHT,Berndorfer Hütte,ÖAV Sekt. Gebirgsverein,47.89495,16.00872,967
 BRNDHT,Berndorfer Hütte,,47.89494,16.00872,967
+BRNDHT,Berndorfer Hütte,Hütte der ÖAV Sekt. Gebigsverein,47.89472,16.00861,967
 BRNHHT,Bernhard-Fest-Hütte,,47.06629,14.13686,1980
 BRNHHT,Bernhard-Fest-Hütte,Hütte der ÖAV Sekt. Murau,47.06628,14.13687,1980
 BRNOSP,Bernina Ospizio,Bergrestaurant,46.41113,10.02196,2309
 BRTAHT,Bertahütte,,46.51814,13.96081,1567
 BRTAHT,Bertahütte,ÖAV Hütte am Südalpenweg 03,46.51815,13.96082,1567
+BRTAHT,Bertahütte,Hütte der ÖAV Sekt. Villach,46.51806,13.96056,1567
 BRTIHT,Berti Hütte,,46.63444,12.31583,1950
 BERTL,Bertl,,47.82004,14.16861,-9999
 BESSO,Besso,,46.07767,7.65877,3668
+BGLCORBASS,Betreten des Glacier de Corbassiere,Übergang auf den Glacier de Corbassiere. Undeutliche Wegspuren.,45.99167,7.30478,2646
 GLAARG,Betreten Glacier Argentiere,,45.95247,6.98671,-9999
 BETSTEIN,Betstein,,47.60244,14.18478,1836
 BTTWG,Bettelwurf; Großer,,47.34431,11.51978,2725
@@ -616,6 +663,8 @@ BRKLFL,Birkelfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mou
 BIRKKARSP,Birkkarspitze,,47.41128,11.43756,2748
 BRKSP,Birkkarspitze,,47.41128,11.43769,2749
 BIRNHR,Birnhorn,,47.47492,12.73377,2634
+BRNHTT,Birnlückenhütte (Rifugio  Brigata Tridentina),Hütte des CAI Bruneck,47.08056,12.20639,2441
+BRNHTT,Birnlückenhütte (Rifugio Brigata Tridentina),Hütte des CAI Bruneck,47.0799,12.20643,2441
 BSCHOF,Bischof,,47.54047,11.17636,2033
 BSCHFS,Bischofskappe,ein Fels in der Form einer Bischofsmütze,49.87655,6.28862,-9999
 BSCHFS,Bischofsmütze,Naturdenkmal,49.91954,7.12166,-9999
@@ -756,10 +805,12 @@ BRDRHT,Bordierhütte,,46.14445,7.84988,2901.4
 BRGNHT,Borgna Hütte,Private Hütte,46.2228,8.92496,1912
 BRTLHT,Bortelhütten,Private Hütte,46.29403,8.09361,2113
 BSCKHT,Böseckhütte,,46.98599,13.10965,2594
+BSCKHT,Böseckhütte,Biwakschachtel; offene Notunterkunft der DAV Sekt. Hagen,46.98583,13.10944,2594
 BOESEN,Bösenbühel,,47.67941,14.03719,2277
 BOESAT,Bösenbühelsattel,,47.68104,14.02791,2104
 BOSOHT,Bosio Hütte,Private Hütte,46.23731,9.77726,2086
 BSRCHT,Bosruckhütte,,47.63932,14.36606,1036
+BSRCHT,Bosruckhütte,Hütte der ÖAV Sekt. Spital/Pyhrn,47.63917,14.36583,1036
 BOSRCK,Bosruckhütte,Am besten über die Vogelgesang-Klamm; problemlos,47.63932,14.3656,1036
 BOSRUCKH,Bosruckhütte,,47.6399,14.36702,1034
 BLDRFW,Bouldern Fürther Stadwald,Im Prinzip mit dem Auto die Südwesttangente von der Innenstadt aus Richtung Langenzenn entlang fahren. Nachdem man den RMD Kanal überquert hat kommt noch eine Auffahrt und kurz drauf eine "halb offizielle" Ausfahrt mit einem weißen Schild "Bauschuttdeponie". Die raus fahren und unter der "AB-Brücke" durch; dann links die Einfahrt zur Deponie rein. Dort Auto parken und zu Fuß zuerst um den abgesperten Bereich 50m (links von der Einfahrt aus gesehen) herum und dann weiter senkrecht zur Autobahn zuerst einen Waldweg ca. 150m folgen dann weiter auf einer Wiese den Hang hinauf. Wenn die Wiese zu ende ist (Waldrand) siehst man einen schmalen Trampelpfad der "etwas" steiler in den Wald rein+hoch geht. Den hochgehen (ca.20-30m) und oben den Wanderweg 10-20m nach rechts folgen. Dann die erste Abzweigung nach links. Dort ist eine Holzbank und auch schon die ersten Blöcke.   ,49.47371,10.91408,356
@@ -776,6 +827,7 @@ BRSCHT,Brasca Hütte,Private Hütte,46.26728,9.53357,1304
 BASP,Braunarlspitze,,47.22944,10.06433,2649
 BRNRHT,Braunauer Hütte,,47.73363,13.34682,1210
 BRNRHT,Braunauer Hütte,ÖAV Hütte,47.73362,13.34682,1210
+BRBGHT,Braunberghütte,am internationalen Weitwanderweg,48.48018,14.58438,902
 BRUNCK,Brauneck,,47.66461,11.52511,1555
 BRNGHS,Brauneck-Gipfelhaus,,47.66391,11.52476,1540
 BRNSHT,Braunschweiger Hütte,,46.9353,10.90923,2759
@@ -812,6 +864,7 @@ BRNDHT,Brendlhütte,,46.76697,15.07372,1566
 BRNDHT,Brendlhütte,ÖAV Hütte der Sekt. Graz,46.76698,15.07372,1566
 BREKL,Brennkogel,,47.09767,12.82031,3018
 BRSLHT,Breslauer Hütte,,46.86817,10.87938,2844
+BRETTERSCH,Bretterscharte,Die Höhe der Bretterscharte ist mit 2452m in vielen Karten falsch angegeben! Die tatsächliche Höhe ist ca. 2555m. Laut Höhenmesser (Thommen) und GPSmap60C mit 8 Sats im Blick.,46.98741,12.08459,2555.7
 BRTRSP,Bretterspitze,Gipfelkreuz der Bretterspitze,47.33294,10.46201,2607.9
 BRICLA,Bricola,Alp und geschlossene Unterkunft (Hotel),46.04711,7.56583,2415
 ACON06,Bridge,,-32.74461,69.809,2900
@@ -820,16 +873,22 @@ BRSNHS,Brisenhaus,Private Hütte,46.91498,8.46405,1753
 BRSTNH,Bristenhüttli,private Selbstversorgerhütte,46.75084,8.68879,2140
 BRTNHT,Britanniahütte,SAC Hütte,46.06006,7.9351,3030
 BRITHT,Britanniahütte,SAC-Hütte,46.05994,7.93492,3035
-BRXNHT,Brixner Hütte,Hütte der Sekt. Brixen des Südtiroler Alpenvereins,46.91473,11.62208,2300
+BRXNHT,Brixner Hütte,Hütte der Sekt. Brixen des Südtiroler Alpenvereins,46.91473,11.62208,2307
+BRXNHT,Brixner Hütte,Hütte des AV Südtirol Sekt. Brixen,46.915,11.62194,2307
+BRXNHT,Brixner Hütte,Hütte des AV Südtrol,46.91486,11.62199,2307
 BRCHHT,Brochhütte,,46.68069,8.13895,1499
 BRKOBG,Broderkonsberg,weglos zu erreichen (wenig Aussicht),50.64154,7.28393,378.1
 BRGLHT,Brogoldone Hütte,Private Hütte,46.26252,9.06258,1910
 BRONXR,Bronx Rock Kletterhalle,Kletterhalle Bronx Rock in Wesseling (südl. Köln),50.8125,6.99192,55
+BROSINND,Brosinnadel,,49.51129,11.56155,321
 BROTFA,Brotfall,,47.70649,14.05993,2380
 BROTV,Brotfall Vorgipfel,,47.70958,14.05864,2360
 BROTFALSCH,Brotfallscharte,,47.71111,14.05736,2320
+BRCHGWD,Brüchige Wand,,49.69205,11.26172,319.1
 BRCHGR,Bruchweiler Geierstein,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1241,7.8103,309
 BRCZWC,Bruchweiler Turm (Zwicksteine),<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1151,7.7697,270
+BRUECK,Brücke,,-16.20899,-68.25161,4552
+BRUECK,Brücke,,-16.08334,-68.32094,4713
 BRUECK,Brücke,,47.51,9.76194,529
 BRUECK,Brücke,,47.46139,9.77917,618
 BRUECK,Brücke,,47.46583,9.76222,568
@@ -872,6 +931,7 @@ BRNSSP,Brunnensteinspitze,,47.40564,11.28739,2180
 BRUNNERSEE,Brunnersee,,47.63314,14.19239,-9999
 BRUNNI,Brunni,,46.62577,7.78167,1644
 BRNNHT,Brunni Hütte,SAC Hütte,46.8409,8.41071,1860
+BRNNKG,Brunnkogel,,47.82778,17.63056,1708
 BRUNNKG,Brunnkogel,,47.65272,14.01044,1891
 BRUNSTSEE,Brunnsteinersee,,47.65108,14.26747,1422
 BRNSHS,Brünnsteinhaus,,47.64492,12.09835,1360
@@ -884,6 +944,7 @@ BUCH,Buch,,47.48228,9.81881,725
 BUCHB,Buchboden,,47.24492,9.95197,910
 BCHLZF,Buchholzfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2192,7.9308,385
 BCHSTN,Buchstein,,47.63311,11.67925,1702
+BS,Buchstein,Gipfel östlich der Tegernseer Hütte,47.63308,11.6794,1701
 BGGNGG,Buggenegg,,47.46775,9.81208,938
 BGGNGG,Buggenegg,,47.46819,9.81222,938
 BHLALP,Bühla Alpe,,47.39972,9.79111,920
@@ -903,6 +964,7 @@ BRGBLC,Burgblickfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mo
 BRSTRK,Burgfels Starkenburg,Seit 1190/91 im Besitz der Grafen von Sponheim. Hauptsitz der sog. "Hinteren Grafschaft" seit 1234. Nur geringe Reste erhalten. (Dehio)  Die Burg von Starkenburg Um 350 - Eine spätrömische Wehranlage entsteht. Dies bezeugen u.a. Reste eines 4 m breiten Abschnittsgrabens an der Nordspitze; eine aus dem Fels gearbeiteter Winkel einer Felskammer; Oberflächenfunde von Keramik; Werkzeug; Münzen ("Solidus Constantius II" Trierer Prägung) Um 412 vermutlich von den Franken zerstört. 1200 Eine mittelalterliche Burg wird erstmals urkundlich erwähnt; als Starkenberg. Als ihre Erbauer werden die Grafen von Sponheim (Reichsgrafen von Spanheim) genannt. Dieser Grafenstamm; schon 1020 mit Kärnten in Verbindung gebracht; erscheint mit einem Grafen Meginhard an der Mosel (Enkirch-1125) 1234 Abgrenzung in die Vordere (Kreuznacher) und Hintere Grafschaft Sponheim (Untere Nahe über Hunsrück bis Mittelmosel). Die Starkenburg ist Verwaltungssitz der Sponheimer für die Hintere Grafschaft. Dazu gehören u.a. die Orte Traben; Trarbach; Enkirch und Wolf. 1315 Heirat von Heinrich II. von Sponheim mit der jungen Loretta von Salm. 1324 Gräfin Loretta; Witwe Heinrichs II.; übernimmt die Regentschaft. Durch Besitzstreitigkeiten mit Balduin; Erzbischof von Trier; kommt es 1328 zu dessen Gefangennahme durch Loretta. Balduin verbringt mehrere Wochen unfreiwilligen Aufenthaltes auf der Burg. Ein Sühnevertrag beendet den Streit. Der Name Starkenburg erscheint auf einem Burgmannssiegel. 1338 Urkundliche Nennung von "Castrum" (Vorburg) und "suburbium" (Dorf); und dem großen Turm. 1357 Die Grevenburg wird beurkundet. Erbauer ist Johann III. Sie löst die Starkenburg als Regierungssitz ab. Die Starkenburg wird nur noch von Burgmannen verwaltet. Der Zollturm unterhalb der Starkenburg entsteht. 1437 Mit Johannes V. stirbt das Geschlecht der Starkenburg-Sponheimer aus. Die Burg besteht noch (1441). 1553 Die Burg wird mehr und mehr vernachlässigt. Die von den in Baden und Simmern residierenden Gemeinsherren als Erben haben kein Interesse an ihrer Erhaltung. Um die Burg herum haben sich im Laufe der Zeit Leibeigene angesiedelt. Die Hintere Grafschaft Sponheim wird reformiert (1557). 1567 Die Veste ist "ein alt baufällig hus". 1607 hat sie noch eine Burgbesatzung. Ab 1620 rechnet man sie nicht mehr zu den festen Schlössern. Die baufällige Schlosskapelle wird niedergelegt (1642). Es sind nur noch die äusseren Gemäuer zu sehen (1660). 1682 Das Schloss ist ein "baufällig Gemäuer" laut einer französischen Landesaufnahme. Im 17.Jh. wächst die Dorfbevölkerung von 12 auf 23 Familien an. Die Burg dient als Steinbruch zur Dorferweiterung. 1690 sind die letzten Baureste abgetragen. Der Flecken Starkenburg ist von einer Mauer umgeben. 1739 Die alte Schlosshofreitung ist nur noch ein Steinhaufen. Ein Schutthaufen bedeckt den Schlosshof (Heimat- und Verkehrsverein Starkenburg),49.95983,7.13867,-9999
 BRGHLD,Burghaldefels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.185,7.8458,303
 BURGHT,Burghütte,private Berghütte,46.45104,8.13534,1750
+BGLAUB,Burglesauer Block,,49.99196,11.08412,522.1
 BURGLSWD F,Burglesauer Wand,,49.99914,11.08783,455.5
 BURGLSWD P,Burglesauer Wand Parkplatz,,49.99919,11.09219,410.6
 BRGLTG,Burgruine Lichtenegg,Aussichtspunkt,49.48113,11.59312,576.1
@@ -924,7 +986,6 @@ CCOLMA,Ca della Colma,,46.21972,8.58491,1722
 CBDLAN,Cab de l'A Neuve,,45.94882,7.06724,2735
 CBDLTS,Cab de la Tsa,,46.03028,7.50386,2607
 CBDMRY,Cab de Moiry,,46.09082,7.59547,2825
-CBPNSS,Cab de Panossiere,,45.99487,7.30402,2669
 CBDTRC,Cab de Tracuit,,46.13025,7.67955,3256
 CBVLSR,Cab de Valsorey,,45.93051,7.27195,3030
 CDVGNT,Cab des Vignettes,,45.98973,7.47555,3158
@@ -951,6 +1012,10 @@ CBNDLL,Cabane de La Luy,Hütte des Skiclub La Luy/Saxon,46.12678,7.17342,1260
 CBNTRC,Cabane de la Tourche,Private Hütte,46.2144,7.0618,2198
 CABTOUR,Cabane de la Tourche,SAC Hütte Sekt. St. Maurice,46.21444,7.0618,2198
 CABVID,Cabane de la Videmanette,Hütte des Club Vanil,46.45888,7.20381,2130
+CBPNSS,Cabane de Panossière,,45.99487,7.30402,2669
+CPNSCB,Cabane de Panossière / Cabane F-X Bagnoud,private Hütte,45.99873,7.29975,2645
+CPNSCB,Cabane de Panossière / Cabane F-X Bagnoud,private Hütte,45.99861,7.30194,2645
+PANFXB,Cabane de Panossiere FXB,,45.99861,7.29981,2638
 CBPRCH,Cabane de Prarochet,Private Hütte,46.31449,7.24741,2555
 CBDSLN,Cabane de Saleinaz,SAC-Hütte,45.97636,7.07028,2691
 CBNSRN,Cabane de Sorniot,auch Refuge de Sorgno; Hütte des Ski-Club Chavalard; 1926 Fully,46.16925,7.09482,2064
@@ -1019,6 +1084,7 @@ CPNBVR,Capanna Bovarina,UTOE Bellinzona,46.55998,8.8889,1870
 CPBRGL,Capanna Brogoldone,Bes.: Patriziato di Lumino,46.26252,9.06258,1910
 CPNBFL,Capanna Buffalora,Bes.: Associazione Sentieri Alpini Calanca,46.35105,9.14839,2078
 CPNCDG,Capanna Cadagno,SAT Ritom,46.54663,8.71954,1987
+CPNCDG,Capanna Cadagno,Hütte des SAT Sekt.Ritom,46.54664,8.71956,1987
 CPNCDL,Capanna Cadlimo,SAC UTO,46.57164,8.69522,2570
 CPCMBN,Capanna Cambra Nara,Hütte des Skiclub Negrentino,46.47196,8.87742,1900
 CPCMTN,Capanna Campo Tencia,CAS Ticino,46.44428,8.73261,2140
@@ -1057,6 +1123,7 @@ CPNSNL,Capanna San Lucio,privat,46.0855,9.08414,1541
 CPNSCL,Capanna Scaletta,SAT Lucomagno,46.60763,8.94057,2205
 CPNSCR,Capanna Scararda,immer zugänglich Selbstversorgehütte,46.55573,9.00603,2173
 CPSVLT,Capanna Soveltra,Bes.: SAV,46.40602,8.7105,1534
+CPSVLT,Capanna Soveltra,Hütte des SAV,46.40607,8.70634,1534
 CPNTMR,Capanna Tamaro,UTOE Bellinzona,46.1087,8.88104,1881
 CPTRMR,Capanna Tremorgio,Besitzer: Azienda Elettrica Ticinese; Bellinzona,46.48162,8.72478,1850
 CBGLRB,Capanna/Bivacco F.lli Gugliermina/Bivacco Valsesia,Biwakhütte der CAI Sekt. Varallo-Sesia,45.9123,7.8826,3212
@@ -1079,14 +1146,19 @@ CAVAHT,Cava Hütte,Private Hütte,46.35745,9.03033,2069
 CVRDHT,Cavardiras Hütte,SAC Hütte,46.74247,8.81423,2649
 CHNBWK,Cecchini Biwak,Private Hütte,46.47597,9.28452,2750
 CLLRHT,Celler Hütte,,47.01938,13.26914,2240
+CRRNGR,Cerro Negro,,-16.1901,-68.25753,5355
 CSRFBV,Cesare Fiorio Bivouac,Biwak,45.90157,7.05983,2729
+DRCHCP,Chacapampa,,-16.19237,-68.14052,3610
 CHAGO,Chago,,27.92611,87.05472,6893
+CHJLPY,Chajolpaya,,-15.85737,-68.39517,4102
+CHJLPA,Chajolpaya Alto,,-15.87573,-68.38309,4324
 CHAKO,Chako,,28.88056,84.28694,6704
 CHLOBR,Chalet de l' Oberegg,Hütte des CAS Gruyere oberhalb des Jaunpasses,46.57142,7.32672,1800
 CHALMA,Chalet des Marrindes,CAS Sekt. Gruyère Hütte,46.53588,7.16203,1886
 CFRSHS,Chalet du Soldat/Freiburger Soldatenhaus,private Berghütte,46.57638,7.26344,1752
 CHLTNF,Chalet Neuf,Private Hütte,46.18194,7.06858,1865
 CHASAV,Chalet Savolayre,CAS Sekt. Monte Rosa/Monthey; Hütte,46.22807,6.87687,1655
+CHLTTF,Chalet Teufi,Private Hütte,46.63341,8.02042,1198
 CHLNHT,Chalin Hütte,SAC Hütte,46.17928,6.94718,2595
 CHMLNG,Chamalang,,27.775,86.94917,7319
 CHMNEC,Chamanna d'Es-Cha,SAC Hütte,46.61138,9.9029,2594
@@ -1126,7 +1198,9 @@ CHOLTS,Chola Tse,,27.885,86.77167,6440
 CHMPMR,Chomo Pamari,,28.05722,86.08972,6109
 CHPULU,Chopulu,,27.91917,86.98194,6711
 CHHRHT,Chörbshornhütte,Skiclub Davos,46.78837,9.76752,2575
+CHORRE,Chorreras,Sektor Chrorreras im Gebiet Castell d Alaro Routen bis 35 m !,39.72862,2.79528,616
 CHRISTLEY,Christinenley,Aussichtspunkt im westlichen Bereich der Christinenley,50.69305,6.46686,324
+CHCHPS,Chuchu Pass,,-15.71744,-68.59711,4602
 CHUEBH,Chüebodenhorn,,46.50802,8.4536,3070
 CHUGMG,Chugimago,,27.84472,86.45083,6256
 CHULUW,ChuluW,,28.74333,84.02556,6419
@@ -1153,7 +1227,10 @@ CLYDE4,Clyde Meadow 4,Clyde Meadow 4,36.5801,-118.26886,-9999
 COAZHT,Coaz Hütte,SAC Hütte,46.38368,9.83546,2610
 COAZHT,Coaz-Hütte,http://www.sac-bernina.ch/htmls/huetten_coaz.htm,46.38368,9.83546,2610
 CBRGHT,Coburger Hütte,,47.36012,10.93347,1920
+CBRGWD,Coburger Wand,,50.02728,11.10967,509
+DRFCCY,Cocooyo,,-15.78783,-68.44767,3505
 CGNRHT,Cognora Hütte,Private Hütte,46.37649,8.81302,1938
+BECCHI,Col Becchei,Alternativer Name: Pareispitze,46.60777,12.04444,2794
 ACON15,Col Camp,,-32.63827,69.99252,-9999
 AVARTO,Col de Avartoli,,42.43777,8.91679,1898
 COLCHA,Col de Chardonnet,,45.96683,7.01134,3320
@@ -1171,6 +1248,7 @@ CLDUPV,Col du Pave,,44.99694,6.32121,3554
 CSNTSC,Col du Sanetsch,,46.33146,7.28618,2252
 COLTOU,Col du Tour,,45.98584,7.01664,3282
 COLPAS,Col Pasquale,,46.44345,10.60731,3408
+COLSAR,Col Supérieur Adams Reilly,Sattel am Ende der letzten Abseillänge (Abstieg von der Aiguille du Chardonnet). Anfang des Abstiegs über den Glacier de l'Epaule. Höhe gemäss IGN Karte.,45.96967,6.99628,3478
 CLTCKT,Col Tuckett,,44.94867,6.43029,3529
 CLDLLN,Colle del Leone,,45.97173,7.64467,3580
 COLGNI,Colle Gnifetti,begangener Punkt zwischen Zumsteinspitze und Signalkuppe,45.93044,7.87491,4452
@@ -1298,6 +1376,7 @@ DIWANR,Diwanare,,27.98278,86.74028,6050
 DOGPCH,Dog Pache,,28.25611,85.60833,6562
 DGRHML,Dogari Himal,,28.76667,83.1,6536
 DOHLSTN,Dohlenstein,,49.97173,11.27526,398.1
+DOHLNWD,Dohlenwand,In Oed bei Heuweg parken (Eisenbahnunterführung),49.5061,11.57142,381
 DLDNHR,Doldenhorn,,46.46854,7.73482,3638
 DLHRHT,Doldenhorn Hütte,SAC Hütte,46.48689,7.69742,1915
 DLHRHT,Doldenhornhütte,,46.48671,7.69729,1915
@@ -1332,7 +1411,8 @@ HNRHHT,Dr.-Heinrich-Hackl-Hütte,ÖAV Hütte der Sekt. Salzburg,47.48407,13.29037,1
 HSJGBG,Dr.-Hernaus-Söckl-Jugendherberge,Nebenhütte der Dr. Widder Jugendherberge,46.9492,13.02757,1765
 DJMHHT,Dr.-Josef-Mehrl-Hütte,ÖAV Hütte,46.97933,13.77487,1720
 STNWHT,Dr.-Steinwender-Hütte,ÖAV Sekt. Austria,46.60542,13.07077,1750
-STNWHT,Dr.-Steinwender-Hütte,ÖAV Sekt. Austria,46.60542,13.07076,1750
+STNWHT,Dr.-Steinwender-Hütte,ÖAV Sekt. Austria,46.60542,13.07075,1750
+STNWHT,Dr.-Steinwender-Hütte,AV Hütte der Sekt. Austria,46.60528,13.07056,1750
 WJGNBG,Dr.-Widder-Jugendherberge,Haus des ÖAV Klagenfurt,46.9492,13.02757,1770
 HNRHHT,Dr.Heinrich-Hackel-Hütte,,47.48406,13.29036,1531
 DJMHHT,Dr.Josef-Mehrl-Hütte,,46.97933,13.77487,1720
@@ -1348,6 +1428,7 @@ DRZINN,Drei Zinnen,Boulderfelsen (relativ hohe),48.39359,2.55721,110
 DREIBRKGL,Dreibrüderkögel,,47.67661,13.91689,1924
 DREIBRSEE,Dreibrüdersee,,47.67831,13.92233,1643
 DRCKHR,Dreieckhorn,,46.47796,8.02005,3811
+DREIECSPIT,Dreieckspitze,,46.96409,12.131,3041
 DRIRSP,Dreierspitze,,47.49689,11.38136,1962
 DRFHNK,Dreifahnenkopf,,47.46306,10.15472,1628
 3KAISR,Dreikaiserstuhl,Sektor Dreikaiserstuhl,52.23585,7.7345,118
@@ -1381,14 +1462,16 @@ DMLRHT,Dümlerhütte,ÖAV Hütte,47.67347,14.2775,1495
 DUEMLERH,Dümlerhütte,Schutzhütte,47.67392,14.27843,1495
 DURCHA,Durchat,,47.44017,13.59768,1731
 DRNBGJ,Dürnbergjoch,,47.54833,11.57331,1835
+DURRAALM,Durraalm,,46.97515,12.08008,2084.8
 DRRKPF,Dürre Kopf,,47.03647,10.03617,2407
 DRNFRD,Dürrensteine (Maria und Friedrich),<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1281,7.7765,409
 DRKRHR,Dürrkarhorn,,47.48817,12.74294,2210
 DRSTGF,Durstigfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1342,7.7781,275
 EFl,E - Flanke,richtung WSW- zum Grat,47.32351,10.08167,1930
 EFl1,E - Flanke 1,Gelände nutzen!!!,47.27703,10.10486,1922
-CMPTHT,E.T.-Compton-Hütte,ÖAV Sekt. Austria,46.69642,13.15728,1650
-CMPTHT,E.T.-Compton-Hütte,ÖAV Sekt. Austria,46.69641,13.15728,1650
+CMPTHT,E.-T.-Compton-Hütte,ÖAV Sekt. Austria,46.69642,13.15728,1585
+CMPTHT,E.-T.-Compton-Hütte,Hütte der AV Sekt. Austria,46.69641,13.15728,1585
+CMPTHT,E.-T.-Compton-Hütte,AV Hütte der Sekt. Austria,46.69639,13.15722,1585
 ESPNMN,East Pinnacle (Manaslu),,28.55444,84.56444,7992
 EBNALP,Ebenalp,Bergrestaurant,47.2832,9.41187,1644
 TP07,Ebene,Tupungato - Beginn der "Ebene",-33.31997,-69.78532,4993.7
@@ -1400,9 +1483,12 @@ ECKBHT,Eckberthütte,ÖAV Hütte,47.46172,13.04797,1140
 ECKPNK,Eckpunkt,,46.94528,13.76417,2091
 ECKTRM,Eckturm,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1377,7.8265,347
 EDKRHT,Edel-(Karl-von-)Hütte,,47.13044,11.89747,2238
+EDHTKR,Edelhütte (Karl von ...),DAV Hütte unter der Ahornspitze im Föllenbergkar,47.13028,11.9,2238
 EDHTKR,Edelhütte (Karl von..),AV Hütte unter der Ahornspitze im Föllenbergkar,47.13045,11.89747,2238
 EDLRHT,Edelrautehütte,,47.43902,14.43232,1725
 EDLRHT,Edelrautehütte,,47.43902,14.43232,1725
+HTESHT,Edelrautehütte (Eisbruggjochhütte),Hütte des CAI Brixen am Eisbruggjoch,46.94889,11.71111,2545
+HTESHT,Edelrautehütte (Eisbruggjochhütte),Hütte des CAI Brixen am Eisbruggjoch,46.94722,11.73882,2545
 EDELWH,Edelweiß Hütte,,46.9828,10.99946,1827
 EDLWHS,Edelweißhaus,,47.21607,10.30056,1530
 EDLWHS,Edelweißhaus,Hütte der DAV Sekt. Stuttgart,47.21607,10.30057,1530
@@ -1415,6 +1501,7 @@ EDLWYM,Edelwyss; Matt,Bergrestaurant,46.96513,9.18489,-9999
 EDERKANZEL,Ederkanzel (Gasthaus),,47.43214,11.24523,1181
 EDMGHT,Edmund-Graf-Hütte,,47.11417,10.35556,2408
 EDPRHS,Edmund-Probst-Haus,,47.41204,10.34728,1930
+EFEUWD,Efeuwand,,50.07275,11.26952,506
 EFFLEY,Effelsley,Kletterfelsen Effels,50.68459,6.47848,290
 EFRAHT,Efra Hütte,Private Hütte,46.33845,8.85116,2039
 EGG,Egg,,47.43194,9.89556,561
@@ -1490,6 +1577,7 @@ ElWig,Elfer Wintergipfel,Abfahrt wie Aufstieg/Abfahrt direkt in Südmulde/Abfahrt
 ELFER,Elferkogel,,47.70579,13.96359,2040
 ELSNST,Elisensitz,Felsformation; Naturdenkmal,49.56621,6.56962,-9999
 BRAHKL,Ellenborn (Brachthauser Klippen),bewaldeter Gipfel mit undeutenden Felsen; der Ausdruck "Klippen" suggeriert hier fälschlich hohe Felsen,51.0404,8.09536,596
+ELMHALT,Ellmauer Halt,,47.56162,12.30252,2282
 ELM,Elm,,47.67364,13.96258,2128
 ELMGRUBE,Elmgrube,Jagdhütte,47.67953,13.94478,1622
 ELMSCHARTE,Elmscharte,,47.64724,14.19655,2203
@@ -1518,6 +1606,8 @@ ENSTHT,Ennstaler Hütte,,47.61912,14.67642,1543
 ENHTKN,Enzianhütte am Kieneck,ÖAV Hütte der Sekt. Enzian,47.96075,15.87438,1107
 ENHTKN,Enzianhütte/Kieneck,,47.96075,15.87438,1107
 ENZNGR,Enzingerboden,Parkplatz Enzingerboden. Ausgangspunkt zur Rudolfhütte.,47.17225,12.62732,1500
+EPMIG2,Eperon Migot Ausstieg,Ausstieg aus dem Eperon Migot auf die Aiguille de Chardonnet. Höhenangabe ungefähr.,45.96886,7.00183,3800
+EPMIG1,Eperon Migot Einstieg,Einstieg in den Eperon Migot auf die Aiguille de Chardonnet; ungefähr 30m vor dem Schrund. Höhenangabe ungefähr.,45.97236,7.00083,3300
 ALTSCH,Eppenbrunner Altschloßfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1035,7.5373,377
 CHRSTK,Eppenbrunner Christkindelsfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1111,7.6127,357
 EPNKRP,Eppenbrunner Krappenfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1089,7.6116,350
@@ -1526,7 +1616,11 @@ ERFRHT,Erfurter Hütte,,47.44163,11.76312,1834
 ERFUHT,Erfurter Hütte,Erfurter Hütte (email: mailto:rofan.achensee@tirol.com) der DAV-Sektion Ettlingen (http://www.alpenverein-ettlingen.de),47.44161,11.76315,1831
 ERCSHT,Erich-Sulke-Hütte,,47.40051,13.03969,1540
 ERCSHT,Erich-Sulke-Hütte,ÖAV Hütte,47.37318,12.59373,1100
+ERCSHT,Erich-Sulke-Hütte,Hütte des ÖAV Akedem. Sekt. Wien,47.37306,12.59361,1100
+ERCSHT,Erich-Sulke-Hütte,Hütte des ÖAV Akedem. Sekt. Wien,47.37318,12.59374,1100
 ERCHHT,Erichhütte,ÖAV Hütte,47.40052,13.03968,1540
+ERCHHT,Erichhütte,Hütte der ÖAV Sekt. Lend-Dienten,47.40028,13.03944,1540
+ERCHHT,Erichhütte,Hütte der ÖAV Sekt. Lend-Dienten,47.40051,13.03968,1540
 ERCHHT,Erichhütte,,47.37318,12.59374,1100
 ERGSHS,Erika; Gasthaus,Bergrestaurant,46.90827,9.89896,1639
 ERINNHTT,Erinnerungshütte,unbewirtschaftete; verschlossene Hütte des Akademischen Alpenvereins München. Errichtet zur Erinnerung an die im Weltkrieg gefallenen Mitglieder.,47.38687,11.11444,2101
@@ -1546,7 +1640,6 @@ ESRSHT,Essener- und Rostocker Hütte,,47.05483,12.2978,2208
 ESTRBG,Esterbergalm,Bewirtschaftete Alm südöstlich des Hohen Fricken..,47.51681,11.15783,1265
 ETZLHT,Etzli Hütte,SAC Hütte,46.71819,8.72047,2052
 EUGSTEIN,Eugenienstein,,50.7033,6.45327,344
-EGNSLL,Eugenio Sella,Hütte der CAI Sekt. Macugnaga,45.98875,7.91411,3029
 ELNFLS,Eulenfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1095,7.5858,407
 ELNHRS,Eulenhorst,Naturdenkmal,49.85689,6.3451,-9999
 ELNHRS,Eulenhorst,Naturdenkmal,49.85689,6.3451,-9999
@@ -1635,6 +1728,7 @@ FEUSTKOPF,Feuerstätterkopf,,47.433,10.07831,1645
 FEUERTALBG,Feuertalberg,,47.68575,14.02239,2376
 FEUERTLSCH,Feuertalscharte,,47.69069,14.02439,-9999
 FFB_BRUCK,FFB-Brücke,Nie fertiggestellte Brücke einsam im Wald. Ca. 8m hoch; Wandklettereien an Löchen und Leisten ab IV aufwärts. Vorstieg und/oder Toprope. Etliche Touren absolut regensicher überdacht. Eingeschränkte Parkmöglichkeiten direkt vor Ort; doch S-Bahnhof Eichenau nur 1km entfernt. Unterhalten von der AV-Ortsgruppe Fürstenfeldbruck.,48.18315,11.31718,520
+FIAMMA,Fiamma,gipfelnadel,46.33913,9.63876,2453
 FpsHt,Fiderepass Hütte,,47.31557,10.21278,2087
 FDRPHT,Fiderepasshütte,,47.3156,10.21255,2067
 FDBGSK,Fideriser Heuberge; Skihäuser,Bergrestaurant,46.86672,9.72549,1939
@@ -1645,8 +1739,9 @@ FSCGHR,Fiescher Gabelhorn,,46.50235,8.08415,3876
 FSCHRS,Fieschersattel,,46.54897,8.06475,3923
 FSCHRT,Fieschertal,,46.42726,8.1418,1108
 FLDRPF,Filderchöpf,,47.27979,9.39248,1761
-STNDHT,Fillmoor-Standschützen-Hütte,ÖAV Sekt. Austria,46.67098,12.53437,2350
+STNDHT,Filmoor -Standschützen Hütte,AV Hütte der Sekt. Ausria,46.67083,12.53417,2350
 STNDHT,Filmoor-Standschützen-Hütte,,46.67098,12.53436,2350
+STNDHT,Filmoor-Standschützen-Hütte,ÖAV Sekt. Austria,46.67098,12.53437,2350
 FNCVRG,Finca Es Verger,Parkmöglichkeit für Castell d'Alaro (von hier nicht auf Weg direkt zum Castell; da in 2003 gesperrt); zu Fuß oder mit Auto (holprig) die Straße; die im Bogen nach NW hochzieht,39.72949,2.78848,560
 FNSTHR,Finsteraarhorn,,46.53728,8.12615,4274
 FNSTRH,Finsteraarhorn,,46.53728,8.12628,4274
@@ -1664,6 +1759,8 @@ FSTRJC,Fisteraarjoch,,46.55026,8.12188,3293
 FTSCHR,Fitscherheldkanzel,Naturdenkmal,49.82717,6.65799,309
 FTSCHR,Fitscherheldkanzel-Felsen,Naturdenkmal. Buntsandsteinfelsen unter der Fitscherheldkanzel.,49.82701,6.66013,-9999
 FLDNST,Fladensteine,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1021,7.8174,373
+FLGRHT,Flaggerschartenhütte(Rifugio Forcella Vallaga),Hütte des CAI ,46.77306,11.48889,2481
+FLGRHT,Flaggerschartenhütte(Rifugio Forcella Vallaga),Hütte des CAI Franzensfeste,46.77329,11.48903,2481
 FLRLNG,Flaurling,,47.2912,11.12168,675
 FLRLNG,Flaurlinger,,47.25805,11.1294,2211
 FLRLNA,Flaurlinger Alm,,47.24624,11.10783,1613
@@ -1686,6 +1783,7 @@ Flu,Flucht,,47.31279,10.19548,1341
 Flu,Flucht,,47.31279,10.19548,1341
 FLCHHR,Fluchthorn,,46.89076,10.22732,3398
 FLUHRN,Fluchthorn,bei Strahlhorn,46.02156,7.91499,3790.5
+FLUCHT,Fluchtkogel,Gipfel Fluchtkogel,46.85817,10.79225,3498
 FLUPSS,Fluchtpass,,46.02067,7.91163,3721
 FLUE,Flue,,46.01295,7.81073,2618
 FLUSHT,Flueseehütte,Private Hütte,46.41134,7.4995,2060
@@ -1704,6 +1802,8 @@ FORNHT,Forno Hütte,SAC Hütte,46.33183,9.70949,2574
 STRMAD,Forststraße R. Madrisa,am südl. Ortsende von Gargellen,46.96433,9.91754,1464
 F VERENA,Forte Verena,Italien - Sette Communi; zerschossene Festung,45.9305,11.41309,2000.1
 FORTZZ,Fortezza,,46.38654,9.94211,3371.4
+FZBSHT,Fozeben Skihütte,Selbstversorgerhütte mit Sonderschloß,47.9025,16.0075,735
+FZBSHT,Fozeben Skihütte,Selbstversorgerhütte mit Sonderschloß,47.90263,16.00769,735
 FRGNHT,Fraganter Hütte,Hütte der ÖAV Sekt.Klagenfurt,46.95103,13.02793,1810
 FJ 105K,Frankenjura Jubiläumswand,Kalkstein. Schöne natürliche Kletterei. Das Gebiet als solches ist sehr empfehlenswert.,49.80292,11.30094,-9999
 FJ 105,Frankenjura Jubiläumswand Parkplatz,Kalkstein. Schöne natürliche Kletterei. Das Gebiet als solches ist sehr empfehlenswert. Dies ist der Parkplatz!,49.80464,11.29522,-9999
@@ -1817,7 +1917,7 @@ GAMCHI,Gamchi,Alphütte,46.53028,7.7873,1672
 GMCHLC,Gamchilücke,,46.49762,7.81601,2837
 GAMMER,Gammering Sattel,,47.63998,14.28232,-9999
 GMMRSP,Gammerspitze,,47.05487,11.57451,2537
-GAMSLP,Gamsalp,Bergrestaurant,47.17267,9.33958,-9999
+GAMSLP,Gamsalp,Bergrestaurant,47.17267,9.33958,1770
 Gfss,Gamsfuß,,47.28689,10.09039,1993
 GAMSHT,Gamshütte,,47.12979,11.79572,1921
 GAMSHT,Gamshütte,DAV Hütte oberhalb von Finkenberg,47.1298,11.79572,1921
@@ -1864,6 +1964,7 @@ GRSTHN,Gärsthorn (Nebengipfel),,46.34663,7.91666,2966
 GRSTHS,Gärsthorn (Signalgipfel),auf diesem aus dem Tal gut sichtbaren Vorgipfel des Gärsthorns steht eine Einrichtung zur Schnee- und Lawinengefahr-Beurteilung; die von Ferne mit einem Gipfelkreuz verwechselt werden kann,46.34395,7.91671,2934
 GRZNHT,Garzonera Hütte,Private Hütte,46.49905,8.66148,1973
 GSCHRN,Gaschurn,Ausgangspunkt für Garneraschlucht; gegenüber Parkplatz,46.98472,10.02558,967
+GSTRSP,Gasteräspitz,,46.43749,7.70486,2821.7
 FELLIMNNLE,Gasthaus Fellimännle,,47.07783,10.02263,1099
 GGH,Gasthaus Geißhöhe,Gasthof oberhalb von Dammbach auf der Geißhöhe,49.84331,9.31683,498
 GHHLZG,Gasthaus Holzegg,nähe Bergstation der Seilbahn von Brunni,47.0289,8.69896,1413
@@ -1891,6 +1992,7 @@ GROSTG,Geierköpfe Ostgipfel,,47.51847,10.88897,2064
 GRWSTG,Geierköpfe Westgipfel,,47.51625,10.86614,2143
 GEIERNESTQ,Geiernestquelle,,47.68947,13.97328,-9999
 GIRSTN,Geierstein,,47.67967,11.61914,1491
+GEIERWD,Geierwand,,50.02867,11.19064,602.9
 GEISBG,Geisberg,Unterstandshütte auf dem Gipfel; Höhe nach topographischer Karte,50.67052,7.23083,323.7
 GISBRN,Geisbirn,,47.45694,9.79183,834
 GSZKPF,Geißkopf,,47.42939,9.82503,1198
@@ -1933,6 +2035,7 @@ GESERB,Geserberg,,47.50806,9.80944,939
 GSROHT,Gesero Hütte,Private Hütte,46.18132,9.12078,1770
 GspW,Gesprengter Weg,auf Rücken in felsiges Geände,47.27923,10.10944,1738
 GYRSLY,Geyersley,Naturdenkmal. Charakteristisch für das untere Kylltal sind die steilen wand- und rippenartig hervortretenden Wände aus rotem Buntsandstein; die von der erodierenden Kraft des Flusses herausmodelliert . Dort; wo in den oberen Bereichen grobe und sehr harte Schichten von Gesteinsschutt (Konglomeratzone) auftreten; blieb das Gestein; zum Beispiel Geyersley; Hochburg - vor stärkerer Abtragung bewahrt. Von diesen Felsgebilden aus bietet sich ein weiter Blick über das bewaldete Kylltal. Die Klausenhöhle und andere Höhlenbildungen in der Nähe sind durch die Arbeit des fließenden Wassers entstanden. Dort; wo Klüfte im Gestein vorhanden waren und sich durch Strudel Kolke bildeten; wurde das weiche Gestein besonders stark ausgehöhlt und es entstanden z. T. imposante Höhlen. In der Klausenhöhle wohnten noch vor rund 200 Jahren Einsiedler. Die Fratzen an den Wänden sollen der Vertreibung des Bösen gedient haben. Hochburg: Auf einem Felsplateau oberhalb des Kylltales befindet sich die Hochburg; eine keltische Bergbefestigung. Noch heute sind deutlich die Reste dieser vorrömischen Anlage zu erkennen. Die Genovevahöhle; durch die erodierende Wirkung der Kyll entstanden; wurde offensichtlich schon in der Altsteinzeit von Jägern und Sammlern bewohnt; die hier Unterschlupf suchten. In dem Schuttkegel vor der Höhle fand man Feuersteinsplitter und Schaber. Aus der jüngeren Steinzeit entdeckte man Steinbeile und Speerspitzen.,49.81899,6.65004,-9999
+GFSZKP,Gfaßköpfe,,47.5057,11.78903,1279
 GFLALP,Gfelalp,,46.43988,7.71931,1847
 GHNGLR,Ghenge Liru,,28.24583,85.42278,6581
 GHBDNB,Ghf. Bodenbauer,,47.57933,15.11433,880
@@ -1955,6 +2058,7 @@ MAEDGA,Gipfel Maedelegabel,,47.29991,10.29568,2644
 GiHg,Gipfelhang,Querung nach SSO zum Grat,47.30223,10.07933,1995
 ANKOGELGK,Gipfelkreuz Ankogel,etwas südlich des eigentlichen Gipfels,47.05055,13.24822,3238
 SVYRES,Gipfelstation Savoleyres,Von hier Zugang zu den Pierre Avoi in 30 Minuten.,46.12254,7.21928,2354
+GPFSTMB,Gipfelstürmerblock,,49.99185,11.08441,531
 HOCHKOPPEL,Gipfelturm des Hochkoppelmassivs,Einstieg zum Gipfelturm des Hochkoppelmassivs,50.72757,6.46856,190
 GSWLRS,Giswilerstock,Bergrestaurant,46.82543,8.10833,-9999
 GTDLDZ,Gîte de Lodze,,46.25963,7.25966,1973
@@ -2006,6 +2110,7 @@ GSRRHT,Goiserer Hütte,ÖAV Hütte,47.62367,13.56147,1592
 GOUTA,Gola di Gouta,,43.93939,7.60833,1219
 GLDCHT,Goldeckhütte,,46.76098,13.46941,1945
 GLDCHT,Goldeckhütte,ÖAV Hütte,46.76098,13.4694,1945
+GLDCHT,Goldeckhütte,Hütte der AV Sekt. Spittal/Drau,46.76083,13.46917,1945
 GLDBRS,Golden Borst,,47.07169,10.06664,2209
 GLDRKN,Golderli; Kiental,Bergrestaurant,46.55086,7.76396,1460
 GLGGHR,Golegghorn,,46.61554,8.24986,3077
@@ -2090,6 +2195,7 @@ Grt,Grat,n S- zur Gipfelkalotte,47.28725,10.09078,1989
 Grt,Grat,,47.30266,10.18412,2207
 Grt,Grat,,47.30375,10.20795,2184
 DA,Grat bei Derrenalpe,,47.30438,10.08719,1815
+GRTVDHTKSP,Grat Vordere u. Hintere Karlspitze,Ausstieg des Normalweges vom Ellmauer Tor auf den Verbindungsgrat Vordere u. Hintere karlspitze,47.56606,12.31526,2265.9
 GRATHT,Grathütte,Private Hütte,46.56471,7.69296,2079
 GRATHT,Grathütte,private Berghütte,46.56667,7.69167,2079
 GRATHT,Grathütte,private Berghütte,46.56471,7.69361,2079
@@ -2147,6 +2253,7 @@ GRPYRGAS,Großer Pyhrgas,,47.65316,14.3984,2244
 GSEEBDN,Großer Seeboden,,47.63804,14.50739,-9999
 GRSSLS,Großer Solstein,,47.30276,11.30758,2541
 GRSLST,Großer Sonnleitstein,,47.75217,15.639,1639
+GRSTBTM,Großer Stübiger Turm,,50.00898,11.08222,449
 TRTHEN,Großer Traithen,,47.64659,12.03762,1852
 GRSTRG,Großer Trögler,,46.99569,11.16032,2902
 GRWLDR,Großer Wilder,,47.37022,10.38909,2379
@@ -2176,6 +2283,7 @@ GRSZVN,Großvenediger,,47.10911,12.34527,3667
 GRVNDG,Großvenediger,Ort des Gipfelkreuzes,47.1093,12.34539,3666
 X GROTTA,Grotta,,45.9801,11.49146,1936.7
 GRBGHT,Grubenberghütte,Private Hütte,46.54928,7.25179,1840
+GRBGHT,Grubenberghütte,Hütte der SAC Sekt. Oldenberg,46.54928,7.25192,1840
 GRBNKS,Grubenkar Sp.,,47.38083,11.5221,2663
 GRBKSP,Grubenkarspitze,,47.38072,11.52206,2661
 GRUKO,Grubenkopf,,47.57647,10.86911,1847
@@ -2276,10 +2384,11 @@ HAGLER,Hagler,,47.77197,14.31115,-9999
 Haelko,Hählekopf,,47.34686,10.07083,2058
 HAEHLK,Hählekopf,,47.34703,10.07081,2058
 HNKMSP,Hahnenkamplspitze,,47.39542,11.59444,2080
-HNMSPS,Hahnenmoospass,Bergrestaurant,46.45317,7.49473,-9999
+HNMSPS,Hahnenmoospass,Bergrestaurant,46.45317,7.49473,1957
 HNSCHR,Hahnenschritthorn,,46.37102,7.35455,2834
 HNBRCK,Hahnfels (Brückenfels),<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.158,7.8146,290
 HDCHSG,Haidachstellwand (Gipfelkreuz),Gipfelkreuz Haidachstellwand,47.44402,11.78038,2192
+HNDLHT,Haindlkarhütte,ÖAV Htte der Sekt. Reichenstein,47.56117,14.65219,1121
 HDLKHT,Haindlkarhütte,,47.56708,14.612,1121
 HALDI,Haldi,Bergrestaurant,46.86398,8.67022,-9999
 HAELEK,Hälekopf,,47.38478,9.96878,1614
@@ -2292,27 +2401,34 @@ HALSLM,Halsalm,Hüttentour,47.60389,12.83389,1211
 HLSRSP,Halserspitze,,47.59125,11.78133,1861
 HLSMRT,Halsmarter H.,Seilbahnstation,47.24194,11.54419,1550
 HMSCHL,Hamburger Skiheim/Schlossalm,,47.148,13.06017,1970
+HMMRMDTM,Hammerschmiedturm,,50.03311,11.20153,547.1
 Hmspz,Hammerspitze,wird im Allgäu irrtümlicherweise als Schüsser bezeichnet,47.32644,10.19958,2170
 HAMMERSTL,Hammerstiel,Ausgangspunkt für Skitour ins Watzmankar,47.60339,12.9482,767.3
+HAMMERTWD,Hammertalwand,,49.51427,11.5588,313.9
 HNURHT,Hanauer Hütte,,47.24981,10.59101,1922
 HNURHT,Hanauer Hütte,Hütte der DAV Sekt. Hanau,47.24982,10.59102,1922
 HNDGRM,Handeck; Grimsel,Bergrestaurant,46.61197,8.3079,-9999
 HANDGG,Handegg,,46.61098,8.30762,1401
 HNDSCH,Handschuhkopf,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1973,7.7462,324
 HNBRGS,Haneburger Sp.,,47.21221,11.58479,2596
+HANF,Hanfplantage,,50.03066,11.20268,503.2
 MP04,Hang,Am Fuß eines Hangs,-33.80269,-69.99492,2544
 Hng1,Hang 1,weiter n. SSE,47.29778,10.12094,1365
 Hng2,Hang 2,weiter n. SW,47.29498,10.12818,1598
+HNGRTK,Hangartkopf,,47.51844,11.76855,1514
 TP08,Hangeinstieg,Tupungato - Einstieg Hang zum Joch,-33.32124,-69.78496,5007.6
 HNGLHT,Hängelahütte,Private Hütte,46.62178,9.16675,-9999
 HSTEIN,Hängender Stein,Nur für schwindelfreie Bergsteiger,47.17694,9.78194,634
 HNGNHR,Hangendgletscherhorn,,46.62941,8.1823,3292
 HANGSP,Hangspitze,,47.36056,9.85056,1746
+HNKHTP,Hankokhota Pass,,-16.05261,-68.30626,4978
+HNKLKP,Hankolakaya Pass,,-15.99274,-68.31655,4762
 HNNGLP,Hannigalp,Gasthof und Liftstation Hannigalp,46.11479,7.9164,2346
 HNVRHS,Hannoverhaus,,47.04397,13.21468,2719
 HANNOVHAUS,Hannoverhaus,,47.04406,13.21481,2725
 HBHAUS,Hans Berger Haus,Naturfreundehaus,47.57755,12.28502,875.1
 HANSLHTT,Hanslhütte,Jagdhaus,47.61506,14.11684,1468
+HPPRGWD,Happurger Wand,,49.48492,11.49164,449.9
 HARDLG,Härdler,auf dem höchsten Punkt ein trigonometrischer Punkt (im Wald); indes uninteressanter; flacher Gipfel,51.10386,8.23583,755.8
 HARDLT,Härdler (Hinweistafel),unweit des höchsten Punktes an Wanderweg A8,51.10374,8.23712,753
 HRMLKP,Härmelekopf,,47.32669,11.23078,2224
@@ -2330,6 +2446,7 @@ HASLSGTL,Haslersgatter,,47.73744,14.37958,1154
 HTTING,Hatting,,47.2772,11.16688,616
 HAUERKGL,Hauerkogel,,47.0654,10.93587,2493
 HURSHT,Hauerseehütte,,47.05838,10.91763,2383
+HAUNRITZWD,Haunritzerwand,,49.48904,11.58799,324.9
 HSESNS,Haus Eisensteinhöhle,,47.83052,16.14365,407
 HSESNS,Haus Eisensteinhöhle,ÖAV Haus ohne Nächtigungsmöglichkeit,47.83052,16.14365,407
 HAUSBERG,Hausberg,,47.73958,13.9703,1246
@@ -2412,6 +2529,7 @@ HNDNBRGTOR,Hindenburgtor,Felsgruppe - zwischen Christinenley und den Hinkelstein
 HFTSHR,Hinter Fietscherhorn,,46.54644,8.06759,4025
 HNTRHT,Hinterbalmhütte,Private Hütte,46.77927,8.79854,1817
 HNTRBL,Hinterbichl,Brücke bei Wassermühle / Postbuskehre,47.01807,12.34016,1340
+HTKRLSPZ,Hintere Karlspitze,,47.56685,12.31516,2281.1
 HNTRND,Hintere Niedere,,47.39944,9.94778,1711
 HSCHSP,Hintere Schöntaufspitze,,46.50283,10.62864,3280
 HNTWND,Hintere Wand,Kletterfelsen Effels,50.68473,6.47779,290
@@ -2424,8 +2542,10 @@ HNTGHR,Hinteres Galmihorn,,46.51349,8.1893,3486
 HIGRAHUE,Hintergrathütte,,46.50158,10.58325,2651
 HMELLENALP,Hintermellenalpe,,47.29372,9.82039,1450
 HNTRSZ,Hinterriß,,47.4733,11.46659,928
+HNTRBG,Hintersteinberg,,47.50869,11.79897,1021
 HSTALM,Hintersteineralm,,47.61829,14.28167,1029
 HNTRTX,Hintertux,,47.11485,11.68136,1493
+HNTRNT,Hinterunnutz,,47.52991,11.73478,2007
 HNTRWD,Hinterweidenthaler Rappenfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1962,7.7551,240
 HiWil,Hinterwilden,,47.30522,10.19521,1777
 HPLSTN,Hippelsteinchen,Naturdenkmal. Jenseits des Dorfrandes von Gönnersdorf findet man das sagenumwobene Hippelsteinchen - nach Aussage des Heimatforschers Busch der eigenartigste Dolomitfelsen des Landkreises Daun. Es steht inmitten blütenreicher Kalkmagerrasen; die auf extensive Nutzung über Jahrhunderte zurückgehen (eifeltour.de),50.33393,6.61204,-9999
@@ -2475,6 +2595,8 @@ HCHFHT,Hochfeilerhütte,,46.96272,11.70936,2710
 HCHFHT,Hochfeilerhütte,Hütte der Sekt. Sterzing des AVS,46.96355,11.70152,2710
 HCHFHT,Hochfeilerhütte,,46.96231,11.70839,2710
 HOCHFOHRA,Hochfohra,,47.67719,14.09092,1507
+HCHHTR,Hochgallhütte (Rifugio Roma),Hütte des CAI Sekt. Roma/ ehemals Alte Kasseler Hütte),46.93389,12.10667,2276
+HCHHTR,Hochgallhütte (Rifugio Roma),Hütte des CAI Sekt. Roma; ehemalige Alte Kasseler Hütte,46.9291,12.10301,2276
 HGERN,Hochgern,,47.75078,12.51614,1744
 HGERNHS,Hochgernhaus,,47.75014,12.49811,1461
 HGLSH,Hochgleiersch,,47.36111,11.35614,2497
@@ -2499,6 +2621,7 @@ HCHLHT,Hochlandhütte,Hütte der DAV Sekt. HochlND,47.46765,11.31875,1623
 HCHLNT,Hochlantsch,,47.36278,15.42472,1720
 HCHLHS,Hochleckenhaus,,47.82903,13.60566,1572
 HCHLHS,Hochleckenhaus,ÖAV Hütte,47.82903,13.60567,1572
+HCHLKG,Hochleckenkogel,,47.82722,13.62139,1691
 HCHLTR,Hochleitenkopf (Rauhenkopf),,47.29787,11.18993,1276
 HOCHMOELB,Hochmölbing,,47.63482,14.17868,2341
 HOCHMOELHT,Hochmölbinghütte,,47.60458,14.14842,1684
@@ -2506,6 +2629,7 @@ HNSSL,Hochnissl,,47.36722,11.61828,2547
 HOCHPL,Hochplanberg,,47.64743,14.06211,2230
 HOCHRIES,Hochriesalpe,,47.43503,10.05253,1374
 HCHRHS,Hochrieshaus,,47.36012,13.63941,1569
+HCHRHS,Hochrieshaus,Hütte der DAV Sekt. Rosenheim,47.74722,12.24889,1568
 HCHSCH,Hochschijen,,46.66344,8.49472,2634
 HCHSCS,Hochschijen Südgrat,Einstieg Hochschijen S-Grat; Kletteroute; 4c; ,46.66186,8.49456,2489
 HCHSCHOBER,Hochschober,,46.94266,12.69824,3240
@@ -2518,18 +2642,24 @@ HCHSHS,Hochstadelhaus,ÖTK Schutzhaus,46.7555,12.88782,1780
 HOCHSTAUFE,Hochstaufen,,47.75491,12.84862,1763.9
 HCHSTN,Hochstein,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1451,7.7892,296
 HCHSHT,Hochsteinhütte,Schutzhaus der ÖAV Sekt.Lienz,46.8187,12.70298,2023
+HCHSHT,Hochsteinhütte,Hütte der OEAV Sekt. Lienz,46.82139,12.70028,2023
+HCHSHT,Höchsteinhütte,Hütte der OEAV Sekt. Lienz,46.82144,12.70043,2023
 HOCHSTSCH,Hochsteinscharte,,47.62549,14.10488,-9999
 HCHSHT,Hochstubaihütte,,46.98153,11.06468,3173
 HCHSHS,Hochstuckli Skihaus,Bergrestaurant,47.06143,8.66022,-9999
+HCHANC,Hochtal von Ancohuma,,-15.74916,-68.51958,3862
 HCHTBG,Hochtannbergpaß,,47.26947,10.13049,1675
 HOCHTR,Hochtor,,47.56183,14.63267,2369
 HOCHTURM,Hochturm,,47.65384,14.45812,1956
+HCHNTZ,Hochunnutz,,47.52003,11.736,2075
 HCHWND,Hochwand,,47.35889,11.01598,2721
 HCHWSS,Hochwasser,,47.39603,11.05539,2744
 HCHWCH,Hochwechsel,,47.5295,15.91467,1743
 HOCHWEIS,Hochweiß,,47.62956,14.00711,2158
 HCHWHS,Hochweisssteinhaus,,46.64305,12.7402,1868
 HCHWHS,Hochweißsteinhaus,ÖAV Sekt. Austria,46.64305,12.7402,1868
+HCHWHS,Hochweißsteinhaus,AV Hütte der Sekt. Austria,46.64278,12.74,1868
+HCHWHS,Hochweißsteinhaus,AV Hütte der Sekt.Austria,46.64305,12.7402,1868
 HCHWHS,Hochwildehaus,,46.80488,10.98822,2883
 HCHWHT,Hochwurzenhütte,,47.36011,13.63941,1852
 HCHWHT,Hochwurzenhütte,Privates Berghaus am Ende der Hochwurzenstrasse ÖAV Vertragshaus,47.36012,13.63942,1852
@@ -2563,6 +2693,7 @@ HHERTE,Hohe Reute,,49.63394,11.40932,595.9
 HORIFL,Hohe Riffl,,47.1228,12.66616,3346
 HSTIEGE,Hohe Stiege,,47.77118,14.48639,-9999
 HVTSCH,Hohe Veitsch,,47.649,15.40583,1981
+HOHWND,Hohe Wand,,50.04546,11.22313,360
 DRTSCH,Hohe-Derst-Tischchen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.0878,7.9197,543
 HOHENEMS,Hohenems,,47.36389,9.69028,432
 GLSTG2,Höhenglücksteig 2.Teil,Einstieg,49.54742,11.54192,541
@@ -2583,12 +2714,14 @@ HOGAIF,Hoher Gaif,,47.42238,11.06338,2288
 HHRGFK,Hoher Gaifkopf,,47.42425,11.08542,1868
 HHRGLL,Hoher Göll,Die Koordinaten beziehen sich auf die Alpeltalhütte den Stützpunkt für eine (Ski)tour auf den Hohen Göll; es sind gerade mal 5 Gehminuten zum Ausgangspunkt zur Tour; auch zum Ausgangspunkt der Skitour in das Watzmannkar sind es nur 20 Minuten mit dem Auto. Geniale Hütte mit unglaublich günstigen Preisen und netten Wirtsleuten. Übernachtung im Lager mit Frühstück und Dusche für 11€. Näheres unter www.alpeltalhuette.de.,47.59708,13.02172,1100
 HHRGLL,Hoher Göll,,47.59403,13.06689,2522
+HOHERIFEN,Hoher Ifen,Gipfel Hoher Ifen,47.35475,10.1,2232
 IFEN,Hoher Ifen,,47.35472,10.10028,2230
 HRKSTN,Hoher Kasten,Bergrestaurant,47.28354,9.48553,1795
 HKAST,Hoher Kasten,,47.28417,9.48583,1794
 HRKNPF,Hoher Knopf,oberhalb von Dornbirn,47.36306,9.77861,1092
 HRLRNZ,Hoher Lorenzen,,46.97288,11.43245,2315
 HRRFLR,Hoher Riffler,,47.11611,10.37111,3166
+HBBK,Hoher Seeblaskogel,N47 05.735 E11 04.489,47.09558,11.07482,3235
 HHRZUN,Hoher Zaun,,47.09979,12.37644,3457
 HRZNKN,Hoher Zinken,Wird in manchen Karten auch unter "Großer Zinken" geführt,47.27111,14.3425,2222
 HRKPTR,Hoher-Kopf-Turm,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1743,7.8471,443
@@ -2598,6 +2731,8 @@ HFLSHT,Hohfläsch Hütte,Hütte der Alpinen Sekt. der Swissair,47.0816,8.93989,1368
 HOEHLE,Höhle,,47.65149,14.39254,-9999
 HOEHLE,Höhle,Höhle,47.658,13.8609,-9999
 HLFLSN,Hohle Felsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.11,7.5514,356
+HOEHLWD,Höhlenwand,,50.07289,11.26973,502
+HLRFELS,Hohler Fels,,49.48469,11.49204,534.9
 HHSSHT,Hohsaashütte,,46.13942,7.98901,3098
 HOHSHT,Hohsaashütte,,46.13925,7.98861,3098
 HSNDHR,Hohsandhorn,,46.40396,8.30964,3182
@@ -2606,8 +2741,10 @@ HOLENK,Holenke,,47.33167,9.92778,2044
 HLNDHT,Hollandia Hütte,SAC Hütte,46.47528,7.96025,3238
 HLNFLS,Höllenfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1895,7.8883,414
 HLLSPTZ,Höllenspitze,,47.24335,10.20545,2364
+HOELLEST,Höllenstein,,49.81774,11.2866,316.1
 HLLNTL,Höllentalangerhütte,,47.43808,11.02483,1386.5
 HTAH,Höllentalangerhütte,,47.43808,11.02483,1379
+HLNTLS,Höllentalaussicht,Aussichtspunkt mit Blick in Große Höllental,47.72323,15.75442,1650
 HLNTHT,Höllentaleingangshütte,,47.4482,11.04343,1045
 HTEH,Höllentaleingangshütte,,47.4482,11.04343,1000
 JUBLUM,Höllentalgrathütte,,47.42092,11.02637,2693
@@ -2654,6 +2791,8 @@ HTWLHS,Hotel Waldhaus,,46.4643,7.66164,1358
 HTWTHR,Hotel Wetterhorn,,46.63242,8.07107,1228
 HWLDST,Hotel Wildstrubel,nahe der Bergstation Leukerbad- Gemmipass;,46.39709,7.61416,2314
 HTNGAL,Höttinger Alm,,47.29895,11.36643,1487
+HURHRN,Huarihaurini,,-16.03532,-68.29793,4599
+HUYNPT,Huayna Potosí,,-16.26247,-68.15413,6097.5
 HBLFLS,Hübelfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.129,7.6277,355
 HBRTSF,Hubertusfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2558,7.7456,522
 HBRTHS,Hubertushaus,,47.81171,16.02532,946
@@ -2690,6 +2829,8 @@ HVERFJALL,Hverfjall,Ringwallkrater am Mývatn,65.60169,-16.88069,452
 IBGRHT,Ibergeregg Hotel,Bergrestaurant,47.01768,8.73303,-9999
 ICBLKE,Ice Berg Lake,Ice Berg Lake,36.58003,-118.28486,-9999
 IFGNLP,Iffigenalp,,46.39975,7.44085,1584
+IFNHTI,Ifingerhütte (Rifugio Picco Ivigna),Hütte des CAI,46.69611,11.24083,1810
+IFNHTI,Ifingerhütte (Rifugio Picco Ivigna),Hütte des CAI Meran,46.69601,11.23989,1810
 IGLCMP,Igl Compass,,46.58907,9.82305,3016
 IGLS,Igls,,47.23108,11.4091,870
 IMHT,Ignaz-Mattis-Haus,,47.28459,13.64858,1986
@@ -2707,6 +2848,7 @@ INSHHU,Inn. Schaeferhuette,,46.83055,10.68482,2355
 InWial,Inn. Widdersteinalpe,jetzt n. SSE,47.29921,10.1199,1339
 INNRBG,Innerberg,,47.21528,9.78278,877
 INNERBERG,Innerberg,im Silbertal; Ausgangspunkt für den Itonskopf,47.09994,9.94371,1156
+INNROETALM,Innere Rötalm,,47.03671,12.15762,2174.7
 Itua,Innere Turaalpe,Forstweg weiter,47.31467,10.10229,1386
 INNTUR,Innere Turre,im NE-Grat des Strahlhorns (Gefahr: Abbruch nach Osten),46.03052,7.92204,3381
 INWTSP,Innere Wetterspitze,,46.99666,11.24664,3053
@@ -2737,10 +2879,12 @@ JAEGERBR,Jägerbrunnen,,47.69192,13.89669,-9999
 JAGRHR,Jägerhorn,,45.95236,7.87725,3970
 JAGIHR,Jägihorn,,46.40085,7.88412,3407
 JAIDHTAL,Jaidhaustal,,47.80443,14.34077,-9999
+JKBSKG,Jakobskogel,,47.71222,15.7591,1736
 JMTLHT,Jamtalhütte,Private Hütte,46.88645,10.17642,2164
 JAMTHT,Jamtalhütte,,46.8863,10.17666,2142
 JMTLHT,Jamtalhütte (neue),,46.88677,10.17624,2165
 JNKOTL,Janak (Outlier),,27.87222,88.09361,7035
+JNCHLP,Janchallani Pass,,-16.20201,-68.29109,4888
 JASAMB,Jasamba,,28.08139,86.60639,7351
 JMSNHM,Jaumson Himal,,28.84222,84.14389,6120
 JRNGHT,Jauringalmhütte,,47.57698,15.23914,1550
@@ -2795,6 +2939,8 @@ TP_00J,Jungu,Seilbahn-Bergstation Jungu oberhalb St.Niklaus,46.19614,7.80032,198
 TP_00J,Jungu,Bergstation Jungen von St.Niklaus ,46.19614,7.80032,1989
 JUNFRK,Juonenfürkli,weglose Scharte zwischen Frygebirge und Oswaldkopf; wird häufig verwechselt mit dem Madrisajoch,46.93887,9.8796,2614
 JUNFRS,Juonenfürkli (Steinmann),weithin sichtbarer Steinmann an der Nachbarscharte des Juonenfürkli; von hier weiter in netter Kletterei (Stellen I-II) auf den Oswaldkopf,46.93854,9.87902,2612
+JURAFLS,Jurafels,,50.02995,11.11444,531
+JURAHHTT,Jurahütte,Hütte des Coburger Alpenvereins,50.02977,11.11402,527
 JYCHYN,Jyachhyunga,,30.10611,81.08528,6338
 KARLHT,Kaarlhütte,,47.61569,15.6287,1310
 KARLHT,Kaarlhütte,private Hütte,47.6157,15.62868,1310
@@ -2835,6 +2981,8 @@ KAMMERSEE,Kammersee,,47.64894,13.94392,-9999
 KSTHUE,Kammersteiner Hütte,,48.11668,16.2282,572
 KMRSHT,Kammersteinerhütte,Hütte des ÖAV Liesing-Perchtoldsdorf,48.11678,16.22845,572
 KMRSHT,Kammersteinerhütte,Hütte des ÖAV Liesing-Perchtoldsdorf,48.11669,16.22819,572
+KMRSHT,Kammersteinerhütte,ÖAV Hütte,48.11667,16.22806,572
+KMRSHT,Kammersteinerhütte,ÖAV Hütte,48.11669,16.22819,572
 KAMOR,Kamor,,47.28917,9.49028,1700
 KAMPERKG,Kamperkogel,,47.64831,13.97914,1670
 KAMPHTN,Kamphütte,,47.60483,14.07492,-9999
@@ -2860,6 +3008,7 @@ KNSHRM,Kanshurm,,28.17139,85.74111,6078
 KNSDLP,Kansi Dalpha,,29.28333,82.55389,6386
 KFRHNB,Kanzel im Frohnbachtal,Naturdenkmal,49.86362,6.98928,-9999
 KANZEL,Känzele,Schöne Aussicht über ganz Nüziders und Bludenz,47.17861,9.78778,658
+KNZLFLS,Kanzelfels,,49.4682,11.50568,388
 KZLWND,Kanzelwand,,49.63526,11.41181,552.9
 KPCHUL,Kap Chuli,,29.84778,81.04083,6467
 KAPELL,Kapelle,,47.51111,9.76556,662
@@ -2883,9 +3032,11 @@ KRLNHS,Kärlinger Haus,,47.49524,12.93679,1629.7
 KRLNHS,Kärlingerhaus,Hütte der DAV Sekt. Berchtesgaden,47.49523,12.93698,1631
 KRLHSF,Kärlingerhaus/Funtensee,,47.49524,12.93697,1631
 KRLSHT,Karlsbader Hütte,,46.76316,12.8012,2260
+KRLSHT,Karlsbader Hütte,Hütte der DAV Sekt.Karlsbad/Tirschenreuth,46.76306,12.80111,2261
+KRLSHT,Karlsbader Hütte,Hütte der DAV Sekt. Karlsbad/Tirschenrteuth,46.76315,12.8012,2261
 KARLSPITZE,Karlspitze,,47.72958,14.14089,1883
 Kltor,Karlstor,event. Abfahrt ins Gemstel,47.28828,10.13424,2107
-KARNBG,Karnberg,,46.71108,14.29235,-9999
+KARNBG,Karnberg,,46.71108,14.29235,634
 KARREN,Karren Bergstation,,47.3875,9.75028,971
 KRTLST,Karren Talstation,,47.40111,9.75361,458
 KARREN,Karrenseilbahn Talstation,Talstation der Karrenseilbahn,47.40139,9.75417,458
@@ -2901,10 +3052,13 @@ KSKMRF,Käskammerfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/
 KASKELLER,Kaskeller,Höhle,47.66425,14.29447,-9999
 KSSLHT,Kasseler Hütte,,47.05947,11.94826,2177
 KSSLHT,Kasseler Hütte,AV Hütte über dem Talschluss des Stilluppgrundes ,47.05947,11.94827,2177
+KASSLHU,Kassler Hütte,,46.92903,12.1032,2277.8
 KSTLFL,Kastellfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.0834,7.7622,302
 KSLM,Kastenalm,,47.36967,11.43494,1220
 KTWTHT,Kattowitzer Hütte,,47.05832,13.39129,2360
 KATZENB,Katzenbuckel,Höchster Punkt des Odenwaldes. 18m hoher Aussichtsturm; schöner Rundblick. Ehemaliger Schlot eines Vulkans mit erkalteter Magma; welche der Erosion mehr Widerstand entgegensetzte. Das Gestein ist magnetisiert und kann den Kompaß beeinflussen.,49.47088,9.04163,626
+KTZBKLT,Katzenbuckel Turm,,50.02119,11.06516,483.1
+KTZBKLW,Katzenbuckel Westwandmassive,,50.02165,11.06474,481.9
 KTZNFL,Katzenfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2605,7.9865,497
 KTZNKP,Katzenkopf,,47.65427,11.51797,1350
 KATZENLO F,Katzenlöcher,,49.60541,11.55193,458.4
@@ -2924,6 +3078,7 @@ KNPRHT,Keinprechthütte,ÖAV Hütte,47.2746,13.69302,1872
 KLLRHT,Kellerhütte,,47.15301,12.27153,1669
 KLRJHT,Kellerjochhütte,,47.31663,11.76479,2237
 KLRJHT,Kellerjochhütte,ÖAV Hütte der Sekt. Hall in Tirol,47.31663,11.76478,2237
+KLRJHT,Kellerjochhütte,Hütte der ÖAV Sekt. Schwaz,47.31639,11.76472,2237
 KEL,Kelmen,,47.36908,10.68536,1355
 KMACHR,Kemacher,,47.31273,11.36657,2480
 KMTNTR,Kematen i. Tirol,,47.25435,11.2728,610
@@ -2949,6 +3104,8 @@ KLWTHT,Kieler Wetterhütte,,47.05174,10.29041,2809
 KNLTNK,Kienleiten K.,,47.38683,11.31641,1605
 MACH10,Kilimanjaro Summit,,-3.07641,37.354,5821
 KINGSP,Kingspitze,,46.67587,8.17601,2621
+KINGSP,Kingspitze Abseilst. Gipfel,Abseilstelle im Gipfelbereich am Westgrat,46.67569,8.17631,2619.1
+KINGNOW,Kingspitze NOW Einstieg,Weiter die Schlucht hinauf,46.67735,8.17714,2044
 KINHGR,Kinhorn-WNW-Grat,kleine Plattform auf dem WNW-Grat des Kinhorns,46.0784,7.8242,3177
 KINHT,Kinhütte,private Berghütte in der Südflanke des Grabenhorns,46.08995,7.81359,2584
 KINHTT,Kinhütte,seit Herbst 2001 neu errichtete Hütte bewirtschaftet,46.08817,7.807,2620
@@ -2977,11 +3134,15 @@ KLWINDLOCH,Kl. Windloch,Höhle,47.68311,13.95581,-9999
 KWOISING,Kl. Woising,,47.71817,13.89589,1879
 KLGNHT,Klagenfurter Hütte,,46.44687,14.18309,1660
 KLGNHT,Klagenfurter Hütte,ÖAV Hütte am Südalpenweg 03,46.44687,14.1831,1660
+KLGNHT,Klagenfurter Hütte,Hütte der ÖAV Sekt. Klagenfurt,46.44667,14.18306,1660
 KLAMME,Klammeck,,47.47325,13.74646,1869.9
 KLAMMKGL,Klammkogel,,47.70906,13.86353,1703
+KLAMMLJOCH,Klammljoch,,46.98409,12.13266,2292.7
 KLMPFL,Klammpfeiler,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1458,7.7706,250
 KLARATS,Klaratsberg,,47.4353,9.94092,1003
 KLAUSBG,Klausberg,,47.39333,9.86639,961
+KLSHTC,Klausener Hütte (Rifugio Chiusa al Campaccio),Hütte des CAI Bozen,46.68472,11.28278,1923
+KLSHTC,Klausener Hütte (Rifugio Chiusia al Campaccio),Hütte des CAI Bozen,46.72853,11.52355,1923
 KFSCHR,Klein Fiescherhorn,,46.55548,8.07578,3895
 KLGRHR,Klein Grünhorn,,46.53669,8.074,3913
 KLMTHR,Klein Matterhorn,,45.93808,7.72989,3883
@@ -3004,6 +3165,7 @@ KLOELB,Kleiner Ölberg,Höhe nach topographischer Karte,50.68816,7.25011,331.7
 K-PRIEL,Kleiner Priel,,47.73305,14.12945,2134
 KLRBNF,Kleiner Rabenfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1737,7.6684,448
 KSEEBODEN,Kleiner Seeboden,,47.64258,14.51282,-9999
+KLSTBTRM,Kleiner Stübiger Turm,,50.00859,11.08202,448.1
 KTRAGL,Kleiner Tragl,,47.61564,14.03073,2165
 KALTHR,Kleines Aletschhorn,,46.46747,7.97684,3750
 DAMUELHORN,Kleines Damülser Horn,,47.27056,9.86917,1929
@@ -3048,6 +3210,7 @@ KNORR,Knorrhütte,,47.41012,11.01271,2051.3
 KOBEL,Kobel Alpe,,47.36694,9.79278,995
 KOCHALM,Kochalm,,47.64255,14.45805,1185
 KCHLST,Kochelstein,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1566,7.8798,350
+KCHSPS,Kochuasini Pass,,-15.77061,-68.50001,4470
 KOFEL,Kofel,,47.58686,11.05957,1342
 KOGLER,Kogler,,47.77819,14.26388,-9999
 KGLJCH,Kögljoch,,47.49403,11.73582,1476
@@ -3083,6 +3246,7 @@ KRPSLY,Korpesley,Naturdenkmal,49.82237,6.66113,-9999
 KOSENNSP,Kosennspitze,,47.60839,14.21019,1962
 KSTNFL,Kostenfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2212,7.9232,327
 KSTNHT,Kostner Hütte,Franz-Kostner-Hütte (Vallon-Hütte),46.51303,11.83644,2541
+KOTALM,Kotalm,,47.51403,11.76931,1449
 KOTE,Kote,,47.65208,14.47129,1925
 KOTE,Kote,,47.70967,14.02425,2222
 KWSCHOPP,Kraftwerk Schoppernau,,47.30083,10.03972,893
@@ -3164,6 +3328,7 @@ KUEHBG,Kühberg,,47.385,9.74972,950
 KUHBG,Kuhberg,,47.00688,11.52521,1992
 KUHBDN,Kühboden,,46.41319,8.10299,2212
 KUEHFE,Kühfeld,,47.6197,14.24795,1923
+KUHFLS,Kuhfels,,49.4828,11.65137,431.9
 KUHGEHR,Kuhgehren,,47.33417,10.19139,1910
 KHSCHB,Kuhscheibe,,47.01288,11.05515,3188
 KULM,Kulm,Örtlichkeit bei St. Leonhard,46.74135,14.25612,-9999
@@ -3221,8 +3386,12 @@ LGCHIG,Lago del Chignolasc,Tourenbeschreibung siehe http://www.infraroth.de/inde
 LAGOHT,Lago Hütte,Private Hütte,46.35378,9.02002,2125
 Scuro,Lago Scuro,Wegpunkt Presenapass/Mandronhaus,46.20992,10.57281,2696
 XSPILLEK,Lago Spillek,Italien - Sette Communi,45.89296,11.45772,1101.8
+LCHJNK,Laguna Chojnakhota,,-16.13068,-68.34904,4461
+LGCHLM,Laguna Chullumpini,,-15.94074,-68.34037,4424
+LGNCND,Laguna Condoriri,,-16.19414,-68.24002,4669
+LGJRKH,Laguna Jurikhota,,-16.19869,-68.27683,4634
 LAHNGALM,Lahngangalm,,47.67275,13.93483,1494
-LDVNHT,Lai da Vons Hütte,Private Hütte,46.59053,9.39142,-9999
+LDVNHT,Lai da Vons Hütte,Private Hütte,46.59053,9.39142,2083
 LDRBWK,Laliderer Biwak,,47.38978,11.50339,2495
 LFLK,Laliderer Falk,,47.43528,11.51903,2427
 LDRFLK,Laliderer Falk,,47.43533,11.51916,2427
@@ -3241,6 +3410,8 @@ LMPSSP,Lampsenspitze,,47.15618,11.09593,2876
 LMSNHT,Lamsenjochhütte,,47.38021,11.60347,1953
 LMSHTT,Lamsenjochhütte,,47.38025,11.60339,1953
 LMSP,Lamsenspitze,,47.38275,11.59106,2508
+LNDWHT,Landawirseehütte,AV Hütte,47.27083,13.72583,1985
+LNDWHT,Landawirseehütte,AV Hütte,47.27103,13.72601,1985
 GASTHFISCH,Landgasthaus Fischer Stierberg,,49.68106,11.38716,545.9
 LNDSHT,Landshuter-Europa-Hütte,,46.9971,11.58054,2693
 LNDSHT,Landshuter-Europa-Hütte,AV + CAI Hütte direkt an der Landesgrenze,46.9971,11.58053,2693
@@ -3275,7 +3446,9 @@ ACON05,Las Lenas (newer site),,-32.75197,69.80757,-9999
 105,Las Torres; Geröllhalde,Las Torres; Geröllhalde,-50.94333,-72.94872,883
 106,Las Torres; Laguna,Las Torres; Laguna,-50.9429,-72.95027,867
 LASA,Lasa,,30.13556,81.08306,6189
-LSBGHT,Lasenberghütte,Private Hütte,46.47224,7.38994,-9999
+LSBGHT,Lasenberghütte,Private Hütte,46.47224,7.38994,1890
+LSZNHT,Laßnitzenhütte,private Berghütte,46.98423,12.33915,1887
+LSRLHT,Lasörlinghütte,private Berghütte,46.95702,12.3769,2350
 LTLHRN,Latelhorn,auch Punta di Saas,46.04474,8.0343,3204
 LATERNS,Laterns,,47.26722,9.70361,921
 LTSCHU,Latschau,Ortschaft oberhalb Schruns,47.07444,9.87861,983
@@ -3318,6 +3491,7 @@ LECHRINKG,Lechringkogel,,47.705,13.88125,1791
 LECKNSEE,Leckner See,,47.47639,10.03667,1000
 LGRLBR,Legerlibrücke,an der Strasse von Lauenen Ausgangspunkt am Anstieg zur Geltenhütte,46.39368,7.34113,1379
 LGLRHT,Legler Hütte,SAC Hütte,46.92736,9.08017,2773
+LEHENHMR,Lehenhammertalwände,,49.5158,11.56003,298.1
 LEISTHTT,Leistalmhütte,auch Leisthütte; Jagdhütte,47.60492,14.06355,1647
 LEITHT,Leit Hütte,Private Hütte,46.46629,8.71933,2260
 LEITKONK,Leiteraufstieg Konkordiahütte,Beginn des Leiteraufstiegs zur Konkordiahütte,46.50113,8.05199,2741.1
@@ -3329,6 +3503,8 @@ LNGRHT,Lenggrieser Hütte,,47.65175,11.63111,1338
 LNGRHT,Lenggrieser Hütte,,47.65197,11.63088,1338
 LENK,Lenk,,46.45669,7.44124,1064
 LNKRST,Lenkerstrubel,,46.40025,7.52862,3244
+LNKJHT,Lenkjöchlhütte (Rifugio Giogo Lungo),Hütte des CAI Bruneck,47.03917,12.19111,2590
+LNKJHT,Lenkjöchlhütte (Rifugio Giogo Lungo),Hütte des CAI Bruneck,47.0393,12.19512,2590
 LNZRTH,Lenzerath,Buntsandsteinfelsen; Naturdenkmal,50.24973,6.59586,519
 LENZSP,Lenzspitze,,46.10459,7.86851,4294
 LNZSPZ,Lenzspitze,,46.1045,7.86864,4294
@@ -3348,6 +3524,7 @@ LESROS,Les Rosses,Ruine eines Alpgebäudes,46.06112,7.56255,2415
 LSRSSS,Les Rousses,,46.33273,7.43708,1764
 LTRSPT,Letterspitzbiwak,,46.64188,12.80352,2080
 LUKRBD,Leukerbad,,46.38007,7.62737,1424
+LEUMER,Leumer Ged.-Wand,,50.025,11.19613,588.6
 LEUPSTWD F,Leupoldsteiner Wand,,49.69309,11.39013,534.1
 LPSTWD,Leupoldsteiner Wand,,49.69305,11.38994,573
 LEUPSTWD P,Leupoldsteiner Wand Parkplatz,,49.69393,11.38956,520.4
@@ -3361,6 +3538,7 @@ LHSHMM,Lhashamma,,29.22639,82.74722,6412
 LHOTSE,Lho Tse,,27.9625,86.93417,8516
 LHTSSH,Lhotse Shar,,27.95833,86.94306,8400
 LCHTBR,Lichtbrenntjoch,,47.46122,10.83422,1961
+LCHTNFLS,Lichtenfelser Dach,,50.02474,11.19479,594.4
 LICHKL,Lichtenhardter Klippen,unbedeutende Felsen nordwestl. des Gipfels des Lichtenhardt (auf Karte unbenannt),51.06271,8.13838,584
 MGEWP8,Lichtung (oberer Rand),,45.93671,9.00169,772
 Ltng1,Lichtung 1,allmählich zur Seilbahn zurück,47.29026,10.10918,1502
@@ -3368,7 +3546,7 @@ LDRNHT,Lidernen Hütte,SAC Hütte,46.93522,8.69268,1727
 LIEBLSCH,Lieblscharte,,47.65403,14.45585,1814
 Liechk,Liechelkopf,,47.29616,10.17964,2384
 LIECHKOPF,Liechelkopf,,47.29611,10.18,2383
-LIEMBG,Liemberg,,46.75135,14.23277,-9999
+LIEMBG,Liemberg,,46.75135,14.23277,725
 LIENZERHTT,Lienzer Hütte,,46.93469,12.74646,1972
 LIEZENER,Liezener,,47.65069,14.23228,2367
 LIEZENERHT,Liezener Hütte,,47.60531,14.16512,1767
@@ -3436,7 +3614,7 @@ LNGNHT,Longoni Hütte,Private Hütte,46.33022,9.82076,2417
 LNZHRN,Lonzahörner,,46.42389,7.90408,3560
 LORAHT,Loreahütte,,47.34654,10.79109,2018
 HTRNHT,Loreahütte (Otto Reinhardt Hütte),Hütte der DAV Sekt. Isartal/München,47.34653,10.79108,2018
-LORENZ,Lorenziberg,Örtlichkeit WNW von St. Veit,46.77278,14.31947,-9999
+LORENZ,Lorenziberg,Örtlichkeit WNW von St. Veit,46.77278,14.31947,971
 LORET,Loret,Pizzo Badille; Nordkante,46.32214,9.58331,1234
 LOSEGG,Losegg,Jagdhütte,47.61998,14.26295,1488
 LOSRHT,Loser Hütte,,47.65617,13.78133,1504
@@ -3454,9 +3632,12 @@ LUCAHT,Luca Hütte,Private Hütte,46.06372,9.02797,1070
 LUEDER,Lüderichberg,,50.93128,7.21019,260
 LUDSCH,Ludesch,,47.19472,9.78194,555
 LDWLHS,Ludwig-Walter-Haus,Hütte der ÖAV. Sekt. Villach,46.60307,13.67203,2143
+LDWLHS,Ludwig-Walter-Haus,ÖAV Haus der Sekt. Villach,46.60306,13.67194,2143
+LDWLHS,Ludwig-Walter-Haus,ÖAV Haus der Sekt. Villach,46.60307,13.67202,2143
 LDWGHT,Ludwigsburger Hütte,,46.60307,13.67202,2143
 LDWGSH,Ludwigshöhe,,45.9167,7.86356,4341
 LGFRDR,Luger Friedrich,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1837,7.8886,310
+LSENWD,Luisenwand,,50.03589,11.20317,534
 LKMNRH,Lukmanierpass; Hospezi S. Maria,Bergrestaurant,46.56371,8.8009,-9999
 MACH03,Lunch 1,,-3.07967,37.28238,3624
 MACH05,Lunch 2,,-3.06837,37.31743,4505
@@ -3524,11 +3705,12 @@ MNHMHT,Mannheimerhütte,Private Hütte,47.06561,9.69349,2679
 MANSIL,Mansail,,29.30194,83.81278,6235
 MNZBWK,Manzi Biwak,Biwak,46.2808,9.69191,2551
 MRNGHT,Marangun Hütte,Private Hütte,46.80829,10.08789,2025
+MAERCHLD,Märchenland,,49.4892,11.58883,331.9
 MRCRHT,Marco e Rosa Hütte,Private Hütte,46.37375,9.91031,3597
 MRNDKP,Marendköpfl,,47.37619,11.24645,1306
 MARGHO,Margarethenhöhe,Parkplatz an L 331 zwischen Königswinter und Ittenbach,50.67667,7.24896,320
 MARGST,Margarethenstein,Unterstandshütte und Wegweiser am Rothaarsteig (siehe http://www.rothaarsteig.de),51.09329,8.22382,685
-MRCRHT,Maria Curti Hütte,Private Hütte,46.40788,9.30887,-9999
+MRCRHT,Maria Curti Hütte,Private Hütte,46.40788,9.30887,1855
 MRIEBN,Maria Ebene,,47.22081,9.60508,574
 MRLSHT,Maria Luisa Hütte,Private Hütte,46.4346,8.42792,2157
 MRNBGS,Marienberg Sp.,,47.35057,10.91607,2561
@@ -3591,12 +3773,16 @@ MEILHT,Meiler-Hütte,Alpenvereinshütte,47.41233,11.12883,2384
 MILRHT,Meilerhütte,,47.41251,11.12913,2366
 MIRNGN,Meiringen,,46.72755,8.18221,595
 MEISENBERG,Meisenberg,,47.69111,14.05255,2119
+MSZNHS,Meißner Haus,Hütte der DAV Sekt. Grafing,47.20806,11.48833,1707
+MSZNHS,Meißner Haus,Hütte der DAV Sekt. Grafing,47.20827,11.48858,1701
 MLNAHT,Melanger Almhütte,,46.82605,10.67581,1970
 MELBOC,Melibocus,Gipfel mit Aussichtsturm; beliebtes Ziel von Mountainbikern,49.72484,8.63587,514
 MELL,Mellau,,47.35003,9.88183,688
 MNGRHT,Memminger Hütte,,47.20044,10.47845,2242
 MEMMHT,Memminger Hütte,vielbesuchte Hütte am E% oberhalb von Madau.,47.20043,10.47845,2242
 MERA,Mera,,27.77417,86.91111,6654
+HTGRHS,Meraner Hütte (Hermann-Gritsch-Haus),Hütte des AVS,46.68472,11.28278,1960
+HTGRHS,Meraner Hütte (Hermann-Gritsch-Haus),Hütte des AVS,46.68472,11.28284,1960
 MRGLBG,Mergelsberg,,50.92847,7.15022,136
 MRGUGN,Mergugno,Parkmöglichkeit am Ende der Fahrstraße von Brissago (Incella) herauf,46.12739,8.68315,1071
 MRKNSH,Merkenshöhe,im Wald versteckter Felsgipfel,50.66833,7.24935,391
@@ -3605,7 +3791,7 @@ MERRA,Merra,,27.74083,88.01667,6334
 MESCHN,Meschen,,47.46367,9.75742,500
 MESMER,Mesmer,Bergrestaurant,47.25938,9.37332,1613
 MESSNR,Meßnerin,,47.5603,15.0872,1835
-METSCH,Metsch,Bergrestaurant,46.44193,7.46896,-9999
+METSCH,Metsch,Bergrestaurant,46.44193,7.46896,1801
 MTMNNF,Mettmen; Naturfreundehaus,Private Hütte,46.96054,9.09917,1560
 MTBGHS,Mettmenalp; Berggasthaus,Bergrestaurant,46.95824,9.09741,1620
 FIARA,Mga. Fiara,Italien - Sette Communi,45.9577,11.55028,1624.3
@@ -3662,8 +3848,10 @@ MITTER,Mitter-Alm,,47.70809,12.03862,1200
 MITTERBERG,Mitterberg,,47.59594,14.04039,2185
 MTTRHR,Mitterhorn,,47.54964,12.62816,2503.3
 MITTERHT,Mitterhütte,,47.81341,14.1904,-9999
+MITTEJ,Mitterjoch,,47.44358,10.78197,1881
 MTRKBW,Mitterkar Biwak,ÖAV Sekt. Austria,46.66397,12.67958,1973
 MTRKBW,Mitterkar-Biwak,,46.66397,12.67959,1973
+MTRKRB,Mitterkarbiwak,,46.66389,12.67944,1973
 MITKJ,Mitterkarjoch,Schlüsselstelle beim Normalaufstieg von der Breslauer Hütte,46.885,10.85639,3462
 MTRKHT,Mitterkaser Almhütte,,46.75269,10.94513,1954
 MITTERMOEL,Mittermölbing,,47.63186,14.17777,2322
@@ -3676,6 +3864,7 @@ MHNZNF,Mittlere Hinzenfelsen,<a href="http://www.summitpost.org/show/mountain_li
 OEDKARSP,Mittlere Ödkarspitze,,47.41254,11.42448,2746
 MTBRNK,Mittlerer Bärenkopf,Gletschertour,47.12414,12.71178,3357
 GCKLBG,Mittlerer Göckelsbergfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2196,7.8951,259
+MDLNHT,Mödlinger Hütte,ÖAV Hütte der Skt. Mödling,47.52904,14.55325,1523
 MDLNGR,Mödlinger Hütte,,47.52907,14.55287,1523.1
 MOEHTT,Mödlinger Hütte,Schön gelegen; Aufstieg von Johnsbach,47.52905,14.55325,1523
 MOGGRS,Möggers,,47.56083,9.81611,923
@@ -3782,6 +3971,7 @@ MORLLP,Mörlialp,Bergrestaurant,46.82542,8.1103,-9999
 MRSBHT,Mörsbachhütte,,47.38149,14.0831,1300
 MRSBHT,Mörsbachhütte,Hütte der ÖAV Sekt. Graz,47.38148,14.0831,1300
 MOERZ,Mörzelspitze,,47.34583,9.81111,1830
+MOSELA,Moselalm,,47.55972,11.57528,1262
 MSLRLY,Moselloreley,Dieses Felsmassiv ist die kleinere Ausgabe der großen Rheinloreley. In älteren topographischen Karten führt es den Namen "Rotlei". Neben dem Kupferglanz-Erz entdeckte man in dem harten Gestein vor allem Bleiglanz. Er ist das mineralische Ausgangsmaterial zur Herstellung von Zink; Kupfer; Blei und der Töpferglasur. Das Felsmassiv ist nicht nur schön; sondern es brachte in den dreißiger Jahren dieses Jahrhunderts auch einen wirtschaftlichen Nutzen. In bergmännischer Art trieb man zwei Förderstollen in das Felsmassiv. Das herausgesprengte oder gebrochene Erzgestein lagerte vor dem unteren Stolleneingang auf dem kleinen Plateau. Zu Zeiten im Jahreskreis; wenn die Mosel (vor der Kanalisation) mehr Wasser führte; kamen Schiffe von Trier her und transportierten das erzhaltige Gestein moselabwärts ins Ruhrgebiet zu den Hochöfen. Da sich der Abbau (ca. 1941) nicht mehr lohnte; wurden die Förderstollen stillgelegt. Gegen Ende des II. Weltkrieges diente der untere als Zufluchtsstätte vor Fliegerangriffen. Die romantische "Moselloreley" ist Anfang Juli die natürliche Kulisse für ein Großfeuerwerk.,49.87509,6.93306,-9999
 MOSENBERG,Mosenberg,Gipfel mit Aussichtsturm südöstlich des Windsborn Maars,50.08104,6.7807,521
 MOSLLM,Möslalm,,47.33744,11.34311,1262
@@ -3817,7 +4007,7 @@ MSWTZR,Munt Pers,,46.42177,9.95357,3207
 MNTRLY,Munterley,Naturdenkmal. Teil der Gerolsteiner Dolomiten; die auf über 100 m über das Talniveau ansteigen. Die steilen Felsformationen entstanden vor 380 - 320 Millionen Jahren als Kalkriff in einem tropischen devonischen Flachmeer; das von Korallen und Stromatoporen gebildet wurde. Ähnlich den Korallenriffen tropischer Meere sind an den Gerolsteiner Dolomiten die Riffoberkante; der Steilabfall und die darunterliegende Blockhalde leicht zu erkennen. In den Gerolsteiner Riffen ist es durch Auswaschung des Calciumcarbonats und Anreicherung des Magnesiumcarbonats aus den Skeletten der riffbildenden Meeresorganismen durch Kristallisation zur Bildung von Dolomit gekommen. Bei dem chemischen Prozess gingen die Formen der Fossilien verloren; so daß sich in den mächtigen Steinwänden keine Fossilien mehr finden. Versteinerungen; die in den Eifler Kalkmulden häufig sind; fand man früher vor allem auf frisch gepflügten Feldern an Stellen; wo das Gestein nur dünn von Verwitterungsboden bedeckt ist. Da das Gelände heute nicht mehr ackerbaulich genutzt wird; werden Fossiliensammler; die früher scharenweise das Gerolsteiner Land aufsuchten; nur noch an Baustellen und Straßenbauprojekten fündig. An der Nordwestseite der Munterley liegt das Buchenloch; eine 36 m lange Karsthöhle; in der während der Altsteinzeit Menschen wohnten,50.22653,6.65517,482
 MNTSCH,Muntische,Schneeschuhtour Januar 2005,46.59247,9.59044,2528
 MNZFLS,Münzfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1904,7.9869,488
-MTSKLM,Muottas Kulm,Bergrestaurant,46.52187,9.9019,-9999
+MTSKLM,Muottas Kulm,Bergrestaurant,46.52187,9.9019,2545
 MURRHT,Murauer Hütte,,47.0836,14.15135,1583
 MURRHT,Murauer Hütte,Hütte der ÖAV Sekt. Murau,47.0836,14.15135,1583
 MDELLF,Muro Dell'Asino - Kletterwand,Klettertouren für Anfänger geeignet - ab Schwierigkeitsgrad 3+,45.93046,10.88783,342
@@ -3859,7 +4049,8 @@ NAPLON,Napoleon,,49.76975,11.33136,452
 NPOLON,Napoleon,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1215,7.7707,336
 NASENTURM,Nasenturm,Einstieg zu den Routen am Nasenturm (Untermaubach),50.72944,6.46658,169
 NSSFHS,Nassfeldhaus,,46.56312,13.27482,1513
-NSSFHS,Nassfeldhaus,private Hütte,46.56313,13.27482,1513
+NSSFHS,Nassfeldhaus,private Hütte am Karnischen Höhenweg,46.56313,13.27482,1513
+NSSFHS,Nassfeldhaus,private Hütte am Karnischen Höhenweg,46.56306,13.27472,1513
 NATTERRGL,Natterriegel,,47.64036,14.48954,2065
 NFALHS,Naturfreundehaus Albishaus,Koordinaten nach Quelle nur auf ca. 100 m genau (bei Kenntnis genauerer Koordinaten bitte im Kommentar angeben),47.27982,8.50924,830
 ALPSBG,Naturfreundehaus Alpenhof-Stechelberg,Koordinaten nach Quelle nur auf ca. 100 m genau (bei Kenntnis genauerer Koordinaten bitte im Kommentar angeben),46.54355,7.90146,915
@@ -3961,18 +4152,25 @@ NDSCHT,Nauderer Schihütte,,46.87795,10.54848,1913
 NAVIS,Navis,,47.12975,11.53941,1340
 NVSRHT,Naviser Hütte,,47.14201,11.56861,1787
 NVSRHT,Naviser Hütte,ÖAV Hütte,47.14202,11.5686,1787
+NVSRHT,Naviser Hütte,Hütte der ÖAV Akadem. Sekt. Innsbruck ,47.14194,11.56833,1787
 NAZOGL,Nazogl,,47.61114,14.22931,2057
 NMULD,NE- Mulde,weiter nach SW- in aufsteilende Mulde,47.28584,10.09261,1918
+NBLSTNW,Nebelsteiner Wand,,49.6911,11.26002,306.9
 NBLSHT,Nebelsteinhütte,Hütte der ÖAV Sekt. Waldviertel am Schnittpunkt einiger Fern- und Weitwanderwege,48.67288,14.77883,1000
+NBLSHT,Nebelsteinhütte,Hütte der ÖAV Sekt. Waldviertel; am Schnittpunkt einiger Weit- und Fernwanderwege,48.67289,14.77884,1000
+NBLSHT,Nebelsteinhütte,Hütte der ÖAV Sekt. Waldviertel; am Schnittpunkt einiger Weit- und Fernwanderwege,48.67278,14.77861,1000
 NDNGFL,Nedingfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1983,7.8569,336
+NGRNPS,Negruni Pass,,-15.91031,-68.37529,4920
 NZING,Nenzing,,47.18306,9.7,510
 NPLPK,Nepal Peak,,27.77694,88.67528,6910
+NEPPWD,Neppwand,,49.81464,11.2948,392.9
 NSSLBG,Nesselbergfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1782,7.8939,300
 NESTHR,Nesthorn,,46.41318,7.92597,3822
 NEUBURG,Neuburgalpe,,47.43208,10.06114,1354
 PFRZHT,Neue Pforzheimer Hütte,,47.15514,11.07166,2310
 NPRGHT,Neue Prager Hütte,,47.12307,12.3924,2796
 RGNSHT,Neue Regensburger Hütte,,47.05457,11.19874,2286
+THRNHT,Neue Thüringer Hütte,Hütte des DAV,47.1725,12.38333,2212
 NEUAHB,Neuenahrer Berg (Aussichtsturm),,50.53102,7.13837,350
 NFLDTR,Neufeldtürmchen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1988,7.846,245
 NLNDHT,Neulandhütte,,47.67693,11.4902,1235
@@ -3993,8 +4191,10 @@ NDRGST,Niedergesteln,,46.3135,7.78214,639
 NDHRHT,Niederhornhütte,SAC-Bern,46.61105,7.406,1390
 NDRNHT,Niedernalp Hütte,private Berghütte,46.90573,9.19163,1480
 NDRSHS,Niedersachsenhaus,,47.06054,13.01017,2471
+NDRSHS,Niedersachsenhaus,Hütte der DAV Sekt. Hannover,47.06028,13.01,2472
 NIEFLS,Niedrige Felswand,"Niedrige Felswand" ist der Name des Felsens; Koordinate am Gipfel aufgenommen; Kletterverbot!,50.65926,6.49567,252
 NIESHR,Niesehorn,,46.38219,7.37364,2776
+NIESTWD,Niestenerwand,,50.07198,11.26681,470.9
 NKLSLY,Nikolauslay,Naturdenkmal,49.85962,6.34678,-9999
 NKLSLY,Nikolauslay,Naturdenkmal,49.85962,6.34678,-9999
 NLGCNT,Nilgiri Central,,28.67917,83.73861,6940
@@ -4045,6 +4245,7 @@ OBRLHT,Oberaletschütten,,46.42493,7.97382,2640
 OBRLPG,Oberalppass; Piz Galmot,Bergrestaurant,46.65973,8.67099,-9999
 OBRBLD,Oberbildstein,,47.46289,9.80753,915
 OBRCHS,Oberchäseren,Bergrestaurant,47.17767,9.12889,1656
+OBRBGL,Obere Bergalm,,47.53416,11.76019,1029
 OBBAHT,Obere Birg Almhütte,,46.89199,10.73004,2175
 OBHTSH,Obere Hölltalscharte,Einstieg zum SW-Grat auf die Ruderhofspitze (nicht die Hölltalscharte; untere wählen),47.03582,11.13756,3251
 OBOCHSSCH,Obere Ochsenscharte,Übergang von der Wiesbadener Hütte zur Jamtalhütte; muss beim Anstieg zur Dreiländerspitze von der Wiesbadener Hütte aus nicht betreten werden,46.85465,10.14394,2965
@@ -4099,6 +4300,8 @@ OBWLHT,Obwaldhütte,Oberwalderhütte (Skihütte; im Sommer Jausenstation),46.95468,
 OCHSNL,Ochsenalp,Private Hütte; keine Nächtigung,46.80661,9.64171,1936
 OCHSHR,Ochsenhorn,,47.53802,12.66015,2510.3
 OCHSNK,Ochsenkampen,,47.66617,11.66592,1595
+OEDSCHLCH,Oeder Schlucht,,49.51026,11.56216,321
+OEDERWD,Oeder Wand,,49.51143,11.56147,316.1
 ÖKM,Oedkarspitze; Mittlere,,47.41253,11.42431,2743
 ÖKÖ,Oedkarspitze; Östliche,,47.41256,11.42992,2739
 ÖKW,Oedkarspitze; Westliche,,47.41183,11.42028,2711
@@ -4153,6 +4356,7 @@ OKNDHS,Otto-Kandler-Haus,Hütte der ÖAV Sekt. St. Pölten,47.9847,15.49922,1195
 SCHWHT,Otto-Schwegler-Hütte,,47.08108,12.92062,2987
 OUMLFB,Otto-Umlauft-Biwak,,47.08108,12.92062,2987
 OUMLFB,Otto-Umlauft-Biwak,am Hocharn Westgrat,47.08108,12.92063,2987
+OUMLFB,Otto-Umlauft-Biwak,Biwakschachtel der ÖAV Sekt. Klagenfurt,47.08083,12.92056,2987
 OTTOHS,Ottohaus,,47.71328,15.76182,1644
 OKRNHS,Ottokar-Kernstock-Haus,,47.50933,10.61879,1530
 OKRNHS,Ottokar-Kernstock-Haus,ÖAV Hütte der Sekt. Bruck a.d Mur nahe des Gipfel des Rennfeld,47.40562,15.35938,1619
@@ -4206,15 +4410,16 @@ PAMLAK,Pamlaka,,27.94083,86.34528,6349
 PNLOTP,Panalotapa,,27.80472,86.57111,6696
 PNGBUK,Pangbuk,,28.00417,86.51944,6631
 PNXRHT,Panixerpasshütte,SAC Hütte,46.856,9.10407,2407
-PNSSHT,Panossière Hütte,SAC Hütte,45.99487,7.30402,2645
 PNSRBW,Pansera Biwak,Biwak,46.36104,9.95003,3546
 PARTCR,Parallel to creek,Parallel to creek,36.58475,-118.25917,-9999
 PRCHMC,Parchemuche,,27.83056,86.54583,6187
 PARDIL,Pardiel,Bergrestaurant,46.98859,9.46494,-9999
 ACNG01,Park Entrance (Horcones),,-32.82447,69.9421,-9999
 PRKDAL,Park-/Campingmöglichkeit Castell d'Alaro,hierher auf sehr schlechter Straße; ab hier befestigter; historischer Fußweg zum Castell,39.73494,2.78681,700
+PAVWND,Parken Alpenvereinswand,,50.02643,11.10726,442
 PBTZSTN,Parken Betzensteiner Sportkletterwand,Parken Betzensteiner Sportkletterwand,49.68229,11.40928,509
-PEGLST,Parken Egloffstein,Parkplatz am Freibad,49.7031,11.26349,419.1
+PBLSAUB,Parken Burglesauer Block,Es gilt eine Zufahrtbeschränkung! Nur für landwirtschafliche Fahrzeuge !,49.98856,11.08578,538.9
+PEGSTGW,Parken Egloffsteiner Gemsenwand,Parkplatz des Freibades,49.70225,11.26202,264
 PEBNWD,Parken Eibenwände,Parkplatz und Zugang für Eibenwände und Fehensteine,49.77314,11.33953,470
 PFLSLD,Parken Felslandl,,49.7072,11.61524,433.1
 FFWNHS,Parken Feuerwehr Neuhaus,Ausgangspunkt zu den Kletterfelsen im Bärental. Beschränkte Parkmöglichkeiten.,50.06087,11.26213,412.1
@@ -4222,13 +4427,16 @@ PGLZST,Parken Glatzenstein,,49.53988,11.37091,449
 PHLSTD,Parken Haselstaudener Wände,,49.68324,11.28562,431.9
 PHXNKE,Parken Hexenküche,,49.66179,11.32887,531.9
 PHRFLS,Parken Hoher Fels,Vom Parkplatz am Trafohäuschen vorbei in den Wald. Steil hinauf; dann wieder hinunter; an einem Acker vorbei und wieder durch den Wald hinauf. Der Hohe Fels liegt direkt am Wanderweg 34 dem man gefolgt ist.,49.47997,11.59466,537.1
+PHLFLS,Parken Hohler Fels,Dem Wanderweg (Markierung blauer Punkt) folgen bis zu einer Wegkreuzung (Schild Arzlohe u. Förrenbach; separater Wegpunkt). Dann rechts der Markierung (grüner Strich) folgen,49.4917,11.50333,398.1
 PHLZWD,Parken Holzgauer Wand,Zugang zur Holzgauer Wand; Bauernschmitt Ged.-Wand und Toni Schmid Ged.-Wand.,50.03612,11.20499,396.8
+PKZLFLS,Parken Kanzelfels,Vom Parkplatz die Straße 50 m in Richtung Förrenbach. Dann links in den Weg einbiegen.,49.46868,11.51002,406.9
 PKRZTN,Parken Kreuzstein,Zum Parken noch etwas in den Wald fahren.,49.97891,11.09766,438.9
 PLPSTW,Parken Leupoldst. Wand,Parkmöglichkeit Leupoldsteiner Wand. Abzweig (B2) an der Bushaltestelle 29. Von Nürnberg kommend ca. 200 Meter hinter dem Wirtshaus (Alte Post?),49.69281,11.39165,539.8
 PMTLBG,Parken Mittelbergwand/Castellwand,Vom Ortseingang Unterhirschbach ist die Mittelbergwand sichtbar.,49.55174,11.52502,305.1
 PMSTVL,Parken Mostvieler Klettergarten (Unentwegtenwand),Parkplatz Mostvieler Klettergarten und Unentwegtenwand. Der Zugang erfolgt über den Wanderweg (zuerst Wiese) zwischen dem Gasthof und Parkplatz. An der Bank rechts dem Wanderweg folgen und gleich wieder links zu den Felsen.,49.71238,11.25684,321.9
 PMNCHW,Parken Münchser Wand,,49.67657,11.37457,519.1
 PNAPLN,Parken Napoleon,,49.76679,11.33034,447.1
+PRGNWD,Parken Regenwand,,50.07228,11.26188,236.7
 PSRGWD,Parken Schloßbergwand,Vom Parkplatz Richtung Burggaillenreuth. Bei der freiwilligen Feuerwehr nach rechts abzweigen.,49.77437,11.28448,324
 TDCHIE,Parken Tete de Chien/La Turbie,Zugang zum Klettergebiet "La Turbie". Schöner Blick auf Monaco.,43.73176,7.4019,569.1
 PWSWND,Parken Weiße Wand/Höhenglückssteig,Die Weiße Wand (rechts) ist von Parkplatz sichtbar. An den linken Felsen befindet sich der Höhenglückssteig. An diesen Felsen sind keine Kletterrouten eingerichtet!,49.53821,11.5335,420
@@ -4321,6 +4529,7 @@ PTSCHR,Patscherkofel,,47.20891,11.46072,2246
 PTSCHT,Patscherkofel Hütte,,47.2108,11.45211,1964
 PTSCHS,Patscherkofelhaus,,47.21117,11.45232,1970
 PTSCHS,Patscherkofelhaus,,47.21117,11.45232,1970
+PTSCHS,Patscherkofelhaus,Htte er ÖV Sekt. T.K. Innsbruck,47.21111,11.45222,1970
 PTTROL,Patteriol,,47.044,10.1875,3056
 PAULNREIT,Päulenreith,,47.69419,14.24,-9999
 PAYHUE,Payer-Hütte,,46.52767,10.54331,3020
@@ -4330,6 +4539,8 @@ PIDRSP,Peider Spitze,,47.21994,11.12152,2808
 PEILSP,Peilspitze,,47.10293,11.39057,2393
 PLSTHS,Peilsteinhaus,,48.01484,16.05201,716
 PLSTHS,Peilsteinhaus,ÖGV Sekt. Gebirgsverein,48.01483,16.052,716
+PLSTHS,Peilsteinhaus,ÖAV Hütte,40.01472,16.05194,716
+PLSTHS,Peilsteinhaus,ÖAV Hütte,48.01483,16.05199,716
 PELZLI,Pelzli,Mit dem Zug nach Grellingen. Vom Bahnhof mit dem Postauto Richtung Seewen. Der Chauffeur hält auf Anfrage beim Pelzliparkplatz an. Vom Busstop zweigt ein Weg direkt zu den Felsen ab. Routenanzahl ca. 252; -5c bis 8a; Routenlängen 7-34 m Das Pelzli ist eines der grössten Gebiete im Basler Jura. Es besteht aus mehreren Felsgruppen; die sich auf eine Strecke von ca. 900 m erstrecken. (Auszug aus Kletterführer Fluebible) ,47.43756,7.61494,-9999
 MP14,Penidentes,Penidentes - Einstieg (?),-33.72205,-69.93342,4600
 MP15,Penidentes,Penidentes - Ausstieg (?),-33.72198,-69.9327,4613
@@ -4383,6 +4594,7 @@ PSBTHN,Phole Sobithongje I,,27.68639,88.02833,6669
 PHLLHT,Pholela Hut,1. Wanderhütte,29.67783,29.40864,1725
 PHNPCW,Phunphun Chuli (Wedge),,29.27139,82.77444,6102
 PHRCHY,Phurbo Chyachu,,28.13056,85.86944,6637
+PCNPMP,Piacuani Pampa,,-15.97446,-68.31672,4280
 PNALHT,Pian d'Alpe Hütte,Private Hütte,46.3946,8.93857,1764
 PCRSHT,Pian di Crest Hütte,Private Hütte,46.39104,8.4869,2108
 PGRNBW,Pian Grand Biwak,Biwak,46.41327,9.1631,2398
@@ -4397,6 +4609,7 @@ PCNGCD,Pic de Neige Cordier,Höhenangabe gemäss IGN Karte,44.95528,6.38858,3614
 PCGSPR,Pic Gaspard,,44.99809,6.33065,3881.0
 PCSNSN,Pic Sans Nom,,44.89333,6.38347,3913.0
 PCTCKT,Pic Tuckett,,44.94769,6.43028,3567.9
+PICDLY,Piccadilly di Bedretto,Einstieg zur Route "Piccadilly di Bedretto". ,46.49506,8.45588,2309.2
 BEJENADO,Pico Bejenado,,28.69247,-17.87681,1844
 BEJENADOVP,Pico Bejenado (nordwestlicher Vorgipfel),Vermessungspunkt; schöner Tiefblick in den Barranco de las Angustias,28.693,-17.87758,1837
 BIRIGOYO,Pico Birigoyo,Pico Birigoyo,28.6048,-17.84084,1804
@@ -4404,6 +4617,7 @@ CORRALEJO,Pico Corralejo,,28.69828,-17.83989,2045
 TEIDE,Pico de Teide,,28.27278,-16.64236,3718
 NAMBROQUE,Pico Nambroque,mit kurzen Abstecher von der Vulkanroute aus erreichbar,28.5833,-17.83335,1919
 PICOOVEJAS,Pico Ovejas,,28.68486,-17.83248,1861
+PDRGRN,Piedra Grande,,-15.79201,-68.44355,3620
 ACNG04,Piedra Grande,,-32.73549,70.00083,-9999
 PRRAVO,Pierre Avoi,,46.11838,7.20036,2473
 PGNDAR,Pigne d'Arolla,,45.99135,7.45516,3796
@@ -4518,7 +4732,7 @@ PRTLFRKL,Portla Fürkli,,47.28221,9.84039,1799
 PORTLA,Portlahorn,,47.29083,9.85,2010
 PORTLAHORN,Portlahorn,,47.28994,9.8497,2010
 PORTLAKOPF,Portlakopf,,47.28083,9.84361,1906
-PRTSCH,Pörtschach am Berg,südwestl. von St. Veit a.d. Glan,46.69976,14.31841,-9999
+PRTSCH,Pörtschach am Berg,südwestl. von St. Veit a.d. Glan,46.69976,14.31841,584
 PRCPLM,Porze (Cima Palombino),Zustieg auf Klettersteig vom Karnischen Höhenweg 403,46.65108,12.56847,2599
 PORZHT,Porzehütte,,46.65972,12.58232,1942
 PORZHT,Porzehütte,ÖAV Sekt. Austria,46.65972,12.58232,1942
@@ -4535,11 +4749,13 @@ PRGRHT,Prager Hütte (neue),,47.12309,12.39234,2796
 PRGRHT,Prager Hütte (Neue),Hütte der DAV Sekt. Oberland/München,47.12308,12.39233,2796
 PRAEGR,Prägraten,,47.01814,12.37421,1355
 PRMRSP,Pramarnspitze,,47.02374,11.29163,2511
+PRTRST,Praterstern,,47.7168,15.7622,1624
 PRXSPO,Praxmarerkarspitze; Östliche,,47.35139,11.40361,2636
 PRXSPW,Praxmarerkarspitze; Westliche,,47.35083,11.40167,2523
 PRDGTS,Predigtstuhl,Naturdenkmal,49.85479,6.33019,-9999
 PRDGTS,Predigtstuhl,Naturdenkmal,49.85479,6.33019,-9999
 PRDGTS,Predigtstuhl,,47.38339,11.05802,2234
+PRNRWN,Preinerwandgipfel,,47.70065,15.73817,1783
 Presen,Presenapass,Presena Schigebiet,46.22008,10.58475,3031
 PRIBIZ,Pribitz,,47.55129,15.05486,1579
 PRILSH,Priel-Schutzhaus,,47.70543,14.08323,1420
@@ -4547,6 +4763,7 @@ PRLSHS,Prielschutzhaus,,47.70489,14.08209,1420
 PRLSHS,Prielschutzhaus,ÖAV Hütte der Sekt. Touristenklub Linz,47.70488,14.08208,1420
 PRILHS,Prielschutzhaus,,47.70483,14.08133,1420
 PRNRHT,Priener Hütte,,47.70203,12.32757,1410
+PRNRHT,Priener Hütte,Hütte der DAV Sekt. Prien,47.70194,12.3275,1410
 PRLTHS,Prinz-Luitpold-Haus,,47.39245,10.41981,1846
 PRBSTL,Probstalm,,47.65804,11.48727,1375.2
 PRBGHT,Prochenberghütte,,47.93287,14.9165,1123
@@ -4554,6 +4771,7 @@ PRBGHT,Prochenberghütte,,47.93287,14.9165,1123
 PRDRHT,Prodör Hütte,Private Hütte,46.49812,8.81376,1757
 PRSTRW,Prosterather Wacken,In der Str. "Zum Felsen" liegt ein haushoher Felsblock wie ein gestrandetes Urtier inmitten der Wohnanlage und er rührt sich seit Jahrmillionen nicht vom Fleck. Hunsrücker Wacken Auf den Höhenzügen des Hunsrücks ist der Quarzit das landschaftsprägende Gestein. Er stammt aus Sandablagerungen des Erdaltertums; die unter dem Druck später abgelagerter Schichten stark verfestigt wurden. Eingebettet ist der Quarzit in weicheres Gestein wie Schiefer und Grauwacke; das leichter abzutragen ist. Wegen seiner hohen Widerstandskraft gegen Verwitterung und Erosion ragen stellenweise die Quarzithärtlinge als bizarre Felsgebilde aus der Erde hervor. S sind sie durch Wind und Wetter im Verlaufe der Jahrmillionen zu unseren heutigen Naturdenkmälern präpariert worden.,49.74017,6.9256,-9999
 PROUHT,Prou Hütte,Private Hütte,46.43614,9.00036,2015
+PSLRTS,Psiloritis,Besteigung am 06.06.2006,35.22639,24.77083,2454
 ACON01,Puerta del Incas,,-32.82462,69.90953,2721
 PHRNHT,Pühringer Hütte,,47.68667,13.966,1638
 PUEHRHTT,Pühringer Hütte,,47.6879,13.9676,1638
@@ -4641,6 +4859,7 @@ RPNWND,Rappenwand,<a href="http://www.summitpost.org/show/mountain_link.pl/mount
 RARON,Raron,,46.31173,7.80005,637
 RSKGHT,Rastkogelhütte,,47.23205,11.78838,2124
 RSKGHT,Rastkogelhütte,Hütte der DAV Sekt. Oberkochen,47.23205,11.78837,2124
+RSKGHT,Rastkogelhütte,Hütte der DAV Sekt.Oberkochen,47.23194,11.78833,2117
 TP02,Rastplatz,Tupungato - Pausenplatz,-33.35285,-69.88818,3085.9
 RTRCHS,Räterichsboden Staumauer,,46.59067,8.32844,1767
 RTHONG,Rathong,,27.59361,88.09083,6679
@@ -4675,7 +4894,7 @@ CIUTTU,Refuge Ciuttulu di i Mori,,42.33486,8.8681,1991
 REFARG,Réfuge d'Argentière,,45.94641,7.0046,2770
 RFAGNT,Réfuge d'Argentière,CAF-Hütte,45.94635,7.00472,2771
 RFARML,Refuge d'Armeillon,immer zugängliche Selbsversorgerhütte,46.36142,7.41811,2130
-RFGDUB,Refuge d'Ubine,Naturfreunde Frankreich,46.30666,6.74262,1740
+RFUBRM,Refuge d'Ubine/Refuge le c'Maclie,Naturfreunde Thonon les Bains,46.30833,6.74333,1450
 REFCH,Refuge de Chésery,Privat,46.19828,6.80968,1980
 RFFRFN,Refuge de Furfande,private Berghütte,44.72875,6.7125,2300
 RFGLBL,Refuge de Glacier Blanc,,44.93744,6.41178,2542
@@ -4693,6 +4912,7 @@ RFGPRD,Refuge de Pierredar,Private Hütte,46.32131,7.19467,2293
 REFTRE,Refuge de Tre la Tete,,45.79173,6.73483,1970
 REFESC,Refuge de'l Escapade,Hütte des Skiclub Sanetsch,46.25886,7.28353,1420
 PIOBBU,Refuge del Ortu di u Piobbu,,42.46483,8.90707,-9999
+RFDNTM,Refuge Dents du Midi,Hütte der CAS Sekt. Argentiere,46.16431,6.93942,2884
 REFBAN,Refuge des Bans,,44.83433,6.36097,2083
 RFDBQT,Refuge des Bouquetins,SAC Hütte,45.97089,7.53049,2980
 REFCON,Refuge des Conscrits,,45.78689,6.76576,2604
@@ -4718,6 +4938,7 @@ TIGHIE,Refuge Tighiettu,,42.36225,8.90916,1684.9
 REFVIE,Refuge Vieux Emosson,CAS Sekt. Monte Rosa/Martigny; Hütte,46.06239,6.90042,2160
 RIPNTB,Refuge-Igloo des Pantalons Blanc,Biwak,46.04053,7.36837,3280
 RFBGSL,Refuge/Auberge de Salanfe,private Berghütte,46.14456,6.97046,1950
+RFCBCH,Refuge/Cabane de Chalin,Hütte der SAC Sekt. Chalin,46.17928,6.94705,2595
 RFCNBR,Refuge/Cantine de Barmaz,private Berghütte,46.14049,6.83352,1500
 CARROZZU,Refugede Carrozzu,,42.42627,8.90041,236.7
 103,Refugio Chileno,Refugio Chileno,-50.95718,-72.911,414
@@ -4729,6 +4950,7 @@ REFPUNTA,Refugio de la Punta de los Roques,,28.7038,-17.84633,2057
 502,Refugio Peohe,Refugio Peohe,-51.07159,-73.09249,50
 RGNSHT,Regensburger Hütte (Neue),,47.0547,11.19824,2286
 RGNSHT,Regensburgerhütte (Neue),Hütte der DAV Sekt. Regensburg,47.0547,11.19825,2286
+RGNWND,Regenwand,,50.07159,11.26437,408.1
 RHBGFL,Rehbergfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1826,7.9711,576
 RHHBRT,Rehfels (Heibertsstein),<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1859,7.7462,249
 REHM,Rehmen,Parzelle von Au,47.32222,9.99778,824
@@ -4736,9 +4958,12 @@ REICHMWD P,Reichelsmühler Wand Parkplatz,,49.69255,11.32834,425.5
 RCBGHT,Reichenberger Hütte (neue),,46.97128,12.27938,2586
 RCBGHT,Reichenberger Hütte (Neue),Hütte der AV Sekt. Reichenberg,46.97128,12.27938,2586
 RCHNHS,Reichenhaller Haus,,47.75502,12.84979,1750
+RCHNHT,Reichenhaller Hütte,Hütte der DAV Sekt. Bad Reichenhall,47.755,12.84972,1750
 REICHENST,Reichenstein,,47.66202,13.88663,1912
 RCHNHT,Reichensteinhütte,,47.50069,14.93215,2128
 RCHNHT,Reichensteinhütte,Hütte der ÖAV Sekt. Leoben,47.5007,14.93215,2128
+RCHNHT,Reichensteinhütte,Hütte der ÖAV Sekt. Leoben,47.50056,14.93194,2128
+RCHNHT,Reichensteinhütte,Hütte der ÖAV Sekt. Leoben,47.50068,14.93214,2128
 RHRFLS,Reiherfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1834,7.7377,299
 RNRTRL,Reinertörl,,47.103,12.35754,3422
 RNRTBG,Reinertsberg,Naturdenkmal,50.28137,6.7991,610
@@ -4748,10 +4973,11 @@ RNTLNG,Reintalangerhütte,,47.40514,11.03581,1364.9
 RTAH,Reintalangerhütte,,47.40562,11.036,1366
 RHTFHT,Reintalhütte (Franz-Fischer-Hütte),,47.40738,11.10431,1525
 RSZCHT,Reißeckhütte,ÖAV Sekt. Gebirgsverein,46.91545,13.374,2287
+RSZKFB,Reißkofel-Biwak,,46.6832,13.12528,1799
+RSZKFB,Reißkofel-Biwak,,46.68306,13.12528,1799
 RSSCHT,Reisseckhütte,,46.91544,13.37401,2287
 RSSLSP,Reissende Lahn-Spitze,,47.48,11.34431,2209
 RSSKFB,Reisskofel-Biwak,,46.6832,13.12529,1799
-RSSKFB,Reisskofel-Biwak,,46.6832,13.12528,1799
 RTHSFL,Reith bei Seefeld,,47.2982,11.20462,1130
 RTHRSP,Reither Spitze,,47.32323,11.23595,2374
 REITHERSP,Reitherspitze,,47.32313,11.23592,2367
@@ -4775,7 +5001,7 @@ RTNRHT,Reuttener Hütte,,47.40509,10.69087,1740
 RTNRHT,Reuttener Hütte,Hütte der ÖAV Sekt. Reutte,47.4051,10.69087,1740
 REVETON,Reventón-Pass,,28.66849,-17.82705,1428
 RHNLPF,Rheinland-Pfalz-Biwak,,46.96681,10.9049,3247
-RHNTSC,Rheinquelle; Tschamut,Bergrestaurant,46.6553,8.70837,-9999
+RHNTSC,Rheinquelle; Tschamut,Bergrestaurant,46.6553,8.70837,1650
 RHWLDH,Rheinwaldhorn,,46.49362,9.04019,3402
 RIBIHT,Ribia Hütte,Private Hütte,46.2517,8.5418,1996
 RCHTHT,Richterhütte,,47.12415,12.13391,2374
@@ -4786,7 +5012,7 @@ RIED,Ried,,46.41426,7.80684,1486
 RIDRHT,Rieder Hütte,,47.80423,13.67613,1765
 RIDRHT,Rieder Hütte,Hütte der ÖAV Sekt. Ried im Innkreis,47.80423,13.67613,1765
 RIDRLP,Riederalp,,46.37779,8.02847,1925
-RDRFRK,Riederfurka,Bergrestaurant,46.37758,8.01755,-9999
+RDRFRK,Riederfurka,Bergrestaurant,46.37758,8.01755,2065
 RDRSTN,Riederstein,,47.70417,11.79156,1207
 RIEDERSTN,Riederstein,Kapelle am Gipfel,47.70421,11.79232,1208
 RIEDERWHS,Riederstein Whs.,Berggasthof Riederstein am Galaun,47.70363,11.78845,1061
@@ -4799,10 +5025,15 @@ RMNNHS,Riemannhaus,,47.45788,12.9147,2177
 RIMRCH,Riemerich,Naturdenkmal,50.20266,6.77333,601
 RIESNB,Riesenberg,bei Oberhundem,51.09238,8.2068,720
 RIESNBRG,Riesenburg,,49.80352,11.29666,330.7
+RISNHT,Riesenhütte,Hütte der DAV Sekt. Oberland,47.75722,12.26778,1346
+RISNHT,Riesenhütte,Hütte der DAV Sekt. Oberland,47.75745,12.26845,1346
 RIESENSP,Riesenspitze,,47.305,9.80028,1774
 RIESENTOR,Riesentor,,50.69257,6.47345,281
+RSHTHT,Rieserfernerhütte (Hanns-Forcher-Mayr-Hütte),Hütte der AVS Sektionen Bozen und Bruneck; ehemalige Fürther Hütte,46.895,12.09667,2791
+RSHTHT,Rieserfernerhütte (Hanns-Forcher-Mayr-Hütte),Hütte der AVS Sektionen Bozen und Bruneck; ehemalige Fürther Hütte,46.89009,12.08017,2791
 RIESHOEHE,Rieshöhe,,47.598,14.04989,-9999
 RIESSRHT,Riessriegelhütte,,47.75648,14.29524,-9999
+RIESTRM,Riesturm,,49.51502,11.56118,327.1
 RIETZ,Rietz,,47.28826,11.02767,665
 RTZGKG,Rietzer Grieskogel,,47.24591,11.05914,2884
 RIEZL,Riezlern,,47.35833,10.18722,1086
@@ -4818,6 +5049,7 @@ ALLEGN,Rifugio Al Legn,immer geöffnete Hütte mit toller Aussicht auf den Lago Ma
 RFAPCS,Rifugio Al Passo di Cassana,Private Hütte; auch Berghaus Chaschauna-Alpe Campaccio,46.55484,10.0734,2601
 RFALFR,Rifugio Alfredo Rivetti,Hütte des CAI Biella,45.71967,7.93536,2150
 RALSNN,Rifugio Allesandro Nacamuli; Col Collon-Nacamuli,Hütte der CAI Sekt. Torino,45.9487,7.50092,2818
+RFALCR,Rifugio Alpe Curgei,Private; immer offene Hütte unterhalb des Pizzo Pernice; an der Aufstiegsroute von Cicogna über Varola. Neu renoviert; voll eingerichtete Küche; Schlafraum im Obergeschoss mit Drahtgitterbetten. Brunnen vor der Hütte mit reichlich Wasser. In wunderschöner Lage am Grat auf einer Wiese mit freiem Blick ins Val Marona und nach Pogallo. Tisch und Bänke vor der Hütte. 2:00 von Alpe Pala ob Miazzina; 3:00 von Cicogna; 0:45 bis zum Rifugio Pian Cavallone.,46.00317,8.5191,1350
 RFGALL,Rifugio Alpe di Lago,,46.35357,9.01983,2125
 RFALAL,Rifugio Alpe l'Alpino,private Selbstversorgerhütte,46.12607,8.59981,1274
 RAFRNC,Rifugio Amiante-Francesco Chiarella,Hütte des CAI Sekt.Torino,45.91022,7.30462,2779
@@ -4881,6 +5113,7 @@ RENSCR,Rifugio Entova-Scercen,Private Hütte; die Hütte ist derzeit nicht benützb
 RFEMRG,Rifugio Eugenio Margaroli,Hütte des CAI Domodossola,46.38478,8.36484,2197
 RFEMRG,Rifugio Eugenio Margaroli,Hütte des CAI Domodossola,46.38778,8.36958,2197
 RFGEGS,Rifugio Eugenio Sella,Hütte des CAI Macugnaga,45.98748,7.9316,3029
+RFGEGS,Rifugio Eugenio Sella,Hütte der CAI Sekt. Macugnaga,45.98875,7.91411,3029
 RFTCQN,Rifugio F.F. Tucket e Quintino Sella,SAT Societá Alpinisti Tridentini,46.19203,10.88211,2271
 RFTCQN,Rifugio F.F. Tucket e Quintino Sella,SAT Societá Alpinisti Tridentini,46.19201,10.88211,2271
 RFFSCF,Rifugio Föisch (Föisc),im Jahr 2000 neu erbaute Hütte nahe Monte Föisc  Gipfel,46.53312,8.66786,2208
@@ -4891,7 +5124,9 @@ RFFRAL,Rifugio Franco Allavena,Hütte der CAI Sekt. Bordighera,43.98617,7.67361,1
 RFFRTF,Rifugio Fratelli Filzi,SAT Hütte,45.90036,11.11478,1603
 RFFRTF,Rifugio Fratelli Filzi,SAT Hütte,45.90037,11.11478,1603
 RFGGBT,Rifugio Gabiet,private Berghütte,45.85649,7.84648,2357
+RFGRZN,Rifugio Garzonera,Hütte des SAT Sekt. Ritom,46.49906,8.66147,1973
 RGSOBM,Rifugio Gaspare Oberto/Paolo Maroli,Hütte des CAI MAcugnaga,45.99644,7.97879,2796
+RFFDBN,Rifugio Gian Federico Benevollo,Hütte des CAI Torino,45.51667,7.08551,2285
 GIANET,Rifugio Gianetti,Pizzo Badille; Nordkante,46.28069,9.58428,2484
 RFGRGR,Rifugio Giorgio Graffer,SAT Societa Alpinisti Tridentini,46.21956,10.88978,2261
 RFGRGR,Rifugio Giorgio Graffer,SAT Societá Alpinisti Tridentini,46.21956,10.88977,2261
@@ -4907,6 +5142,7 @@ RFGGIG,Rifugio Giovo (Il Giovo),Hütte der CAI Sekt.Dongo,46.15611,9.17444,1714
 RFGGIG,Rifugio Giovo (Il Giovo),Hütte der CAI Sekt.Dongo,46.15563,9.17139,1714
 RFGSBR,Rifugio Giuseppe e Bruno,Hütte der CAI Sekt. Como,45.9422,9.06352,1179
 RGRTRN,Rifugio Grand Tournalin,private Berghütte,45.86111,7.695,2534
+RIFGRA,Rifugio Granero,Biwakhütte oberhalb der eigentlichen Granero Hütte,44.72811,7.04475,2376
 RFGGLM,Rifugio Guglielmina,private Berghütte,45.87123,7.87364,2864
 RFCRTG,Rifugio Guide del Cervino /Testa Grigia,Hütte des Bergführerveirein Cervino,45.93481,7.70757,3479
 RGDVAY,Rifugio Guide della Val d'Ayas,Hütte vom Bergführerverein Champoluc-Ayas,45.92106,7.76989,3394
@@ -4914,6 +5150,7 @@ RALMBR,Rifugio Guide Valle d'Ayas al Lambronecca,Hütte vom Bergführerverein Cham
 RLRCCV,Rifugio Guido Larcher al Cevedale,SAT-Società Alpinisti Tridentini,46.43683,10.66633,2608
 RLRCCV,Rifugio Guido Larcher al Cevedale,SAT Hütte,46.43684,10.66632,2608
 RFHGMN,Rifugio Havis de Giorgio/Mondovi,Hütte der CAI Sekt. Mondovi,44.19158,7.73178,1761
+RFHYPT,Rifugio Huayna Potosi,,-16.28058,-68.12162,4715
 RJANTC,Rifugio Jean Antoine Carrel,Hütte des Bergführervereins Cervino,45.97308,7.64796,3835
 LAVARE,Rifugio Lavaredo,Rifugio Lavaredo,46.61829,12.31195,2355.1
 RFLAMS,Rifugio Luigi Amadeo di Savoia,Hütte der CAI Sekt. Torino,45.97308,7.64803,3835
@@ -4922,6 +5159,8 @@ RFMNTA,Rifugio Mantova al Vioz,SAT-Società Alpinisti Tridentini,46.39919,10.6358
 RFMNTA,Rifugio Mantova al Vioz,SAT Società Alpinisti Tridentini,46.39918,10.63585,3535
 MRCRS,Rifugio Marco e Rosa,,46.37363,9.91048,3609
 RFMLIV,Rifugio Maria Luisa im Val Toggia,Hütte der CAI Sekt. Busto-Arsicio,46.435,8.42861,2160
+RFGMRN,Rifugio Marinelli,Hütte des CAI Udine,46.59389,12.89694,2111
+RFGMRN,Rifugio Marinelli,Hütte des CAI Udine,46.60397,13.56251,2111
 RFGMRY,Rifugio Miryam,private Berghütte,46.37818,8.39429,2050
 RFGMNG,Rifugio Mongioie,Hütte der CAI Sekt. Albegna,44.15111,8.775,1520
 RFMNBN,Rifugio Monte Bianco,Hütte des CAI-Uget Torino,45.7975,5.52139,1700
@@ -4937,6 +5176,8 @@ RFGPLR,Rifugio Peller,SAT Societa Alpinisti Tridentini,46.32211,10.95267,2022
 RFGPLR,Rifugio Peller,SAT Societá Alpinisti Tridentini,46.32212,10.95266,2022
 RIFPDC,Rifugio Piano delle Creste,,46.39101,8.48695,2108
 RFGPBR,Rifugio Piazza Bruno,Hütte der CAI Sekt. Ivrea,45.51167,4.71167,1052
+RFFRTC,Rifugio Pier Fortunato Calvi,Hütte des CAI Sappada,46.62417,12.72694,2167
+RFFRTC,Rifugio Pier Fortunato Calvi,Hütte des CAI Sappada,46.62408,12.72702,2167
 RFGPGR,Rifugio Piero Garelli,Hütte der CAI Sekt. Mondovi,44.18883,7.68789,1970
 RFPTCR,Rifugio Pietro Crosta,Hütte der CAI Sekt. Gallarate,46.23639,8.25731,1750
 RFGPPR,Rifugio Pino Prati,SAT Hütte,46.03617,11.15394,670
@@ -4985,6 +5226,7 @@ RFVDMD,Rifugio Velo della Madonna,,46.23136,11.84267,2358
 RFVDMD,Rifugio Velo della Madonna,,46.23134,11.84265,2358
 RFVNCL,Rifugio Vincenzo Lancia,SAT Hütte,45.82733,11.14483,1825
 RFVNCL,Rifugio Vincenzo Lancia,SAT Hütte,45.82733,11.14484,1825
+RIFJER,Rifugio Willy Jervis,,44.77342,7.03928,1732
 RFBVEG,Rifugio/Bivacco Emilio Greppi,Selbstversorgerhütte der CAI Sekt. Valle Vigezzo,46.18337,8.49029,1915
 RGKULM,Rigi-Kulm,,51.25,7.11667,332
 RGKULM,Rigi-Kulm,Bergrestaurant,47.0558,8.48391,-9999
@@ -5013,6 +5255,8 @@ RINSLY,Rinsley,schöne; felsige Örtlichkeit nördlich Saalhausen; auf dem höchsten
 RSSFK,Risser Falk,,47.43872,11.50656,2414
 RSSRKG,Risserkogel,,47.637,11.80361,1826
 RSTRSS,Ristorante Sassal Masone,Bergrestaurant,46.38633,10.03138,2355
+RTHRHS,Rittner-Horn-Haus (Rifugio Corno Renòn di Sopra),Hütte des CAI Bozen,46.61611,11.46222,2260
+RTHRHS,Rittner-Horn-Haus (Rifugio Corno Renòn di Sopra),Hütte des CAI Bozen,46.61602,11.46228,2260
 ROBERTMAUR,Robertmauer,interessanter Felsdurchgang am Weg zum Roque de los Muchachos (von Osten),28.75995,-17.86977,2325
 ROSABO,Roche aux Sabots,Boulderfelsen,48.37498,2.51417,77
 ROCEPI,Roche Emile Pic,Höhenangabe gemäss IGN Karte.,44.95486,6.38386,3586
@@ -5032,6 +5276,7 @@ ROHR,Rohr Alpe,,47.36944,9.84556,1261
 RGROES,Rohrauer Gröstenberg,,47.78778,14.28883,-9999
 RJCHHT,Rojacher Hütte,,47.0482,12.96909,2718
 RJCHHT,Rojacher Hütte,Hütte der ÖAV Sekt. Rauris,47.0482,12.96908,2718
+RJCHHT,Rojacher Hütte,Hütte der ÖAV Sekt. Rauris,47.10083,12.96889,2718
 RP,Roland's Point,Frühstücksplatz auf dem Gletscher der Watzenspitze unterhalb der letzten Steilstufe(06/2003) mit schönen Ausblick auf den Geigenkamm der Ötztaler-Kette im Osten.,46.98556,10.79889,3250
 ROLAND,Rolandfels,,50.03153,11.20281,392.9
 ROELLH,Röllhöhle,Höhle,47.70156,13.97539,-9999
@@ -5067,6 +5312,7 @@ Rossgi,Rossgipfel,Wandern im Wienerwald,48.09622,16.05687,660
 ROSSHT,Rosshütte,,47.34175,11.22803,1751
 RSZSTN,Roßstein,,47.63256,11.67636,1697
 RSZSTN,Roßstein,,47.63261,11.67633,1698
+ROETALM,Rötalm,,47.04001,12.14573,2119
 RTBHHT,Rotbühelhütte,,46.92879,9.97175,2075
 RTFLUH,Rote Flüh,,47.49961,10.60844,2111
 ROTEKOEGL,Rote Kögel,,47.68683,13.99178,2035
@@ -5085,10 +5331,12 @@ RTTRTL,Roten Trotz-Lücke,,46.4117,7.59418,2820
 ROTBALP,Rotenbachalpe,,47.38833,9.83997,1219
 RTFLBS,Rotenfluh (Bergstation),Seilbahn von Rickenbach bei Schwyz; auch Rotenflue genannt,47.01804,8.70054,1532
 RTFLGI,Rotenfluh (Gipfel),Startpunkt für Paraglider und Drachenflieger; auch Rotenflue genannt,47.02113,8.7032,1577
+ROTMANJOCH,Rotenmannjoch,,47.02639,12.19164,2899.9
 RTNRME,Rotenrumer Eck,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1079,7.5401,401
 ROTNSP,Rötenspitze,,47.02924,11.38679,2481
 RTNSTN,Rotenstein,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2162,7.7521,423
 ROTRKG,Roter Kogel,,47.13803,11.16918,2832
+RTERMNCH,Roter Mönch,,50.03038,11.20113,557.2
 ROTTTZ,Roter Totz,,46.41546,7.59974,2848
 RTRTRT,Roter Trotz,,46.41565,7.59953,2840
 ROTFLS,Rotfels,Naturdenkmal,50.22,6.58078,-9999
@@ -5127,6 +5375,8 @@ ROTWAN,Rotwand Gipfel,,47.65025,11.93445,1884.9
 ROTWAN,Rotwand Haus,,47.64632,11.93513,1741.9
 RTWNHS,Rotwandhaus,,47.64626,11.93491,1765
 RTWNHT,Rotwandhütte,Hütte der DAV Sekt. Neuland/München,47.54348,11.61538,1525
+RTWHTR,Rotwandhütte (Rifugio Parete Rossa),Hütte des SAI Meran,46.67639,11.25861,1817
+RTWHTR,Rotwandhütte (Rifugio Parete Rossa),Hütte des CAI Meran,46.67647,11.2587,1817
 RTWNHT,Rotwandlhütte,,47.54349,11.61539,1525
 RTWNDS,Rotwandlspitze,,47.37369,11.60628,2322
 RTZNST,Rötzensteinpfeiler,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1571,7.9107,392
@@ -5140,6 +5390,8 @@ RDRHSP,Ruderhof Spitze,,47.03982,11.14318,3474
 RUDHSP,Ruderhofspitze,,47.03976,11.14322,3474
 RPRKHT,Rudolf-Proksch-Hütte,,48.0316,16.23813,541
 RPRKHT,Rudolf-Proksch-Hütte,ÖAV Sekt. Gebirgsverein,48.0316,16.23813,541
+RPRKHT,Rudolf-Proksch-Hütte,,48.03139,16.23806,541
+RPRKHT,Rudolf-Proksch-Hütte,,48.03159,16.23812,541
 RDSCHT,Rudolf-Schober-Hütte,,47.2519,13.97401,1667
 RDSCHT,Rudolf-Schober-Hütte,Hütte der ÖAV Sekt. Stuhlecker ,47.2519,13.974,1667
 RUEFIK,Rüfikopf,,47.20139,10.17028,2362
@@ -5213,6 +5465,7 @@ SNGRFL,Sängerfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mount
 SANTIS,Säntis,Bergrestaurant,47.24961,9.34443,2504
 SOSOHT,Saoseo Hütte,SAC Hütte,46.39696,10.11872,1985
 SASEHT,Saoseo-Hütte,http://www.sac-bernina.ch/htmls/huetten_saoseo.htm,46.39679,10.11846,1985
+SRNPSS,Sarani Pass,,-15.8461,-68.40874,4493
 SRDNHT,Sardona Hütte,SAC Hütte,46.91548,9.27546,2157
 SAROJA,Saroja Alpe,,47.18972,9.57944,1474
 SRTLHT,Sarotla Hütte,Aufstieg zur Zimba und über Zimbajoch zur Heinrich Hueter Hütte,47.10439,9.78661,1645
@@ -5246,11 +5499,13 @@ SULKPF,Saulakopf,Von der Douglas Hütte oder Heinrich Hueter Hütte aus erreichbar
 SULING,Säuling,Bergtour,47.53506,10.75386,2048
 SLHUET,Säulinghaus,,47.53486,10.74958,1720
 SLHPP,Säulinghaus Parkplatz,Unten in Pflach,47.51692,10.72958,893
+SAULK,Saulkopf,,47.07639,47.70028,3209
 SAULKP,Säulkopf,auch Seilkopf (auf Schildern),47.04847,12.42013,3209
 SAUZAHN,Sauzahn,,47.71317,14.04033,2260
 SCAIEE,Scaiee,,46.33003,8.83732,2457
 P24406,Scaiee P. 2440.6,,46.32919,8.83266,2441
 SCLTHT,Scaletta Hütte,Private Hütte,46.60763,8.94043,2205
+SCHRWN,Schaarwand,,47.51722,11.75072,1781
 SCHBHS,Schabell; Skihaus,Private Hütte,46.92204,9.15473,1571
 SCHCHT,Schachtkopf,,47.36344,10.89961,1642
 SCHAFBERG,Schafberg,,47.59978,14.17422,1932
@@ -5318,6 +5573,7 @@ SCHSHS,Schiestlhaus,Schutzhütte nahe Hochschwabgipfel,47.62222,15.14945,2153
 SCHRND,Schihörndl,,47.53647,12.65061,2286
 SCHLDN,Schildenstein,,47.59483,11.72497,1611
 SCHGRF,Schilder Grinner-Ferner,Wegschilder am Nordöstlichen Ende des Grinner-Ferner zwischen Patrolscharte und Gasillschlucht.,47.17285,10.48238,2755
+SCHLDKRT,Schildkröte,Einstieg der Route Schildkröte am Albigna Stausee.,46.32799,9.64067,2350
 SCHILL,Schillereck,,47.80156,14.22511,-9999
 SCHLRF,Schillerfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1489,7.7725,231
 SCHLHR,Schilthorn,,46.55747,7.83481,2970
@@ -5326,12 +5582,14 @@ SCHNDL,Schindlerskopf,,47.55464,11.19136,1940
 SCHNHR,Schinhorn,,46.4516,7.94649,3797
 SCHLHT,Schladminger Hütte,,47.37232,13.72399,1830
 SCHLHT,Schladminger Hütte,,47.37232,13.72398,1830
+SCHLGK,Schlagkopf,,47.51553,11.75917,1688
 SCHLGK,Schlagkopf,,47.35979,11.24228,1518
 SCHLPJ,Schlappiner Joch,Übergang vom Gargellental nach Schlappin und Klosters (Schweiz),46.92542,9.90803,2203
 SHLKKP,Schlauchkarkopf,,47.41683,11.43997,2500
 SCHLCHKRST,Schlauchkarsattel,,47.41174,11.43492,2623
 SCHLEIERF,Schleierfall,,47.76556,14.48919,-9999
 SCHLMS,Schleimssattel,,47.46883,11.64439,1545
+SCHLNKN,Schlenken,,47.6817,13.21318,1648
 SCHLH,Schlichtenkarspitze; Hintere,,47.44706,11.40439,2325
 SCHLV,Schlichtenkarspitze; Vordere,,47.44744,11.39903,2476
 SCHLFR,Schlieferspitz,,47.1221,12.22283,3289
@@ -5459,6 +5717,7 @@ SCHSCH,Schweigestelle - Schweineställe,An der Stelle; wo der Ringweg A die Felse
 SCHWNS,Schweinsspießfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1818,7.7903,351
 SCHWZT,Schweizer Tor,Übergang vom Rellstal zum Rätikon Höhenweg Süd,47.03886,9.7845,2137
 SCHWALP,Schwendealpe,,47.41575,9.78128,1096
+SCHWDER,Schwender Wand,Vom Parkplatz dem Wanderweg (Nr. 6) folgen,49.41818,11.63115,511.1
 Schwnd,Schwendle,,47.32184,10.16501,1162
 SCORHT,Sciora Hütte,SAC Hütte,46.31252,9.61115,2117
 SCIURS,Sciürés,großer überdachender Steinblock mit Markierung an dieser Stelle auf der Alp,46.34387,8.81542,1481
@@ -5476,6 +5735,7 @@ SEEFELDRSP,Seefelder Spitze,,47.33279,11.23754,2235
 SEEHAGELM,Seehaglmauer,,47.78887,14.31392,-9999
 SEEHAU,Seehaus,Wirtshaus am Almsee,47.74465,13.95264,589
 SEEHR,Seehorn,,47.54494,12.59958,2155
+HTHLHT,Seehütte (Neue) Höllentaler Holzknechthütte,,47.70307,15.72725,1643
 SFLRKG,Seejoch (Flaurlinger Roßkogel),,47.22477,11.10258,2808
 SKRKRZ,Seekarkreuz,,47.6525,11.64322,1601
 SKRKRZ,Seekarkreuz,,47.65219,11.64314,1601
@@ -5541,6 +5801,7 @@ SLBRST,Silbersattel,,45.93755,7.86862,4515
 SLBSAT,Silbersattel,zwischen Nordend und Dufourspitze,45.93762,7.86849,4515
 SLBRTL,Silbertal,,47.09503,9.97694,889
 SLNRHT,Sillianer Hütte,ÖAV Hütte; Sekt. Sillian am Karnischen Höhenweg,46.7,12.4,2447
+SLNRHT,Sillianer Hütte,Hütte des ÖAV Sillian,46.70617,12.40633,2447
 SLVRHT,Silvretta Hütte,SAC Hütte,46.85446,10.04143,2341
 SLVRHT,Silvretta Hütte,Schöne Hütte; auch im winter offen. Viele Touren von dort möglich; nicht so überlaufen wie österreichische Seite.,46.85451,-175.95785,2341
 SILZ,Silz,,47.26552,10.92757,654
@@ -5556,6 +5817,7 @@ SMPLNH,Simplonhospiz,,46.24699,8.02925,1997
 SINABE,Sinabell,,47.45109,13.69125,2349.1
 SCFLTD,Singu Chuli (FlutedPeak),,28.5875,83.885,6501
 SINKOR,Sinkor,,27.93194,86.54639,6380
+SPLNGR,Siplingerkopf,Bei Balderschwang,47.48001,-175.87465,1745
 SSTRNS,Sistrans,,47.23746,11.44597,919
 STCHCH,Sita Chuchura,,28.78333,83.48528,6611
 SITZENBHT,Sitzenbachhütte,,47.7492,14.44522,895
@@ -5563,7 +5825,7 @@ SIXBLANC,Six Blanc,,46.03746,7.18524,2440
 SHSERE,Skihaus Erbs; Elm,Private Hütte,46.8998,9.11294,1700
 HSHCHW,Skihaus Hochwang,Bergrestaurant,46.8543,9.66517,1958
 SHSKBL,Skihaus Kübelialp,Private Hütte,46.5098,7.33115,1565
-HSSCBG,Skihaus Schwarzenberg,Private Hütte,47.05131,9.35469,-9999
+HSSCBG,Skihaus Schwarzenberg,Private Hütte,47.05131,9.35469,1360
 SHSSTF,Skihaus Stäfeli,Private Hütte (Schlüssel-Depot bei Seilbahn Matt),46.9789,9.18442,1770
 SHSSTR,Skihaus Sternenegg,Private Hütte,47.00614,8.74708,-9999
 SKHSSR,Skihaus Surenen,Private Hütte,46.84327,8.60447,1560
@@ -5596,13 +5858,15 @@ SNGSHS,Sonne; Gasthaus,Bergrestaurant,46.89686,8.92205,-9999
 SNKBGS,Sonnenkopf Bergstation,,47.11083,10.05556,1832
 SNKPBG,Sonnenkopfbahn Bergstation,,47.11083,10.05556,1832
 SNNNSP,Sonnenspitze,,47.17161,11.57437,2620
+SNNENWD,Sonnenwand,,50.07203,11.26613,473
+SJOCH,Sonnjoch,zwischen der Eng und dem Achensee,47.41247,11.6048,2438
 SNJH,Sonnjoch,,47.4125,11.60511,2458
 SNLTHT,Sonnleitnerhütte,,47.2783,14.61087,1215
 SNLTHT,Sonnleitnerhütte,Jugendheim der ÖAV Sekt. Knittelfeld,47.2783,14.61087,1215
 SONNLEITST,Sonnleitstein,,47.67236,14.02594,2177
 SNSCHT,Sonnschienhütte,,47.58656,15.03901,1526
 SNSCHT,Sonnschienhütte,ÖAV Hütte; Sekt. Alp. Ges. Voisthaler,47.58655,15.039,1526
-SOERG,Sörg,westl. St. Veit a.d. Glan,46.76306,14.27593,-9999
+SOERG,Sörg,westl. St. Veit a.d. Glan,46.76306,14.27593,840
 SRGNBG,Sorgenbergfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1643,7.8284,296
 SORBUN,Soribun,,28.88472,84.17278,6328
 SVLTHT,Soveltra Hütte,Private Hütte,46.40602,8.7105,1534
@@ -5624,6 +5888,7 @@ SPIESRWD P,Spieser Wand Parkplatz,,49.6354,11.40676,558.2
 SPRKLR,Spirkelbacher Rauhfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1973,7.8735,371
 SPBOLL,Spitze Boll,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2322,7.8141,540
 SPNSTN,Spitzenstein,Quarzitfelsen "Der Spitzenstein und die Fischhuffelsen".,49.84766,7.17923,-9999
+SPTZNSTN,Spitzenstein(Kleinziegenf),,50.01527,11.21216,564.5
 SPRFLS,Spitzer Fels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.0558,7.6551,330
 SPTZGF,Spitzguf,,47.12414,9.90369,1908
 SPTZBR,Spitziger Brand,,47.46174,10.89161,1816
@@ -5633,7 +5898,8 @@ SPITZM,Spitzmauer,,47.69549,14.06245,2442
 SPTZML,Spitzmeilen,,47.02401,9.23635,2500.9
 SPTZHT,Spitzmeilen Hütte,SAC Hütte,47.03429,9.25058,2087
 SPTZHS,Spitzsteinhaus,,47.70443,12.24319,1335
-SPLGLD,Splügen Lodge,Private Hütte,46.55441,9.32761,-9999
+SPTZHS,Spitzsteinhaus,Hütte der DAV Sekt. Spitzstein,47.70417,12.24306,1252
+SPLGLD,Splügen Lodge,Private Hütte,46.55441,9.32761,1457
 SPNDHT,Sponda Hütte,Private Hütte,46.41757,8.78583,2000
 SPRLBD,Springelbode,an Europaweg; Wegweiser (daran Höhenangabe 2230 m),46.08391,7.79525,2182
 SPDCBG,Sprinzel (Dickenbergturm),<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1308,7.8119,297
@@ -5649,7 +5915,7 @@ SPLTHT,St. Pöltener Hütte,,47.15748,12.49581,2481
 SPLTHT,St. Pöltener Hütte,Hütte der ÖAV Sekt. St. Pölten,47.15748,12.49582,2481
 SSGMSL,St. Sigmund im Sellrain,,47.20241,11.103,1513
 STVEIT,St. Veit,,47.32287,11.06583,861
-STBBHT,Stabbio Hütte,Private Hütte,46.4376,8.97282,-9999
+STBBHT,Stabbio Hütte,Private Hütte,46.4376,8.97282,1166
 STAFFL,Staffel,,47.58572,11.46792,1532
 STFLLM,Staffelalm,,47.64511,11.41512,1320
 STFLCH,Stafflach,,47.06404,11.48781,1100
@@ -5670,6 +5936,7 @@ STUDCH,Staudach,,47.46286,9.76639,597
 STAUF,Staufen,oberhalb der Karrenseilbahn,47.37639,9.75528,1465
 STAUFALP,Staufenalpe,,47.37889,9.76472,1107
 STFNHS,Staufner Haus,,47.49149,10.06879,1600
+STUMUR,Staumauer,,-16.19932,-68.17989,4279
 STAUSE,Stausee,,47.2589,10.15281,1942
 STSEKP,Stausee Kops,am südl. Ende der Staumauer,46.9681,10.11493,1819
 STCHBG,Stechelberg,,46.54489,7.90278,919
@@ -5743,6 +6010,7 @@ STCKHT,Sticklerhütte,Hütte des ÖAV Graz,47.14823,13.37835,1750
 STRGWD,Stierberger Gemsenwand,,49.67597,11.37906,577
 STIRGG,Stieregg,Die Hütte musste im Sommer 2005 abgebrannt werden; da sie mitsamt umgebenden Erdreichs auf den Gletscher abzurutschen drohte.,46.59946,8.06077,1650
 STRJCH,Stierjoch,,47.51106,11.51878,1909
+SJOCH,Stierjoch,Gipfel östlich vom Scharfreuther,47.51098,11.51862,1909
 STRJCH,Stierjoch,,47.51102,11.51863,1909
 STRLCH,Stierlochalpe,,47.1807,10.10048,1796
 StlBa,Stierlochbach,über den Bach (Brücke),47.29164,10.11171,1411
@@ -5753,7 +6021,7 @@ STCKRH,Stockerhof,,47.19495,11.37473,1156
 STCKHR,Stockhorn,,46.38235,7.87695,3212
 STCHRB,Stockhorn Biwak,Biwak,46.37739,7.88107,2590
 STCKHR,Stockhornbiwak,Biwakunterkunft,46.37739,7.88094,2598
-STCKHT,Stockhüttli,Private Hütte,46.46422,7.65604,-9999
+STCKHT,Stockhüttli,Private Hütte,46.46422,7.65604,1834
 STOEAL,Stöcklen Almhütte,Die Stöcklen Alm liegt auf dem Zustieg zur Franz-Senn-Hütte,47.09989,11.20662,1587
 STOFEL,Stofel,,47.29667,9.49278,1560
 STHRHS,Stöhrhaus,,47.69309,12.98033,1894
@@ -5777,6 +6045,8 @@ STRHRN,Strahlhorn,,46.01333,7.90176,4190
 STRAHLK,Strahlkopf,,47.35417,9.72306,1366
 STRHLR,Strahlrüfi,Bergrestaurant,47.0979,9.38805,1646
 STRBHS,Straubinger Haus,,47.62032,12.49969,1600
+STRBHS,Straubinger Haus,Hütte der DAV Sekt. Straubing,47.62028,12.49944,1558
+STRBHS,Straubinger Haus,Hütte der DAV Sekt. Straubing,47.62031,12.49968,1558
 Str1,Sträucher 1,n. SSW,47.28411,10.10761,1595
 STRALP,Streichbrunnen Alpe,,47.47278,9.99667,1083
 STRNGM,Strengmatt,Bergrestaurant,46.81186,8.67898,-9999
@@ -5835,8 +6105,9 @@ SUNSERJOCH,Sünser Joch,Wegweiser,47.29775,9.84653,1912
 SUENSERSEE,Sünser See,,47.29789,9.84049,1822
 SUENS,Sünser Spitze,,47.30333,9.83472,2062
 SSNFHT,Susanfe Hütte,SAC Hütte,46.13947,6.89797,2102
-SSTHSP,Susten Hospitz,Bergrestaurant,46.7287,8.44888,-9999
+SSTNPH,Sustenpass Hospiz,Bergrestaurant,46.7287,8.44888,-9999
 SSTLHT,Sustlihütte,SAC-Hütte,46.75158,8.47075,2257
+STNST,Suttenstein,,50.04486,11.22352,324.9
 SWGRHE,SW-Grat Hohes Eis,auf Weg von Siegerlandhütte zu Hohes Eis und Sonklarspitze,46.95042,11.1625,3423
 SWGMKP,SW-Grat-Anfang Muttekopf,Scharte mit Wegweiser am Wanderweg von der Muttekopfhütte zum Muttekopf,47.26467,10.64737,2625
 SWLKHN,Swelokhang,,28.725,84.64444,6180
@@ -5848,6 +6119,7 @@ TAFAM,Tafamunt Bergstation,,46.97528,10.06028,1532
 TFMBGS,Tafamunt Bergstation,,46.97528,10.06028,1532
 TAFERLM,Taferlmoos,Hochmoor im Sattel zwischen Breitenberg und Schliersberg,47.73165,11.89523,1082
 TAKRGO,Takargo,,27.875,86.51167,6782
+TVANCH,Tal von Ancohuma,,-16.20363,-68.1567,3849
 TAELISP,Tälispitz,,47.23972,9.77778,2000
 TALKOGEL,Talkogel,,47.65986,14.01508,1953
 TLLIHT,Tälli Hütte,Private Hütte,46.74018,8.32829,1720
@@ -5861,7 +6133,7 @@ TAMHSG,Tamierhorn (Südgipfel),,46.40268,8.46359,3068
 TAMPAS,Tamierpass,nach Schweizer Landeskarte,46.39968,8.46718,2772
 TNSHRP,Tanga (Sharphu),,27.75333,87.92083,6410
 TNGKNG,Tangkongma,,27.80833,88.07583,6224
-TANNLP,Tannalp,Bergrestaurant,46.77879,8.31876,-9999
+TANNLP,Tannalp,Bergrestaurant,46.77879,8.31876,1970
 TANNEN,Tannen,,47.455,9.85861,797
 TNNFLH,Tannenfluh,Mit dem Tram Nr. 10 oder Zug zum Bahnhof Dornach / Arlesheim. Nun mit dem Postauto nach Hochwald bis zur Haltestelle "Restaurant Rössli" eingangs Dorf. Oder auf der Strasse von Dornach Richtung Hochwald. Routen ca. 60 Stück; -5c bis 7+; Routenlänge 7-24 m. Die Untere Tannenfluh ist von tiefen; kühlen; feuchten Schluchten geprägt und kann deshalb sehr gut im Sommer besucht werden. Die Obere Tannenfluh besteht aus mehreren kleineren; freistehenden Felsgruppen; die nach Süden ausgerichtet sind. Hier herrscht vorwiegend Wandkletterei an teilweise sehr schönem Lochfels vor. (Auszug aus Kletterführer Fluebible),47.46542,7.62962,-9999
 TNNNSP,Tannenspitze,,46.67922,8.17174,2255
@@ -5890,6 +6162,7 @@ TAUERN,Tauern,,47.46778,10.76225,1841
 TRNSPZ,Tauernspitz,,47.47174,10.758,1811
 TAWACH,Tawache,,27.89667,86.78,6501
 JOHTAX,Taxiplatz Johannishütte,Abfahrtplatz des Venedigertaxis bei der Johannishütte,47.05828,12.33401,2138
+TYPTPS,Taypipata Pass,,-15.95896,-68.33607,4873
 TGRNHT,Tegernseer Hütte,,47.63281,11.67846,1650
 TLFSST,Telfes i. Stubai,,47.16636,11.36265,994
 TELFS,Telfs,,47.30898,11.07369,634
@@ -5899,6 +6172,8 @@ TEMSAT,Temelbergsattel,,47.70288,14.03196,2060
 TNBCHR,Tennbachhorn,,46.43547,7.78682,3013
 TNNALM,Tennen Alm,,47.66422,11.51102,1485
 TNNALM,Tennen Alm,,47.66422,11.51102,1485
+TPLHTP,Teplitzer Hütte (Rifugio Vedretta Pendente),Hütte des CAI Sterzing; früher Feuersteinhütte oder auch Rifugio Montarso,46.95556,11.22778,2586
+TPLHTP,Teplitzer Hütte (Rifugio Vedretta Pendente),Hütte des CAI Sterzing; auch Feuersteinhütte oder auch Rifugio Montarso,46.95552,11.2277,2586
 Teras,Terasse,am rechten Rand über Wächte auf Gipfelgrat,47.28641,10.09147,1985
 Trse,Terasse,,47.29803,10.18428,2048
 TrsHö,Terassenhöhe,nach N- auf Terasse unter Gipfelwächte,47.28528,10.09124,1973
@@ -5922,8 +6197,9 @@ TFLSSC,Teufelsschlucht,Naturdenkmal,49.98462,6.56604,-9999
 TFLSSC,Teufelsschlucht,Naturdenkmal,49.98462,6.56604,-9999
 TFLSSC,Teufelsschlucht,Naturdenkmal. Durch Rutschungen entstanden ist die Teufelsschlucht; die sich den Irreler Wasserfällen anschließt. Die heutige Tiefe der Schlucht ist etwa 20 m; die engste Stelle beträgt 1 m; die obere Breite 3;50 m. Weitere Auskunft: Verbandsgemeindeverwaltung Irrel. Tel: 06525/790.,49.84566,6.44083,-9999
 TFLSHT,Teufelsteinhütte,,48.11793,16.22488,547
+TFLSHT,Teufelsteinhütte,,48.11792,16.22487,547
+TFLSHT,Teufelsteinhütte,,48.11778,16.22472,547
 TSTHTT,Teufelsteinhütte,,48.11793,16.22488,547
-TFCHLT,Teufi; Chalet,Private Hütte,46.63341,8.02042,-9999
 THAL,Thal,,47.26611,9.70278,921
 THLRKG,Thaler Kogel,Toller Rundumblick; einfache Tour,47.4767,15.0539,1650
 THMSRK,Thamaserku,,27.78472,86.7875,6623
@@ -5977,6 +6253,7 @@ TOMOHT,Tomeo Hütte,Private Hütte,46.366,8.68877,1739
 TONGU,Tongu,,28.865,83.50694,6197
 AOBRST,Toni Adam-Dr. Obersteiner Biwak,Metallbiwakhütte der ÖAV Sekt. Stainach; 50 m unterhalb des Grimminggipfels,47.52153,14.0145,2300
 AOBRST,Toni Adam-Dr.Obersteiner-Biwak,,47.52154,14.0145,2300
+TSGEDWD,Toni Schmid Ged. Wand,,50.03468,11.20314,395
 TNILHT,Toni-Lenz-Hütte,,47.71489,13.00903,1411
 TONSBERG,Tonsberg,Gipfel mit Ruinenresten auf einer Landzunge in der Rurtalsperre,50.63733,6.43005,341
 TOPLHT,Topali Hütte,Private Hütte (1998 abgebrannt; eine neue Hütte wird frühestens ab Sommer 2003 zur Verfügung stehen),46.15689,7.76193,2674
@@ -6013,6 +6290,8 @@ TRANEBENKG,Tranebenkogel,,47.59769,14.07228,1815
 TRNNLY,Tränenlay,Naturdenkmal,49.85486,6.32334,-9999
 TRTNKP,Tratenköpfl,,47.38744,11.40489,2126
 TRNSHT,Traunsteiner Hütte (neue),,47.62806,12.80099,1560
+TRNSHT,Traunsteiner Skihütte,Hütte der DAV Sekt. Traunstein,47.62528,12.79333,1160
+TRNSHT,Traunsteiner Skihütte,Hütte der DAV Sekt. Traunstein,47.62548,12.79343,1160
 TRAWENG,Traweng,,47.60375,14.01433,1981
 TRFFUR,Treffauer,,47.55539,12.2915,2304
 TRMLZT,TREMALZO T,Tunnel,45.83874,10.70641,1836.7
@@ -6023,6 +6302,8 @@ TRSCHT,Treschhütte,SAC-Hütte,46.7186,8.64945,1475
 TRNTZKG,Treunitzer Klettergarten,,49.95919,11.20874,370
 TRNZFPF,Treunitzer Pfeiler,,49.96911,11.19035,378.9
 TNTZWD,Treunitzer Wand,,49.97053,11.18835,376.1
+TRHTCT,Tribulaunhütte (Rif. Caesare Calciati al Tribulaun,Hütte des CAI Sekt. Sterzing,49.98556,11.325,2369
+TRHTCT,Tribulaunhütte (Rif. Caesare Calciati al Tribulaun,Hütte des CAI Sekt. Sterzing,46.98535,11.32507,2369
 TRIDNT,Trident,,45.98525,7.04144,3436
 TRDNHT,Tridentina Hütte,Private Hütte,46.44136,10.05557,2315
 TRBNHT,Triebentalhütte,,47.42914,14.53697,1104
@@ -6081,13 +6362,17 @@ TZNGHT,Tutzinger Hütte,,47.65749,11.46218,1327
 TXJH,Tuxerjochhaus,,47.09889,11.64972,2313
 ueqDb,über Derrenbach,,47.30357,10.10335,1378
 AWOFH4,Übergang auf Ofenhorn-Ostgrat,,46.38629,8.31986,3193
+UEGGLET,Übergang Fels auf Glacier de Trelatete,Übergang vom Fels auf den Glacier de Trelatete. (Zustieg Refuge Conscrits),45.78971,6.74945,2044
+GLTSCHFLS,Übergang Glacier de Trelatete zum Fels,Übergang vom Glacier de Trelatete zum Hüttenweg des Ref. Conscrits,45.78264,6.75841,2258
 WP5MBH,Übergang ob Renggli,,46.61341,7.80006,1879
 UBRA,Ubra,,28.26833,85.57611,6266
 UFRHGL,Ufer Hohlaubgletscher,ungefähr hier unteres Ende des Weges zwischen Britannia-Hütte und Hohlaubgletscher,46.05828,7.93159,2960
 UHURU,Uhuru Peak,,-3.07661,37.354,5895
+UHUSTN,Uhustein,,50.04502,11.23048,356.9
 ULMRHT,Ulmer Hütte,,47.147,10.20918,2281
 ULMRHT,Ulmer Hütte,Hütter der DAV Sekt. Ulm,47.147,10.20918,2281
 ULRCHN,Ulrichen,,46.50666,8.30334,1346
+ULRCHN,Ulricher Nieder,,47.54335,12.63634,2223
 ULRSBG,Ulrichsberg,westl. von Pörtschach am Berg,46.70207,14.29617,1015
 ULRCHR,Ulrichshorn,,46.11824,7.87651,3925
 ULRCSP,Ulrichspitze,,46.67879,8.18363,2637
@@ -6134,6 +6419,7 @@ UMWKHT,Upper Mweka Hut,,-3.13746,37.37215,-9999
 URFLSP,Urfallspitze,,46.98472,11.21228,2805
 URKNMN,Urkinmang,,28.16861,85.71611,6151
 URNRRS,Urnerboden; Restaurant,Bergrestaurant,46.88805,8.90261,-9999
+URSPRUNGAL,Ursprungalm,,46.94503,12.13343,2402.7
 USCHNG,Üschenegrat,,46.44574,7.62682,2377
 UANDRB,Uwe-Anderle-Biwak,,47.79086,14.25556,1583
 UANDRB,Uwe-Anderle-Biwak,auch Hochgseng-Biwak; dr ÖAV Sekt. Molln-Steyrtal,47.79087,14.25557,1583
@@ -6152,7 +6438,7 @@ VLZFNJ,Valzifenzer Joch,,46.9253,9.94807,2485
 VNPDRB,Vaninetti (Pedroni) Biwak,Biwak,46.29527,9.56749,2577
 VRHSHF,VarahShikar (Fang),,28.57806,83.80333,7647
 VBRNDJ,Vd. Brandjoch Sp.,,47.30232,11.34154,2559
-VEITSB,Veitsberg,westl. von Liemberg,46.74942,14.2081,-9999
+VEITSB,Veitsberg,westl. von Liemberg,46.74942,14.2081,1160
 VEITSK,Veitskopf,,50.43019,7.26428,427
 VLANHT,Vélan Hütte,SAC Hütte,45.91806,7.24763,2642
 VELD,Vèld,,46.32482,8.79306,1191
@@ -6161,6 +6447,7 @@ VELD_U,Vèld (unterer Rand),,46.32426,8.79524,1140
 VNDGRS,Venedigerscharte,,47.11171,12.3566,3413
 VESPI1,Veneziaspitze 1,,46.45377,10.68938,3386
 VESPI2,Veneziaspitze 2,,46.4558,10.69053,3371
+VNTNPS,Ventanani Pass,,-16.16307,-68.35969,4662
 VRJOCH,Verajoch,Zwischen Lünersee und Schweizertor am Rätikon-Höhenweg-Nord,47.04306,9.77361,2330
 VERAJ,Verajoch,Zwischen Lünersee und Schweizertor am Rätikon-Höhenweg-Nord,47.04306,9.77361,2330
 VERBELLA,Verbella Alpe,,46.99306,10.10694,1938
@@ -6228,6 +6515,7 @@ VMELLENALP,Vordermellen Alpe,,47.3,9.79736,1518
 VORDERBALM,Vordernbachalm,,47.65764,13.9255,1129
 VRDKP,Vorderskopf,,47.49706,11.43744,1858
 VRDRSP,Vorderspitze,,46.6796,8.18364,2619
+VRDRNT,Vorderunnutz,,47.51517,11.73869,2078
 VZWIESEL,Vorderzwiesel,,47.67915,14.51028,691
 WGSCHL,Waagschalenfels,Naturdenkmal,49.83477,6.98567,-9999
 WAGENSCH,Wagenscharte,,47.77606,14.34478,1842
@@ -6263,18 +6551,22 @@ WANNAKPF,Wannaköpfle,,47.11282,9.9214,2038
 Wne,Wanne/Mulde,allmählich n. NW,47.32318,10.08618,1845
 WNHRST,Wannenhornsattel,,46.48587,8.1031,3672
 WPPNWD,Wappenwand,Klettergebiet Morgenbachtal,50.00103,7.84719,229.6
+WRNSHT,Warnsdorfer Hütte,Hütte der OEAV Sekt. Warnsdorf/Krimml,47.09278,12.25139,2336
 WRNSHT,Warnsdorfer Hütte,,47.09306,12.25198,2336
 WARSCHENEK,Warscheneck,,47.6525,14.24081,2388
 WRTHHR,Warther Horn,Bergstation Steffisalpebahn,47.25157,10.15773,2256
 WASNHR,Wasenhorn,,46.26656,8.08537,3246
 WSNWND,Wasenwand,,47.0881,11.35748,2563
 WSSRAL,Wasser Alm,,47.49465,13.00672,1416.1
+WSSRLM,Wasseralm,Hütte der DAV Sekt. Berchtesgaden/Nationalpark,47.49472,13.00639,1423
+WSSRLM,Wasseralm,Hütte der DAV Sekt. Berchtesgaden/Nationalpark,47.49654,13.00696,1423
 WSSRFL,Wasserfall,auf Karte eingezeichnete Hütte nicht mehr vorhanden; Höhe nach topographischer Karte; Vermessungspunkt am Gipfel,50.6786,7.23671,338.2
 WSRFZG,Wasserfall (Zugang),Zugang zum Wasserfall,47.7885,13.49342,484
 WAWAND,Wasserwand,über kurzen Klettersteig vom Heuberg aus zu erreichen,47.7276,12.18488,1370
 ACON03,Water,,-32.75969,69.80533,2834
 ACON04,Water,,-32.75646,69.80735,2852
 ACON10,Water,,-32.63574,69.86182,3377
+WTTNDRFWD,Wattendorfer Wand,,50.03212,11.11836,559.9
 WATTNS,Wattens,,47.29176,11.59359,564
 WATZMN,Watzmann (Südspitze),,47.54803,12.91692,2712
 MTTLSP,Watzmann Mittelspitze,,47.55435,12.92224,2712.4
@@ -6647,22 +6939,29 @@ WWGLTR,Wegweiser Gletschertor Riedgletscher,,46.16381,7.8341,2035
 WWGORF,Wegweiser Gorfenspitze,hier beginnt der Aufstieg zur Gorfenspitze,46.96475,10.18594,1606
 WWHANH,Wegweiser Hanauer Hütte,auf dem SW-Grat des Muttekopfs,47.26558,10.64832,2637
 JGDHTTWW,Wegweiser Jagdhütte,,47.10745,9.90544,1694
+WWKOFLER,Wegweiser Kofleralm,,46.94297,12.1356,2343.9
+WWLENKST,Wegweiser Lenksteinjoch,,46.93775,12.13459,2386
 TSCH05,Wegweiser Mittagsspitze,Tschaggunser Mittagsspitze,47.05768,9.88338,1560
 WWMKP1,Wegweiser Muttekopf,,47.26177,10.65336,2285
 WWBOCK,Wegweiser nähe Bockhütte,,47.41891,11.0975,-9999
+WWOCHSNLE,Wegweiser Ochsenlenke,,46.99928,12.08654,2188.8
 PETROWW,Wegweiser Petroglyphen,Wegweiser; markiert den Abstecher (200m) zu den Petroglyphen am Aufstieg zum Pico Bejenado,28.68653,-17.86185,1413
 PIODEE,Wegweiser Piodee,auf Wegweiser Höhenangabe 1100 m,45.9357,9.00941,1012.1
+WWRIESER,Wegweiser Riesernockscharte,,46.92435,12.12199,2380.8
 WWSTAL,Wegweiser Seetal - Plattje,,46.16833,7.83486,1987
 WWSPSS,Wegweiser Spissen,,46.11156,7.90668,2302
 MARTINWW,Wegweiser Volcán Martin,,28.52507,-17.83753,1204
 MARTINWW2,Wegweiser Volcán Martin,,28.52726,-17.83991,1298
 MARTINWW3,Wegweiser Volcán Martin,,28.53603,-17.84272,1497
+AWWBAEREN,Wegweiser zur Bärenluegscharte,,46.95918,12.10924,2457
 WEID,Weid,Bergrestaurant,46.95202,8.56997,-9999
 WDNRHT,Weidener Hütte,,47.22382,11.70887,1856
 WDNRHT,Weidener Hütte,DAV Hütte,47.22383,11.70887,1799
+WDNRHT,Weidener Hütte,Hütte der DAV Sekt. Weiden,47.22361,11.70861,1799
 WDNTHF,Weidenthaler Fels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2198,7.8904,242
 WGLFLS,Weigelfels,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1659,7.7609,229
 WEIHER,Weiher,,47.47083,9.75778,466
+WHERSMLWD,Weihermühlerwand,,50.04277,11.21913,427
 WHRWND,Weiherwände,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.206,7.9106,358
 WEILBG,Weilberg,,50.69876,7.22036,248
 WEILBS,Weilberg-Steinbruch,Aussichtspunkt für den ehem. Basalt-Steinbruch Weilberg,50.69772,7.22026,297
@@ -6671,14 +6970,17 @@ DRWEG,Weinberg Drachenfels,hinter der Sitzbank beginnt der Steig zum Drachenfels
 WINBIT,Weinbiet,Gipfel mit Aussichtsturm und daneben hoher Sendemast,49.36667,8.11667,552
 WEINBIET,Weinbiet,Aussichtsturm; Gaststätte etc. Auch zum Rodeln geeignet.,49.37592,8.12155,553
 WEINGALM,Weingartalm,,47.75554,14.41852,1154
+WSZBHT,Weißbriacherhütte,Hütte der ÖAV Sekt. Hermagor/Gailtal,46.69067,13.21063,1567
+WSZBHT,Weißbriacherhütte,Selbstversorgerhütte der AV Sekt. Weißbriach mit AV Schlüßel zugänglich,46.69056,13.21056,1567
+WSZBHT,Weißbriacherhütte,Sebstversorgerhütte der AV Sekt. Weißbriach; mit AV Schlüßel zugänglich,46.69066,13.21064,1567
 WEISSEWD F,Weiße Wand,,49.54412,11.54121,534.1
 WSWAND,Weiße Wand,,49.54392,11.54134,480.1
 WEISSEWD P,Weiße Wand Parkplatz,,49.53821,11.53349,470.7
 WFLUHALP,Weißenfluh Alpe,,47.37922,9.82967,1367
 WEISSNST P,Weißenstein Parkplatz,,49.63457,11.53119,407.2
 WEISST,Weißer Stein,höchster Gipfel des vorderen Odenwaldes; Restaurant; Aussichtspunkt; Sendeantenne; beliebtes Mountainbiker-Ziel,49.45354,8.72324,551
+WSZGRB,Weißgerber-Biwak,Biwakschachtel; offener Unterstand,47.00667,13.07,2714
 WSSBHT,Weissbriachhütte,,46.69066,13.21064,1493
-WSSBHT,Weissbriachhütte,Hütte der ÖAV Sekt. Hermagor/Gailtal,46.69067,13.21063,1493
 WEISSEWAND,Weisse Wand,,47.64091,14.00668,2200
 WSSGRB,Weissgerber-Biwak,,47.00684,13.07026,2712
 WISSHR,Weisshorn,,46.10129,7.71615,4506
@@ -6706,6 +7008,7 @@ WNDLST,Wendelstein,,47.70333,12.01222,1837
 WDSTTS,Wendelsteinbahn Talstation,Talstation der Wendelsteinbahn,47.72513,12.09272,426.1
 WENGEN,Wengen,,46.60499,7.92183,1275
 WRTZST,Weritzstafel,,46.42213,7.79441,2099
+WBROESL,Werner Brösel Ged.-Wand,,49.81518,11.29415,366.1
 WRNBGG,Wernersberger Geiersteine,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1798,7.9116,378
 WRBGWC,Wernersberger Wachtfels (Kanzel),<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1927,7.9241,386
 WSTFHS,Westfalenhaus,,47.10779,11.09996,2273
@@ -6724,6 +7027,7 @@ WTTRHR,Wetterhorn,,46.63873,8.11542,3692
 WTRKHS,Wetterkoglerhaus,,47.53038,15.91446,1743
 WTRKHS,Wetterkoglerhaus,ÖAV Sekt. Gebirgsverein,47.53038,15.91445,1743
 WTRKRZ,Wetterkreuz,Aussichtspunkt,47.0024,12.37277,2148
+WTRKHT,Wetterkreuzhütte,private Berghütte,46.97847,12.45925,2106
 WETTERLUCK,Wetterluck,Höhle,47.64839,14.2116,-9999
 WTRLCK,Wetterlücke,,46.47786,7.85819,3174
 WTRSTL,Wettersattel,,46.63656,8.11775,3500
@@ -6780,6 +7084,7 @@ WLGRTS,Wilgartisburg,<a href="http://www.summitpost.org/show/mountain_link.pl/mo
 WLGRTS,Wilgartisplatte,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2256,7.9036,274
 WLGBGS,Wilgartswieser Rauhberg-Südostpfeiler,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2028,7.8726,338
 WLGRBG,Wilgartswieser Rauhbergpfeiler,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.1992,7.8735,328
+WLHLAO,Wilhelmine Alpe obere,bei Balderschwang,47.47744,-175.86528,1513
 WMRKHT,Willi Merkl-Ged.Hütte,,47.50932,10.61613,1550
 WMBGHT,Wimbachgrieshütte,,47.53964,12.88881,1326
 WINDGG,Windegg,,47.17617,11.18149,2577
@@ -6806,12 +7111,15 @@ WSMYHS,Wismeyerhaus,,47.24578,13.56741,1670
 WSMYHS,Wismeyerhaus,Hütte des ÖAV Edlweiss,47.24578,13.5674,1670
 WISSIGST,Wissigstock,,46.84547,8.50683,2887
 WITWST,Witenwasserenstock,,46.52489,8.47803,3082
-WTGRBR,Wittgruberhof,Jugendheim der ÖAV Sekt. Weiz,47.27017,15.65562,904
 WTGRBJ,Wittgruberhof Jugendh.,,47.27017,15.65562,904
+WTGRJG,Wittgruberhof Jugendheim,Jugendheim der ÖAV Sekt. Weiz,47.27017,15.65562,904
+WTGRJG,Wittgruberhof Jugendheim,,47.27,15.65556,904
 WWNNHR,Wiwannihorn,,46.35517,7.85607,3001
 WWNNHT,Wiwannihütte,Private Hütte,46.34471,7.86184,2470
 WLYRHT,Wolayerseehütte,,46.61222,12.86703,1960
-WLHTHT,Wolayerseehütte frühere Eduard-Pichl-Hütte,ÖAV Sekt. Austria,46.61222,12.86703,1960
+WLHTHT,Wolayerseehütte (ehem. Eduard-Pichl-Hütte),Hütte der ÖAV Sekt. Austria am Karnischen Höhenweg,46.61222,12.86703,1960
+WLHTHT,Wolayerseehütte (ehem. Eduard-Pichl-Hütte),Hütte der ÖAV Sekt. Austria am Karnischen Höhenweg,46.61222,12.86694,1960
+WLHTHT,Wolayerseehütte(ehem. Eduard-Pichl-Hütte),Hütte der ÖAV Sekt. Austria am Karnischen Höhenweg,46.61235,12.86693,1000
 WLHSHT,Wolfratshauser Hütte,,47.39127,10.84863,1753
 WLHSHT,Wolfratshauser Hütte,Hütte der DAV Sekt. Wolfratshausen,47.39127,10.84863,1753
 WLBGHT,Wolfsberger Hütte,,46.83411,14.6591,1850
@@ -6861,7 +7169,7 @@ ZELT,Zelt/Parkplatz (Brüggler),Zelt bzw. Parkplatz im Schwändital. Ausgangspunkt
 ZENOK,Zenokopf Gipfel,Gipfel den Zenokopfes,47.7346,12.7195,1606
 ZPZRHS,Zeppezauerhaus,,47.7245,13.00721,1663
 ZPZRHS,Zeppezauerhaus,Hütte der ÖAV Sekt. Salzburg,47.7245,13.00722,1663
-ZGNFDW,Ziegenfelder Wände,,50.02501,11.19427,427
+ZGNFDW,Ziegenfelder Wände (KLinge),,50.02501,11.19427,427
 ZSCHHT,Zielalm Schutzhütte,Sehr schöne gemütliche Almwirtschaft. Neu erbaut 2002. Bietet Übernachtungsmöglichkeit (Zimmer/Lager) und heimische Speisen. Sehr nettes tiroler Ehepaar. Eignet sich ideal als Ausgangsort/Station zu Touren in/durch den Naturpark Texelgruppe.,46.72389,11.02528,2218
 ZIELM,Zielmoos,,47.7374,11.89008,1180
 ZGNRFL,Zigeunerfelsen,<a href="http://www.summitpost.org/show/mountain_link.pl/mountain_id/4329" target="summitpost" class="intext">Suedpfalz Climbing Region (SummitPost.org)</a>,49.2104,7.6321,345
@@ -6883,12 +7191,15 @@ ZTTRHT,Zittauer Hütte,AV Hütte im hintersten Wildgerlostal am Unteren Gerlossee,
 ZTTRHT,Zittauerhütte,,47.16259,12.1241,2328
 ZTTLHS,Zittelhaus,,47.05403,12.95721,3105
 ZTTLHS,Zittelhaus,Hütte der ÖAV Sekt. Rauris am Gipfel des Sonnblick Wetterstation,47.05403,12.95722,3105
+ZTTLHS,Zittelhaus,Hütte der Öav Sekt. Rauris,47.05389,12.95694,3105
 ZITTER,Zitterklapfen,,47.26833,9.97167,2403
 ZODERBG,Zodererberg,,47.63678,14.15103,1881
 ZOIAHT,Zoia Hütte,Private Hütte,46.30289,9.93079,2021
 ZOLLHT,Zollhütte,,46.92506,9.972,2233
+ZOLL,Zollhütte Klammljoch,,46.98171,12.12642,2260.7
 ZWHWIESHT,Zollwachthütte bei der Wiesbadener Hütte,,46.86719,10.11883,2486
 ZONC,Zoncolan,Höchster befahrbarer Gipfel des Berges,46.50189,12.92683,1740
+ZNGPSS,Zongo Pass,,-16.28745,-68.13038,4799
 ZPTSCH,Zopetscharte,Scharte zwischen Johannishütte und Eisseehütte,47.03752,12.20825,2958
 Z08,Zuckerhütl,,46.96436,11.15372,3513
 ZUFHT,Zufallhütte,,46.48135,10.67916,2264
@@ -6909,11 +7220,13 @@ ZUGSP,Zugspitze,,47.4213,10.98673,2962.1
 ZUGSPI,Zugspitze,,47.42111,10.98639,2963
 ZMSTSP,Zumsteinspitze,,45.93205,7.87154,4563
 ZUMSTP,Zumsteinspitze,,45.93215,7.87147,4563
+ZUNGLM,Zunigalm,private Almhütte,46.97312,12.51878,1846
 ZNTRGG,Zunteregg,,47.37956,11.2102,1682
+ZPLSHT,Zupalseehütte,private Berghütte ,46.95815,12.43728,2350
 GiWa,zur Gipfelwanne,,47.30457,10.08215,1905
 ZUERS,Zürs,,47.16566,10.16418,1723
 ZURSRS,Zürsersee,,47.17423,10.14072,2163
-ZWEIK,Zweikirchen,,46.71208,14.26445,-9999
+ZWEIK,Zweikirchen,,46.71208,14.26445,517
 ZWRGNL,Zwergenloch,Loch im Gratverlauf der Engelsley; von hier aus kann man das gegenüber liegende; bekanntere Teufelsloch sehen,50.51514,6.99625,256
 ZWERGSHS F,Zwergenschloß,,49.82233,11.30927,418.8
 ZWERGSHS P,Zwergenschloß Parkplatz,,49.8196,11.3114,343.8
@@ -6928,5 +7241,6 @@ ZWSHBP,Zwischbergenpass,,46.1148,8.02006,3268
 ZWSCHN,Zwischensulzbachtörl,,47.12822,12.34101,2917
 ZWISCHENW,Zwischenwänd,,47.65061,14.22472,-9999
 ZWLFE,Zwölferkogel,,47.70972,13.95223,2102
+ZWLFRK,Zwölferkopf,,47.52156,11.75911,1513
 ZWLFRK,Zwölferkopf,,47.12747,9.90244,1843
 ZWLFSP,Zwölferspitze,,47.07685,11.29972,2562
