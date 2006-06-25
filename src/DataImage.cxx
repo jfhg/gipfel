@@ -39,3 +39,49 @@ DataImage::~DataImage() {
 int
 DataImage::set_pixel(int x, int y, char r, char g, char b) {
 }
+
+static int
+DataImage::get_pixel(Fl_RGB_Image *img, int x, int y,
+                     char *r, char *g, char *b) {
+	if ( img->d() == 0 ) {
+		return 1;
+	}
+
+	if (x < 0 || x >=img->w() || y < 0 || y >= img->h()) {
+		return 1;
+	}
+
+	long index = (y * img->w() * img->d()) + (x * img->d()); // X/Y -> buf index  
+	switch ( img->count() ) {
+		case 1: {                                            // bitmap
+				const char *buf = img->data()[0];
+				switch ( img->d() ) {
+					case 1: {                                    // 8bit
+							*r = *g = *b = *(buf+index);
+							break;
+						}
+					case 3:                                      // 24bit
+						*r = *(buf+index+0);
+						*g = *(buf+index+1);
+						*b = *(buf+index+2);
+						break;
+					default:                                     // ??
+						printf("Not supported: chans=%d\n", img->d());
+						return 1;
+                    }
+				break;
+			}
+		default:                                             // ?? pixmap, bit vals
+			printf("Not supported: count=%d\n", img->count());
+			exit(1);
+	}
+
+	return 0;
+}
+    
+
+
+
+
+
+

@@ -32,6 +32,9 @@ class DataImage : Fl_Widget {
 		~DataImage();
 		
 		int set_pixel(nt x, int y, char r, char g, char b);
+
+		static int get_pixel(Fl_RGB_Image *img, int x, int y,
+			char *r, char *g, char *b);
 };
 
 #endif
