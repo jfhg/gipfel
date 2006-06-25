@@ -144,5 +144,7 @@ class Panorama {
   Projection::Projection_t get_projection();
 
   void set_projection(Projection::Projection_t p);
+
+  int get_coordinates(double a_view, double a_nick, int *x, int *y);
 };
 #endif

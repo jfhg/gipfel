@@ -21,6 +21,7 @@
 #define STITCH_H
 
 #include "GipfelWidget.H"
+#include "DataImage.H"
 
 #define MAX_PICS 256
 
@@ -34,9 +35,9 @@ class Stitch {
 
 		~Stitch();
 		
-		int add_image(const char *file);
+		int load_image(char *file);
 		
-		int resample(Fl_RGB_Image *,
+		int resample(DataImage *img,
 			double view_start, double view_end,
 			double nick_start, double nick_end);
 };

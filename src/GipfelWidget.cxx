@@ -40,6 +40,7 @@
 #include <FL/fl_draw.H>
 
 #include "Fl_Search_Chooser.H"
+#include "DataImage.H"
 #include "choose_hill.H"
 #include "util.h"
 #include "GipfelWidget.H"
@@ -714,6 +715,7 @@ GipfelWidget::set_track_width(double w) {
   redraw();
 }
 
+
 int
 GipfelWidget::handle(int event) {
   int mark_x, mark_y;
@@ -743,3 +745,18 @@ GipfelWidget::handle(int event) {
   }
   return 0;
 }
+
+int
+GipfelWidget::get_pixel(double a_view, double a_nick,
+                        char *r, char *g, char *b) {
+	int px, py;
+
+
+	if (img == NULL) {
+		return 1;
+	}
+
+	pan->get_coordinates(a_view, a_nick, &px, &py);
+	return DataImage::get_pixel(img, px, py, r, g, b);
+}
+

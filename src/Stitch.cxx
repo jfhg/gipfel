@@ -27,17 +27,39 @@
 #include "Stitch.H"
 
 Stitch::Stitch() {
-
-
+	for (int i=0; i<MAX_PICS; i++) {
+		gipf[i] = NULL;
+	}
 }
 
 Stitch::~Stitch() {
-
-
+	for (int i=0; i<MAX_PICS; i++) {
+		if (gipf[i]) {
+			delete(gipf[i]);
+		} else {
+			break;
+		}
+	}
 }
 
 
 int
-Stitch::resample(Fl_Stitch_Display *
+Stitch::load_image(char *file) {
+	for (int i=0; i<MAX_PICS; i++) {
+		if (gipf[i] == NULL) {
+			gipf[i] = new GipfelWidget(0, 0, 800, 600);
+			gipf[i]->load_image(file);
+			break;
+		}
+	}
+
+
+}
+
+int
+Stitch::resample(DataImage *img,
+            double view_start, double view_end,
+            double nick_start, double nick_end) {
+
 
 }

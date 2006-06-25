@@ -586,3 +586,18 @@ Panorama::get_real_distance(Hill *m) {
   return c;
 }
 
+int
+Panorama::get_coordinates(double a_view, double a_nick, int *x, int *y) {
+	Hill *m = new Hill(0,0);
+
+	m->a_view = a_view;
+	m->a_nick = a_nick;
+
+    proj->set_coordinates(m, &parms);
+
+	*x = m->x;
+	*y = m->y;
+
+	return 0;
+}
+

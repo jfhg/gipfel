@@ -20,20 +20,25 @@
 #ifndef DATAIMAGE_H
 #define DATAIMAGE_H
 
+#include <FL/Fl_Widget.H>
+#include <FL/Fl_Image.H>
 
-
-class DataImage : Fl_Widget {
+class DataImage : public Fl_Widget {
 	private:
+		int d;
+		uchar *data;
 		
 
 	public:
-		DataImage(int w, int h);
+		DataImage(int X, int Y, int W, int H);
 
 		~DataImage();
 		
-		int set_pixel(nt x, int y, char r, char g, char b);
+		int set_pixel(int x, int y, char r, char g, char b);
 
-		static int get_pixel(Fl_RGB_Image *img, int x, int y,
+		void draw();
+
+		static int get_pixel(Fl_Image *img, int x, int y,
 			char *r, char *g, char *b);
 };
 

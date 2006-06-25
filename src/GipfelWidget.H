@@ -118,6 +118,9 @@ class GipfelWidget : public Fl_Widget {
 
   int update();
 
+  int get_pixel(double a_view, double a_nick,
+                    char *r, char *g, char *b);
+
   void draw();
 };
 #endif

@@ -22,13 +22,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
+
+#include <Fl/fl_draw.h>
 
 #include "DataImage.H"
 
-DataImage::DataImage() {
-
-
+DataImage::DataImage(int X, int Y, int W, int H): Fl_Widget(X, Y, W, H) {
+	d = 3;
+	data = (uchar*) malloc(W * H * d);
 }
 
 DataImage::~DataImage() {
@@ -38,10 +39,26 @@ DataImage::~DataImage() {
 
 int
 DataImage::set_pixel(int x, int y, char r, char g, char b) {
+	if (x < 0 || x >= w() || y < 0 || y >= h()) {
+		return 1;
+	}
+
+	long index = (y * w() * d + (x * d)); // X/Y -> buf index  
+	*(data+index+0) = r;
+	*(data+index+1) = g;
+	*(data+index+2) = b;
+
+	return 0;
 }
 
-static int
-DataImage::get_pixel(Fl_RGB_Image *img, int x, int y,
+
+void
+DataImage::draw() {
+	fl_draw_image(data, 0, 0, w(), h(), d);
+}
+
+int
+DataImage::get_pixel(Fl_Image *img, int x, int y,
                      char *r, char *g, char *b) {
 	if ( img->d() == 0 ) {
 		return 1;
