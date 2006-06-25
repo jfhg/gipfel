@@ -55,7 +55,11 @@ DataImage::set_pixel(int x, int y, char r, char g, char b) {
 
 void
 DataImage::draw() {
-	fl_draw_image(data, 0, 0, w(), h(), d);
+	fl_push_clip(x(), y(), w(), h());
+
+	fl_draw_image(data, x(), y(), w(), h(), d);
+
+	fl_pop_clip();
 }
 
 int

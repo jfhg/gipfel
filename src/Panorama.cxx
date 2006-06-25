@@ -593,17 +593,17 @@ Panorama::get_coordinates(double a_view, double a_nick, int *x, int *y) {
 
 
 	m.a_view = a_view - parms.a_center;
-    
+
     if (m.a_view > pi_d) {
       m.a_view -= 2.0*pi_d;
     } else if (m.a_view < -pi_d) {
       m.a_view += 2.0*pi_d;
     }
   
-    if (m.a_view < view_angle && m.a_view > - view_angle) {
+    if (m.a_view > view_angle || m.a_view < - view_angle) {
 		return 1;
 	}
-	
+
 	m.a_nick = a_nick;
 
     proj->set_coordinates(&m, &parms);

@@ -413,17 +413,20 @@ int main(int argc, char** argv) {
 
 int stitch(int argc, char **argv) {
   Fl_Window *win;
+  Fl_Scroll *scroll;
   Stitch *st = new Stitch();
 
   st->load_image("test1.jpg");
   st->load_image("test2.jpg");
   st->load_image("test3.jpg");
+  st->load_image("test4.jpg");
 
-  win = new Fl_Window(0,0, 1000, 200);
-  DataImage *img = new DataImage(0, 0, 1000, 200);
-  st->resample(img, 2.0, 6.0);
+  win = new Fl_Window(0,0, 1000, 1000);
+  scroll = new Fl_Scroll(0, 0, win->w(), win->h());
+  DataImage *img = new DataImage(0, 0, 2000, 500);
 
   win->show(0, argv); 
+  st->resample(img, 0.0, 6.3);
   Fl::run();
   exit(0);
 }

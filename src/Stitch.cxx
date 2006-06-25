@@ -24,6 +24,8 @@
 #include <string.h>
 #include <math.h>
 
+#include <Fl/Fl.H>
+
 #include "Stitch.H"
 
 Stitch::Stitch() {
@@ -66,8 +68,7 @@ Stitch::resample(DataImage *img,
 	for (int x=0; x<img->w(); x++) {
 		for (int y=0; y<img->h(); y++) {
 			double a_view, a_nick;
-
-			a_view = x * step_view;
+			a_view = view_start + x * step_view;
 			a_nick = (y_off - y) * step_view;
 
 			for (int i=0; i<MAX_PICS; i++) {
@@ -79,5 +80,7 @@ Stitch::resample(DataImage *img,
 				}
 			}
 		}
+		img->redraw();
+		Fl::check();
 	}
 }
