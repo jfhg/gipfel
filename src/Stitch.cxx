@@ -28,6 +28,8 @@
 
 #include "Stitch.H"
 
+static double pi_d = asin(1.0) * 2.0;
+
 Stitch::Stitch() {
 	for (int i=0; i<MAX_PICS; i++) {
 		gipf[i] = NULL;
@@ -67,9 +69,10 @@ Stitch::resample(DataImage *img,
 	double step_view = (view_end - view_start) / img->w();
 	char r, g, b;
 	int y_off = img->h() / 2;
+ 	double radius = (double) img->w() / (view_end -view_start);
 
 	for (int y=0; y<img->h(); y++) {
-		double a_nick = atan(((double)(y_off - y)/(double)img->h()));
+		double a_nick = atan((double)(y_off - y)/radius);
 
 		for (int x=0; x<img->w(); x++) {
 			double a_view;
