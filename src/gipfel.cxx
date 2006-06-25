@@ -41,6 +41,8 @@
 #include "Fl_Value_Dial.H"
 #include "Fl_Search_Chooser.H"
 #include "GipfelWidget.H"
+#include "DataImage.H"
+#include "Stitch.H"
 #include "choose_hill.H"
 #include "../config.h"
 
@@ -59,6 +61,8 @@ Fl_Slider *s_nick, *s_scale, *s_tilt, *s_height_dist, *s_track_width;
 Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
 Fl_Box *b_viewpoint;
 Fl_Menu_Bar *mb;
+
+int stitch(int argc, char **argv);
 
 void set_values() {
   s_center->value(gipf->get_center_angle());
@@ -319,12 +323,13 @@ int main(int argc, char** argv) {
   char c, *sep, *tmp, **my_argv;
   char *view_point = NULL;
   int err, bflag = 0, dflag = 0, my_argc;
+  int stitch_flag = 0;
   Fl_Window *control_win, *view_win;
   Fl_Scroll *scroll;
 
   
   err = 0;
-  while ((c = getopt(argc, argv, "d:v:")) != EOF) {
+  while ((c = getopt(argc, argv, "d:v:s")) != EOF) {
     switch (c) {  
     case 'h':
       usage();
@@ -335,6 +340,9 @@ int main(int argc, char** argv) {
       break;
     case 'v':
       view_point = optarg;
+      break;
+    case 's':
+      stitch_flag++;
       break;
     default:
       err++;
@@ -359,6 +367,10 @@ int main(int argc, char** argv) {
     Fl::scheme(NULL);
   } else {
     Fl::scheme("plastic");
+  }
+
+  if (stitch_flag) {
+    stitch(my_argc, my_argv);
   }
 
   control_win = create_control_window();
@@ -397,4 +409,21 @@ int main(int argc, char** argv) {
   }
   
   return Fl::run();
+}
+
+int stitch(int argc, char **argv) {
+  Fl_Window *win;
+  Stitch *st = new Stitch();
+
+  st->load_image("test1.jpg");
+  st->load_image("test2.jpg");
+  st->load_image("test3.jpg");
+
+  win = new Fl_Window(0,0, 1000, 200);
+  DataImage *img = new DataImage(0, 0, 1000, 200);
+  st->resample(img, 2.0, 6.0);
+
+  win->show(0, argv); 
+  Fl::run();
+  exit(0);
 }

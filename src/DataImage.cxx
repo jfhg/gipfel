@@ -30,6 +30,7 @@
 DataImage::DataImage(int X, int Y, int W, int H): Fl_Widget(X, Y, W, H) {
 	d = 3;
 	data = (uchar*) malloc(W * H * d);
+	memset(data, 0, W * H * d);
 }
 
 DataImage::~DataImage() {

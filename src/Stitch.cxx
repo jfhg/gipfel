@@ -58,8 +58,26 @@ Stitch::load_image(char *file) {
 
 int
 Stitch::resample(DataImage *img,
-            double view_start, double view_end,
-            double nick_start, double nick_end) {
+            double view_start, double view_end) {
+	double step_view = (view_end - view_start) / img->w();
+	char r, g, b;
+	int y_off = img->h() / 2;
 
+	for (int x=0; x<img->w(); x++) {
+		for (int y=0; y<img->h(); y++) {
+			double a_view, a_nick;
 
+			a_view = x * step_view;
+			a_nick = (y_off - y) * step_view;
+
+			for (int i=0; i<MAX_PICS; i++) {
+				if (gipf[i] == NULL) {
+					break;
+				} else if (gipf[i]->get_pixel(a_view, a_nick, &r, &g, &b)==0) {
+					img->set_pixel(x, y, r, g, b);
+					break;
+				}
+			}
+		}
+	}
 }

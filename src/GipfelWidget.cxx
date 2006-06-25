@@ -757,6 +757,8 @@ GipfelWidget::get_pixel(double a_view, double a_nick,
 	}
 
 	pan->get_coordinates(a_view, a_nick, &px, &py);
-	return DataImage::get_pixel(img, px, py, r, g, b);
+
+//printf("===> %s: %f, %f -> %d %d\n", img_file, a_view, a_nick, px, py);
+	return DataImage::get_pixel(img, px + img->w() / 2, py + img->h() / 2, r, g, b);
 }
 

@@ -38,8 +38,7 @@ class Stitch {
 		int load_image(char *file);
 		
 		int resample(DataImage *img,
-			double view_start, double view_end,
-			double nick_start, double nick_end);
+			double view_start, double view_end);
 };
 
 #endif
