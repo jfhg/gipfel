@@ -362,15 +362,15 @@ int main(int argc, char** argv) {
     exit(1);
   }
 
+  if (stitch_flag) {
+    stitch(my_argc, my_argv);
+  }
+
   Fl::get_system_colors();
   if (getenv("FLTK_SCHEME")) {
     Fl::scheme(NULL);
   } else {
     Fl::scheme("plastic");
-  }
-
-  if (stitch_flag) {
-    stitch(my_argc, my_argv);
   }
 
   control_win = create_control_window();
@@ -420,13 +420,21 @@ int stitch(int argc, char **argv) {
   st->load_image("test2.jpg");
   st->load_image("test3.jpg");
   st->load_image("test4.jpg");
+  st->load_image("test5.jpg");
+  st->load_image("test6.jpg");
+  st->load_image("test7.jpg");
+  st->load_image("test8.jpg");
+  st->load_image("test9.jpg");
+  st->load_image("test10.jpg");
+  st->load_image("test11.jpg");
 
   win = new Fl_Window(0,0, 1000, 1000);
   scroll = new Fl_Scroll(0, 0, win->w(), win->h());
-  DataImage *img = new DataImage(0, 0, 2000, 500);
+  DataImage *img = new DataImage(0, 0, 10000, 2000);
+  win->resizable(scroll);
 
   win->show(0, argv); 
-  st->resample(img, 0.0, 6.3);
+  st->resample(img, 0.0, 7.0);
   Fl::run();
   exit(0);
 }

@@ -50,7 +50,10 @@ Stitch::load_image(char *file) {
 	for (int i=0; i<MAX_PICS; i++) {
 		if (gipf[i] == NULL) {
 			gipf[i] = new GipfelWidget(0, 0, 800, 600);
-			gipf[i]->load_image(file);
+			if (gipf[i]->load_image(file) != 0) {
+				delete gipf[i];
+				gipf[i] = NULL;
+			}
 			break;
 		}
 	}
@@ -65,11 +68,12 @@ Stitch::resample(DataImage *img,
 	char r, g, b;
 	int y_off = img->h() / 2;
 
-	for (int x=0; x<img->w(); x++) {
-		for (int y=0; y<img->h(); y++) {
-			double a_view, a_nick;
+	for (int y=0; y<img->h(); y++) {
+		double a_nick = atan(((double)(y_off - y)/(double)img->h()));
+
+		for (int x=0; x<img->w(); x++) {
+			double a_view;
 			a_view = view_start + x * step_view;
-			a_nick = (y_off - y) * step_view;
 
 			for (int i=0; i<MAX_PICS; i++) {
 				if (gipf[i] == NULL) {
@@ -80,7 +84,10 @@ Stitch::resample(DataImage *img,
 				}
 			}
 		}
-		img->redraw();
-		Fl::check();
+
+		if (y % (img->h() / 200) == 0) {
+			img->redraw();
+			Fl::check();
+		}
 	}
 }
