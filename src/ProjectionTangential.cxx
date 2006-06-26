@@ -160,15 +160,16 @@ ProjectionTangential::optimize(const Hill *m1, const Hill *m2, ViewParams *parms
 }
 
 void 
-ProjectionTangential::set_coordinates(Hill *m, const ViewParams *parms) {
+ProjectionTangential::get_coordinates(double a_view, double a_nick,
+	const ViewParams *parms, double *x, double *y) {
   double x_tmp, y_tmp;
 
-  x_tmp = tan(m->a_view) * parms->scale;
-  y_tmp = - (tan(m->a_nick - parms->a_nick) * parms->scale);
+  x_tmp = tan(a_view) * parms->scale;
+  y_tmp = - (tan(a_nick - parms->a_nick) * parms->scale);
 
   // rotate by a_tilt;
-  m->x = (int) rint(x_tmp * cos(parms->a_tilt) - y_tmp * sin(parms->a_tilt));
-  m->y = (int) rint(x_tmp * sin(parms->a_tilt) + y_tmp * cos(parms->a_tilt));
+  *x = x_tmp * cos(parms->a_tilt) - y_tmp * sin(parms->a_tilt);
+  *y = x_tmp * sin(parms->a_tilt) + y_tmp * cos(parms->a_tilt);
 }
 
 double

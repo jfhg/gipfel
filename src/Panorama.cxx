@@ -508,8 +508,11 @@ Panorama::update_coordinates() {
 
   for (int i=0; i<visible_mountains->get_num(); i++) {
     m = visible_mountains->get(i);
+	double tmp_x, tmp_y;
     
-    proj->set_coordinates(m, &parms);
+    proj->get_coordinates(m->a_view, m->a_nick, &parms, &tmp_x, &tmp_y);
+	m->x = (int) rint(tmp_x);
+	m->y = (int) rint(tmp_y);
   }
 }
 
@@ -587,29 +590,20 @@ Panorama::get_real_distance(Hill *m) {
 }
 
 int
-Panorama::get_coordinates(double a_view, double a_nick, int *x, int *y) {
-	Hill m(0,0);
+Panorama::get_coordinates(double a_view, double a_nick, double *x, double *y) {
+	a_view = a_view - parms.a_center;
 
-
-
-	m.a_view = a_view - parms.a_center;
-
-    if (m.a_view > pi_d) {
-      m.a_view -= 2.0*pi_d;
-    } else if (m.a_view < -pi_d) {
-      m.a_view += 2.0*pi_d;
+    if (a_view > pi_d) {
+      a_view -= 2.0*pi_d;
+    } else if (a_view < -pi_d) {
+      a_view += 2.0*pi_d;
     }
   
-    if (m.a_view > view_angle || m.a_view < - view_angle) {
+    if (a_view > view_angle || a_view < - view_angle) {
 		return 1;
 	}
 
-	m.a_nick = a_nick;
-
-    proj->set_coordinates(&m, &parms);
-
-	*x = m.x;
-	*y = m.y;
+    proj->get_coordinates(a_view, a_nick, &parms, x, y);
 
 	return 0;
 }

@@ -31,7 +31,8 @@ Projection::Projection() {
 };
 
 void
-Projection::set_coordinates(Hill *m, const ViewParams *parms) {
+Projection::get_coordinates(double a_view, double a_nick,
+		const ViewParams *parms, double *x, double *y) {
   fprintf(stderr, "Error: Projection::set_coordinates()\n");
 }
 

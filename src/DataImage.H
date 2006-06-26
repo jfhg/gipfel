@@ -40,6 +40,12 @@ class DataImage : public Fl_Widget {
 
 		static int get_pixel(Fl_Image *img, int x, int y,
 			char *r, char *g, char *b);
+
+		static int get_pixel_bilinear(Fl_Image *img, double x, double y,
+			char *r, char *g, char *b);
+
+		static int get_pixel_nearest(Fl_Image *img, double x, double y,
+			char *r, char *g, char *b);
 };
 
 #endif

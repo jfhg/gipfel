@@ -36,7 +36,8 @@ class ProjectionTangential : public Projection {
   int optimize(const Hill *m1, const Hill *m2, ViewParams *parms);
 
  public:
-  void set_coordinates(Hill *m, const ViewParams *parms);
+  void get_coordinates(double a_view, double a_nick, const ViewParams *parms,
+		double *x, double *y);
   
   int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
 };

@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include <Fl/fl_draw.h>
 
@@ -63,6 +64,23 @@ DataImage::draw() {
 }
 
 int
+DataImage::get_pixel_bilinear(Fl_Image *img, double x, double y,
+                     char *r, char *g, char *b) {
+
+
+}
+
+int
+DataImage::get_pixel_nearest(Fl_Image *img, double x, double y,
+                     char *r, char *g, char *b) {
+	if (isnan(x) || isnan(y)) {
+		return 1;
+	} else {
+		return get_pixel(img, (int) rint(x), (int) rint(y), r, g, b);
+	}
+}
+
+int
 DataImage::get_pixel(Fl_Image *img, int x, int y,
                      char *r, char *g, char *b) {
 	if ( img->d() == 0 ) {
@@ -72,7 +90,6 @@ DataImage::get_pixel(Fl_Image *img, int x, int y,
 	if (x < 0 || x >=img->w() || y < 0 || y >= img->h()) {
 		return 1;
 	}
-
 	long index = (y * img->w() * img->d()) + (x * img->d()); // X/Y -> buf index  
 	switch ( img->count() ) {
 		case 1: {                                            // bitmap

@@ -749,16 +749,19 @@ GipfelWidget::handle(int event) {
 int
 GipfelWidget::get_pixel(double a_view, double a_nick,
                         char *r, char *g, char *b) {
-	int px, py;
+	double px, py;
 
 
 	if (img == NULL) {
 		return 1;
 	}
 
-	pan->get_coordinates(a_view, a_nick, &px, &py);
+	if (pan->get_coordinates(a_view, a_nick, &px, &py) != 0) {
+		return 1;
+	}
 
 //printf("===> %s: %f, %f -> %d %d\n", img_file, a_view, a_nick, px, py);
-	return DataImage::get_pixel(img, px + img->w() / 2, py + img->h() / 2, r, g, b);
+	return DataImage::get_pixel_nearest(img, px + ((double) img->w()) / 2.0,
+				py + ((double) img->h()) / 2.0, r, g, b);
 }
 
