@@ -88,7 +88,7 @@ Stitch::resample(DataImage *img,
 			}
 		}
 
-		if (y % (img->h() / 200) == 0) {
+		if (y % (img->h() / 100 + 1) == 0) {
 			img->redraw();
 			Fl::check();
 		}
