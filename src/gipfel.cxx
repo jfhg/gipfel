@@ -422,17 +422,9 @@ int stitch(int stitch_w, int stitch_h, int argc, char **argv) {
   Fl_Scroll *scroll;
   Stitch *st = new Stitch();
 
-  st->load_image("test1.jpg");
-  st->load_image("test2.jpg");
-  st->load_image("test3.jpg");
-  st->load_image("test4.jpg");
-  st->load_image("test5.jpg");
-  st->load_image("test6.jpg");
-  st->load_image("test7.jpg");
-  st->load_image("test8.jpg");
-  st->load_image("test9.jpg");
-  st->load_image("test10.jpg");
-  st->load_image("test11.jpg");
+  for (int i=0; i<argc; i++) {
+    st->load_image(argv[i]);
+  }
 
   win = new Fl_Window(0,0, 1000, stitch_h);
   scroll = new Fl_Scroll(0, 0, win->w(), win->h());
