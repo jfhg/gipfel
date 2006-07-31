@@ -25,6 +25,7 @@
 #include <math.h>
 extern "C" {
 #include <jpeglib.h>
+#include <tiffio.h>
 }
 
 #include <Fl/fl_draw.h>
@@ -159,5 +160,36 @@ DataImage::write_jpeg(const char *file, int quality) {
 	fclose(outfile);
 	jpeg_destroy_compress(&cinfo);
 
+	return 0;
+}
+
+int
+DataImage::write_tiff(const char *file) {
+	TIFF *output;
+	uint32 width, height;
+	char *raster;
+
+	// Open the output image
+	if((output = TIFFOpen(file, "w")) == NULL){
+		fprintf(stderr, "can't open %s\n", file);
+		return 1;
+	}
+
+	// Write the tiff tags to the file
+	TIFFSetField(output, TIFFTAG_IMAGEWIDTH, w());
+	TIFFSetField(output, TIFFTAG_IMAGELENGTH, h());
+	TIFFSetField(output, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
+	TIFFSetField(output, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+	TIFFSetField(output, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+	TIFFSetField(output, TIFFTAG_BITSPERSAMPLE, 8);
+	TIFFSetField(output, TIFFTAG_SAMPLESPERPIXEL, 3);
+
+	// Actually write the image
+	if(TIFFWriteEncodedStrip(output, 0, data, w() * h() * 3) == 0){
+		fprintf(stderr, "Could not write image\n");
+		return 2;
+	}
+
+	TIFFClose(output);
 	return 0;
 }

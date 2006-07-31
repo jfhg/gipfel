@@ -52,5 +52,9 @@ LIBS="`$FLTKCONFIG --use-images --ldflags` $LIBS"
 AC_CHECK_HEADERS([ccmath.h], [], [echo "Error: ccmath.h not found."; exit 1;])
 AC_CHECK_LIB([ccm], [open], [], [echo "Error: ccmath.so not found."; exit 1;])
 
+# Check for libtiff
+AC_CHECK_HEADERS([tiffio.h], [], [echo "Error: tiffio.h not found."; exit 1;])
+AC_CHECK_LIB([tiff], [TIFFOpen], [], [echo "Error: libtiff.so not found."; exit 1;])
+
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
