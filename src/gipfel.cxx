@@ -62,7 +62,8 @@ Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
 Fl_Box *b_viewpoint;
 Fl_Menu_Bar *mb;
 
-int stitch(int stitch_w, int stitch_h, int argc, char **argv);
+static int tiffstitch(int stitch_w, int stitch_h, int argc, char **argv);
+static int stitch(int stitch_w, int stitch_h, int argc, char **argv);
 
 void set_values() {
   s_center->value(gipf->get_center_angle());
@@ -323,13 +324,13 @@ int main(int argc, char** argv) {
   char c, *sep, *tmp, **my_argv;
   char *view_point = NULL;
   int err, bflag = 0, dflag = 0, my_argc;
-  int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
+  int stitch_flag = 0, tiff_flag = 0, stitch_w = 2000, stitch_h = 500;
   Fl_Window *control_win, *view_win;
   Fl_Scroll *scroll;
 
   
   err = 0;
-  while ((c = getopt(argc, argv, "d:v:sw:b:")) != EOF) {
+  while ((c = getopt(argc, argv, "d:v:sw:b:t")) != EOF) {
     switch (c) {  
     case 'h':
       usage();
@@ -343,6 +344,10 @@ int main(int argc, char** argv) {
       break;
     case 's':
       stitch_flag++;
+      break;
+    case 't':
+      stitch_flag++;
+      tiff_flag++;
       break;
     case 'w':
       stitch_w = atoi(optarg);
@@ -369,7 +374,12 @@ int main(int argc, char** argv) {
   }
 
   if (stitch_flag) {
-    stitch(stitch_w, stitch_h, my_argc, my_argv);
+    if (tiff_flag) {
+      tiffstitch(stitch_w, stitch_h, my_argc, my_argv);
+    } else {
+      stitch(stitch_w, stitch_h, my_argc, my_argv);
+    }
+    exit(0);
   }
 
   Fl::get_system_colors();
@@ -417,7 +427,27 @@ int main(int argc, char** argv) {
   return Fl::run();
 }
 
-int stitch(int stitch_w, int stitch_h, int argc, char **argv) {
+static int tiffstitch(int stitch_w, int stitch_h, int argc, char **argv) {
+  char buf[256];
+
+  for (int i=0; i<argc; i++) {
+    Stitch *st = new Stitch();
+    DataImage *img = new DataImage(0, 0, stitch_w, stitch_h, 4);
+
+    st->load_image(argv[i]);
+
+    st->resample(img, 0.0, 7.0);
+    snprintf(buf, sizeof(buf), "gipfel_%d.tiff", i);
+	img->write_tiff(buf);
+    delete st;
+	delete img;
+  }
+ 
+  return 0;
+}  
+
+
+static int stitch(int stitch_w, int stitch_h, int argc, char **argv) {
   Fl_Window *win;
   Fl_Scroll *scroll;
   Stitch *st = new Stitch();
@@ -435,7 +465,7 @@ int stitch(int stitch_w, int stitch_h, int argc, char **argv) {
   st->resample(img, 0.0, 7.0);
 
   img->write_jpeg("/tmp/bla.jpg", 90);
-  img->write_tiff("/tmp/bla.tiff");
   Fl::run();
-  exit(0);
+
+  return 0;
 }

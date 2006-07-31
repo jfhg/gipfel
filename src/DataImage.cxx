@@ -32,10 +32,10 @@ extern "C" {
 
 #include "DataImage.H"
 
-DataImage::DataImage(int X, int Y, int W, int H): Fl_Widget(X, Y, W, H) {
-	d = 3;
+DataImage::DataImage(int X, int Y, int W, int H, int channels): Fl_Widget(X, Y, W, H) {
+	d = channels;
 	data = (uchar*) malloc(W * H * d);
-	memset(data, 200, W * H * d);
+	memset(data, 0, W * H * d);
 }
 
 DataImage::~DataImage() {
@@ -53,6 +53,9 @@ DataImage::set_pixel(int x, int y, char r, char g, char b) {
 	*(data+index+0) = r;
 	*(data+index+1) = g;
 	*(data+index+2) = b;
+	if (d == 4) {
+		*(data+index+3) = 255;
+	}
 
 	return 0;
 }
@@ -150,7 +153,7 @@ DataImage::write_jpeg(const char *file, int quality) {
 
 	jpeg_start_compress(&cinfo, TRUE);
 
-	row_stride = w() * 3; /* JSAMPLEs per row in image_buffer */
+	row_stride = w() * d; /* JSAMPLEs per row in image_buffer */
 	while (cinfo.next_scanline < cinfo.image_height) {
 		row_pointer[0] = & data[cinfo.next_scanline * row_stride];
 		jpeg_write_scanlines(&cinfo, row_pointer, 1);
@@ -182,10 +185,10 @@ DataImage::write_tiff(const char *file) {
 	TIFFSetField(output, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 	TIFFSetField(output, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
 	TIFFSetField(output, TIFFTAG_BITSPERSAMPLE, 8);
-	TIFFSetField(output, TIFFTAG_SAMPLESPERPIXEL, 3);
+	TIFFSetField(output, TIFFTAG_SAMPLESPERPIXEL, d);
 
 	// Actually write the image
-	if(TIFFWriteEncodedStrip(output, 0, data, w() * h() * 3) == 0){
+	if(TIFFWriteEncodedStrip(output, 0, data, w() * h() * d) == 0){
 		fprintf(stderr, "Could not write image\n");
 		return 2;
 	}

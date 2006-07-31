@@ -30,7 +30,7 @@ class DataImage : public Fl_Widget {
 		
 
 	public:
-		DataImage(int X, int Y, int W, int H);
+		DataImage(int X, int Y, int W, int H, int channels=3);
 
 		~DataImage();
 		
