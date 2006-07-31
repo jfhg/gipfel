@@ -433,6 +433,8 @@ int stitch(int stitch_w, int stitch_h, int argc, char **argv) {
 
   win->show(0, argv); 
   st->resample(img, 0.0, 7.0);
+
+  img->write_jpeg("/tmp/bla.jpg", 90);
   Fl::run();
   exit(0);
 }

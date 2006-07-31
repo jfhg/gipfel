@@ -38,6 +38,8 @@ class DataImage : public Fl_Widget {
 
 		void draw();
 
+		int write_jpeg(const char *file, int quality);
+
 		static int get_pixel(Fl_Image *img, int x, int y,
 			char *r, char *g, char *b);
 
