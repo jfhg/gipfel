@@ -29,6 +29,8 @@ class JPEGOutputImage : OutputImage {
 		
 		int init(int w, int h);
 
+		int done();
+
 	protected:
 		int set_pixel_internal(int x, char r, char g, char b);	
 
