@@ -23,7 +23,7 @@
 
 class OutputImage {
 	private:
-		int w, h;
+		int w, h, initialized, line;
 
 	public:
 		OutputImage();
@@ -39,7 +39,7 @@ class OutputImage {
 		int done();
 
 	protected:
-		virtual int init_internal(int w1, h1);
+		virtual int init_internal(int w1, int h1);
 
 		virtual int set_pixel_internal(int x, char r, char g, char b);	
 	
@@ -49,14 +49,18 @@ class OutputImage {
 };
 
 class OutputImages {
+	private:
+		OutputImage **imgs;
+		int max_imgs;
+
 	public:
 		OutputImages();
 
 		~OutputImages();
 
-		int add(OutputImage *i);
+		int add(OutputImage *img);
 
-		int remove(OutputImage *i);
+		int remove(OutputImage *img);
 
 		int init(int w, int h);
 
@@ -65,6 +69,6 @@ class OutputImages {
 		int next_line();
 
 		int done();
-}
+};
 
 #endif

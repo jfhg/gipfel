@@ -20,21 +20,36 @@
 #ifndef JPEGOUTPUTIMAGE_H
 #define JPEGOUTPUTIMAGE_H
 
+#include <stdio.h>
+extern "C" {
+#include <jpeglib.h>
+}
+
+#include "OutputImage.H"
 
 class JPEGOutputImage : OutputImage {
+	private:
+		unsigned char *row;
+		char *file;
+		int w, h;
+		struct jpeg_compress_struct cinfo;
+		struct jpeg_error_mgr jerr;
+		FILE *fp;
+		int quality;
+
 	public:
-		JPEGOutputImage();
+		JPEGOutputImage(const char *file, int quality = 90);
 
 		~JPEGOutputImage();
-		
-		int init(int w, int h);
-
-		int done();
 
 	protected:
+		int init_internal(int w, int h);
+
 		int set_pixel_internal(int x, char r, char g, char b);	
 
 		int next_line_internal();
+
+		int done_internal();
 };
 
 #endif

@@ -13,7 +13,8 @@ gipfel_SOURCES = \
 	Fl_Search_Chooser.cxx \
 	choose_hill.cxx \
 	Stitch.cxx \
-	DataImage.cxx
+	OutputImage.cxx \
+	JPEGOutputImage.cxx 
 
 noinst_HEADERS = \
 	GipfelWidget.H \
@@ -27,5 +28,6 @@ noinst_HEADERS = \
 	Fl_Search_Chooser.H \
 	choose_hill.H \
 	Stitch.H \
-	DataImage.H \
+	OutputImage.H \
+	JPEGOutputImage.H \
 	util.h
