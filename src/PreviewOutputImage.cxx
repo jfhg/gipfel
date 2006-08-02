@@ -43,7 +43,6 @@ int
 PreviewOutputImage::init_internal(int w, int h) {
 	data = (uchar*) malloc(w * h * d);
 	memset(data, 0, w * h * d);
-	row = 0;
 	size(w, h);
 	return 0;
 }
@@ -56,7 +55,7 @@ PreviewOutputImage::set_pixel_internal(int x, char r, char g, char b) {
 		return 1;
 	}
 
-	long index = (row * w() * d + (x * d));
+	long index = (line * w() * d + (x * d));
 	*(data+index+0) = r;
 	*(data+index+1) = g;
 	*(data+index+2) = b;
@@ -66,8 +65,7 @@ PreviewOutputImage::set_pixel_internal(int x, char r, char g, char b) {
 
 int
 PreviewOutputImage::next_line_internal() {
-	row++;
-	if (row % (h() / 100) == 0) {
+	if (line % 10 == 0) {
 		redraw();
 		Fl::check();
 	}

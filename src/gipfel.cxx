@@ -450,7 +450,7 @@ static int stitch(int stitch_w, int stitch_h, int argc, char **argv) {
     st->load_image(argv[i]);
   }
 
-  win = new Fl_Window(0,0, 1000, stitch_h);
+  win = new Fl_Window(0,0, stitch_w, stitch_h);
   scroll = new Fl_Scroll(0, 0, win->w(), win->h());
   PreviewOutputImage *img = new PreviewOutputImage(0, 0, stitch_w, stitch_h);
   win->resizable(scroll);

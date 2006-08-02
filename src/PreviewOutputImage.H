@@ -31,7 +31,6 @@ class PreviewOutputImage : OutputImage , public Fl_Widget {
 	private:
 		uchar *data;
 		int d;
-		int row;
 
 	public:
 		PreviewOutputImage(int X, int Y, int W, int H);
