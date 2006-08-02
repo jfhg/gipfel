@@ -457,8 +457,8 @@ static int stitch(int stitch_w, int stitch_h, int argc, char **argv) {
 
   win->show(0, argv); 
 
-  //st->set_output((OutputImage*) new JPEGOutputImage("/tmp/bla.jpg", 90));
-  st->set_output((OutputImage*) img);
+  st->set_output((OutputImage*) new JPEGOutputImage("/tmp/bla.jpg", 90));
+  //st->set_output((OutputImage*) img);
   st->resample(stitch_w, stitch_h, 0.0, 7.0);
   img->redraw();
   Fl::run();

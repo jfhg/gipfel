@@ -32,7 +32,6 @@ class JPEGOutputImage : OutputImage {
 	private:
 		unsigned char *row;
 		char *file;
-		int w, h;
 		struct jpeg_compress_struct cinfo;
 		struct jpeg_error_mgr jerr;
 		FILE *fp;
