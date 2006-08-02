@@ -23,7 +23,7 @@
 
 class OutputImage {
 	private:
-		int w, h, initialized, line;
+		int W, H, initialized, line;
 
 	public:
 		OutputImage();

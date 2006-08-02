@@ -42,6 +42,7 @@
 #include "Fl_Search_Chooser.H"
 #include "GipfelWidget.H"
 #include "JPEGOutputImage.H"
+#include "PreviewOutputImage.H"
 #include "Stitch.H"
 #include "choose_hill.H"
 #include "../config.h"
@@ -448,18 +449,18 @@ static int stitch(int stitch_w, int stitch_h, int argc, char **argv) {
   for (int i=0; i<argc; i++) {
     st->load_image(argv[i]);
   }
-#if 0
+
   win = new Fl_Window(0,0, 1000, stitch_h);
   scroll = new Fl_Scroll(0, 0, win->w(), win->h());
-  PreviewOutputImage *img = new PreviewOutputImage();
+  PreviewOutputImage *img = new PreviewOutputImage(0, 0, stitch_w, stitch_h);
   win->resizable(scroll);
 
   win->show(0, argv); 
-  st->resample(img, 0.0, 7.0);
-#endif
 
-  st->set_output((OutputImage*) new JPEGOutputImage("/tmp/bla.jpg", 90));
+  //st->set_output((OutputImage*) new JPEGOutputImage("/tmp/bla.jpg", 90));
+  st->set_output((OutputImage*) img);
   st->resample(stitch_w, stitch_h, 0.0, 7.0);
+  img->redraw();
   Fl::run();
 
   return 0;

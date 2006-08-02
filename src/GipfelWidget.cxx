@@ -770,11 +770,18 @@ GipfelWidget::get_pixel(double a_view, double a_nick,
 
 int
 GipfelWidget::get_pixel_nearest(Fl_Image *img, double x, double y,
-                     char *r, char *g, char *b) {
-    if (isnan(x) || isnan(y)) {
-        return 1;
-    } 
+	char *r, char *g, char *b) {
+	if (isnan(x) || isnan(y)) {
+		return 1;
+	} else {
+		return get_pixel(img, (int) rint(x), (int) rint(y), r, g, b);
+	}
+}
 
+
+int
+GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
+                     char *r, char *g, char *b) {
     if ( img->d() == 0 ) {
         return 1;
     }

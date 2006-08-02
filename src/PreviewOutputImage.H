@@ -17,39 +17,37 @@
 // USA.
 //
 
-#ifndef DATAIMAGE_H
-#define DATAIMAGE_H
+#ifndef PREVIEWOUTPUTIMAGE_H
+#define PREVIEWOUTPUTIMAGE_H
+
+#include <stdio.h>
 
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Image.H>
 
-class DataImage : public Fl_Widget {
+#include "OutputImage.H"
+
+class PreviewOutputImage : OutputImage , public Fl_Widget {
 	private:
-		int d;
 		uchar *data;
-		
+		int d;
+		int row;
 
 	public:
-		DataImage(int X, int Y, int W, int H, int channels=3);
+		PreviewOutputImage(int X, int Y, int W, int H);
 
-		~DataImage();
-		
-		int set_pixel(int x, int y, char r, char g, char b);
+		~PreviewOutputImage();
 
 		void draw();
 
-		int write_jpeg(const char *file, int quality);
+	protected:
+		int init_internal(int w, int h);
 
-		int write_tiff(const char *file);
+		int set_pixel_internal(int x, char r, char g, char b);	
 
-		static int get_pixel(Fl_Image *img, int x, int y,
-			char *r, char *g, char *b);
+		int next_line_internal();
 
-		static int get_pixel_bilinear(Fl_Image *img, double x, double y,
-			char *r, char *g, char *b);
-
-		static int get_pixel_nearest(Fl_Image *img, double x, double y,
-			char *r, char *g, char *b);
+		int done_internal();
 };
 
 #endif

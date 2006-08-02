@@ -14,7 +14,8 @@ gipfel_SOURCES = \
 	choose_hill.cxx \
 	Stitch.cxx \
 	OutputImage.cxx \
-	JPEGOutputImage.cxx 
+	JPEGOutputImage.cxx \
+	PreviewOutputImage.cxx 
 
 noinst_HEADERS = \
 	GipfelWidget.H \
@@ -30,4 +31,5 @@ noinst_HEADERS = \
 	Stitch.H \
 	OutputImage.H \
 	JPEGOutputImage.H \
+	PreviewOutputImage.H \
 	util.h
