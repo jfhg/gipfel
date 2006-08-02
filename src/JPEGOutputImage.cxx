@@ -93,7 +93,7 @@ JPEGOutputImage::next_line_internal() {
 	JSAMPROW row_pointer[1];
 
 	row_pointer[0] = row;
-	jpeg_write_scanlines(&cinfo, &row_pointer, 1);
+	jpeg_write_scanlines(&cinfo, row_pointer, 1);
 	memset(row, 0, sizeof(char) * 3 * W);
 	return 0;
 }
