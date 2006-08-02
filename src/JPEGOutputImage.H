@@ -23,6 +23,7 @@
 #include <stdio.h>
 extern "C" {
 #include <jpeglib.h>
+#undef HAVE_STDLIB_H
 }
 
 #include "OutputImage.H"

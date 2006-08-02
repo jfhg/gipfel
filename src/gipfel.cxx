@@ -41,7 +41,7 @@
 #include "Fl_Value_Dial.H"
 #include "Fl_Search_Chooser.H"
 #include "GipfelWidget.H"
-#include "DataImage.H"
+#include "JPEGOutputImage.H"
 #include "Stitch.H"
 #include "choose_hill.H"
 #include "../config.h"
@@ -62,7 +62,6 @@ Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
 Fl_Box *b_viewpoint;
 Fl_Menu_Bar *mb;
 
-static int tiffstitch(int stitch_w, int stitch_h, int argc, char **argv);
 static int stitch(int stitch_w, int stitch_h, int argc, char **argv);
 
 void set_values() {
@@ -324,13 +323,13 @@ int main(int argc, char** argv) {
   char c, *sep, *tmp, **my_argv;
   char *view_point = NULL;
   int err, bflag = 0, dflag = 0, my_argc;
-  int stitch_flag = 0, tiff_flag = 0, stitch_w = 2000, stitch_h = 500;
+  int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
   Fl_Window *control_win, *view_win;
   Fl_Scroll *scroll;
 
   
   err = 0;
-  while ((c = getopt(argc, argv, "d:v:sw:b:t")) != EOF) {
+  while ((c = getopt(argc, argv, "d:v:sw:b:")) != EOF) {
     switch (c) {  
     case 'h':
       usage();
@@ -344,10 +343,6 @@ int main(int argc, char** argv) {
       break;
     case 's':
       stitch_flag++;
-      break;
-    case 't':
-      stitch_flag++;
-      tiff_flag++;
       break;
     case 'w':
       stitch_w = atoi(optarg);
@@ -374,11 +369,7 @@ int main(int argc, char** argv) {
   }
 
   if (stitch_flag) {
-    if (tiff_flag) {
-      tiffstitch(stitch_w, stitch_h, my_argc, my_argv);
-    } else {
-      stitch(stitch_w, stitch_h, my_argc, my_argv);
-    }
+    stitch(stitch_w, stitch_h, my_argc, my_argv);
     exit(0);
   }
 
@@ -427,6 +418,7 @@ int main(int argc, char** argv) {
   return Fl::run();
 }
 
+#if 0
 static int tiffstitch(int stitch_w, int stitch_h, int argc, char **argv) {
   char buf[256];
 
@@ -445,6 +437,7 @@ static int tiffstitch(int stitch_w, int stitch_h, int argc, char **argv) {
  
   return 0;
 }  
+#endif
 
 
 static int stitch(int stitch_w, int stitch_h, int argc, char **argv) {
@@ -455,16 +448,18 @@ static int stitch(int stitch_w, int stitch_h, int argc, char **argv) {
   for (int i=0; i<argc; i++) {
     st->load_image(argv[i]);
   }
-
+#if 0
   win = new Fl_Window(0,0, 1000, stitch_h);
   scroll = new Fl_Scroll(0, 0, win->w(), win->h());
-  DataImage *img = new DataImage(0, 0, stitch_w, stitch_h);
+  PreviewOutputImage *img = new PreviewOutputImage();
   win->resizable(scroll);
 
   win->show(0, argv); 
   st->resample(img, 0.0, 7.0);
+#endif
 
-  img->write_jpeg("/tmp/bla.jpg", 90);
+  st->set_output((OutputImage*) new JPEGOutputImage("/tmp/bla.jpg", 90));
+  st->resample(stitch_w, stitch_h, 0.0, 7.0);
   Fl::run();
 
   return 0;

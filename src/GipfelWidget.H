@@ -49,6 +49,9 @@ class GipfelWidget : public Fl_Widget {
 
   int get_rel_track_width(Hill *m);
 
+  static int get_pixel_nearest(Fl_Image *img, double x, double y,
+                     char *r, char *g, char *b);
+
  public:
   GipfelWidget(int X,int Y,int W, int H);
 
@@ -57,6 +60,8 @@ class GipfelWidget : public Fl_Widget {
   int load_image(char *file);
 
   int save_image(char *file);
+	
+  const char * get_image_filename();
 
   int load_data(const char *file);
 
