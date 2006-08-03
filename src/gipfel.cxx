@@ -211,12 +211,16 @@ void fill_menubar(Fl_Menu_Bar* mb) {
 
 void usage() {
   fprintf(stderr,
-	  "usage: gipfel [-v <viewpoint>] [-d <datafile>] [<image>]\n"
+	  "usage: gipfel [-v <viewpoint>] [-d <datafile>]\n"
+      "              [-s] [-j <outfile>] [-t <outdir] [<image(s)>]\n"
 	  "   -v <viewpoint>  Set point from which the picture was taken.\n"
 	  "                   This must be a string that unambiguously \n"
 	  "                   matches the name of an entry in the data file.\n"
 	  "   -d <datafile>   Use <datafile> for GPS data.\n"
-	  "      <image>      JPEG file to use.\n");
+      "   -s              Stitch mode.\n"
+      "   -j <outfile>    JPEG output file for Stitch mode.\n"
+      "   -t <outdir>     Output directory for TIFF images in Stitch mode.\n"
+	  "      <image(s)>      JPEG file(s) to use.\n");
 }
 
 Fl_Window * 
