@@ -101,11 +101,13 @@ JPEGOutputImage::next_line_internal() {
 
 int
 JPEGOutputImage::done_internal() {
-	next_line_internal();
 	jpeg_finish_compress(&cinfo);
-	fclose(fp);
-	fp = NULL;
 	jpeg_destroy_compress(&cinfo);
+
+	if (fp) {
+		fclose(fp);
+		fp = NULL;
+	}
 	if (row) {
 		free(row);
 	}

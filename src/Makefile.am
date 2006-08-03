@@ -15,6 +15,7 @@ gipfel_SOURCES = \
 	Stitch.cxx \
 	OutputImage.cxx \
 	JPEGOutputImage.cxx \
+	TIFFOutputImage.cxx \
 	PreviewOutputImage.cxx 
 
 noinst_HEADERS = \
@@ -31,5 +32,6 @@ noinst_HEADERS = \
 	Stitch.H \
 	OutputImage.H \
 	JPEGOutputImage.H \
+	TIFFOutputImage.H \
 	PreviewOutputImage.H \
 	util.h
