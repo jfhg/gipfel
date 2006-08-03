@@ -50,27 +50,4 @@ class OutputImage {
 		virtual int done_internal();
 };
 
-class OutputImages {
-	private:
-		OutputImage **imgs;
-		int max_imgs;
-
-	public:
-		OutputImages();
-
-		~OutputImages();
-
-		int add(OutputImage *img);
-
-		int remove(OutputImage *img);
-
-		int init(int w, int h);
-
-		int set_pixel(int x, char r, char g, char b);
-
-		int next_line();
-
-		int done();
-};
-
 #endif
