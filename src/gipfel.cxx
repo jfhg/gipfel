@@ -212,7 +212,8 @@ void fill_menubar(Fl_Menu_Bar* mb) {
 void usage() {
   fprintf(stderr,
 	  "usage: gipfel [-v <viewpoint>] [-d <datafile>]\n"
-      "              [-s] [-j <outfile>] [-t <outdir] [<image(s)>]\n"
+      "          [-s] [-j <outfile>] [-t <outdir] [-w <width>] [-h <height>]\n"
+      "          [<image(s)>]\n"
 	  "   -v <viewpoint>  Set point from which the picture was taken.\n"
 	  "                   This must be a string that unambiguously \n"
 	  "                   matches the name of an entry in the data file.\n"
@@ -220,7 +221,7 @@ void usage() {
       "   -s              Stitch mode.\n"
       "   -j <outfile>    JPEG output file for Stitch mode.\n"
       "   -t <outdir>     Output directory for TIFF images in Stitch mode.\n"
-	  "      <image(s)>      JPEG file(s) to use.\n");
+	  "      <image(s)>   JPEG file(s) to use.\n");
 }
 
 Fl_Window * 

@@ -160,6 +160,9 @@ record the corresponding color values from the input images.
 In contrast to other stitching programs, the input images don't need to 
 overlap.
 
+If you want to open a stitched image in gipfel to locate the mountains
+on it, don't forget to choose Panoramic Projection!
+
 
 Troubleshooting
 ===============
