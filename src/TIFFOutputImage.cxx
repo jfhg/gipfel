@@ -66,6 +66,7 @@ TIFFOutputImage::init_internal(int w1, int h1) {
 	TIFFSetField(tiff, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
 	TIFFSetField(tiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 	TIFFSetField(tiff, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
+	TIFFSetField(tiff, TIFFTAG_ROWSPERSTRIP, 1);
 	TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 8);
 	TIFFSetField(tiff, TIFFTAG_SAMPLESPERPIXEL, 4);
 
@@ -85,10 +86,9 @@ TIFFOutputImage::set_pixel_internal(int x, char r, char g, char b) {
 int
 TIFFOutputImage::next_line_internal() {
 	int ret;
-	ret = TIFFWriteScanline(tiff, row, line-1, 0);
-	if (ret != 1) {
-		fprintf(stderr, "TIFFWriteScanline failed\n");
-	}
+
+	TIFFWriteEncodedStrip(tiff, line -1 , row, W * 4);
+
 	memset(row, 0, sizeof(char) * 4 * W);
 	return 0;
 }
