@@ -133,6 +133,34 @@ the Option->Show Hidden menu entry. Hidden objects and hidden GPS way points
 are displayed in blue.
 
 
+Stitching
+=========
+
+If you have multiple images from the same viewpoint gipfel can stitch them
+together to form a panorama image.
+For stitching the input images must all have been correctly oriented
+with gipfel and saved (see "Loading and Saving Images").
+You can then call gipfel -s <img1> <img2> ...
+to see the result in a window. Alternatively you can call
+gipfel -s -j <outimg> <img1> <img2> ...
+to save the result as a JPEG image to <outimg> or 
+gipfel -s -t <outdir> <img1> <img2> ...
+to save the result as multiple TIFF images to <outdir>.
+Use the multiple TIFF option for blending the result with enblend
+(http://enblend.sourceforge.net/).
+The width and height of the result images can be adjusted with the
+-w and -h options.
+
+The nice thing about stitching is that gipfel uses the same code that
+it already had for positioning mountains on the pictures.
+gipfel simply scans all directions needed for the panorama and determines
+where these directions would end up on the various pictures. It can then
+record the corresponding color values from the input images.
+
+In contrast to other stitching programs, the input images don't need to 
+overlap.
+
+
 Troubleshooting
 ===============
 
