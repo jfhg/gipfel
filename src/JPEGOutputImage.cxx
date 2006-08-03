@@ -26,10 +26,11 @@ extern "C" {
 
 #include "JPEGOutputImage.H"
 
-JPEGOutputImage::JPEGOutputImage(const char *f, int quality) {
+JPEGOutputImage::JPEGOutputImage(const char *f, int q) {
 	file = strdup(f);
 	fp = NULL;
 	row = NULL;
+	quality = q;
 }
 
 JPEGOutputImage::~JPEGOutputImage() {
