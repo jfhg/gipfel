@@ -136,9 +136,9 @@ are displayed in blue.
 Stitching
 =========
 
-If you have multiple images from the same viewpoint gipfel can stitch them
-together to form a panorama image.
-For stitching the input images must all have been correctly oriented
+If you have multiple images from the same viewpoint referenced with gipfel
+you can stitch them together to form a panorama image.
+For stitching the input images must all have been correctly referenced
 with gipfel and saved (see "Loading and Saving Images").
 You can then call gipfel -s <img1> <img2> ...
 to see the result in a window. Alternatively you can call
