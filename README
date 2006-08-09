@@ -18,9 +18,11 @@ picture manually.
 
 Requirements
 ============
-- gipfel works on UNIX-like system (e.g. Linux, *BSD and probably others).
-- You need fltk-1.1.x from www.fltk.org.
-- You need the ccmath library (http://freshmeat.net/projects/ccmath/).
+- fltk-1.1.x (http://www.fltk.org)
+- libtiff (http://www.remotesensing.org/libtiff/)
+- libjpeg (http://www.ijg.org/)
+- ccmath library (http://freshmeat.net/projects/ccmath/)
+- gipfel works on UNIX-like system (e.g. Linux, *BSD and probably others)
 
 
 Installation
@@ -211,4 +213,3 @@ results of gipfel.
 
 Johannes Hofmann
 (Johannes.Hofmann@gmx.de)
-Nov 14, 2005
