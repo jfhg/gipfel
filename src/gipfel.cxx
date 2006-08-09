@@ -1,9 +1,7 @@
 // 
-// "$Id: gipfel.cxx,v 1.26 2005/05/20 13:34:39 hofmann Exp $"
-//
 // gipfel program.
 //
-// Copyright 2005 by Johannes Hofmann
+// Copyright 2006 by Johannes Hofmann
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public
