@@ -1,6 +1,9 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.1.3
+ - Add stitching mode (gipfel -s). See README  for details.
+
 gipfel-0.1.2
  - Fix bugs for "Normal Projection" and "Panoramic Projection" mode.
    Panorama mode now works with the great view from Mount Everest by
