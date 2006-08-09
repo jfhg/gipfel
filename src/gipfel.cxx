@@ -217,6 +217,8 @@ void usage() {
 	  "                   matches the name of an entry in the data file.\n"
 	  "   -d <datafile>   Use <datafile> for GPS data.\n"
       "   -s              Stitch mode.\n"
+      "   -w <width>      Width of result image.\n"
+      "   -h <height>     Height of result image.\n"
       "   -j <outfile>    JPEG output file for Stitch mode.\n"
       "   -t <outdir>     Output directory for TIFF images in Stitch mode.\n"
 	  "      <image(s)>   JPEG file(s) to use.\n");
