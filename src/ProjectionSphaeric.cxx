@@ -66,9 +66,9 @@ ProjectionSphaeric::comp_params(const Hill *m1, const Hill *m2, ViewParams *parm
           isnan(tmp.a_nick) || isnan(tmp.a_tilt)) {
         ;
       } else {
-        set_coordinates(m1, &tmp, &tmp_x, &tmp_y);
+        get_coordinates(m1->a_view, m1->a_nick, &tmp, &tmp_x, &tmp_y);
         val = sqrt(pow(tmp_x - m1->x, 2.0) + pow(tmp_y - m1->y, 2.0)); 
-        set_coordinates(m2, &tmp, &tmp_x, &tmp_y);
+        get_coordinates(m2->a_view, m2->a_nick, &tmp, &tmp_x, &tmp_y);
         val += sqrt(pow(tmp_x - m2->x, 2.0) + pow(tmp_y - m2->y, 2.0)); 
 
         if (val < best_val) {	
@@ -88,22 +88,12 @@ ProjectionSphaeric::comp_params(const Hill *m1, const Hill *m2, ViewParams *parm
 }
 
 void 
-ProjectionSphaeric::set_coordinates(Hill *m, const ViewParams *parms) {
+ProjectionSphaeric::get_coordinates(double a_view, double a_nick,
+	const ViewParams *parms, double *x, double *y) {
   double x_tmp, y_tmp;
 
-  set_coordinates(m, parms, &x_tmp, &y_tmp);
-
-  m->x = (int) rint(x_tmp);
-  m->y = (int) rint(y_tmp);
-}
-
-void 
-ProjectionSphaeric::set_coordinates(const Hill *m, const ViewParams *parms,
-                                    double *x, double *y) {
-  double x_tmp, y_tmp;
-
-  x_tmp = m->a_view * parms->scale;
-  y_tmp = - (m->a_nick - parms->a_nick) * parms->scale;
+  x_tmp = a_view * parms->scale;
+  y_tmp = - (a_nick - parms->a_nick) * parms->scale;
 
   // rotate by a_tilt;
   *x = x_tmp * cos(parms->a_tilt) - y_tmp * sin(parms->a_tilt);

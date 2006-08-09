@@ -11,7 +11,12 @@ gipfel_SOURCES = \
 	Hill.cxx \
 	Fl_Value_Dial.cxx \
 	Fl_Search_Chooser.cxx \
-	choose_hill.cxx
+	choose_hill.cxx \
+	Stitch.cxx \
+	OutputImage.cxx \
+	JPEGOutputImage.cxx \
+	TIFFOutputImage.cxx \
+	PreviewOutputImage.cxx 
 
 noinst_HEADERS = \
 	GipfelWidget.H \
@@ -24,4 +29,9 @@ noinst_HEADERS = \
 	Fl_Value_Dial.H \
 	Fl_Search_Chooser.H \
 	choose_hill.H \
+	Stitch.H \
+	OutputImage.H \
+	JPEGOutputImage.H \
+	TIFFOutputImage.H \
+	PreviewOutputImage.H \
 	util.h

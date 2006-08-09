@@ -17,27 +17,36 @@
 // USA.
 //
 
-#ifndef PROJECTION_H
-#define PROJECTION_H
+#ifndef PREVIEWOUTPUTIMAGE_H
+#define PREVIEWOUTPUTIMAGE_H
 
-#include "Hill.H"
-#include "ViewParams.H"
+#include <stdio.h>
 
-class Projection {
- protected:
-  double pi_d;
+#include <FL/Fl_Widget.H>
+#include <FL/Fl_Image.H>
 
- public:
-  typedef enum {
-    TANGENTIAL = 0,
-    SPHAERIC   = 1
-  } Projection_t;
+#include "OutputImage.H"
 
-  Projection();
+class PreviewOutputImage : OutputImage , public Fl_Widget {
+	private:
+		uchar *data;
+		int d;
 
-  virtual void get_coordinates(double a_view, double a_nick,
-	const ViewParams *parms, double *x, double *y);
-  
-  virtual int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
+	public:
+		PreviewOutputImage(int X, int Y, int W, int H);
+
+		~PreviewOutputImage();
+
+		void draw();
+
+	protected:
+		int init_internal(int w, int h);
+
+		int set_pixel_internal(int x, char r, char g, char b);	
+
+		int next_line_internal();
+
+		int done_internal();
 };
+
 #endif

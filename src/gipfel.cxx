@@ -41,6 +41,10 @@
 #include "Fl_Value_Dial.H"
 #include "Fl_Search_Chooser.H"
 #include "GipfelWidget.H"
+#include "JPEGOutputImage.H"
+#include "TIFFOutputImage.H"
+#include "PreviewOutputImage.H"
+#include "Stitch.H"
 #include "choose_hill.H"
 #include "../config.h"
 
@@ -59,6 +63,12 @@ Fl_Slider *s_nick, *s_scale, *s_tilt, *s_height_dist, *s_track_width;
 Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
 Fl_Box *b_viewpoint;
 Fl_Menu_Bar *mb;
+
+#define STITCH_PREVIEW 1
+#define STITCH_JPEG    2
+#define STITCH_TIFF    4
+static int stitch(int stitch_w, int stitch_h, int type, const char *path,
+  int argc, char **argv);
 
 void set_values() {
   s_center->value(gipf->get_center_angle());
@@ -201,12 +211,17 @@ void fill_menubar(Fl_Menu_Bar* mb) {
 
 void usage() {
   fprintf(stderr,
-	  "usage: gipfel [-v <viewpoint>] [-d <datafile>] [<image>]\n"
+	  "usage: gipfel [-v <viewpoint>] [-d <datafile>]\n"
+      "          [-s] [-j <outfile>] [-t <outdir] [-w <width>] [-h <height>]\n"
+      "          [<image(s)>]\n"
 	  "   -v <viewpoint>  Set point from which the picture was taken.\n"
 	  "                   This must be a string that unambiguously \n"
 	  "                   matches the name of an entry in the data file.\n"
 	  "   -d <datafile>   Use <datafile> for GPS data.\n"
-	  "      <image>      JPEG file to use.\n");
+      "   -s              Stitch mode.\n"
+      "   -j <outfile>    JPEG output file for Stitch mode.\n"
+      "   -t <outdir>     Output directory for TIFF images in Stitch mode.\n"
+	  "      <image(s)>   JPEG file(s) to use.\n");
 }
 
 Fl_Window * 
@@ -319,14 +334,17 @@ int main(int argc, char** argv) {
   char c, *sep, *tmp, **my_argv;
   char *view_point = NULL;
   int err, bflag = 0, dflag = 0, my_argc;
+  int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
+  int jpeg_flag = 0, tiff_flag = 0;
+  char *outpath;
   Fl_Window *control_win, *view_win;
   Fl_Scroll *scroll;
 
   
   err = 0;
-  while ((c = getopt(argc, argv, "d:v:")) != EOF) {
+  while ((c = getopt(argc, argv, "?d:v:sw:h:j:t:")) != EOF) {
     switch (c) {  
-    case 'h':
+    case '?':
       usage();
       exit(0);
       break;
@@ -335,6 +353,23 @@ int main(int argc, char** argv) {
       break;
     case 'v':
       view_point = optarg;
+      break;
+    case 's':
+      stitch_flag++;
+      break;
+    case 'j':
+      jpeg_flag++;
+      outpath = optarg;
+      break;
+    case 't':
+      tiff_flag++;
+      outpath = optarg;
+      break;
+    case 'w':
+      stitch_w = atoi(optarg);
+      break;
+    case 'h':
+      stitch_h = atoi(optarg);
       break;
     default:
       err++;
@@ -352,6 +387,17 @@ int main(int argc, char** argv) {
   if (data_file == NULL || err) {
     usage();
     exit(1);
+  }
+
+  if (stitch_flag) {
+    int type = STITCH_PREVIEW;
+    if (jpeg_flag) {
+      type = STITCH_JPEG;
+    } else if (tiff_flag) {
+      type = STITCH_TIFF;
+    }
+    stitch(stitch_w, stitch_h, type, outpath, my_argc, my_argv);
+    exit(0);
   }
 
   Fl::get_system_colors();
@@ -397,4 +443,49 @@ int main(int argc, char** argv) {
   }
   
   return Fl::run();
+}
+
+static int stitch(int stitch_w, int stitch_h, int type, const char *path, int argc, char **argv) {
+  Fl_Window *win;
+  Fl_Scroll *scroll;
+  Stitch *st = new Stitch();
+
+  for (int i=0; i<argc; i++) {
+    st->load_image(argv[i]);
+  }
+  
+  if (type == STITCH_JPEG) {
+
+    st->set_output((OutputImage*) new JPEGOutputImage(path, 90));
+    st->resample(stitch_w, stitch_h, 0.0, 7.0);
+
+  } else if (type == STITCH_TIFF) {
+
+    for (int i=0; i<argc; i++) {
+      char buf[1024];
+      char *dot;
+
+      snprintf(buf, sizeof(buf), "%s/%s", path, argv[i]);
+      dot = strrchr(buf, '.');
+      *dot = '\0';
+      strncat(buf, ".tiff", sizeof(buf));
+
+      st->set_output(argv[i], (OutputImage*) new TIFFOutputImage(buf));
+    }
+
+    st->resample(stitch_w, stitch_h, 0.0, 7.0);
+
+  } else {
+    win = new Fl_Window(0,0, stitch_w, stitch_h);
+    scroll = new Fl_Scroll(0, 0, win->w(), win->h());
+    PreviewOutputImage *img = new PreviewOutputImage(0, 0, stitch_w, stitch_h);
+    win->resizable(scroll);
+    win->show(0, argv); 
+    st->set_output((OutputImage*) img);
+    st->resample(stitch_w, stitch_h, 0.0, 7.0);
+    img->redraw();
+    Fl::run();
+  }
+
+  return 0;
 }

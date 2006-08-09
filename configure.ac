@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(gipfel, 0.1.2, Johannes.Hofmann@gmx.de)
+AC_INIT(gipfel, 0.1.3, Johannes.Hofmann@gmx.de)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/Panorama.H])
 AC_CONFIG_HEADER(config.h)
@@ -51,6 +51,10 @@ LIBS="`$FLTKCONFIG --use-images --ldflags` $LIBS"
 # Check for ccmath
 AC_CHECK_HEADERS([ccmath.h], [], [echo "Error: ccmath.h not found."; exit 1;])
 AC_CHECK_LIB([ccm], [open], [], [echo "Error: ccmath.so not found."; exit 1;])
+
+# Check for libtiff
+AC_CHECK_HEADERS([tiffio.h], [], [echo "Error: tiffio.h not found."; exit 1;])
+AC_CHECK_LIB([tiff], [TIFFOpen], [], [echo "Error: libtiff.so not found."; exit 1;])
 
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT

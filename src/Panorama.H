@@ -1,6 +1,4 @@
 // 
-// "$Id: Panorama.H,v 1.20 2005/06/22 19:47:20 hofmann Exp $"
-//
 // Copyright 2005 by Johannes Hofmann
 //
 // This library is free software; you can redistribute it and/or
@@ -144,5 +142,7 @@ class Panorama {
   Projection::Projection_t get_projection();
 
   void set_projection(Projection::Projection_t p);
+
+  int get_coordinates(double a_view, double a_nick, double *x, double *y);
 };
 #endif

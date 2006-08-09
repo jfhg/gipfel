@@ -1,6 +1,4 @@
 // 
-// "$Id: Hill.H,v 1.16 2005/06/22 20:40:35 hofmann Exp $"
-//
 // Copyright 2005 by Johannes Hofmann
 //
 // This library is free software; you can redistribute it and/or

@@ -17,27 +17,39 @@
 // USA.
 //
 
-#ifndef PROJECTION_H
-#define PROJECTION_H
+#ifndef JPEGOUTPUTIMAGE_H
+#define JPEGOUTPUTIMAGE_H
 
-#include "Hill.H"
-#include "ViewParams.H"
+#include <stdio.h>
+extern "C" {
+#include <jpeglib.h>
+#undef HAVE_STDLIB_H
+}
 
-class Projection {
- protected:
-  double pi_d;
+#include "OutputImage.H"
 
- public:
-  typedef enum {
-    TANGENTIAL = 0,
-    SPHAERIC   = 1
-  } Projection_t;
+class JPEGOutputImage : OutputImage {
+	private:
+		unsigned char *row;
+		char *file;
+		struct jpeg_compress_struct cinfo;
+		struct jpeg_error_mgr jerr;
+		FILE *fp;
+		int quality;
 
-  Projection();
+	public:
+		JPEGOutputImage(const char *file, int quality = 90);
 
-  virtual void get_coordinates(double a_view, double a_nick,
-	const ViewParams *parms, double *x, double *y);
-  
-  virtual int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
+		~JPEGOutputImage();
+
+	protected:
+		int init_internal(int w, int h);
+
+		int set_pixel_internal(int x, char r, char g, char b);	
+
+		int next_line_internal();
+
+		int done_internal();
 };
+
 #endif

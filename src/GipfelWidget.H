@@ -1,7 +1,5 @@
 // 
-// "$Id: GipfelWidget.H,v 1.22 2005/06/22 19:47:19 hofmann Exp $"
-//
-// Copyright 2005 by Johannes Hofmann
+// Copyright 2006 by Johannes Hofmann
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -49,6 +47,12 @@ class GipfelWidget : public Fl_Widget {
 
   int get_rel_track_width(Hill *m);
 
+  static int get_pixel_nearest(Fl_Image *img, double x, double y,
+                     char *r, char *g, char *b);
+
+  static int get_pixel(Fl_Image *img, int x, int y,
+                     char *r, char *g, char *b);
+
  public:
   GipfelWidget(int X,int Y,int W, int H);
 
@@ -57,6 +61,8 @@ class GipfelWidget : public Fl_Widget {
   int load_image(char *file);
 
   int save_image(char *file);
+	
+  const char * get_image_filename();
 
   int load_data(const char *file);
 
@@ -117,6 +123,9 @@ class GipfelWidget : public Fl_Widget {
   int guess();
 
   int update();
+
+  int get_pixel(double a_view, double a_nick,
+                    char *r, char *g, char *b);
 
   void draw();
 };

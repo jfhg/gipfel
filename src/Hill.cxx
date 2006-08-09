@@ -58,7 +58,7 @@ Hill::Hill(const Hill& h) {
 }
 
 Hill::Hill(int x_tmp, int y_tmp) {
-  name = "";
+  name = NULL;
   phi = 0.0;
   lam = 0.0;
   height = 0.0;

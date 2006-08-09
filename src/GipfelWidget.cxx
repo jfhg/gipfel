@@ -147,6 +147,11 @@ GipfelWidget::load_image(char *file) {
   return 0;
 }
 
+const char *
+GipfelWidget::get_image_filename() {
+	return img_file;
+}
+
 int
 GipfelWidget::save_image(char *file) {
   char * args[32];
@@ -714,6 +719,7 @@ GipfelWidget::set_track_width(double w) {
   redraw();
 }
 
+
 int
 GipfelWidget::handle(int event) {
   int mark_x, mark_y;
@@ -743,3 +749,72 @@ GipfelWidget::handle(int event) {
   }
   return 0;
 }
+
+int
+GipfelWidget::get_pixel(double a_view, double a_nick,
+                        char *r, char *g, char *b) {
+	double px, py;
+
+
+	if (img == NULL) {
+		return 1;
+	}
+
+	if (pan->get_coordinates(a_view, a_nick, &px, &py) != 0) {
+		return 1;
+	}
+
+	return get_pixel_nearest(img, px + ((double) img->w()) / 2.0,
+				py + ((double) img->h()) / 2.0, r, g, b);
+}
+
+int
+GipfelWidget::get_pixel_nearest(Fl_Image *img, double x, double y,
+	char *r, char *g, char *b) {
+	if (isnan(x) || isnan(y)) {
+		return 1;
+	} else {
+		return get_pixel(img, (int) rint(x), (int) rint(y), r, g, b);
+	}
+}
+
+
+int
+GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
+                     char *r, char *g, char *b) {
+    if ( img->d() == 0 ) {
+        return 1;
+    }
+
+    if (x < 0 || x >=img->w() || y < 0 || y >= img->h()) {
+        return 1;
+    }
+    long index = (y * img->w() * img->d()) + (x * img->d()); // X/Y -> buf index  
+    switch ( img->count() ) {
+        case 1: {                                            // bitmap
+                const char *buf = img->data()[0];
+                switch ( img->d() ) {
+                    case 1: {                                    // 8bit
+                            *r = *g = *b = *(buf+index);
+                            break;
+                        }
+                    case 3:                                      // 24bit
+                        *r = *(buf+index+0);
+                        *g = *(buf+index+1);
+                        *b = *(buf+index+2);
+                        break;
+                    default:                                     // ??
+                        printf("Not supported: chans=%d\n", img->d());
+                        return 1;
+                    }
+                break;
+            }
+        default:                                             // ?? pixmap, bit vals
+            printf("Not supported: count=%d\n", img->count());
+            return 1;
+    }
+
+    return 0;
+
+}
+

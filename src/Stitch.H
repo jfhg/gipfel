@@ -17,24 +17,35 @@
 // USA.
 //
 
-#ifndef PROJECTIONSPHAERIC_H
-#define PROJECTIONSPHAERIC_H
+#ifndef STITCH_H
+#define STITCH_H
 
-#include "Hill.H"
-#include "Projection.H"
+#include "GipfelWidget.H"
+#include "OutputImage.H"
 
-class ProjectionSphaeric : public Projection {
- private:
+#define MAX_PICS 256
 
-  double comp_scale(const Hill *m1, const Hill *m2, double d_m1_m2_2);
-  double comp_dir_view(const Hill *m1, const Hill *m2, double d_m1_2, double d_m2_2, double scale, double sign3);
-  double comp_nick_view(const Hill *m1, const Hill *m2, double d_m1_2, double scale, double dir_view, double sign1);
-  double comp_tilt_view(const Hill *m, double scale, double dir_view, double nick_view);
+		
+class Stitch {
+	private:
+		GipfelWidget *gipf[MAX_PICS];
+		OutputImage *single_images[MAX_PICS];
+		OutputImage *merged_image;
+		
 
- public:
-  void get_coordinates(double a_view, double a_nick, const ViewParams *parms,
-		double *x, double *y);
+	public:
+		Stitch();
 
-  int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
+		~Stitch();
+		
+		int load_image(char *file);
+
+		OutputImage * set_output(OutputImage *img);
+
+		OutputImage * set_output(const char *file, OutputImage *img);
+
+		int resample(int w, int h,
+			double view_start, double view_end);
 };
+
 #endif

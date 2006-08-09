@@ -17,27 +17,37 @@
 // USA.
 //
 
-#ifndef PROJECTION_H
-#define PROJECTION_H
+#ifndef OUTPUTIMAGE_H
+#define OUTPUTIMAGE_H
 
-#include "Hill.H"
-#include "ViewParams.H"
 
-class Projection {
- protected:
-  double pi_d;
+class OutputImage {
+	private:
+		int initialized;
 
- public:
-  typedef enum {
-    TANGENTIAL = 0,
-    SPHAERIC   = 1
-  } Projection_t;
+	public:
+		OutputImage();
 
-  Projection();
+		~OutputImage();
+		
+		virtual int init(int w1, int h1);
 
-  virtual void get_coordinates(double a_view, double a_nick,
-	const ViewParams *parms, double *x, double *y);
-  
-  virtual int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
+		int set_pixel(int x, char r, char g, char b);
+
+		int next_line();
+
+		int done();
+
+	protected:
+		int W, H, line;
+
+		virtual int init_internal(int w1, int h1);
+
+		virtual int set_pixel_internal(int x, char r, char g, char b);	
+	
+		virtual int next_line_internal();
+
+		virtual int done_internal();
 };
+
 #endif

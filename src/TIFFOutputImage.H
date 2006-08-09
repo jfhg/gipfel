@@ -17,27 +17,33 @@
 // USA.
 //
 
-#ifndef PROJECTION_H
-#define PROJECTION_H
+#ifndef TIFFOUTPUTIMAGE_H
+#define TIFFOUTPUTIMAGE_H
 
-#include "Hill.H"
-#include "ViewParams.H"
+#include <stdio.h>
+#include <tiffio.h>
 
-class Projection {
- protected:
-  double pi_d;
+#include "OutputImage.H"
 
- public:
-  typedef enum {
-    TANGENTIAL = 0,
-    SPHAERIC   = 1
-  } Projection_t;
+class TIFFOutputImage : OutputImage {
+	private:
+		unsigned char *row;
+		char *file;
+		TIFF *tiff;
 
-  Projection();
+	public:
+		TIFFOutputImage(const char *file);
 
-  virtual void get_coordinates(double a_view, double a_nick,
-	const ViewParams *parms, double *x, double *y);
-  
-  virtual int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
+		~TIFFOutputImage();
+
+	protected:
+		int init_internal(int w, int h);
+
+		int set_pixel_internal(int x, char r, char g, char b);	
+
+		int next_line_internal();
+
+		int done_internal();
 };
+
 #endif
