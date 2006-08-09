@@ -1,6 +1,4 @@
 //
-// "$Id: Fl_Value_Dial.H,v 1.2 2005/05/18 11:34:30 hofmann Exp $"
-//
 // Value dial header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
@@ -19,8 +17,6 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef FL_SEARCH_CHOOSER_H

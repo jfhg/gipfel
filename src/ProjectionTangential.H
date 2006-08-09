@@ -1,6 +1,4 @@
 // 
-// "$Id: Panorama.H,v 1.20 2005/06/22 19:47:20 hofmann Exp $"
-//
 // Copyright 2005 by Johannes Hofmann
 //
 // This library is free software; you can redistribute it and/or

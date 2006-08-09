@@ -1,7 +1,5 @@
 // 
-// "$Id: GipfelWidget.H,v 1.22 2005/06/22 19:47:19 hofmann Exp $"
-//
-// Copyright 2005 by Johannes Hofmann
+// Copyright 2006 by Johannes Hofmann
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
