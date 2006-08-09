@@ -1,8 +1,4 @@
 // 
-// "$Id: Hill.cxx,v 1.17 2005/06/22 20:40:35 hofmann Exp $"
-//
-// Hill routines.
-//
 // Copyright 2005 by Johannes Hofmann
 //
 // This library is free software; you can redistribute it and/or

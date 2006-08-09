@@ -1,8 +1,4 @@
 // 
-// "$Id: Panorama.cxx,v 1.45 2005/06/22 19:47:20 hofmann Exp $"
-//
-// Panorama routines.
-//
 // Copyright 2005 by Johannes Hofmann
 //
 // This library is free software; you can redistribute it and/or
