@@ -182,7 +182,7 @@ void guess_cb(Fl_Widget *, void *) {
 void about_cb() {
   fl_message("gipfel -- and you know what you see.\n"
 	     "Version %s\n\n"
-	     "(c) Johannes Hofmann 2005\n\n"
+	     "(c) Johannes Hofmann 2006\n\n"
              "Default datafile by http://www.alpin-koordinaten.de\n",
              VERSION);
 
