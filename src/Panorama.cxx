@@ -41,6 +41,9 @@ Panorama::Panorama() {
   parms.a_tilt = 0.0;
   parms.scale = 3500.0;
   view_name = NULL;
+  view_phi = 0.0;
+  view_lam = 0.0;
+  view_height = 0.0;
   proj = NULL;
   set_projection(Projection::TANGENTIAL);
 }
