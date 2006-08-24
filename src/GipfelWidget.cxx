@@ -109,7 +109,7 @@ GipfelWidget::load_image(char *file) {
   mb = new Fl_Menu_Button(x(),y(),w()+x(),h()+y(),"&popup");
   mb->type(Fl_Menu_Button::POPUP3);
   mb->box(FL_NO_BOX);
-  mb->add("Center Peak", NULL, (Fl_Callback*) center_cb, this);
+  mb->add("Center Peak", 0, (Fl_Callback*) center_cb, this);
 
 // try to retrieve gipfel data from JPEG comment section
   args[0] = "rdjpgcom";

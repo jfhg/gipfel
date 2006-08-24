@@ -196,15 +196,15 @@ void fill_menubar(Fl_Menu_Bar* mb) {
   mb->add("&File/&Quit", FL_CTRL+'q', (Fl_Callback*)quit_cb);
 
 
-  mb->add("&Projection/Normal Projection", NULL, (Fl_Callback *)proj_cb, 
+  mb->add("&Projection/Normal Projection", 0, (Fl_Callback *)proj_cb, 
           (void *)0, FL_MENU_RADIO|FL_MENU_VALUE);
-  mb->add("&Projection/Panoramic Projection", NULL, (Fl_Callback *)proj_cb, 
+  mb->add("&Projection/Panoramic Projection", 0, (Fl_Callback *)proj_cb, 
           (void *)1, FL_MENU_RADIO);
 
-  mb->add("&Option/Show Hidden", NULL, (Fl_Callback *) hidden_cb, 
+  mb->add("&Option/Show Hidden", 0, (Fl_Callback *) hidden_cb, 
           (void *)0, FL_MENU_TOGGLE);
 
-  mb->add("&Help/About", NULL, (Fl_Callback*)about_cb);
+  mb->add("&Help/About", 0, (Fl_Callback*)about_cb);
 }
 
 void usage() {
