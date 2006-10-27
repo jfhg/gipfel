@@ -32,8 +32,10 @@ class ImageMetaData {
 		int    projection_type;
 
 	public:
-		virtual int load_image(const char *name);
-		virtual int save_image(const char *name);
+		ImageMetaData();
+
+		virtual int load_image(char *name);
+		virtual int save_image(char *name);
 
  		double get_longitude();
 		double get_latitude();
