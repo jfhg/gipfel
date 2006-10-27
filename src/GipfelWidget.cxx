@@ -39,7 +39,6 @@
 #include "JpgcomImageMetaData.H"
 #include "Fl_Search_Chooser.H"
 #include "choose_hill.H"
-#include "util.h"
 #include "GipfelWidget.H"
 
 #define CROSS_SIZE 2
@@ -74,8 +73,6 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
   fl_register_images();
 }
 
-#define GIPFEL_FORMAT "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, scale %lf, projection type %d"
-
 int
 GipfelWidget::load_image(char *file) {
   Fl_Image *new_img;
@@ -108,8 +105,7 @@ GipfelWidget::load_image(char *file) {
   mb->box(FL_NO_BOX);
   mb->add("Center Peak", 0, (Fl_Callback*) center_cb, this);
 
-// try to retrieve gipfel data from JPEG comment section
-
+  // try to retrieve gipfel data from JPEG comment section
   md = new JpgcomImageMetaData();
   ret = md->load_image(file);
   if (ret != 1) {
@@ -148,78 +144,30 @@ GipfelWidget::get_image_filename() {
 
 int
 GipfelWidget::save_image(char *file) {
-  char * args[32];
-  FILE *p, *out;
-  pid_t pid;
-  char buf[1024];
-  int status;
-  size_t n;
-  struct stat in_stat, out_stat;
+  ImageMetaData *md;
+  int ret;
 
   if (img_file == NULL) {
     fprintf(stderr, "Nothing to save\n");
     return 1;
   }
 
-  if (stat(img_file, &in_stat) != 0) {
-    perror("stat");
-    return 1;
-  }
+  md = new JpgcomImageMetaData();
 
-  if (stat(file, &out_stat) == 0) {
-    if (in_stat.st_ino == out_stat.st_ino) {
-      fprintf(stderr, "Input image %s and output image %s are the same file\n",
-        img_file, file);
-      return 1;
-    }
-  } 
+  md->set_longitude(get_view_long());
+  md->set_latitude(get_view_lat());
+  md->set_height(get_view_height());
+  md->set_direction(get_center_angle());
+  md->set_nick(get_nick_angle());
+  md->set_tilt(get_tilt_angle());
+  md->set_focallength_sensor_ratio(get_scale() / (double) img->w());
+  md->set_projection_type((int) get_projection());
 
-  out = fopen(file, "w");
-  if (out == NULL) {
-    perror("fopen");
-    return 1;
-  }
+  ret = md->save_image(img_file, file);
+  delete md;
 
-  snprintf(buf, sizeof(buf), GIPFEL_FORMAT, 
-    get_view_long(), 
-    get_view_lat(), 
-    get_view_height(), 
-    get_center_angle(), 
-    get_nick_angle(), 
-    get_tilt_angle(), 
-    get_scale(),
-    (int) get_projection());
-
-// try to save gipfel data in JPEG comment section
-  args[0] = "wrjpgcom";
-  args[1] = "-replace";
-  args[2] = "-comment";
-  args[3] = buf;
-  args[4] = img_file;
-  args[5] = NULL;
-
-  p = pexecvp(args[0], args, &pid, "r");
-
-  if (p) {
-    while ((n = fread(buf, 1, sizeof(buf), p)) != 0) {
-      if (fwrite(buf, 1, n, out) != n) {
-        perror("fwrite");
-        fclose(out);
-        fclose(p);
-        waitpid(pid, &status, 0);
-       }
-    }
-    fclose(p);
-    waitpid(pid, &status, 0);
-    if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 126) {
-      fprintf(stderr, "%s not found\n", args[0]);
-    }
-  }
-
-  fclose(out);
-  return 0;
+  return ret;
 }
-
 
 int
 GipfelWidget::load_data(const char *file) {

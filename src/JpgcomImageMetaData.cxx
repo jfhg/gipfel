@@ -19,7 +19,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 #include "util.h"
 
@@ -92,5 +94,70 @@ JpgcomImageMetaData::load_image(char *name) {
 }
 
 int
-JpgcomImageMetaData::save_image(char *name) {
+JpgcomImageMetaData::save_image(char *in_img, char *out_img) {
+	char * args[32];
+	FILE *p, *out;
+	pid_t pid;
+	char buf[1024];
+	int status;
+	size_t n;
+	struct stat in_stat, out_stat;
+
+	if (stat(in_img, &in_stat) != 0) {
+		perror("stat");
+		return 1;
+	}
+
+	if (stat(out_img, &out_stat) == 0) {
+		if (in_stat.st_ino == out_stat.st_ino) {
+			fprintf(stderr, "Input image %s and output image %s are the same file\n",
+				in_img, out_img);
+			return 1;
+		}
+	}
+
+	out = fopen(out_img, "w");
+	if (out == NULL) {
+		perror("fopen");
+		return 1;
+	}
+
+	snprintf(buf, sizeof(buf), GIPFEL_FORMAT_2,
+		longitude,
+		latitude,
+		height,
+		direction,
+		nick,
+		tilt,
+		focallength_sensor_ratio,
+		projection_type);
+
+	// try to save gipfel data in JPEG comment section
+	args[0] = "wrjpgcom";
+	args[1] = "-replace";
+	args[2] = "-comment";
+	args[3] = buf;
+	args[4] = in_img;
+	args[5] = NULL;
+
+	p = pexecvp(args[0], args, &pid, "r");
+
+	if (p) {
+		while ((n = fread(buf, 1, sizeof(buf), p)) != 0) {
+			if (fwrite(buf, 1, n, out) != n) {
+				perror("fwrite");
+				fclose(out);
+				fclose(p);
+				waitpid(pid, &status, 0);
+			}
+		}
+		fclose(p);
+		waitpid(pid, &status, 0);
+		if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 126) {
+			fprintf(stderr, "%s not found\n", args[0]);
+		}
+	}
+
+	fclose(out);
+	return 0;
 } 

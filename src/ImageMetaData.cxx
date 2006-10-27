@@ -39,7 +39,7 @@ ImageMetaData::load_image(char *name) {
 }
 
 int
-ImageMetaData::save_image(char *name) {
+ImageMetaData::save_image(char *in_img, char *out_img) {
 	return 1;
 }
 

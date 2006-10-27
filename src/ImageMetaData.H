@@ -35,7 +35,7 @@ class ImageMetaData {
 		ImageMetaData();
 
 		virtual int load_image(char *name);
-		virtual int save_image(char *name);
+		virtual int save_image(char *in_img, char *out_img);
 
  		double get_longitude();
 		double get_latitude();

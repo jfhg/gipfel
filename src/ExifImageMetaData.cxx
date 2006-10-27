@@ -70,6 +70,7 @@ ExifImageMetaData::load_image(char *name) {
 
 
 int
-ExifImageMetaData::save_image(char *name) {
+ExifImageMetaData::save_image(char *in_img, char *out_img) {
+	return 1;
 }
 

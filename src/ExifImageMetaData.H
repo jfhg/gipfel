@@ -24,6 +24,6 @@
 
 class ExifImageMetaData : public ImageMetaData {
 	virtual int load_image(char *name);
-	virtual int save_image(char *name);
+	virtual int save_image(char *in_img, char *out_img);
 };
 #endif
