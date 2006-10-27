@@ -47,13 +47,13 @@ ExifImageMetaData::load_image(char *name) {
 
 	if (p) {
 		while (fgets(buf, sizeof(buf), p) != NULL) {
-			if (sscanf(buf, "%d\t%s", &id, val) != 2) {
+			if (sscanf(buf, "%x\t%s", &id, val) != 2) {
 				continue;
 			}
-	
+
 			switch(id) {
 				case FOCAL_LENGTH_IN_35MM_FILM:
-					focallength_sensor_ratio = atof(val) / 35;
+					focallength_sensor_ratio = atof(val) / 35.0;
 					break;
 			}	
 		}
@@ -66,5 +66,10 @@ ExifImageMetaData::load_image(char *name) {
 	}
 
 	return 0;
+}
+
+
+int
+ExifImageMetaData::save_image(char *name) {
 }
 

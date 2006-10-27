@@ -53,6 +53,6 @@ class ImageMetaData {
 		void set_nick(double v);
 		void set_tilt(double v);
 		void set_focallength_sensor_ratio(double v);
-		int  set_projection_type(int v);
+		void set_projection_type(int v);
 };
 #endif

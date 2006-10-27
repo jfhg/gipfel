@@ -16,7 +16,7 @@ gipfel_SOURCES = \
 	OutputImage.cxx \
 	JPEGOutputImage.cxx \
 	TIFFOutputImage.cxx \
-	PreviewOutputImage.cxx 
+	PreviewOutputImage.cxx \
 	ImageMetaData.cxx \
 	JpgcomImageMetaData.cxx \
 	ExifImageMetaData.cxx

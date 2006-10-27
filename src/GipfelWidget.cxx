@@ -35,6 +35,8 @@
 #include <FL/Fl_JPEG_Image.H>
 #include <FL/fl_draw.H>
 
+#include "ExifImageMetaData.H"
+#include "JpgcomImageMetaData.H"
 #include "Fl_Search_Chooser.H"
 #include "choose_hill.H"
 #include "util.h"
@@ -76,14 +78,9 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
 
 int
 GipfelWidget::load_image(char *file) {
-  char * args[32];
-  FILE *p;
-  pid_t pid;
-  char buf[1024];
-  double lo, la, he, dir, ni, ti, sc;
-  int status;
-  Projection::Projection_t pt = Projection::TANGENTIAL;
   Fl_Image *new_img;
+  ImageMetaData *md;
+  int ret;
 
   new_img = new Fl_JPEG_Image(file);
   
@@ -112,32 +109,33 @@ GipfelWidget::load_image(char *file) {
   mb->add("Center Peak", 0, (Fl_Callback*) center_cb, this);
 
 // try to retrieve gipfel data from JPEG comment section
-  args[0] = "rdjpgcom";
-  args[1] = file;
-  args[2] = NULL;
-  
-  p = pexecvp(args[0], args, &pid, "r");
 
-  if (p) {
-    while (fgets(buf, sizeof(buf), p) != NULL) {
-      if (sscanf(buf, GIPFEL_FORMAT, &lo, &la, &he, &dir, &ni, &ti, &sc, &pt) >= 7) {
-        set_view_long(lo);
-        set_view_lat(la);
-        set_view_height(he);
-        set_center_angle(dir);
-        set_nick_angle(ni);
-        set_tilt_angle(ti);
-        set_scale(sc);
-        set_projection(pt);
-        
-	break;
-      }
+  md = new JpgcomImageMetaData();
+  ret = md->load_image(file);
+  if (ret != 1) {
+    set_view_long(md->get_longitude());
+    set_view_lat(md->get_latitude());
+    set_view_height(md->get_height());
+    set_center_angle(md->get_direction());
+    set_nick_angle(md->get_nick());
+    set_tilt_angle(md->get_tilt());
+	set_projection((Projection::Projection_t) md->get_projection_type());
+    if (ret == 2) { // special compatibility return code for old format
+      set_scale(md->get_focallength_sensor_ratio());
+    } else {
+      set_scale(md->get_focallength_sensor_ratio() * img->w());
     }
-    fclose(p);
-    waitpid(pid, &status, 0); 
-    if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 126) {
-      fprintf(stderr, "%s not found\n", args[0]);
+  }
+
+  delete md;
+
+  if (ret == 1) {
+    md = new ExifImageMetaData();
+    ret = md->load_image(file);
+    if (ret == 0) {
+      set_scale(md->get_focallength_sensor_ratio() * img->w());
     }
+    delete md;
   }
 
   return 0;

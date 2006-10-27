@@ -22,7 +22,7 @@
 
 #include "ImageMetaData.H"
 
-class ExifImageMetaData : ImageMetaData {
+class ExifImageMetaData : public ImageMetaData {
 	virtual int load_image(char *name);
 	virtual int save_image(char *name);
 };

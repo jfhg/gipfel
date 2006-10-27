@@ -91,3 +91,6 @@ JpgcomImageMetaData::load_image(char *name) {
 	return ret;
 }
 
+int
+JpgcomImageMetaData::save_image(char *name) {
+} 

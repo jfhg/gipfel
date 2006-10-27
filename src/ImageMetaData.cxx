@@ -33,6 +33,15 @@ ImageMetaData::ImageMetaData() {
 	projection_type = -1;
 }
 
+int
+ImageMetaData::load_image(char *name) {
+	return 1;
+}
+
+int
+ImageMetaData::save_image(char *name) {
+	return 1;
+}
 
 double
 ImageMetaData::get_longitude() {
@@ -69,6 +78,10 @@ ImageMetaData::get_focallength_sensor_ratio() {
 	return focallength_sensor_ratio;
 }
 
+int
+ImageMetaData::get_projection_type() {
+	return projection_type;
+}
 
 void
 ImageMetaData::set_longitude(double v) {
@@ -105,6 +118,7 @@ ImageMetaData::set_focallength_sensor_ratio(double v) {
 	focallength_sensor_ratio = v;
 }
 
-int ImageMetaData::set_projection_type(int v) {
+void
+ImageMetaData::set_projection_type(int v) {
 	projection_type = v;
 }
