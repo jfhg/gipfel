@@ -130,6 +130,9 @@ GipfelWidget::load_image(char *file) {
     ret = md->load_image(file);
     if (ret == 0) {
       set_scale(md->get_focallength_sensor_ratio() * img->w());
+      set_view_long(md->get_longitude());
+      set_view_lat(md->get_latitude());
+      set_view_height(md->get_height());
     }
     delete md;
   }

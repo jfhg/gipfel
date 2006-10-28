@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/wait.h>
 
 #include "util.h"
@@ -26,6 +27,29 @@
 #include "ExifImageMetaData.H"
 
 #define FOCAL_LENGTH_IN_35MM_FILM 0xa405
+#define GPS_LATIITUDE             0x0002
+#define GPS_LONGITUDE             0x0004
+#define GPS_ALTITUDE              0x0006
+
+
+static double
+degminsecstr2double(char *val) {
+	double ret, dv;
+
+	ret = 0.0;
+	for (dv=1.0; dv <= 3600.0; dv = dv * 60.0) {
+		ret = ret + atof(val) / dv;
+		val = strchr(val, ',');
+		if (!val || val[1] == '\0') {
+			break;
+		} else {
+			val++;
+		}
+	}
+
+	return ret;
+}
+
 
 int
 ExifImageMetaData::load_image(char *name) {
@@ -47,13 +71,22 @@ ExifImageMetaData::load_image(char *name) {
 
 	if (p) {
 		while (fgets(buf, sizeof(buf), p) != NULL) {
-			if (sscanf(buf, "%x\t%s", &id, val) != 2) {
+			if (sscanf(buf, "%x\t%[^\n]\n", &id, val) != 2) {
 				continue;
 			}
 
 			switch(id) {
 				case FOCAL_LENGTH_IN_35MM_FILM:
 					focallength_sensor_ratio = atof(val) / 35.0;
+					break;
+				case GPS_LONGITUDE:
+					longitude = degminsecstr2double(val);
+					break;
+				case GPS_LATIITUDE:
+					latitude = degminsecstr2double(val);
+					break;
+				case GPS_ALTITUDE:
+					height = atof(val);
 					break;
 			}	
 		}
