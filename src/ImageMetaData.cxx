@@ -38,16 +38,19 @@ ImageMetaData::ImageMetaData() {
 	nick = 0.0;
 	tilt = 0.0;
 	focallength_sensor_ratio = 1.0;
-	projection_type = 1;
+	scale = NAN;
+	projection_type = 0;
 }
 
 
 int
-ImageMetaData::load_image(char *name) {
+ImageMetaData::load_image(char *name, int img_width) {
 	int ret;
 
 	ret = load_image_jpgcom(name);
-	if (ret != 0) {
+	if (ret == 2) { // old format
+		focallength_sensor_ratio = scale / (double) img_width;
+	} else if (ret == 1) { // get reasonable defaults from exif data
 		ret = load_image_exif(name);
 	}
 
@@ -179,7 +182,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
                 direction = dir;
                 nick      = ni;
                 tilt      = ti;
-                focallength_sensor_ratio = fr;
+                scale     = fr;
                 projection_type = pt;
 
                 ret = 2; // special return value for compatibility with

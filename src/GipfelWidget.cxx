@@ -104,23 +104,17 @@ GipfelWidget::load_image(char *file) {
   mb->box(FL_NO_BOX);
   mb->add("Center Peak", 0, (Fl_Callback*) center_cb, this);
 
-  // try to retrieve gipfel data from JPEG comment section
+  // try to retrieve gipfel data from JPEG meta data
   md = new ImageMetaData();
-  ret = md->load_image(file);
-  if (ret != 1) {
-    set_view_long(md->get_longitude());
-    set_view_lat(md->get_latitude());
-    set_view_height(md->get_height());
-    set_center_angle(md->get_direction());
-    set_nick_angle(md->get_nick());
-    set_tilt_angle(md->get_tilt());
-	set_projection((Projection::Projection_t) md->get_projection_type());
-    if (ret == 2) { // special compatibility return code for old format
-      set_scale(md->get_focallength_sensor_ratio());
-    } else {
-      set_scale(md->get_focallength_sensor_ratio() * img->w());
-    }
-  }
+  md->load_image(file, img->w());
+  set_view_long(md->get_longitude());
+  set_view_lat(md->get_latitude());
+  set_view_height(md->get_height());
+  set_center_angle(md->get_direction());
+  set_nick_angle(md->get_nick());
+  set_tilt_angle(md->get_tilt());
+  set_projection((Projection::Projection_t) md->get_projection_type());
+  set_scale(md->get_focallength_sensor_ratio() * img->w());
 
   delete md;
 

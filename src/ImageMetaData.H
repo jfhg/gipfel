@@ -29,6 +29,7 @@ class ImageMetaData {
 		double nick;
 		double tilt;
 		double focallength_sensor_ratio;
+		double scale;
 		int    projection_type;
 
 		int load_image_jpgcom(char *name);
@@ -38,7 +39,7 @@ class ImageMetaData {
 	public:
 		ImageMetaData();
 
-		int load_image(char *name);
+		int load_image(char *name, int img_width);
 		int save_image(char *in_img, char *out_img);
 
  		double get_longitude();
