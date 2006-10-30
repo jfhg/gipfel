@@ -12,27 +12,27 @@
 #include <FL/Fl_Input.H>
 
 class Fl_Search_Browser : public Fl_Select_Browser {
-  public:
-    
-   Fl_Search_Browser(int X, int Y, int W, int H, const char *c):Fl_Select_Browser(X,Y,W,H,c){};
+	public:
 
-   int find_prefix(const char *p);
-  private:
-   int find_prefix(const char *p, int s, int e);
+		Fl_Search_Browser(int X, int Y, int W, int H, const char *c):Fl_Select_Browser(X,Y,W,H,c){};
+
+		int find_prefix(const char *p);
+	private:
+		int find_prefix(const char *p, int s, int e);
 };
 
 class Fl_Search_Chooser {
-  private:
-  public:
-    Fl_Window *w;
-    Fl_Search_Browser *sb;
+	private:
+	public:
+		Fl_Window *w;
+		Fl_Search_Browser *sb;
 
-    Fl_Search_Chooser(const char *title);
+		Fl_Search_Chooser(const char *title);
 
-    void add(const char *t, void *d);
-    void *data();
-    void show();
-    int shown();
+		void add(const char *t, void *d);
+		void *data();
+		void show();
+		int shown();
 };
 
 #endif

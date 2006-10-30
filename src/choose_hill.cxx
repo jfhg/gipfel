@@ -11,30 +11,30 @@
 
 Hill*
 choose_hill(const Hills *hills, const char *l) {
-  Fl_Search_Chooser *sc = new Fl_Search_Chooser(l?l:"Choose Hill");
-  Hills *h_sort = new Hills(hills);
-  Hill *ret;
+	Fl_Search_Chooser *sc = new Fl_Search_Chooser(l?l:"Choose Hill");
+	Hills *h_sort = new Hills(hills);
+	Hill *ret;
 
-  h_sort->sort_name();
-  
-  for (int i=0; i<h_sort->get_num(); i++) {
-    Hill *m = h_sort->get(i);
-    if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
-      continue;
-    } 
-    sc->add(m->name, m);
-  } 
-  
-  delete h_sort;
-  
-  sc->show();
-  while (sc->shown()) {
-    Fl::wait();
-  } 
-  
-  ret = (Hill*) sc->data();
+	h_sort->sort_name();
 
-  delete(sc);
+	for (int i=0; i<h_sort->get_num(); i++) {
+		Hill *m = h_sort->get(i);
+		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
+			continue;
+		} 
+		sc->add(m->name, m);
+	} 
 
-  return ret;
+	delete h_sort;
+
+	sc->show();
+	while (sc->shown()) {
+		Fl::wait();
+	} 
+
+	ret = (Hill*) sc->data();
+
+	delete(sc);
+
+	return ret;
 }

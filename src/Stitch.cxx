@@ -78,12 +78,12 @@ Stitch::set_output(const char *file, OutputImage *img) {
 
 int
 Stitch::resample(int w, int h,
-            double view_start, double view_end) {
+	double view_start, double view_end) {
 	double step_view = (view_end - view_start) / w;
 	char r, g, b;
 	int y_off = h / 2;
 	int merged_pixel_set;
- 	double radius = (double) w / (view_end -view_start);
+	double radius = (double) w / (view_end -view_start);
 
 	if (merged_image) {
 		merged_image->init(w, h);
