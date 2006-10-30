@@ -42,6 +42,7 @@ char *img_file;
 char *data_file = DEFAULT_DATAFILE;
 
 GipfelWidget *gipf = NULL;
+Fl_Window *control_win, *view_win;
 Fl_Dial *s_center = NULL;
 Fl_Slider *s_nick, *s_focal_length, *s_tilt, *s_height_dist, *s_track_width;
 Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
@@ -81,6 +82,8 @@ void open_cb() {
 	char *file = fl_file_chooser("Open File?", "*.jpg", img_file);
 	if(file != NULL) {
 		gipf->load_image(file);
+		view_win->label(file);
+		control_win->label(file);
 		set_values();
 	}  
 }
@@ -322,7 +325,6 @@ int main(int argc, char** argv) {
 	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
 	int jpeg_flag = 0, tiff_flag = 0;
 	char *outpath;
-	Fl_Window *control_win, *view_win;
 	Fl_Scroll *scroll;
 
 
@@ -404,6 +406,8 @@ int main(int argc, char** argv) {
 	gipf = new GipfelWidget(0,0,800,600);
 	if (img_file) {
 		gipf->load_image(img_file);
+		view_win->label(img_file);
+		control_win->label(img_file);
 	}
 
 	view_win->size(gipf->w(), gipf->h());
