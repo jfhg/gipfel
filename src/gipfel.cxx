@@ -230,12 +230,12 @@ create_control_window() {
   Fl_Box *west = new Fl_Box(0, 125, 40, 20, "West");
 
 
-  s_focal_length = new Fl_Value_Slider(235, 60, 160, 15, "Focal Length In 35mm");
+  s_focal_length = new Fl_Value_Slider(235, 60, 160, 15, "Focal Length in 35mm");
   s_focal_length->type(1);
   s_focal_length->box(FL_THIN_DOWN_BOX);
   s_focal_length->labelsize(10);
   s_focal_length->step(0.01);
-  s_focal_length->bounds(1.0, 200.0);
+  s_focal_length->bounds(1.0, 300.0);
   s_focal_length->slider(FL_UP_BOX);
   s_focal_length->callback((Fl_Callback*)focal_length_cb);
   s_focal_length->align(FL_ALIGN_TOP);
