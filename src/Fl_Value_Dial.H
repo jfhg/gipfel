@@ -1,3 +1,8 @@
+//
+// Copyright 2006 Johannes Hofmann <Johannes.Hofmann@gmx.de>
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
 
 #ifndef Fl_Value_Dial_H
 #define Fl_Value_Dial_H
