@@ -23,6 +23,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
@@ -438,7 +439,7 @@ int main(int argc, char** argv) {
   if (view_point) {
     gipf->set_viewpoint(view_point);
   } else if (img_file && 
-             gipf->get_view_lat()==0.0 && gipf->get_view_long()==0.0) {
+             (isnan(gipf->get_view_lat()) || isnan(gipf->get_view_long()))) {
     viewpoint_cb(NULL, NULL);
   }
   

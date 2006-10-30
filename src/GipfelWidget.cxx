@@ -35,8 +35,7 @@
 #include <FL/Fl_JPEG_Image.H>
 #include <FL/fl_draw.H>
 
-#include "ExifImageMetaData.H"
-#include "JpgcomImageMetaData.H"
+#include "ImageMetaData.H"
 #include "Fl_Search_Chooser.H"
 #include "choose_hill.H"
 #include "GipfelWidget.H"
@@ -106,7 +105,7 @@ GipfelWidget::load_image(char *file) {
   mb->add("Center Peak", 0, (Fl_Callback*) center_cb, this);
 
   // try to retrieve gipfel data from JPEG comment section
-  md = new JpgcomImageMetaData();
+  md = new ImageMetaData();
   ret = md->load_image(file);
   if (ret != 1) {
     set_view_long(md->get_longitude());
@@ -124,18 +123,6 @@ GipfelWidget::load_image(char *file) {
   }
 
   delete md;
-
-  if (ret == 1) {
-    md = new ExifImageMetaData();
-    ret = md->load_image(file);
-    if (ret == 0) {
-      set_scale(md->get_focallength_sensor_ratio() * img->w());
-      set_view_long(md->get_longitude());
-      set_view_lat(md->get_latitude());
-      set_view_height(md->get_height());
-    }
-    delete md;
-  }
 
   return 0;
 }
@@ -155,7 +142,7 @@ GipfelWidget::save_image(char *file) {
     return 1;
   }
 
-  md = new JpgcomImageMetaData();
+  md = new ImageMetaData();
 
   md->set_longitude(get_view_long());
   md->set_latitude(get_view_lat());

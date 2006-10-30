@@ -21,7 +21,7 @@
 #define IMAGE_META_DATA_H
 
 class ImageMetaData {
-	protected:
+	private:
 		double longitude;
 		double latitude;
 		double height;
@@ -31,11 +31,15 @@ class ImageMetaData {
 		double focallength_sensor_ratio;
 		int    projection_type;
 
+		int load_image_jpgcom(char *name);
+		int save_image_jpgcom(char *in_img, char *out_img);
+		int load_image_exif(char *name);
+
 	public:
 		ImageMetaData();
 
-		virtual int load_image(char *name);
-		virtual int save_image(char *in_img, char *out_img);
+		int load_image(char *name);
+		int save_image(char *in_img, char *out_img);
 
  		double get_longitude();
 		double get_latitude();
