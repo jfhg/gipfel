@@ -83,11 +83,6 @@ Fl_Search_Chooser::Fl_Search_Chooser(const char *title) {
   w->end();
 }
 
-Fl_Search_Chooser::~Fl_Search_Chooser() {
-  delete sb;
-  delete w;
-}
-
 void
 Fl_Search_Chooser::add(const char *t, void *d) {
   sb->add(t, d);

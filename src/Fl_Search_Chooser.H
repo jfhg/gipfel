@@ -28,7 +28,6 @@ class Fl_Search_Chooser {
     Fl_Search_Browser *sb;
 
     Fl_Search_Chooser(const char *title);
-    ~Fl_Search_Chooser();
 
     void add(const char *t, void *d);
     void *data();
