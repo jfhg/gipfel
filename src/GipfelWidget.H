@@ -78,7 +78,7 @@ class GipfelWidget : public Fl_Widget {
 
   void set_tilt_angle(double a);
 
-  void set_scale(double s);
+  void set_focal_length_35mm(double s);
 
   void set_height_dist_ratio(double r);
 
@@ -100,7 +100,7 @@ class GipfelWidget : public Fl_Widget {
 
   double get_tilt_angle();
 
-  double get_scale();
+  double get_focal_length_35mm();
 
   double get_height_dist_ratio();
 

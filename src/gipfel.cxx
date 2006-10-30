@@ -58,7 +58,7 @@ char *data_file = DEFAULT_DATAFILE;
 
 GipfelWidget *gipf = NULL;
 Fl_Dial *s_center = NULL;
-Fl_Slider *s_nick, *s_scale, *s_tilt, *s_height_dist, *s_track_width;
+Fl_Slider *s_nick, *s_focal_length, *s_tilt, *s_height_dist, *s_track_width;
 Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
 Fl_Box *b_viewpoint;
 Fl_Menu_Bar *mb;
@@ -72,7 +72,7 @@ static int stitch(int stitch_w, int stitch_h, int type, const char *path,
 void set_values() {
   s_center->value(gipf->get_center_angle());
   s_nick->value(gipf->get_nick_angle());
-  s_scale->value(gipf->get_scale());
+  s_focal_length->value(gipf->get_focal_length_35mm());
   s_tilt->value(gipf->get_tilt_angle());
   s_height_dist->value(gipf->get_height_dist_ratio());
   i_view_lat->value(gipf->get_view_lat());
@@ -114,8 +114,8 @@ void save_cb() {
   }
 }
 
-void scale_cb(Fl_Slider* o, void*) {
-  gipf->set_scale(o->value());
+void focal_length_cb(Fl_Slider* o, void*) {
+  gipf->set_focal_length_35mm(o->value());
 }
 
 void angle_cb(Fl_Slider* o, void*) {
@@ -245,15 +245,15 @@ create_control_window() {
   Fl_Box *west = new Fl_Box(0, 125, 40, 20, "West");
 
 
-  s_scale = new Fl_Value_Slider(235, 60, 160, 15, "Scale");
-  s_scale->type(1);
-  s_scale->box(FL_THIN_DOWN_BOX);
-  s_scale->labelsize(10);
-  s_scale->step(5.0);
-  s_scale->bounds(0.0, 10000.0);
-  s_scale->slider(FL_UP_BOX);
-  s_scale->callback((Fl_Callback*)scale_cb);
-  s_scale->align(FL_ALIGN_TOP);
+  s_focal_length = new Fl_Value_Slider(235, 60, 160, 15, "Focal Length In 35mm");
+  s_focal_length->type(1);
+  s_focal_length->box(FL_THIN_DOWN_BOX);
+  s_focal_length->labelsize(10);
+  s_focal_length->step(0.01);
+  s_focal_length->bounds(1.0, 200.0);
+  s_focal_length->slider(FL_UP_BOX);
+  s_focal_length->callback((Fl_Callback*)focal_length_cb);
+  s_focal_length->align(FL_ALIGN_TOP);
 
   s_nick = new Fl_Value_Slider(235, 90, 160, 15, "Nick (deg.)");
   s_nick->type(1);

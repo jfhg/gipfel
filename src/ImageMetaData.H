@@ -28,7 +28,7 @@ class ImageMetaData {
 		double direction;
 		double nick;
 		double tilt;
-		double focallength_sensor_ratio;
+		double focal_length_35mm;
 		double scale;
 		int    projection_type;
 
@@ -48,7 +48,7 @@ class ImageMetaData {
 		double get_direction();
 		double get_nick();
 		double get_tilt();
-		double get_focallength_sensor_ratio();
+		double get_focal_length_35mm();
 		int    get_projection_type();
 
 		void set_longitude(double v);
@@ -57,7 +57,7 @@ class ImageMetaData {
 		void set_direction(double v);
 		void set_nick(double v);
 		void set_tilt(double v);
-		void set_focallength_sensor_ratio(double v);
+		void set_focal_length_35mm(double v);
 		void set_projection_type(int v);
 };
 #endif

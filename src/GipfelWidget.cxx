@@ -114,7 +114,7 @@ GipfelWidget::load_image(char *file) {
   set_nick_angle(md->get_nick());
   set_tilt_angle(md->get_tilt());
   set_projection((Projection::Projection_t) md->get_projection_type());
-  set_scale(md->get_focallength_sensor_ratio() * img->w());
+  set_focal_length_35mm(md->get_focal_length_35mm());
 
   delete md;
 
@@ -144,7 +144,7 @@ GipfelWidget::save_image(char *file) {
   md->set_direction(get_center_angle());
   md->set_nick(get_nick_angle());
   md->set_tilt(get_tilt_angle());
-  md->set_focallength_sensor_ratio(get_scale() / (double) img->w());
+  md->set_focal_length_35mm(get_focal_length_35mm());
   md->set_projection_type((int) get_projection());
 
   ret = md->save_image(img_file, file);
@@ -469,8 +469,8 @@ GipfelWidget::set_tilt_angle(double a) {
 }
 
 void
-GipfelWidget::set_scale(double s) {
-  pan->set_scale(s);
+GipfelWidget::set_focal_length_35mm(double s) {
+  pan->set_scale(s * (double) img->w() / 35.0);
   set_labels(pan->get_visible_mountains());
   redraw();
 }
@@ -503,8 +503,8 @@ GipfelWidget::get_tilt_angle() {
 }
 
 double
-GipfelWidget::get_scale() {
-  return pan->get_scale();
+GipfelWidget::get_focal_length_35mm() {
+  return pan->get_scale() * 35.0 / (double) img->w();
 }
 
 double

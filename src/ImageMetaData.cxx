@@ -37,7 +37,7 @@ ImageMetaData::ImageMetaData() {
 	direction = 0.0;
 	nick = 0.0;
 	tilt = 0.0;
-	focallength_sensor_ratio = 1.0;
+	focal_length_35mm = 35.0;
 	scale = NAN;
 	projection_type = 0;
 }
@@ -49,7 +49,7 @@ ImageMetaData::load_image(char *name, int img_width) {
 
 	ret = load_image_jpgcom(name);
 	if (ret == 2) { // old format
-		focallength_sensor_ratio = scale / (double) img_width;
+		focal_length_35mm = scale * 35.0 / (double) img_width;
 	} else if (ret == 1) { // get reasonable defaults from exif data
 		ret = load_image_exif(name);
 	}
@@ -111,7 +111,7 @@ ImageMetaData::load_image_exif(char *name) {
 
             switch(id) {
                 case EXIF_FOCAL_LENGTH_IN_35MM_FILM:
-                    focallength_sensor_ratio = atof(val) / 35.0;
+                    focal_length_35mm = atof(val);
                     break;
                 case EXIF_GPS_LONGITUDE:
                     longitude = degminsecstr2double(val);
@@ -137,7 +137,7 @@ ImageMetaData::load_image_exif(char *name) {
 
 
 #define GIPFEL_FORMAT_1 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, scale %lf, projection type %d"
-#define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focallength_sensor_ratio %lf, projection type %d"
+#define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focal_length_35mm %lf, projection type %d"
 
 int
 ImageMetaData::load_image_jpgcom(char *name) {
@@ -167,7 +167,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
                 direction = dir;
                 nick      = ni;
                 tilt      = ti;
-                focallength_sensor_ratio = fr;
+                focal_length_35mm = fr;
                 projection_type = pt;
 
                 ret = 0;
@@ -238,7 +238,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
         direction,
         nick,
         tilt,
-        focallength_sensor_ratio,
+        focal_length_35mm,
         projection_type);
 
     // try to save gipfel data in JPEG comment section
@@ -303,8 +303,8 @@ ImageMetaData::get_tilt() {
 }
 
 double
-ImageMetaData::get_focallength_sensor_ratio() {
-	return focallength_sensor_ratio;
+ImageMetaData::get_focal_length_35mm() {
+	return focal_length_35mm;
 }
 
 int
@@ -343,8 +343,8 @@ ImageMetaData::set_tilt(double v) {
 }
 
 void
-ImageMetaData::set_focallength_sensor_ratio(double v) {
-	focallength_sensor_ratio = v;
+ImageMetaData::set_focal_length_35mm(double v) {
+	focal_length_35mm = v;
 }
 
 void
