@@ -52,426 +52,427 @@ Fl_Menu_Bar *mb;
 #define STITCH_JPEG    2
 #define STITCH_TIFF    4
 static int stitch(int stitch_w, int stitch_h, int type, const char *path,
-  int argc, char **argv);
+	int argc, char **argv);
 
 void set_values() {
-  s_center->value(gipf->get_center_angle());
-  s_nick->value(gipf->get_nick_angle());
-  s_focal_length->value(gipf->get_focal_length_35mm());
-  s_tilt->value(gipf->get_tilt_angle());
-  s_height_dist->value(gipf->get_height_dist_ratio());
-  i_view_lat->value(gipf->get_view_lat());
-  i_view_long->value(gipf->get_view_long());
-  i_view_height->value(gipf->get_view_height());
-  b_viewpoint->label(gipf->get_viewpoint());
-  if (gipf->get_projection() == Projection::TANGENTIAL) {
-    mb->mode(8, FL_MENU_RADIO|FL_MENU_VALUE);
-    mb->mode(9, FL_MENU_RADIO);
-  } else {
-    mb->mode(9, FL_MENU_RADIO|FL_MENU_VALUE);
-    mb->mode(8, FL_MENU_RADIO);
-  }
+	s_center->value(gipf->get_center_angle());
+	s_nick->value(gipf->get_nick_angle());
+	s_focal_length->value(gipf->get_focal_length_35mm());
+	s_tilt->value(gipf->get_tilt_angle());
+	s_height_dist->value(gipf->get_height_dist_ratio());
+	i_view_lat->value(gipf->get_view_lat());
+	i_view_long->value(gipf->get_view_long());
+	i_view_height->value(gipf->get_view_height());
+	b_viewpoint->label(gipf->get_viewpoint());
+	if (gipf->get_projection() == Projection::TANGENTIAL) {
+		mb->mode(8, FL_MENU_RADIO|FL_MENU_VALUE);
+		mb->mode(9, FL_MENU_RADIO);
+	} else {
+		mb->mode(9, FL_MENU_RADIO|FL_MENU_VALUE);
+		mb->mode(8, FL_MENU_RADIO);
+	}
 }
 
 void quit_cb() {
-  exit(0);
+	exit(0);
 }
 
 void open_cb() {
-  char *file = fl_file_chooser("Open File?", "*.jpg", img_file);
-  if(file != NULL) {
-    gipf->load_image(file);
-    set_values();
-  }  
+	char *file = fl_file_chooser("Open File?", "*.jpg", img_file);
+	if(file != NULL) {
+		gipf->load_image(file);
+		set_values();
+	}  
 }
 
 void track_cb() {
-  char *file = fl_file_chooser("Track File?", NULL, NULL);
-  if (gipf->load_track(file) == 0) {
-    s_track_width->activate();
-  }
+	char *file = fl_file_chooser("Track File?", NULL, NULL);
+	if (gipf->load_track(file) == 0) {
+		s_track_width->activate();
+	}
 }
 
 void save_cb() {
-  char *file = fl_file_chooser("Save Image As?", NULL, NULL);
-  if (file) {
-    gipf->save_image(file);
-  }
+	char *file = fl_file_chooser("Save Image As?", NULL, NULL);
+	if (file) {
+		gipf->save_image(file);
+	}
 }
 
 void focal_length_cb(Fl_Slider* o, void*) {
-  gipf->set_focal_length_35mm(o->value());
+	gipf->set_focal_length_35mm(o->value());
 }
 
 void angle_cb(Fl_Slider* o, void*) {
-  gipf->set_center_angle(o->value());
+	gipf->set_center_angle(o->value());
 }
 
 void nick_cb(Fl_Slider* o, void*) {
-  gipf->set_nick_angle(o->value());
+	gipf->set_nick_angle(o->value());
 }
 
 void tilt_cb(Fl_Slider* o, void*) {
-  gipf->set_tilt_angle(o->value());
+	gipf->set_tilt_angle(o->value());
 }
 
 void h_d_cb(Fl_Slider* o, void*) {
-  gipf->set_height_dist_ratio(o->value());
+	gipf->set_height_dist_ratio(o->value());
 }
 
 void view_lat_cb(Fl_Value_Input* o, void*) {
-  gipf->set_view_lat(o->value());
+	gipf->set_view_lat(o->value());
 }
 
 void view_long_cb(Fl_Value_Input* o, void*) {
-  gipf->set_view_long(o->value());
+	gipf->set_view_long(o->value());
 }
 
 void view_height_cb(Fl_Value_Input* o, void*) {
-  gipf->set_view_height(o->value());
+	gipf->set_view_height(o->value());
 }
 
 void track_width_cb(Fl_Value_Input* o, void*) {
-  gipf->set_track_width(o->value());
+	gipf->set_track_width(o->value());
 }
 
 void viewpoint_cb(Fl_Value_Input* o, void*) {
-  Hill *m = choose_hill(gipf->get_mountains(), "Choose Viewpoint");
-  if (m) {
-    gipf->set_viewpoint(m);
-    set_values();
-  }
+	Hill *m = choose_hill(gipf->get_mountains(), "Choose Viewpoint");
+	if (m) {
+		gipf->set_viewpoint(m);
+		set_values();
+	}
 }
 
 void proj_cb(Fl_Value_Input* o, void*d) {
-  if(d == NULL) {
-    gipf->set_projection(Projection::TANGENTIAL);
-  } else {
-    gipf->set_projection(Projection::SPHAERIC);
-  }
+	if(d == NULL) {
+		gipf->set_projection(Projection::TANGENTIAL);
+	} else {
+		gipf->set_projection(Projection::SPHAERIC);
+	}
 }
 
 void hidden_cb(Fl_Menu_* o, void*d) {
-  gipf->set_show_hidden(o->mvalue()->value()); 
+	gipf->set_show_hidden(o->mvalue()->value()); 
 }
 
 void comp_cb(Fl_Widget *, void *) {
-  gipf->comp_params();
-  set_values();
+	gipf->comp_params();
+	set_values();
 }
 
 void guess_cb(Fl_Widget *, void *) {
-  gipf->guess();
-  set_values();
+	gipf->guess();
+	set_values();
 }
 
 void about_cb() {
-  fl_message("gipfel -- and you know what you see.\n"
-	     "Version %s\n\n"
-	     "(c) Johannes Hofmann 2006\n\n"
-             "Default datafile by http://www.alpin-koordinaten.de\n",
-             VERSION);
+	fl_message("gipfel -- and you know what you see.\n"
+		"Version %s\n\n"
+		"(c) Johannes Hofmann 2006\n\n"
+		"Default datafile by http://www.alpin-koordinaten.de\n",
+		VERSION);
 
 }
 
 void fill_menubar(Fl_Menu_Bar* mb) {
-  mb->add("&File/L&oad Image", FL_CTRL+'o', (Fl_Callback*)open_cb);
-  mb->add("&File/&Save Image", FL_CTRL+'s', (Fl_Callback*)save_cb);
-  mb->add("&File/Choose &Viewpoint", FL_CTRL+'v', (Fl_Callback*)viewpoint_cb);
-  mb->add("&File/Load &Track", FL_CTRL+'t', (Fl_Callback*)track_cb);
-  mb->add("&File/&Quit", FL_CTRL+'q', (Fl_Callback*)quit_cb);
+	mb->add("&File/L&oad Image", FL_CTRL+'o', (Fl_Callback*)open_cb);
+	mb->add("&File/&Save Image", FL_CTRL+'s', (Fl_Callback*)save_cb);
+	mb->add("&File/Choose &Viewpoint", FL_CTRL+'v', (Fl_Callback*)viewpoint_cb);
+	mb->add("&File/Load &Track", FL_CTRL+'t', (Fl_Callback*)track_cb);
+	mb->add("&File/&Quit", FL_CTRL+'q', (Fl_Callback*)quit_cb);
 
+	mb->add("&Projection/Normal Projection", 0, (Fl_Callback *)proj_cb, 
+		(void *)0, FL_MENU_RADIO|FL_MENU_VALUE);
+	mb->add("&Projection/Panoramic Projection", 0, (Fl_Callback *)proj_cb, 
+		(void *)1, FL_MENU_RADIO);
 
-  mb->add("&Projection/Normal Projection", 0, (Fl_Callback *)proj_cb, 
-          (void *)0, FL_MENU_RADIO|FL_MENU_VALUE);
-  mb->add("&Projection/Panoramic Projection", 0, (Fl_Callback *)proj_cb, 
-          (void *)1, FL_MENU_RADIO);
+	mb->add("&Option/Show Hidden", 0, (Fl_Callback *) hidden_cb, 
+		(void *)0, FL_MENU_TOGGLE);
 
-  mb->add("&Option/Show Hidden", 0, (Fl_Callback *) hidden_cb, 
-          (void *)0, FL_MENU_TOGGLE);
-
-  mb->add("&Help/About", 0, (Fl_Callback*)about_cb);
+	mb->add("&Help/About", 0, (Fl_Callback*)about_cb);
 }
 
 void usage() {
-  fprintf(stderr,
-	  "usage: gipfel [-v <viewpoint>] [-d <datafile>]\n"
-      "          [-s] [-j <outfile>] [-t <outdir] [-w <width>] [-h <height>]\n"
-      "          [<image(s)>]\n"
-	  "   -v <viewpoint>  Set point from which the picture was taken.\n"
-	  "                   This must be a string that unambiguously \n"
-	  "                   matches the name of an entry in the data file.\n"
-	  "   -d <datafile>   Use <datafile> for GPS data.\n"
-      "   -s              Stitch mode.\n"
-      "   -w <width>      Width of result image.\n"
-      "   -h <height>     Height of result image.\n"
-      "   -j <outfile>    JPEG output file for Stitch mode.\n"
-      "   -t <outdir>     Output directory for TIFF images in Stitch mode.\n"
-	  "      <image(s)>   JPEG file(s) to use.\n");
+	fprintf(stderr,
+		"usage: gipfel [-v <viewpoint>] [-d <datafile>]\n"
+		"          [-s] [-j <outfile>] [-t <outdir] [-w <width>] [-h <height>]\n"
+		"          [<image(s)>]\n"
+		"   -v <viewpoint>  Set point from which the picture was taken.\n"
+		"                   This must be a string that unambiguously \n"
+		"                   matches the name of an entry in the data file.\n"
+		"   -d <datafile>   Use <datafile> for GPS data.\n"
+		"   -s              Stitch mode.\n"
+		"   -w <width>      Width of result image.\n"
+		"   -h <height>     Height of result image.\n"
+		"   -j <outfile>    JPEG output file for Stitch mode.\n"
+		"   -t <outdir>     Output directory for TIFF images in Stitch mode.\n"
+		"      <image(s)>   JPEG file(s) to use.\n");
 }
 
 Fl_Window * 
 create_control_window() {
-  Fl_Window *win = new Fl_Window(400,350);
-  mb = new Fl_Menu_Bar(0, 0, 400, 30);
-  fill_menubar(mb);
+	Fl_Window *win = new Fl_Window(400,350);
+	mb = new Fl_Menu_Bar(0, 0, 400, 30);
+	fill_menubar(mb);
 
-  s_center = new Fl_Value_Dial(40, 60, 150, 150, NULL);
-  s_center->type(FL_LINE_DIAL);
-  s_center->labelsize(10);
-  s_center->step(0.01);
-  s_center->bounds(0.0, 360.0);
-  s_center->angles(180, 540);
-  s_center->callback((Fl_Callback*)angle_cb);
+	s_center = new Fl_Value_Dial(40, 60, 150, 150, NULL);
+	s_center->type(FL_LINE_DIAL);
+	s_center->labelsize(10);
+	s_center->step(0.01);
+	s_center->bounds(0.0, 360.0);
+	s_center->angles(180, 540);
+	s_center->callback((Fl_Callback*)angle_cb);
 
-  Fl_Box *north = new Fl_Box(95, 40, 40, 20, "North");
-  Fl_Box *south = new Fl_Box(95, 210, 40, 20, "South");
-  Fl_Box *east = new Fl_Box(190, 125, 40, 20, "East");
-  Fl_Box *west = new Fl_Box(0, 125, 40, 20, "West");
+	Fl_Box *north = new Fl_Box(95, 40, 40, 20, "North");
+	Fl_Box *south = new Fl_Box(95, 210, 40, 20, "South");
+	Fl_Box *east = new Fl_Box(190, 125, 40, 20, "East");
+	Fl_Box *west = new Fl_Box(0, 125, 40, 20, "West");
 
 
-  s_focal_length = new Fl_Value_Slider(235, 60, 160, 15, "Focal Length in 35mm");
-  s_focal_length->type(1);
-  s_focal_length->box(FL_THIN_DOWN_BOX);
-  s_focal_length->labelsize(10);
-  s_focal_length->step(0.01);
-  s_focal_length->bounds(1.0, 300.0);
-  s_focal_length->slider(FL_UP_BOX);
-  s_focal_length->callback((Fl_Callback*)focal_length_cb);
-  s_focal_length->align(FL_ALIGN_TOP);
+	s_focal_length = new Fl_Value_Slider(235, 60, 160, 15, "Focal Length in 35mm");
+	s_focal_length->type(1);
+	s_focal_length->box(FL_THIN_DOWN_BOX);
+	s_focal_length->labelsize(10);
+	s_focal_length->step(0.01);
+	s_focal_length->bounds(1.0, 300.0);
+	s_focal_length->slider(FL_UP_BOX);
+	s_focal_length->callback((Fl_Callback*)focal_length_cb);
+	s_focal_length->align(FL_ALIGN_TOP);
 
-  s_nick = new Fl_Value_Slider(235, 90, 160, 15, "Nick (deg.)");
-  s_nick->type(1);
-  s_nick->box(FL_THIN_DOWN_BOX);
-  s_nick->labelsize(10);
-  s_nick->step(0.01);
-  s_nick->bounds(-20.0, 20.0);
-  s_nick->slider(FL_UP_BOX);
-  s_nick->callback((Fl_Callback*)nick_cb);
-  s_nick->align(FL_ALIGN_TOP);
+	s_nick = new Fl_Value_Slider(235, 90, 160, 15, "Nick (deg.)");
+	s_nick->type(1);
+	s_nick->box(FL_THIN_DOWN_BOX);
+	s_nick->labelsize(10);
+	s_nick->step(0.01);
+	s_nick->bounds(-20.0, 20.0);
+	s_nick->slider(FL_UP_BOX);
+	s_nick->callback((Fl_Callback*)nick_cb);
+	s_nick->align(FL_ALIGN_TOP);
 
-  s_tilt = new Fl_Value_Slider(235, 120, 160, 15, "Tilt (deg.)");
-  s_tilt->type(1);
-  s_tilt->box(FL_THIN_DOWN_BOX);
-  s_tilt->labelsize(10);
-  s_tilt->step(0.01);
-  s_tilt->bounds(-10.0, 10.0);
-  s_tilt->slider(FL_UP_BOX);
-  s_tilt->callback((Fl_Callback*)tilt_cb);
-  s_tilt->align(FL_ALIGN_TOP);
+	s_tilt = new Fl_Value_Slider(235, 120, 160, 15, "Tilt (deg.)");
+	s_tilt->type(1);
+	s_tilt->box(FL_THIN_DOWN_BOX);
+	s_tilt->labelsize(10);
+	s_tilt->step(0.01);
+	s_tilt->bounds(-10.0, 10.0);
+	s_tilt->slider(FL_UP_BOX);
+	s_tilt->callback((Fl_Callback*)tilt_cb);
+	s_tilt->align(FL_ALIGN_TOP);
 
-  s_height_dist = new Fl_Value_Slider(235, 150, 160, 15, "Visibility");
-  s_height_dist->type(1);
-  s_height_dist->box(FL_THIN_DOWN_BOX);
-  s_height_dist->labelsize(10);
-  s_height_dist->step(-0.001);
-  s_height_dist->bounds(0.1, 0.01);
-  s_height_dist->slider(FL_UP_BOX);
-  s_height_dist->callback((Fl_Callback*)h_d_cb);
-  s_height_dist->align(FL_ALIGN_TOP);
+	s_height_dist = new Fl_Value_Slider(235, 150, 160, 15, "Visibility");
+	s_height_dist->type(1);
+	s_height_dist->box(FL_THIN_DOWN_BOX);
+	s_height_dist->labelsize(10);
+	s_height_dist->step(-0.001);
+	s_height_dist->bounds(0.1, 0.01);
+	s_height_dist->slider(FL_UP_BOX);
+	s_height_dist->callback((Fl_Callback*)h_d_cb);
+	s_height_dist->align(FL_ALIGN_TOP);
 
-  s_track_width = new Fl_Value_Slider(235, 180, 160, 15, "Track Width");
-  s_track_width->type(1);
-  s_track_width->box(FL_THIN_DOWN_BOX);
-  s_track_width->labelsize(10);
-  s_track_width->step(1.0);
-  s_track_width->bounds(1.0, 500.0);
-  s_track_width->value(200.0);
-  s_track_width->slider(FL_UP_BOX);
-  s_track_width->callback((Fl_Callback*)track_width_cb);
-  s_track_width->align(FL_ALIGN_TOP);
-  s_track_width->deactivate();
-  // Viewpoint Stuff
+	s_track_width = new Fl_Value_Slider(235, 180, 160, 15, "Track Width");
+	s_track_width->type(1);
+	s_track_width->box(FL_THIN_DOWN_BOX);
+	s_track_width->labelsize(10);
+	s_track_width->step(1.0);
+	s_track_width->bounds(1.0, 500.0);
+	s_track_width->value(200.0);
+	s_track_width->slider(FL_UP_BOX);
+	s_track_width->callback((Fl_Callback*)track_width_cb);
+	s_track_width->align(FL_ALIGN_TOP);
+	s_track_width->deactivate();
+	// Viewpoint Stuff
 
-  b_viewpoint = new Fl_Box(FL_DOWN_BOX, 30, 255, 300, 80, "");
-  b_viewpoint->align(FL_ALIGN_TOP);
+	b_viewpoint = new Fl_Box(FL_DOWN_BOX, 30, 255, 300, 80, "");
+	b_viewpoint->align(FL_ALIGN_TOP);
 
-  i_view_lat = new Fl_Value_Input(40, 270, 100, 20, "Latitude");
-  i_view_lat->labelsize(10);
-  i_view_lat->align(FL_ALIGN_TOP);
-  i_view_lat->when(FL_WHEN_ENTER_KEY);
-  i_view_lat->callback((Fl_Callback*)view_lat_cb);
+	i_view_lat = new Fl_Value_Input(40, 270, 100, 20, "Latitude");
+	i_view_lat->labelsize(10);
+	i_view_lat->align(FL_ALIGN_TOP);
+	i_view_lat->when(FL_WHEN_ENTER_KEY);
+	i_view_lat->callback((Fl_Callback*)view_lat_cb);
 
-  i_view_long = new Fl_Value_Input(200, 270, 100, 20, "Longitude");
-  i_view_long->labelsize(10);
-  i_view_long->align(FL_ALIGN_TOP);
-  i_view_long->when(FL_WHEN_ENTER_KEY);
-  i_view_long->callback((Fl_Callback*)view_long_cb);
+	i_view_long = new Fl_Value_Input(200, 270, 100, 20, "Longitude");
+	i_view_long->labelsize(10);
+	i_view_long->align(FL_ALIGN_TOP);
+	i_view_long->when(FL_WHEN_ENTER_KEY);
+	i_view_long->callback((Fl_Callback*)view_long_cb);
 
-  i_view_height = new Fl_Value_Input(40, 310, 80, 20, "Height");
-  i_view_height->labelsize(10);
-  i_view_height->align(FL_ALIGN_TOP);
-  i_view_height->when(FL_WHEN_ENTER_KEY);
-  i_view_height->callback((Fl_Callback*)view_height_cb);
+	i_view_height = new Fl_Value_Input(40, 310, 80, 20, "Height");
+	i_view_height->labelsize(10);
+	i_view_height->align(FL_ALIGN_TOP);
+	i_view_height->when(FL_WHEN_ENTER_KEY);
+	i_view_height->callback((Fl_Callback*)view_height_cb);
 
-  // Buttons
-  Fl_Button *b = new Fl_Button(240, 210, 60, 20, "comp");
-  b->color(FL_RED);
-  b->callback(comp_cb);
-  Fl_Button *b1 = new Fl_Button(320, 210, 60, 20, "guess");
-  b1->callback(guess_cb);
-  b1->color(FL_GREEN);
+	// Buttons
+	Fl_Button *b = new Fl_Button(240, 210, 60, 20, "comp");
+	b->color(FL_RED);
+	b->callback(comp_cb);
+	Fl_Button *b1 = new Fl_Button(320, 210, 60, 20, "guess");
+	b1->callback(guess_cb);
+	b1->color(FL_GREEN);
 
-  win->end();
-  return win;
+	win->end();
+	return win;
 }
 
 int main(int argc, char** argv) {
-  char c, *sep, *tmp, **my_argv;
-  char *view_point = NULL;
-  int err, bflag = 0, dflag = 0, my_argc;
-  int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
-  int jpeg_flag = 0, tiff_flag = 0;
-  char *outpath;
-  Fl_Window *control_win, *view_win;
-  Fl_Scroll *scroll;
+	char c, *sep, *tmp, **my_argv;
+	char *view_point = NULL;
+	int err, bflag = 0, dflag = 0, my_argc;
+	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
+	int jpeg_flag = 0, tiff_flag = 0;
+	char *outpath;
+	Fl_Window *control_win, *view_win;
+	Fl_Scroll *scroll;
 
-  
-  err = 0;
-  while ((c = getopt(argc, argv, "?d:v:sw:h:j:t:")) != EOF) {
-    switch (c) {  
-    case '?':
-      usage();
-      exit(0);
-      break;
-    case 'd':
-      data_file = optarg;
-      break;
-    case 'v':
-      view_point = optarg;
-      break;
-    case 's':
-      stitch_flag++;
-      break;
-    case 'j':
-      jpeg_flag++;
-      outpath = optarg;
-      break;
-    case 't':
-      tiff_flag++;
-      outpath = optarg;
-      break;
-    case 'w':
-      stitch_w = atoi(optarg);
-      break;
-    case 'h':
-      stitch_h = atoi(optarg);
-      break;
-    default:
-      err++;
-    }
-  }
-  
 
-  my_argc = argc - optind;
-  my_argv = argv + optind;
+	err = 0;
+	while ((c = getopt(argc, argv, "?d:v:sw:h:j:t:")) != EOF) {
+		switch (c) {  
+			case '?':
+				usage();
+				exit(0);
+				break;
+			case 'd':
+				data_file = optarg;
+				break;
+			case 'v':
+				view_point = optarg;
+				break;
+			case 's':
+				stitch_flag++;
+				break;
+			case 'j':
+				jpeg_flag++;
+				outpath = optarg;
+				break;
+			case 't':
+				tiff_flag++;
+				outpath = optarg;
+				break;
+			case 'w':
+				stitch_w = atoi(optarg);
+				break;
+			case 'h':
+				stitch_h = atoi(optarg);
+				break;
+			default:
+				err++;
+		}
+	}
 
-  if (my_argc >= 1) {
-    img_file = my_argv[0];
-  }
 
-  if (data_file == NULL || err) {
-    usage();
-    exit(1);
-  }
+	my_argc = argc - optind;
+	my_argv = argv + optind;
 
-  if (stitch_flag) {
-    int type = STITCH_PREVIEW;
-    if (jpeg_flag) {
-      type = STITCH_JPEG;
-    } else if (tiff_flag) {
-      type = STITCH_TIFF;
-    }
-    stitch(stitch_w, stitch_h, type, outpath, my_argc, my_argv);
-    exit(0);
-  }
+	if (my_argc >= 1) {
+		img_file = my_argv[0];
+	}
 
-  Fl::get_system_colors();
-  if (getenv("FLTK_SCHEME")) {
-    Fl::scheme(NULL);
-  } else {
-    Fl::scheme("plastic");
-  }
+	if (data_file == NULL || err) {
+		usage();
+		exit(1);
+	}
 
-  control_win = create_control_window();
+	if (stitch_flag) {
+		int type = STITCH_PREVIEW;
+		if (jpeg_flag) {
+			type = STITCH_JPEG;
+		} else if (tiff_flag) {
+			type = STITCH_TIFF;
+		}
+		stitch(stitch_w, stitch_h, type, outpath, my_argc, my_argv);
+		exit(0);
+	}
 
-  view_win = new Fl_Window(800, 600);
+	Fl::get_system_colors();
+	if (getenv("FLTK_SCHEME")) {
+		Fl::scheme(NULL);
+	} else {
+		Fl::scheme("plastic");
+	}
 
-  // The Fl_Group is used to avoid FL_DAMAGE_ALL in Fl_Scroll::position 
-  Fl_Group *g = new Fl_Group(0, 0, view_win->w(), view_win->h()); 
-  view_win->resizable(g);
-  scroll = new Fl_Scroll(0, 0, view_win->w(), view_win->h());
-  
-  gipf = new GipfelWidget(0,0,800,600);
-  if (img_file) {
-    gipf->load_image(img_file);
-  }
+	control_win = create_control_window();
 
-  view_win->size(gipf->w(), gipf->h());
-  scroll->size(gipf->w(), gipf->h());
+	view_win = new Fl_Window(800, 600);
 
-  gipf->load_data(data_file);
-  scroll->end();  
+	// The Fl_Group is used to avoid FL_DAMAGE_ALL in Fl_Scroll::position 
+	Fl_Group *g = new Fl_Group(0, 0, view_win->w(), view_win->h()); 
+	view_win->resizable(g);
+	scroll = new Fl_Scroll(0, 0, view_win->w(), view_win->h());
 
-  set_values();
+	gipf = new GipfelWidget(0,0,800,600);
+	if (img_file) {
+		gipf->load_image(img_file);
+	}
 
-  view_win->resizable(scroll);
-  
-  view_win->end();
-  view_win->show(1, argv); 
-  control_win->show(1, argv); 
+	view_win->size(gipf->w(), gipf->h());
+	scroll->size(gipf->w(), gipf->h());
 
-  if (view_point) {
-    gipf->set_viewpoint(view_point);
-  } else if (img_file && 
-             (isnan(gipf->get_view_lat()) || isnan(gipf->get_view_long()))) {
-    viewpoint_cb(NULL, NULL);
-  }
-  
-  return Fl::run();
+	gipf->load_data(data_file);
+	scroll->end();  
+
+	set_values();
+
+	view_win->resizable(scroll);
+
+	view_win->end();
+	view_win->show(1, argv); 
+	control_win->show(1, argv); 
+
+	if (view_point) {
+		gipf->set_viewpoint(view_point);
+	} else if (img_file && 
+		(isnan(gipf->get_view_lat()) || isnan(gipf->get_view_long()))) {
+		viewpoint_cb(NULL, NULL);
+	}
+
+	return Fl::run();
 }
 
 static int stitch(int stitch_w, int stitch_h, int type, const char *path, int argc, char **argv) {
-  Fl_Window *win;
-  Fl_Scroll *scroll;
-  Stitch *st = new Stitch();
+	Fl_Window *win;
+	Fl_Scroll *scroll;
+	Stitch *st = new Stitch();
 
-  for (int i=0; i<argc; i++) {
-    st->load_image(argv[i]);
-  }
-  
-  if (type == STITCH_JPEG) {
+	for (int i=0; i<argc; i++) {
+		st->load_image(argv[i]);
+	}
 
-    st->set_output((OutputImage*) new JPEGOutputImage(path, 90));
-    st->resample(stitch_w, stitch_h, 0.0, 7.0);
+	if (type == STITCH_JPEG) {
 
-  } else if (type == STITCH_TIFF) {
+		st->set_output((OutputImage*) new JPEGOutputImage(path, 90));
+		st->resample(stitch_w, stitch_h, 0.0, 7.0);
 
-    for (int i=0; i<argc; i++) {
-      char buf[1024];
-      char *dot;
+	} else if (type == STITCH_TIFF) {
 
-      snprintf(buf, sizeof(buf), "%s/%s", path, argv[i]);
-      dot = strrchr(buf, '.');
-      *dot = '\0';
-      strncat(buf, ".tiff", sizeof(buf));
+		for (int i=0; i<argc; i++) {
+			char buf[1024];
+			char *dot;
 
-      st->set_output(argv[i], (OutputImage*) new TIFFOutputImage(buf));
-    }
+			snprintf(buf, sizeof(buf), "%s/%s", path, argv[i]);
+			dot = strrchr(buf, '.');
+			*dot = '\0';
+			strncat(buf, ".tiff", sizeof(buf));
 
-    st->resample(stitch_w, stitch_h, 0.0, 7.0);
+			st->set_output(argv[i], (OutputImage*) new TIFFOutputImage(buf));
+		}
 
-  } else {
-    win = new Fl_Window(0,0, stitch_w, stitch_h);
-    scroll = new Fl_Scroll(0, 0, win->w(), win->h());
-    PreviewOutputImage *img = new PreviewOutputImage(0, 0, stitch_w, stitch_h);
-    win->resizable(scroll);
-    win->show(0, argv); 
-    st->set_output((OutputImage*) img);
-    st->resample(stitch_w, stitch_h, 0.0, 7.0);
-    img->redraw();
-    Fl::run();
-  }
+		st->resample(stitch_w, stitch_h, 0.0, 7.0);
 
-  return 0;
+	} else {
+		win = new Fl_Window(0,0, stitch_w, stitch_h);
+		scroll = new Fl_Scroll(0, 0, win->w(), win->h());
+		PreviewOutputImage *img =
+			new PreviewOutputImage(0, 0, stitch_w, stitch_h);
+
+		win->resizable(scroll);
+		win->show(0, argv); 
+		st->set_output((OutputImage*) img);
+		st->resample(stitch_w, stitch_h, 0.0, 7.0);
+		img->redraw();
+		Fl::run();
+	}
+
+	return 0;
 }
