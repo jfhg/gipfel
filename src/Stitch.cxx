@@ -1,21 +1,8 @@
-// 
-// Copyright 2006 by Johannes Hofmann
 //
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
+// Copyright 2006 Johannes Hofmann <Johannes.Hofmann@gmx.de>
 //
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -91,12 +78,12 @@ Stitch::set_output(const char *file, OutputImage *img) {
 
 int
 Stitch::resample(int w, int h,
-            double view_start, double view_end) {
+	double view_start, double view_end) {
 	double step_view = (view_end - view_start) / w;
 	uchar r, g, b;
 	int y_off = h / 2;
 	int merged_pixel_set;
- 	double radius = (double) w / (view_end -view_start);
+	double radius = (double) w / (view_end -view_start);
 
 	if (merged_image) {
 		merged_image->init(w, h);

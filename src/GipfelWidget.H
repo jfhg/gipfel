@@ -1,21 +1,8 @@
-// 
-// Copyright 2006 by Johannes Hofmann
 //
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
+// Copyright 2006 Johannes Hofmann <Johannes.Hofmann@gmx.de>
 //
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
 
 #ifndef GipfelWidget_H
 #define GipfelWidget_H
@@ -25,111 +12,111 @@
 #include "Panorama.H"
 
 class GipfelWidget : public Fl_Widget {
- private:
-  Fl_Image *img;
-  Hill *cur_mountain;
-  Hills *marker;
-  Hills *track_points;
-  Hill *m1, *m2;
-  Panorama *pan;
-  Fl_Menu_Button *mb;
-  char *img_file;
-  double track_width;
-  int show_hidden;
+	private:
+		Fl_Image *img;
+		Hill *cur_mountain;
+		Hills *marker;
+		Hills *track_points;
+		Hill *m1, *m2;
+		Panorama *pan;
+		Fl_Menu_Button *mb;
+		char *img_file;
+		double track_width;
+		int show_hidden;
 
-  int handle(int event);
+		int handle(int event);
 
-  int set_cur_mountain(int m_x, int m_y);
+		int set_cur_mountain(int m_x, int m_y);
 
-  int set_mountain(int m_x, int m_y);
+		int set_mountain(int m_x, int m_y);
 
-  void set_labels(Hills *v);
+		void set_labels(Hills *v);
 
-  int get_rel_track_width(Hill *m);
+		int get_rel_track_width(Hill *m);
 
-  static int get_pixel_nearest(Fl_Image *img, double x, double y,
+		static int get_pixel_nearest(Fl_Image *img, double x, double y,
                      uchar *r, uchar *g, uchar *b);
 
   static int get_pixel_bilinear(Fl_Image *img, double x, double y,
                      uchar *r, uchar *g, uchar *b);
 
-  static int get_pixel(Fl_Image *img, int x, int y,
+		static int get_pixel(Fl_Image *img, int x, int y,
                      uchar *r, uchar *g, uchar *b);
 
- public:
-  GipfelWidget(int X,int Y,int W, int H);
+	public:
+		GipfelWidget(int X,int Y,int W, int H);
 
-  void center();
+		void center();
 
-  int load_image(char *file);
+		int load_image(char *file);
 
-  int save_image(char *file);
-	
-  const char * get_image_filename();
+		int save_image(char *file);
 
-  int load_data(const char *file);
+		const char * get_image_filename();
 
-  int load_track(const char *file);
+		int load_data(const char *file);
 
-  int set_viewpoint(const char *pos);
+		int load_track(const char *file);
 
-  void set_viewpoint(const Hill *m);
+		int set_viewpoint(const char *pos);
 
-  void set_center_angle(double a);
+		void set_viewpoint(const Hill *m);
 
-  void set_nick_angle(double a);
+		void set_center_angle(double a);
 
-  void set_tilt_angle(double a);
+		void set_nick_angle(double a);
 
-  void set_scale(double s);
+		void set_tilt_angle(double a);
 
-  void set_height_dist_ratio(double r);
+		void set_focal_length_35mm(double s);
 
-  void set_hide_value(double h);
+		void set_height_dist_ratio(double r);
 
-  void set_show_hidden(int h);
+		void set_hide_value(double h);
 
-  void set_view_lat(double v);
+		void set_show_hidden(int h);
 
-  void set_view_long(double v);
+		void set_view_lat(double v);
 
-  void set_view_height(double v);
-  
-  const char * get_viewpoint();
+		void set_view_long(double v);
 
-  double get_center_angle();
+		void set_view_height(double v);
 
-  double get_nick_angle();
+		const char * get_viewpoint();
 
-  double get_tilt_angle();
+		double get_center_angle();
 
-  double get_scale();
+		double get_nick_angle();
 
-  double get_height_dist_ratio();
+		double get_tilt_angle();
 
-  double get_view_lat();
+		double get_focal_length_35mm();
 
-  double get_view_long();
+		double get_height_dist_ratio();
 
-  double get_view_height();
+		double get_view_lat();
 
-  void set_track_width(double w);
+		double get_view_long();
 
-  Projection::Projection_t get_projection();
+		double get_view_height();
 
-  void set_projection(Projection::Projection_t p);
+		void set_track_width(double w);
 
-  Hills *get_mountains();
+		Projection::Projection_t get_projection();
 
-  int comp_params();
+		void set_projection(Projection::Projection_t p);
 
-  int guess();
+		Hills *get_mountains();
 
-  int update();
+		int comp_params();
 
-  int get_pixel(double a_view, double a_nick,
+		int guess();
+
+		int update();
+
+		int get_pixel(double a_view, double a_nick,
                     uchar *r, uchar *g, uchar *b);
 
-  void draw();
+		void draw();
 };
 #endif
