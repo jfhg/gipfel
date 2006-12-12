@@ -1,4 +1,4 @@
 all: lsq_funcs.c
 
 lsq_funcs.c: lsq_funcs.mac
-	maxima -b lsq_funcs.mac | grep "^mac_" > lsq_funcs.c
+	maxima -b lsq_funcs.mac | grep "^double" > lsq_funcs.c

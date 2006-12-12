@@ -14,27 +14,30 @@ y : y_unrot * cos(c_tilt) - x_unrot * sin(c_tilt)$
  */
 x_expand : trigexpand(x)$
 y_expand : trigexpand(y)$
-sprint("mac_x =",string(subst(pow, "^", x_expand)),";","
+
+args: "(double c_view, double c_nick, double scale, double k0, double k1, double m_view, double m_nick)"$
+
+sprint("double mac_x", args, "{ return",string(subst(pow, "^", x_expand)),"}","
 ")$
-sprint("mac_y = ", string(subst(pow, "^",y_expand)),";","
+sprint("double mac_y", args, "{ return", string(subst(pow, "^",y_expand)),"}","
 ")$
-sprint("mac_x_dc_view = ", string(subst(pow, "^",diff(x_expand, c_view))),";","
+sprint("double mac_x_dc_view", args, "{ return", string(subst(pow, "^",diff(x_expand, c_view))),"}","
 ")$
-sprint("mac_x_dc_nick = ", string(subst(pow, "^",diff(x_expand, c_nick))),";","
+sprint("double mac_x_dc_nick", args, "{ return", string(subst(pow, "^",diff(x_expand, c_nick))),"}","
 ")$
-sprint("mac_x_dscale = ", string(subst(pow, "^",diff(x_expand, scale))),";","
+sprint("double mac_x_dscale", args, "{ return",string(subst(pow, "^",diff(x_expand, scale))),"}","
 ")$
-sprint("mac_x_dk0 = ", string(subst(pow, "^",diff(x_expand, k0))),";","
+sprint("double mac_x_dk0", args, "{ return",string(subst(pow, "^",diff(x_expand, k0))),"}","
 ")$
-sprint("mac_x_dk1 = ", string(subst(pow, "^",diff(x_expand, k1))),";","
+sprint("double mac_x_dk1",args, "{ return", string(subst(pow, "^",diff(x_expand, k1))),"}","
 ")$
-sprint("mac_y_dc_view = ", string(subst(pow, "^",diff(y_expand, c_view))),";","
+sprint("double mac_y_dc_view",args, "{ return", string(subst(pow, "^",diff(y_expand, c_view))),"}","
 ")$
-sprint("mac_y_dc_nick = ", string(subst(pow, "^",diff(y_expand, c_nick))),";","
+sprint("double mac_y_dc_nick",args, "{ return", string(subst(pow, "^",diff(y_expand, c_nick))),"}","
 ")$
-sprint("mac_y_dscale = ", string(subst(pow, "^",diff(y_expand, scale))),";","
+sprint("double mac_y_dscale", args, "{ return",string(subst(pow, "^",diff(y_expand, scale))),"}","
 ")$
-sprint("mac_y_dk0 = ", string(subst(pow, "^",diff(y_expand, k0))),";","
+sprint("double mac_y_dk0", args, "{ return",string(subst(pow, "^",diff(y_expand, k0))),"}","
 ")$
-sprint("mac_y_dk1 = ", string(subst(pow, "^",diff(y_expand, k1))),";","
+sprint("double mac_y_dk1",args, "{ return", string(subst(pow, "^",diff(y_expand, k1))),"}","
 ")$
