@@ -7,6 +7,7 @@ gipfel_SOURCES = \
 	Panorama.cxx \
 	Projection.cxx \
 	ProjectionTangential.cxx \
+	ProjectionTangentialLSQ.cxx \
 	ProjectionSphaeric.cxx \
 	Hill.cxx \
 	Fl_Value_Dial.cxx \
@@ -24,6 +25,7 @@ noinst_HEADERS = \
 	Panorama.H \
 	Projection.H \
 	ProjectionTangential.H \
+	ProjectionTangentialLSQ.H \
 	ProjectionSphaeric.H \
 	Hill.H \
 	ViewParams.H \
