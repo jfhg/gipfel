@@ -14,15 +14,27 @@ y : y_unrot * cos(c_tilt) - x_unrot * sin(c_tilt)$
  */
 x_expand : trigexpand(x)$
 y_expand : trigexpand(y)$
-sprint("mac_x = ", string(subst(pow, "^", x_expand)))$
-sprint("mac_y = ", string(subst(pow, "^",y_expand)))$
-sprint("mac_x_dc_view = ", string(subst(pow, "^",diff(x_expand, c_view))))$
-sprint("mac_x_dc_nick = ", string(subst(pow, "^",diff(x_expand, c_nick))))$
-sprint("mac_x_dscale = ", string(subst(pow, "^",diff(x_expand, scale))))$
-sprint("mac_x_dk0 = ", string(subst(pow, "^",diff(x_expand, k0))))$
-sprint("mac_x_dk1 = ", string(subst(pow, "^",diff(x_expand, k1))))$
-sprint("mac_y_dc_view = ", string(subst(pow, "^",diff(y_expand, c_view))))$
-sprint("mac_y_dc_nick = ", string(subst(pow, "^",diff(y_expand, c_nick))))$
-sprint("mac_y_dscale = ", string(subst(pow, "^",diff(y_expand, scale))))$
-sprint("mac_y_dk0 = ", string(subst(pow, "^",diff(y_expand, k0))))$
-sprint("mac_y_dk1 = ", string(subst(pow, "^",diff(y_expand, k1))))$
+sprint("mac_x =",string(subst(pow, "^", x_expand)),";","
+")$
+sprint("mac_y = ", string(subst(pow, "^",y_expand)),";","
+")$
+sprint("mac_x_dc_view = ", string(subst(pow, "^",diff(x_expand, c_view))),";","
+")$
+sprint("mac_x_dc_nick = ", string(subst(pow, "^",diff(x_expand, c_nick))),";","
+")$
+sprint("mac_x_dscale = ", string(subst(pow, "^",diff(x_expand, scale))),";","
+")$
+sprint("mac_x_dk0 = ", string(subst(pow, "^",diff(x_expand, k0))),";","
+")$
+sprint("mac_x_dk1 = ", string(subst(pow, "^",diff(x_expand, k1))),";","
+")$
+sprint("mac_y_dc_view = ", string(subst(pow, "^",diff(y_expand, c_view))),";","
+")$
+sprint("mac_y_dc_nick = ", string(subst(pow, "^",diff(y_expand, c_nick))),";","
+")$
+sprint("mac_y_dscale = ", string(subst(pow, "^",diff(y_expand, scale))),";","
+")$
+sprint("mac_y_dk0 = ", string(subst(pow, "^",diff(y_expand, k0))),";","
+")$
+sprint("mac_y_dk1 = ", string(subst(pow, "^",diff(y_expand, k1))),";","
+")$
