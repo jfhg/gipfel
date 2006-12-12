@@ -1,12 +1,28 @@
-x_undist_unrot : TAN(m_view - c_view) * scale$
-y_undist_unrot : TAN(m_nick - c_nick) * scale$
+/*
+ * This is the basic pinhole projection model with distortion correction
+ */
+x_undist_unrot : tan(m_view - c_view) * scale$
+y_undist_unrot : tan(m_nick - c_nick) * scale$
 d : y_undist_unrot ^ 2 + x_undist_unrot ^ 2$
 dist_fact : d ^2 * k1 + d * k0$
 x_unrot : x_undist_unrot * dist_fact$
 y_unrot : y_undist_unrot * dist_fact$
-x : y_unrot * SIN(c_tilt) + x_unrot * COS(c_tilt)$
-y : y_unrot * COS(c_tilt) - x_unrot * SIN(c_tilt)$
+x : y_unrot * sin(c_tilt) + x_unrot * cos(c_tilt)$
+y : y_unrot * cos(c_tilt) - x_unrot * sin(c_tilt)$
+/*
+ * Some mangling for C code generation
+ */
 x_expand : trigexpand(x)$
 y_expand : trigexpand(y)$
-SPRINT("out_x = ", STRING(DIFF(x_expand, TAN(c_view))))$
-
+sprint("mac_x = ", string(subst(pow, "^", x_expand)))$
+sprint("mac_y = ", string(subst(pow, "^",y_expand)))$
+sprint("mac_x_dc_view = ", string(subst(pow, "^",diff(x_expand, c_view))))$
+sprint("mac_x_dc_nick = ", string(subst(pow, "^",diff(x_expand, c_nick))))$
+sprint("mac_x_dscale = ", string(subst(pow, "^",diff(x_expand, scale))))$
+sprint("mac_x_dk0 = ", string(subst(pow, "^",diff(x_expand, k0))))$
+sprint("mac_x_dk1 = ", string(subst(pow, "^",diff(x_expand, k1))))$
+sprint("mac_y_dc_view = ", string(subst(pow, "^",diff(y_expand, c_view))))$
+sprint("mac_y_dc_nick = ", string(subst(pow, "^",diff(y_expand, c_nick))))$
+sprint("mac_y_dscale = ", string(subst(pow, "^",diff(y_expand, scale))))$
+sprint("mac_y_dk0 = ", string(subst(pow, "^",diff(y_expand, k0))))$
+sprint("mac_y_dk1 = ", string(subst(pow, "^",diff(y_expand, k1))))$
