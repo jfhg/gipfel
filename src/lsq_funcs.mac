@@ -12,8 +12,8 @@ y : y_unrot * cos(c_tilt) - x_unrot * sin(c_tilt)$
 /*
  * Some mangling for C code generation
  */
-x_expand : trigexpand(x)$
-y_expand : trigexpand(y)$
+x_expand : trigexpand(x_unrot)$
+y_expand : trigexpand(y_unrot)$
 
 args: "(double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick)"$
 

@@ -11,6 +11,7 @@
 
 #include "Panorama.H"
 #include "ProjectionTangential.H"
+#include "ProjectionTangentialLSQ.H"
 #include "ProjectionSphaeric.H"
 
 #define EARTH_RADIUS 6371010.0
@@ -285,7 +286,7 @@ Panorama::set_projection(Projection::Projection_t p) {
 
 	switch(projection_type) {
 		case Projection::TANGENTIAL:
-			proj = new ProjectionTangential();
+			proj = new ProjectionTangentialLSQ();
 			view_angle = pi_d / 3.0;
 			break;
 		case Projection::SPHAERIC:
