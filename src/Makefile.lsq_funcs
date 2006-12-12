@@ -1,0 +1,4 @@
+all: lsq_funcs.c
+
+lsq_funcs.c: lsq_funcs.max
+	maxima -b lsq_funcs.max > lsq_funcs.c
