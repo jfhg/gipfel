@@ -6,8 +6,8 @@ x_undist_unrot : tan(m_view - c_view) * scale$
 y_undist_unrot : tan(m_nick - c_nick) * scale$
 d : y_undist_unrot ^ 2 + x_undist_unrot ^ 2$
 dist_fact : d ^2 * k1 + d * k0$
-x_unrot : x_undist_unrot * dist_fact$
-y_unrot : y_undist_unrot * dist_fact$
+x_unrot : x_undist_unrot * (1 + dist_fact)$
+y_unrot : y_undist_unrot * (1 + dist_fact)$
 x : y_unrot * sin(c_tilt) + x_unrot * cos(c_tilt)$
 y : y_unrot * cos(c_tilt) - x_unrot * sin(c_tilt)$
 
@@ -19,7 +19,8 @@ x_expand : trigexpand(x_unrot)$
 y_expand : trigexpand(y_unrot)$
 
 args: "(double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick)"$
-printfunc(name, expression) := sprint("double", name, args, "{ return ", string(subst(pow, "^", expression)), ";}", "
+
+printfunc(name, expression) := sprint("static double", name, args, "{ return ", string(subst(pow, "^", expression)), ";}", "
 ")$
 
 printfunc("mac_x", x_expand);
