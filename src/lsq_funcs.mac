@@ -1,6 +1,7 @@
 /*
  * This is the basic pinhole projection model with distortion correction
  */
+
 x_undist_unrot : tan(m_view - c_view) * scale$
 y_undist_unrot : tan(m_nick - c_nick) * scale$
 d : y_undist_unrot ^ 2 + x_undist_unrot ^ 2$
@@ -9,35 +10,27 @@ x_unrot : x_undist_unrot * dist_fact$
 y_unrot : y_undist_unrot * dist_fact$
 x : y_unrot * sin(c_tilt) + x_unrot * cos(c_tilt)$
 y : y_unrot * cos(c_tilt) - x_unrot * sin(c_tilt)$
+
 /*
  * Some mangling for C code generation
  */
+
 x_expand : trigexpand(x_unrot)$
 y_expand : trigexpand(y_unrot)$
 
 args: "(double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick)"$
+printfunc(name, expression) := sprint("double", name, args, "{ return ", string(subst(pow, "^", expression)), ";}", "
+")$
 
-sprint("double mac_x", args, "{ return",string(subst(pow, "^", x_expand)),";}","
-")$
-sprint("double mac_y", args, "{ return", string(subst(pow, "^",y_expand)),";}","
-")$
-sprint("double mac_x_dc_view", args, "{ return", string(subst(pow, "^",diff(x_expand, c_view))),";}","
-")$
-sprint("double mac_x_dc_nick", args, "{ return", string(subst(pow, "^",diff(x_expand, c_nick))),";}","
-")$
-sprint("double mac_x_dscale", args, "{ return",string(subst(pow, "^",diff(x_expand, scale))),";}","
-")$
-sprint("double mac_x_dk0", args, "{ return",string(subst(pow, "^",diff(x_expand, k0))),";}","
-")$
-sprint("double mac_x_dk1",args, "{ return", string(subst(pow, "^",diff(x_expand, k1))),";}","
-")$
-sprint("double mac_y_dc_view",args, "{ return", string(subst(pow, "^",diff(y_expand, c_view))),";}","
-")$
-sprint("double mac_y_dc_nick",args, "{ return", string(subst(pow, "^",diff(y_expand, c_nick))),";}","
-")$
-sprint("double mac_y_dscale", args, "{ return",string(subst(pow, "^",diff(y_expand, scale))),";}","
-")$
-sprint("double mac_y_dk0", args, "{ return",string(subst(pow, "^",diff(y_expand, k0))),";}","
-")$
-sprint("double mac_y_dk1",args, "{ return", string(subst(pow, "^",diff(y_expand, k1))),";}","
-")$
+printfunc("mac_x", x_expand);
+printfunc("mac_y", y_expand);
+printfunc("mac_x_dc_view", diff(x_expand, c_view));
+printfunc("mac_x_dc_nick", diff(x_expand, c_nick));
+printfunc("mac_x_dscale", diff(x_expand, scale));
+printfunc("mac_x_dk0", diff(x_expand, k0));
+printfunc("mac_x_dk1", diff(x_expand, k1));
+printfunc("mac_y_dc_view", diff(y_expand, c_view));
+printfunc("mac_y_dc_nick", diff(y_expand, c_nick));
+printfunc("mac_y_dscale", diff(y_expand, scale));
+printfunc("mac_y_dk0", diff(y_expand, k0));
+printfunc("mac_y_dk1", diff(y_expand, k1));
