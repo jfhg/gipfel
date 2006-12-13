@@ -47,6 +47,15 @@ fi
 CXXFLAGS="`$FLTKCONFIG --use-images --cflags` $CXXFLAGS"
 LIBS="`$FLTKCONFIG --use-images --ldflags` $LIBS"
 
+# Check for gsl
+AC_PATH_PROG(GSLCONFIG,gsl-config)
+if test "x$GSLCONFIG" = x; then
+	echo "gsl-config not found"
+	exit 1
+fi
+
+CXXFLAGS="`$GSLCONFIG --cflags` $CXXFLAGS"
+LIBS="`$GSLCONFIG --libs` $LIBS"
 
 # Check for ccmath
 AC_CHECK_HEADERS([ccmath.h], [], [echo "Error: ccmath.h not found."; exit 1;])

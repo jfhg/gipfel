@@ -25,13 +25,16 @@ printfunc(name, expression) := sprint("static double", name, args, "{ return ", 
 
 printfunc("mac_x", x_expand);
 printfunc("mac_y", y_expand);
+
 printfunc("mac_x_dc_view", diff(x_expand, c_view));
 printfunc("mac_x_dc_nick", diff(x_expand, c_nick));
+printfunc("mac_x_dc_tilt", diff(x_expand, c_tilt));
 printfunc("mac_x_dscale", diff(x_expand, scale));
 printfunc("mac_x_dk0", diff(x_expand, k0));
 printfunc("mac_x_dk1", diff(x_expand, k1));
 printfunc("mac_y_dc_view", diff(y_expand, c_view));
 printfunc("mac_y_dc_nick", diff(y_expand, c_nick));
+printfunc("mac_y_dc_tilt", diff(y_expand, c_tilt));
 printfunc("mac_y_dscale", diff(y_expand, scale));
 printfunc("mac_y_dk0", diff(y_expand, k0));
 printfunc("mac_y_dk1", diff(y_expand, k1));
