@@ -18,7 +18,7 @@ static double sec(double a) {
 
 #include "lsq_funcs.c"
 
-static double k0 = 1.0, k1 = 0.0;
+static double k0 = 0.0, k1 = 0.0;
 
 static double
 comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
@@ -146,8 +146,8 @@ void
 ProjectionTangentialLSQ::get_coordinates(double a_view, double a_nick,
 	const ViewParams *parms, double *x, double *y) {
 
-	*x = mac_x(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale, k0, k1, a_view, -a_nick); 
-	*y = mac_y(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale, k0, k1, a_view, -a_nick); 
+	*x = mac_x(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale, k0, k1, a_view, a_nick); 
+	*y = mac_y(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale, k0, k1, a_view, a_nick); 
 }
 
 double
