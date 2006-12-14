@@ -46,8 +46,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
 	cur_mountain = NULL;
 	mb = NULL;
 	marker = new Hills();
-	m1 = NULL;
-	m2 = NULL;
+	known_hills = new Hills();
 	img_file = NULL;
 	track_width = 200.0;
 	show_hidden = 0;
@@ -236,12 +235,9 @@ GipfelWidget::draw() {
 			continue;
 		}
 
-		if (m == m1) {
+		if (known_hills->contains(m)) {
 			fl_color(FL_RED);
 			draw_flag(center_x + m->x + x(), center_y + m->y + y(), "1");
-		} else if (m == m2) {
-			fl_color(FL_RED);
-			draw_flag(center_x + m->x + x(), center_y + m->y + y(), "2");
 		} else if (m->flags & Hill::HIDDEN) {
 			fl_color(FL_BLUE);
 		} else {
@@ -354,6 +350,28 @@ GipfelWidget::set_labels(Hills *v) {
 
 int
 GipfelWidget::set_cur_mountain(int m_x, int m_y) {
+    Hill *m;
+    int center_x = w() / 2;
+    int center_y = h() / 2;
+    int i;
+
+    for (i=0; i<known_hills->get_num(); i++) {
+        m = known_hills->get(i);
+
+        if (m_x - center_x >= m->x - 2 && m_x - center_x < m->x + 2 &&
+            m_y - center_y >= m->y - 2 && m_y - center_y < m->y + 2) {
+
+			cur_mountain = m;
+			return 0;
+		}
+	}
+
+	return 1;
+}
+
+
+int
+GipfelWidget::toggle_known_mountain(int m_x, int m_y) {
 	Hills *mnts = pan->get_visible_mountains();
 	Hill *m;
 	int center_x = w() / 2;
@@ -368,19 +386,12 @@ GipfelWidget::set_cur_mountain(int m_x, int m_y) {
 
 		if (m_x - center_x >= m->x - 2 && m_x - center_x < m->x + 2 &&
 			m_y - center_y >= m->y - 2 && m_y - center_y < m->y + 2) {
-			cur_mountain = m;
-			if (m1 != NULL && m2 != NULL) {
-				fprintf(stderr, "Resetting m1 and m2\n");
-				m1 = NULL;
-				m2 = NULL;
-			}
 
-			if (m1 == NULL) {
-				m1 = cur_mountain;
-				fprintf(stderr, "m1 = %s\n", m1->name);
-			} else if (m2 == NULL) {
-				m2 = cur_mountain;
-				fprintf(stderr, "m2 = %s\n", m2->name);
+
+			if (known_hills->contains(m)) {
+				known_hills->remove(m);
+			} else {
+				known_hills->add(m);
 			}
 
 			redraw();
@@ -524,11 +535,11 @@ GipfelWidget::center() {
 	Hill *m = choose_hill(pan->get_close_mountains(), "Center Peak");
 	if (m) {
 		set_center_angle(m->alph / deg2rad);
-		if (!m1 || (m1 && m2)) {
-			m1 = m;
-		} else {
-			m2 = m;
+			
+		if (!known_hills->contains(m)) {
+			known_hills->add(m);
 		}
+	
 	}
 }
 
@@ -589,12 +600,12 @@ GipfelWidget::get_mountains() {
 
 int
 GipfelWidget::comp_params() {
-	if (m1 == NULL || m2 == NULL) {
+	if (known_hills->get_num() < 2) {
 		fprintf(stderr, "Position m1 and m2 first.\n");
 		return 1;
 	}
 	fl_cursor(FL_CURSOR_WAIT);
-	pan->comp_params(m1, m2);
+	pan->comp_params(known_hills);
 	set_labels(pan->get_visible_mountains());
 	redraw();
 	fl_cursor(FL_CURSOR_DEFAULT);
@@ -602,12 +613,12 @@ GipfelWidget::comp_params() {
 
 int
 GipfelWidget::guess() {
-	if (m1 == NULL) {
+	if (known_hills->get_num() < 1) {
 		fprintf(stderr, "Position m1 first.\n");
 		return 1;
 	}
 	fl_cursor(FL_CURSOR_WAIT);
-	pan->guess(marker, m1);
+	pan->guess(marker, known_hills->get(0));
 	set_labels(pan->get_visible_mountains());
 	redraw();
 	fl_cursor(FL_CURSOR_DEFAULT);
@@ -639,18 +650,23 @@ GipfelWidget::handle(int event) {
 
 	switch(event) {
 		case FL_PUSH:    
+			mark_x = Fl::event_x()-x();
+			mark_y = Fl::event_y()-y();
 			if (Fl::event_button() == 1) {
-
-				mark_x = Fl::event_x()-x();
-				mark_y = Fl::event_y()-y();
 				set_cur_mountain(mark_x, mark_y);
-
-				Fl::focus(this);
-				return 1;
+			} else if (Fl::event_button() == 2) {
+				toggle_known_mountain(mark_x, mark_y);
 			}
+
+			Fl::focus(this);
+			return 1;
 			break;
 		case FL_DRAG:
 			set_mountain(Fl::event_x()-x(), Fl::event_y()-y());
+			return 1;
+			break;
+		case FL_RELEASE:
+			cur_mountain = NULL;
 			return 1;
 			break;
 		case FL_FOCUS:

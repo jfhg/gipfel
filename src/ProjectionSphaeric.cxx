@@ -13,14 +13,22 @@
 #define BEST_UNDEF 10000000.0
 
 int
-ProjectionSphaeric::comp_params(const Hill *m1, const Hill *m2, ViewParams *parms) {
-	const Hill *m_tmp;
+ProjectionSphaeric::comp_params(const Hills *h, ViewParams *parms) {
+	const Hill *m_tmp, *m1, *m2;
 	double tmp_x, tmp_y;
 	double val;
 	ViewParams best, tmp;
 	double best_val = BEST_UNDEF;
 	double d_m1_2, d_m2_2, d_m1_m2_2;
 	int i, j;
+
+
+	if (h->get_num() != 2) {
+		return 1;
+	}
+
+	m1 = h->get(0);
+	m2 = h->get(1);
 
 	if (m1->x < m2->x) {
 		m_tmp = m1;

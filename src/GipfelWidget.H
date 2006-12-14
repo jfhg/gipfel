@@ -17,7 +17,7 @@ class GipfelWidget : public Fl_Widget {
 		Hill *cur_mountain;
 		Hills *marker;
 		Hills *track_points;
-		Hill *m1, *m2;
+		Hills *known_hills;
 		Panorama *pan;
 		Fl_Menu_Button *mb;
 		char *img_file;
@@ -27,6 +27,8 @@ class GipfelWidget : public Fl_Widget {
 		int handle(int event);
 
 		int set_cur_mountain(int m_x, int m_y);
+
+		int toggle_known_mountain(int m_x, int m_y);
 
 		int set_mountain(int m_x, int m_y);
 

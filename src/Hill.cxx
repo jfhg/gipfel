@@ -269,6 +269,27 @@ Hills::clear() {
 	num = 0;
 }
 
+int
+Hills::contains(const Hill *m) const {
+	for(int i=0; i<get_num();i++) {
+		if (get(i) == m) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+void
+Hills::remove(const Hill *h) {
+	for(int i=0; i<get_num();i++) {
+		if (get(i) == h) {
+			memmove(&m[i], &m[i+1], (get_num() - i - 1) * sizeof(Hill*));
+			num--;
+		}
+	}
+}
+
 void
 Hills::clobber() {
 	int i;
@@ -283,12 +304,12 @@ Hills::clobber() {
 }
 
 int
-Hills::get_num() {
+Hills::get_num() const {
 	return num;
 }
 
 Hill *
-Hills::get(int n) {
+Hills::get(int n) const {
 	if (n < 0 || n >= num) {
 		return NULL;
 	} else {

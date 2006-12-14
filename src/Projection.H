@@ -25,6 +25,6 @@ class Projection {
 		virtual void get_coordinates(double a_view, double a_nick,
 			const ViewParams *parms, double *x, double *y);
 
-		virtual int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
+		virtual int comp_params(const Hills *h, ViewParams *parms);
 };
 #endif

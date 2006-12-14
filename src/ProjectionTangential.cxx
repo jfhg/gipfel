@@ -29,9 +29,17 @@ comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
 	double x, double y, double pi_d);
 
 int
-ProjectionTangential::comp_params(const Hill *m1, const Hill *m2, ViewParams *parms) {
-	const Hill *tmp;
+ProjectionTangential::comp_params(const Hills *h, ViewParams *parms) {
+	const Hill *tmp, *m1, *m2;
 	double a_center_tmp, scale_tmp, a_nick_tmp;
+
+	if (h->get_num() != 2) {
+		return 1;
+	}
+
+	m1 = h->get(0);
+	m2 = h->get(1);
+
 
 	scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
 	if (isnan(scale_tmp) || scale_tmp < 100.0) {

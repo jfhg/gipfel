@@ -161,6 +161,7 @@ int
 Panorama::guess(Hills *p, Hill *m1) {
 	Hill *p2, *m_tmp1, *m_tmp2;
 	Hill *m2;
+	Hills h;
 	double best = 100000000.0, v;
 	double a_center_best, a_nick_best, a_tilt_best, scale_best;
 	int x1_sav, y1_sav;
@@ -193,7 +194,10 @@ Panorama::guess(Hills *p, Hill *m1) {
 			m2->x = p2->x;
 			m2->y = p2->y;
 
-			comp_params(m1, m2);
+			h.clear();
+			h.add(m1);
+			h.add(m2);
+			comp_params(&h);
 
 			v = get_value(p);
 
@@ -220,10 +224,10 @@ Panorama::guess(Hills *p, Hill *m1) {
 }
 
 int
-Panorama::comp_params(Hill *m1, Hill *m2) {
+Panorama::comp_params(Hills *h) {
 	int ret;
 
-	ret = proj->comp_params(m1, m2, &parms);
+	ret = proj->comp_params(h, &parms);
 	update_visible_mountains();
 	return ret;
 }

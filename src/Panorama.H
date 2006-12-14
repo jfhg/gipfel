@@ -122,7 +122,7 @@ class Panorama {
 
 		double get_real_distance(Hill *m);
 
-		int comp_params(Hill *m1, Hill *m2);
+		int comp_params(Hills *h);
 
 		int guess(Hills *p1, Hill *m1);
 

@@ -60,6 +60,8 @@ class Hills {
 
 		void add(Hill *m);
 
+		void remove(const Hill *m);
+
 		void add(Hills *h);
 
 		void sort_phi();
@@ -71,9 +73,11 @@ class Hills {
 		void clear();
 
 		void clobber();
+	
+		int contains(const Hill *m) const;
 
-		int get_num();
+		int get_num() const;
 
-		Hill *get(int n);
+		Hill *get(int n) const;
 };
 #endif

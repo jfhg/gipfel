@@ -22,6 +22,6 @@ class ProjectionSphaeric : public Projection {
 		void get_coordinates(double a_view, double a_nick, const ViewParams *parms,
 			double *x, double *y);
 
-		int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
+		int comp_params(const Hills *h, ViewParams *parms);
 };
 #endif

@@ -20,7 +20,7 @@ Projection::get_coordinates(double a_view, double a_nick,
 }
 
 int 
-Projection::comp_params(const Hill *m1, const Hill *m2, ViewParams *parms) {
+Projection::comp_params(const Hills *h, ViewParams *parms) {
 	fprintf(stderr, "Error: Projection::comp_params()\n");
 	return 1;
 }
