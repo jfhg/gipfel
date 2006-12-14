@@ -65,12 +65,12 @@ ProjectionTangentialLSQ::comp_params(const Hills *h, ViewParams *parms) {
 		parms->a_center = a_center_tmp;
 		parms->scale    = scale_tmp;
 		parms->a_nick   = a_nick_tmp;
-
-		lsq(h, parms);
-
 		if (angle_dist(parms->a_center, m1->alph) > pi_d/2.0) {
 			parms->a_center = parms->a_center + pi_d;
 		}
+
+
+		lsq(h, parms);
 
 		return 0;
 	}
@@ -205,6 +205,9 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 
 		status = gsl_multifit_fdfsolver_iterate (s);
 		fprintf(stderr, "gsl_multifit_fdfsolver_iterate: status %d\n", status);
+		if (status) {
+			break;
+		}
 
 	} 
 

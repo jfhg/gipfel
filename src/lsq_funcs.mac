@@ -2,14 +2,14 @@
  * This is the basic pinhole projection model with distortion correction
  */
 
-x_undist_unrot : tan(m_view - c_view) * scale$
-y_undist_unrot : tan(c_nick - m_nick) * scale$
+x_undist_unrot : tan(m_view - c_view) $
+y_undist_unrot : tan(c_nick - m_nick) $
 d : y_undist_unrot ^ 2 + x_undist_unrot ^ 2$
-dist_fact : d ^2 * k1 + d * k0$
+dist_fact : d ^ 2 * k1 + d * k0$
 x_unrot : x_undist_unrot * (1 + dist_fact)$
 y_unrot : y_undist_unrot * (1 + dist_fact)$
-x : y_unrot * sin(c_tilt) + x_unrot * cos(c_tilt)$
-y : y_unrot * cos(c_tilt) - x_unrot * sin(c_tilt)$
+x : scale * (y_unrot * sin(c_tilt) + x_unrot * cos(c_tilt))$
+y : scale * (y_unrot * cos(c_tilt) - x_unrot * sin(c_tilt))$
 
 /*
  * Some mangling for C code generation
