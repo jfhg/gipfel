@@ -24,6 +24,10 @@ ImageMetaData::ImageMetaData() {
 	direction = 0.0;
 	nick = 0.0;
 	tilt = 0.0;
+	k0 = 0.0;
+	k1 = 0.0;
+	u0 = 0.0;
+	v0 = 0.0;
 	focal_length_35mm = 35.0;
 	scale = NAN;
 	projection_type = 0;
@@ -124,7 +128,7 @@ ImageMetaData::load_image_exif(char *name) {
 
 
 #define GIPFEL_FORMAT_1 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, scale %lf, projection type %d"
-#define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focal_length_35mm %lf, projection type %d"
+#define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focal_length_35mm %lf, projection type %d, k0 %lf, k1 %lf, u0 %lf, v0 %lf"
 
 int
 ImageMetaData::load_image_jpgcom(char *name) {
@@ -133,9 +137,9 @@ ImageMetaData::load_image_jpgcom(char *name) {
     pid_t pid;
     int status;
     char buf[1024];
-    double lo, la, he, dir, ni, ti, fr;
+    double lo, la, he, dir, ni, ti, fr, _k0, _k1, _u0, _v0;
     int pt;
-    int ret = 1;
+    int n, ret = 1;
 
     args[0] = "rdjpgcom";
     args[1] = name;
@@ -145,8 +149,8 @@ ImageMetaData::load_image_jpgcom(char *name) {
 
     if (p) {
         while (fgets(buf, sizeof(buf), p) != NULL) {
-            if (sscanf(buf, GIPFEL_FORMAT_2,
-                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt) >= 7) {
+            if ((n = sscanf(buf, GIPFEL_FORMAT_2,
+                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &_k0, &_k1, &_u0, &_v0)) >= 7) {
 
                 longitude = lo;
                 latitude  = la;
@@ -156,6 +160,13 @@ ImageMetaData::load_image_jpgcom(char *name) {
                 tilt      = ti;
                 focal_length_35mm = fr;
                 projection_type = pt;
+
+				if (n == 11) {
+					k0 = _k0;
+					k1 = _k1;
+					u0 = _u0;
+					v0 = _v0;
+				}
 
                 ret = 0;
 
@@ -226,7 +237,8 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
         nick,
         tilt,
         focal_length_35mm,
-        projection_type);
+        projection_type,
+		k0, k1, u0, v0);
 
     // try to save gipfel data in JPEG comment section
     args[0] = "wrjpgcom";
@@ -337,4 +349,22 @@ ImageMetaData::set_focal_length_35mm(double v) {
 void
 ImageMetaData::set_projection_type(int v) {
 	projection_type = v;
+}
+
+void
+ImageMetaData::get_distortion_params(double *_k0, double *_k1,
+	double *_u0, double *_v0) {
+	*_k0 = k0;	
+	*_k1 = k1;	
+	*_u0 = u0;	
+	*_v0 = v0;	
+}
+
+void
+ImageMetaData::set_distortion_params(double _k0, double _k1,
+	double _u0, double _v0) {
+	k0 = _k0;	
+	k1 = _k1;	
+	u0 = _u0;	
+	v0 = _v0;	
 }

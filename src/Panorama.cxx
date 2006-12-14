@@ -598,4 +598,3 @@ Panorama::get_coordinates(double a_view, double a_nick, double *x, double *y) {
 
 	return 0;
 }
-

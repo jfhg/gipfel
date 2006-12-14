@@ -13,6 +13,10 @@ class ViewParams {
 		double scale;
 		double a_nick;
 		double a_tilt;
+		double k0;
+		double k1;
+		double u0;
+		double v0;
 };
 
 #endif

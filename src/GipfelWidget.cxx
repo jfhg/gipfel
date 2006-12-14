@@ -101,6 +101,8 @@ GipfelWidget::load_image(char *file) {
 	set_tilt_angle(md->get_tilt());
 	set_projection((Projection::Projection_t) md->get_projection_type());
 	set_focal_length_35mm(md->get_focal_length_35mm());
+	md->get_distortion_params(&pan->parms.k0, &pan->parms.k1,
+		&pan->parms.u0, &pan->parms.v0);
 
 	delete md;
 
@@ -132,6 +134,8 @@ GipfelWidget::save_image(char *file) {
 	md->set_tilt(get_tilt_angle());
 	md->set_focal_length_35mm(get_focal_length_35mm());
 	md->set_projection_type((int) get_projection());
+	md->set_distortion_params(pan->parms.k0, pan->parms.k1,
+		pan->parms.u0, pan->parms.v0);
 
 	ret = md->save_image(img_file, file);
 	delete md;

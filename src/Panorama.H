@@ -23,7 +23,6 @@ class Panorama {
 		Hills *mountains;
 		Hills *close_mountains;
 		Hills *visible_mountains;
-		ViewParams parms;
 		Projection::Projection *proj;
 		Projection::Projection_t projection_type;
 
@@ -62,6 +61,8 @@ class Panorama {
 		double pi_d, deg2rad;
 
 	public:
+		ViewParams parms;
+
 		Panorama();
 
 		~Panorama();
