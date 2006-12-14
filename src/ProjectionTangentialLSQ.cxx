@@ -32,9 +32,17 @@ comp_tilt(double tan_nick_view, double tan_dir_view, double n_scale,
 	double x, double y, double pi_d);
 
 int
-ProjectionTangentialLSQ::comp_params(const Hill *m1, const Hill *m2, ViewParams *parms) {
-	const Hill *tmp;
+ProjectionTangentialLSQ::comp_params(const Hills *h, ViewParams *parms) {
+	const Hill *tmp, *m1, *m2;
 	double a_center_tmp, scale_tmp, a_nick_tmp;
+
+	if (h->get_num() < 3) {
+		fprintf(stderr, "Please position at least 3 hills\n");
+		return 1;
+	}
+
+	m1 = h->get(0);
+	m2 = h->get(1);
 
 	scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
 	if (isnan(scale_tmp) || scale_tmp < 100.0) {
@@ -58,7 +66,11 @@ ProjectionTangentialLSQ::comp_params(const Hill *m1, const Hill *m2, ViewParams 
 		parms->scale    = scale_tmp;
 		parms->a_nick   = a_nick_tmp;
 
-		optimize(m1, m2, parms);
+		lsq(h, parms);
+
+		if (angle_dist(parms->a_center, m1->alph) > pi_d/2.0) {
+			parms->a_center = parms->a_center + pi_d;
+		}
 
 		return 0;
 	}
@@ -86,7 +98,7 @@ ProjectionTangentialLSQ::angle_dist(double a1, double a2) {
 }
 
 struct data {
-	Hills *h;
+	const Hills *h;
 };
 
 #define CALL(A) A(c_view, c_nick, c_tilt, scale, k0, k1, m->a_view, m->a_nick) 
@@ -158,7 +170,7 @@ lsq_fdf (const gsl_vector * x, void *data, gsl_vector * f, gsl_matrix * J) {
 
 
 int
-ProjectionTangentialLSQ::lsq(Hills *h, ViewParams *parms) {
+ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 	const gsl_multifit_fdfsolver_type *T;
 	gsl_multifit_fdfsolver *s;
 	gsl_multifit_function_fdf f;
@@ -189,78 +201,23 @@ ProjectionTangentialLSQ::lsq(Hills *h, ViewParams *parms) {
 	s = gsl_multifit_fdfsolver_alloc (T, h->get_num() * 2, 6);
 	gsl_multifit_fdfsolver_set (s, &f, &x.vector);
 
- 
-    for (int i=0; i<20 && status == GSL_CONTINUE; i++) {
+    for (int i=0; i<30; i++) {
 
 		status = gsl_multifit_fdfsolver_iterate (s);
+		fprintf(stderr, "gsl_multifit_fdfsolver_iterate: status %d\n", status);
 
 	} 
 
+	parms->a_center = gsl_vector_get(s->x, 0);
+	parms->a_nick = gsl_vector_get(s->x, 1);
+	parms->a_tilt = gsl_vector_get(s->x, 2);
+	parms->scale = gsl_vector_get(s->x, 3);
+	k0 = gsl_vector_get(s->x, 4);
+	k1 = gsl_vector_get(s->x, 5);
 
 	gsl_multifit_fdfsolver_free (s);
-	return 0;
-}
 
-int
-ProjectionTangentialLSQ::optimize(const Hill *m1, const Hill *m2, ViewParams *parms) {
-	int i;
-	double tan_nick_view, tan_dir_view, n_scale;
-	double tan_nick_m1, tan_dir_m1;
-	double tan_nick_m2, tan_dir_m2;
-	double d_m1_2, d_m2_2, d_m1_m2_2;
-
-	d_m1_2 = pow(m1->x, 2.0) + pow(m1->y, 2.0);
-	d_m2_2 = pow(m2->x, 2.0) + pow(m2->y, 2.0);
-	d_m1_m2_2 = pow(m1->x - m2->x, 2.0) + pow(m1->y - m2->y, 2.0);
-
-	tan_nick_view = tan(parms->a_nick);
-	tan_dir_view = tan(parms->a_center);
-	n_scale = parms->scale;
-	tan_dir_m1 = tan(m1->alph);
-	tan_nick_m1 = tan(m1->a_nick);
-	tan_dir_m2 = tan(m2->alph);
-	tan_nick_m2 = tan(m2->a_nick);
-#if 0
-	for (i=0; i<5; i++) {
-		opt_step(&tan_nick_view, &tan_dir_view, &n_scale, 
-			tan_dir_m1, tan_nick_m1, tan_dir_m2, tan_nick_m2,
-			d_m1_2, d_m2_2, d_m1_m2_2);
-	}
-#endif
-
-	if (isnan(tan_dir_view) || isnan(tan_nick_view) || isnan(n_scale)) {
-		fprintf(stderr, "No solution found.\n");
-		return 1;
-	}
-
-	parms->a_center = atan(tan_dir_view);
-	parms->a_nick = atan(tan_nick_view);
-
-	if (parms->a_center > 2.0 * pi_d) {
-		parms->a_center = parms->a_center - 2.0 * pi_d;
-	} else if (parms->a_center < 0.0) {
-		parms->a_center = parms->a_center + 2.0 * pi_d;
-	}
-
-	// atan(tan_dir_view) is not the only possible solution.
-	// Choose the one which is close to m1->alph.
-	if (angle_dist(parms->a_center, m1->alph) > pi_d/2.0) {
-		parms->a_center = parms->a_center + pi_d;
-	}
-
-	parms->scale = n_scale;
-
-	// use the point with greater distance from center for tilt computation 
-	if (d_m1_2 > d_m2_2) {
-		parms->a_tilt = comp_tilt(tan_nick_view, tan_dir_view, n_scale, 
-			tan_nick_m1, tan_dir_m1,
-			(double) m1->x, (double) m1->y, pi_d);
-	} else {
-		parms->a_tilt = comp_tilt(tan_nick_view, tan_dir_view, n_scale, 
-			tan_nick_m2, tan_dir_m2,
-			(double) m2->x, (double) m2->y, pi_d);
-	}
-
+	fprintf(stderr, "k0 %f k1 %f\n", k0, k1);
 	return 0;
 }
 

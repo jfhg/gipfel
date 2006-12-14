@@ -19,15 +19,13 @@ class ProjectionTangentialLSQ : public Projection {
 
 		double angle_dist(double a1, double a2);
 
-		int optimize(const Hill *m1, const Hill *m2, ViewParams *parms);
-
-		int lsq(Hills *m, ViewParams *parms);
+		int lsq(const Hills *m, ViewParams *parms);
 
 	public:
 		void get_coordinates(double a_view, double a_nick,
 			const ViewParams *parms, double *x, double *y);
 
-		int comp_params(const Hill *m1, const Hill *m2, ViewParams *parms);
+		int comp_params(const Hills *h, ViewParams *parms);
 
 };
 #endif
