@@ -178,14 +178,14 @@ lsq_fdf (const gsl_vector * x, void *data, gsl_vector * f, gsl_matrix * J) {
 	return GSL_SUCCESS;
 }
 
-
+#define NUM_PARAMS 8
 int
 ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 	const gsl_multifit_fdfsolver_type *T;
 	gsl_multifit_fdfsolver *s;
 	gsl_multifit_function_fdf f;
 	struct data dat;
-	double x_init[8];
+	double x_init[NUM_PARAMS];
 	gsl_vector_view x;
 	int status;
 
@@ -200,20 +200,20 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 	x_init[6] = parms->u0;
 	x_init[7] = parms->v0;
 
-	x = gsl_vector_view_array (x_init, 8);
+	x = gsl_vector_view_array (x_init, NUM_PARAMS);
 
    f.f = &lsq_f;
    f.df = &lsq_df;
    f.fdf = &lsq_fdf;
    f.n = h->get_num() * 2;
-   f.p = 6;
+   f.p = NUM_PARAMS;
    f.params = &dat;
 
 	T = gsl_multifit_fdfsolver_lmsder;
-	s = gsl_multifit_fdfsolver_alloc (T, h->get_num() * 2, 8);
+	s = gsl_multifit_fdfsolver_alloc (T, h->get_num() * 2, NUM_PARAMS);
 	gsl_multifit_fdfsolver_set (s, &f, &x.vector);
 
-    for (int i=0; i<30; i++) {
+    for (int i=0; i<10; i++) {
 
 		status = gsl_multifit_fdfsolver_iterate (s);
 		fprintf(stderr, "gsl_multifit_fdfsolver_iterate: status %d\n", status);
