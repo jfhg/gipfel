@@ -103,7 +103,7 @@ GipfelWidget::load_image(char *file) {
 	set_focal_length_35mm(md->get_focal_length_35mm());
 	md->get_distortion_params(&pan->parms.k0, &pan->parms.k1,
 		&pan->parms.u0, &pan->parms.v0);
-
+	fprintf(stderr, "%f %f %f %f\n", pan->parms.k0, pan->parms.k1, pan->parms.u0, pan->parms.v0);
 	delete md;
 
 	return 0;

@@ -150,7 +150,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
     if (p) {
         while (fgets(buf, sizeof(buf), p) != NULL) {
             if ((n = sscanf(buf, GIPFEL_FORMAT_2,
-                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &_k0, &_k1, &_u0, &_v0)) >= 7) {
+                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &_k0, &_k1, &_u0, &_v0)) >= 8) {
 
                 longitude = lo;
                 latitude  = la;
@@ -161,7 +161,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
                 focal_length_35mm = fr;
                 projection_type = pt;
 
-				if (n == 11) {
+				if (n >= 12) {
 					k0 = _k0;
 					k1 = _k1;
 					u0 = _u0;
