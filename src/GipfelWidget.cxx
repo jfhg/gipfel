@@ -472,6 +472,12 @@ GipfelWidget::set_projection(Projection::Projection_t p) {
 	redraw();
 }
 
+void
+GipfelWidget::set_distortion_params(double k0, double k1) {
+	pan->set_distortion_params(k0, k1);
+	redraw();
+}
+
 Projection::Projection_t
 GipfelWidget::get_projection() {
 	return pan->get_projection();

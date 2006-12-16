@@ -131,6 +131,8 @@ class Panorama {
 
 		void set_projection(Projection::Projection_t p);
 
+		void set_distortion_params(double k0, double k1);
+
 		int get_coordinates(double a_view, double a_nick, double *x, double *y);
 };
 #endif

@@ -204,6 +204,7 @@ void usage() {
 		"                   This must be a string that unambiguously \n"
 		"                   matches the name of an entry in the data file.\n"
 		"   -d <datafile>   Use <datafile> for GPS data.\n"
+		"   -u <k0>,<k1>    Use distortion correction values k0,k1.\n"
 		"   -s              Stitch mode.\n"
 		"   -w <width>      Width of result image.\n"
 		"   -h <height>     Height of result image.\n"
@@ -325,12 +326,13 @@ int main(int argc, char** argv) {
 	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
 	int jpeg_flag = 0, tiff_flag = 0;
 	double stitch_from = 0.0, stitch_to = 380.0;
+	double dist_k0 = 0.0, dist_k1 = 0.0;
 	char *outpath;
 	Fl_Scroll *scroll;
 
 
 	err = 0;
-	while ((c = getopt(argc, argv, ":?d:v:s:w:h:j:t:")) != EOF) {
+	while ((c = getopt(argc, argv, ":?d:v:s:w:h:j:t:u:")) != EOF) {
 		switch (c) {  
 			case '?':
 				usage();
@@ -348,6 +350,14 @@ int main(int argc, char** argv) {
 					stitch_from = atof(optarg);
 					if (strchr(optarg, ',')) {
 						stitch_to = atof(strchr(optarg, ',') + 1);
+					}
+				}
+				break;
+			case 'u':
+				if (optarg && strcmp(optarg, ":")) {
+					dist_k0 = atof(optarg);
+					if (strchr(optarg, ',')) {
+						dist_k1 = atof(strchr(optarg, ',') + 1);
 					}
 				}
 				break;
@@ -419,6 +429,7 @@ int main(int argc, char** argv) {
 		control_win->label(img_file);
 	}
 
+	gipf->set_distortion_params(dist_k0, dist_k1);
 	view_win->size(gipf->w(), gipf->h());
 	scroll->size(gipf->w(), gipf->h());
 

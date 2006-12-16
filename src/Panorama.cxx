@@ -257,6 +257,13 @@ Panorama::set_scale(double s) {
 }
 
 void
+Panorama::set_distortion_params(double k0, double k1) {
+	parms.k0 = k0;
+	parms.k1 = k1;
+	update_coordinates();
+}
+
+void
 Panorama::set_height_dist_ratio(double r) {
 	height_dist_ratio = r;
 	update_close_mountains();

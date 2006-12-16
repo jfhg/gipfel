@@ -37,7 +37,7 @@ ProjectionTangentialLSQ::comp_params(const Hills *h, ViewParams *parms) {
 	double a_center_tmp, scale_tmp, a_nick_tmp;
 
 	if (h->get_num() < 2) {
-		fprintf(stderr, "Please position at least 3 hills\n");
+		fprintf(stderr, "Please position at least 2 hills\n");
 		return 1;
 	} else if (h->get_num() > 3) {
 		fprintf(stderr, "Performing calibration\n");
@@ -244,31 +244,7 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 
 	gsl_multifit_fdfsolver_free (s);
 
-	double t_x, t_y;
-	get_coordinates(h->get(0)->a_view, h->get(0)->a_nick, parms, &t_x, &t_y);
-	fprintf(stderr, "center %f, view %f, nick %f, x %f (%f), dx %f, y %f (%f), dy %f\n",
-		parms->a_center / deg2rad,
-		h->get(0)->a_view, h->get(0)->a_nick,
-		h->get(0)->x,
-		t_x,
-		h->get(0)->x - mac_x(parms->a_center, 
-			parms->a_nick,
-			parms->a_tilt,
-			parms->scale,
-			parms->k0,
-			parms->k1,
-			h->get(0)->a_view, h->get(0)->a_nick),
-		h->get(0)->y,
-		t_y,
-		h->get(0)->y - mac_y(parms->a_center, 
-			parms->a_nick,
-			parms->a_tilt,
-			parms->scale,
-			parms->k0,
-			parms->k1,
-			h->get(0)->a_view, h->get(0)->a_nick));
-
-
+	fprintf(stderr, "k0 %f, k1 %f\n", parms->k0, parms->k1);
 
 	return 0;
 }

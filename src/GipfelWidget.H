@@ -108,6 +108,8 @@ class GipfelWidget : public Fl_Widget {
 
 		void set_projection(Projection::Projection_t p);
 
+		void set_distortion_params(double k0, double k1);
+
 		Hills *get_mountains();
 
 		int comp_params();
