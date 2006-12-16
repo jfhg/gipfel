@@ -27,7 +27,7 @@ class Hill {
 		double a_view;
 		double a_nick;
 		double dist;
-		int x, y;
+		double x, y;
 		int label_x, label_y;
 		char *name;
 		int flags;

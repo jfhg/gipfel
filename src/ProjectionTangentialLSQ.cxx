@@ -22,6 +22,8 @@ static double sec(double a) {
 	return 1.0 / cos(a);
 }
 
+static double pi_d = asin(1.0) * 2.0, deg2rad = pi_d / 180.0;
+
 #include "lsq_funcs.c"
 
 static double
@@ -57,23 +59,15 @@ ProjectionTangentialLSQ::comp_params(const Hills *h, ViewParams *parms) {
 		scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
 	}
 
-	a_center_tmp = comp_center_angle(m1->alph, m2->alph, m1->x, m2->x);
-	a_nick_tmp   = atan ((m1->y + tan(m1->a_nick) * parms->scale) / 
-		(parms->scale - m1->y * tan(m1->a_nick)));
 
-	if (isnan(a_center_tmp) || isnan(scale_tmp) ||
-		scale_tmp < 100.0 || isnan(a_nick_tmp)) {
+	if (isnan(scale_tmp) || scale_tmp < 100.0) {
 		return 1;
 	} else {
 
-		parms->a_center = a_center_tmp;
+		parms->a_center = m1->alph;
 		parms->scale    = scale_tmp;
-		parms->a_nick   = a_nick_tmp;
+		parms->a_nick   = 0.0;
 		parms->a_tilt   = 0.0;
-
-		if (angle_dist(parms->a_center, m1->alph) > pi_d/2.0) {
-			parms->a_center = parms->a_center + pi_d;
-		}
 
 		lsq(h, parms);
 
@@ -107,7 +101,7 @@ struct data {
 	const ViewParams *old_params;
 };
 
-#define CALL(A) A(c_view, c_nick, c_tilt, scale, k0, k1, u0, v0, m->a_view, m->a_nick) 
+#define CALL(A) A(c_view, c_nick, c_tilt, scale, k0, k1, m->a_view, m->a_nick) 
 
 static int
 lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
@@ -121,30 +115,19 @@ lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
 	if (x->size >= 6) {
 		k0  = gsl_vector_get (x, 4);
 		k1 = gsl_vector_get (x, 5);
-#if 0
-		u0 = gsl_vector_get (x, 6);
-		v0 = gsl_vector_get (x, 7);
-#else 
-		u0 = dat->old_params->u0;
-		v0 = dat->old_params->v0;
-#endif
-
-
 	} else {
 		k0 = dat->old_params->k0;
 		k1 = dat->old_params->k1;
-		u0 = dat->old_params->u0;
-		v0 = dat->old_params->v0;
 	}
 
 	for (int i=0; i<dat->h->get_num(); i++) {
 		Hill *m = dat->h->get(i);
 
-		double x = CALL(mac_x);
-		double y = CALL(mac_y);
+		double mx = CALL(mac_x);
+		double my = CALL(mac_y);
 
-		gsl_vector_set (f, i*2, x - m->x);
-		gsl_vector_set (f, i*2+1, y - m->y);
+		gsl_vector_set (f, i*2, mx - m->x);
+		gsl_vector_set (f, i*2+1, my - m->y);
 	}
 
 	return GSL_SUCCESS;
@@ -163,19 +146,9 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
     if (x->size >= 6) {
         k0  = gsl_vector_get (x, 4);
         k1 = gsl_vector_get (x, 5);
-#if 0
-        u0 = gsl_vector_get (x, 6);
-        v0 = gsl_vector_get (x, 7);
-#else
-        u0 = dat->old_params->u0;
-        v0 = dat->old_params->v0;
-
-#endif
     } else {
         k0 = dat->old_params->k0;
         k1 = dat->old_params->k1;
-        u0 = dat->old_params->u0;
-        v0 = dat->old_params->v0;
     }            
 
 	for (int i=0; i<dat->h->get_num(); i++) {
@@ -188,10 +161,6 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 		if (x->size >= 6) {
 			gsl_matrix_set (J, 2*i, 4, CALL(mac_x_dk0));
 			gsl_matrix_set (J, 2*i, 5, CALL(mac_x_dk1));
-#if 0
-			gsl_matrix_set (J, 2*i, 6, CALL(mac_x_du0));
-			gsl_matrix_set (J, 2*i, 7, CALL(mac_x_dv0));
-#endif
 		}
 
 		gsl_matrix_set (J, 2*i+1, 0, CALL(mac_y_dc_view));
@@ -201,10 +170,6 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 		if (x->size >= 6) {
 			gsl_matrix_set (J, 2*i+1, 4, CALL(mac_y_dk0));
 			gsl_matrix_set (J, 2*i+1, 5, CALL(mac_y_dk1));
-#if 0
-			gsl_matrix_set (J, 2*i+1, 6, CALL(mac_y_du0));
-			gsl_matrix_set (J, 2*i+1, 7, CALL(mac_y_dv0));
-#endif
 		}
 	}
 
@@ -230,6 +195,11 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 	int status;
 	int num_params = h->get_num()>3?6:4;
 
+	fprintf(stderr, "x %f, y %f\n",
+		h->get(0)->x,
+		h->get(0)->y);
+
+
 	dat.h = h;
 	dat.old_params = parms;
 
@@ -239,8 +209,6 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 	x_init[3] = parms->scale;
 	x_init[4] = parms->k0;
 	x_init[5] = parms->k1;
-	x_init[6] = parms->u0;
-	x_init[7] = parms->v0;
 
 	x = gsl_vector_view_array (x_init, num_params);
 
@@ -263,6 +231,7 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 			break;
 		}
 
+		fprintf(stderr, "%d, |f(x)| = %g\n", i, gsl_blas_dnrm2 (s->f));
 	} 
 
 	parms->a_center = gsl_vector_get(s->x, 0);
@@ -273,16 +242,30 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 	if (num_params == 6) {
 		parms->k0 = gsl_vector_get(s->x, 4);
 		parms->k1 = gsl_vector_get(s->x, 5);
-#if 0
-		parms->u0 = gsl_vector_get(s->x, 6);
-		parms->v0 = gsl_vector_get(s->x, 7);
-#endif
 	}
 
 	gsl_multifit_fdfsolver_free (s);
 
-	fprintf(stderr, "k0 %f k1 %f u0 %f v0 %f\n",
-		parms->k0, parms->k1, parms->u0, parms->v0);
+	fprintf(stderr, "center %f, x %f, dx %f, y %f, dy %f\n",
+		parms->a_center / deg2rad,
+		h->get(0)->x,
+		h->get(0)->x - mac_x(parms->a_center, 
+			parms->a_nick,
+			parms->a_tilt,
+			parms->scale,
+			parms->k0,
+			parms->k1,
+			h->get(0)->a_view, h->get(0)->a_nick),
+		h->get(0)->y,
+		h->get(0)->y - mac_y(parms->a_center, 
+			parms->a_nick,
+			parms->a_tilt,
+			parms->scale,
+			parms->k0,
+			parms->k1,
+			h->get(0)->a_view, h->get(0)->a_nick));
+
+
 
 	return 0;
 }
@@ -292,9 +275,11 @@ ProjectionTangentialLSQ::get_coordinates(double a_view, double a_nick,
 	const ViewParams *parms, double *x, double *y) {
 
 	*x = mac_x(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale,
-		parms->k0, parms->k1, parms->u0, parms->v0, a_view, a_nick); 
+		parms->k0, parms->k1, a_view, a_nick); 
 	*y = mac_y(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale,
-		parms->k0, parms->k1, parms->u0, parms->v0, a_view, a_nick); 
+		parms->k0, parms->k1, a_view, a_nick); 
+
+	fprintf(stderr, "==> %f %f\n", *x, *y);
 }
 
 double

@@ -164,7 +164,7 @@ Panorama::guess(Hills *p, Hill *m1) {
 	Hills h;
 	double best = 100000000.0, v;
 	double a_center_best, a_nick_best, a_tilt_best, scale_best;
-	int x1_sav, y1_sav;
+	double x1_sav, y1_sav;
 	int i, j;
 
 	if (m1 == NULL) {
@@ -475,7 +475,6 @@ Panorama::update_visible_mountains() {
 		m = close_mountains->get(i);
 
 		m->a_view = m->alph - parms.a_center;
-
 		if (m->a_view > pi_d) {
 			m->a_view -= 2.0*pi_d;
 		} else if (m->a_view < -pi_d) {
@@ -499,11 +498,7 @@ Panorama::update_coordinates() {
 
 	for (int i=0; i<visible_mountains->get_num(); i++) {
 		m = visible_mountains->get(i);
-		double tmp_x, tmp_y;
-
-		proj->get_coordinates(m->a_view, m->a_nick, &parms, &tmp_x, &tmp_y);
-		m->x = (int) rint(tmp_x);
-		m->y = (int) rint(tmp_y);
+		proj->get_coordinates(m->a_view, m->a_nick, &parms, &m->x, &m->y);
 	}
 }
 

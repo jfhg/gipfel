@@ -2,23 +2,23 @@
  * This is the basic pinhole projection model with distortion correction
  */
 
-x_undist_unrot : tan(m_view - c_view);
-y_undist_unrot : tan(c_nick - m_nick); 
-d : (u0 - x_undist_unrot) ^ 2 + (v0 - y_undist_unrot) ^ 2;
+x : tan(m_view - c_view);
+y : tan(c_nick - m_nick); 
+x_rot : y * sin(c_tilt) + x * cos(c_tilt);
+y_rot : y * cos(c_tilt) - x * sin(c_tilt);
+d : x_rot ^ 2 + y_rot ^ 2;
 dist_fact : d ^ 2 * k1 + d * k0;
-x_unrot : x_undist_unrot * (1 + dist_fact);
-y_unrot : y_undist_unrot * (1 + dist_fact);
-x : scale * (y_unrot * sin(c_tilt) + x_unrot * cos(c_tilt));
-y : scale * (y_unrot * cos(c_tilt) - x_unrot * sin(c_tilt));
+x_dist : x_rot * (1 + dist_fact) * scale;
+y_dist : y_rot * (1 + dist_fact) * scale;
 
 /*
  * Some mangling for C code generation
  */
 
-x_expand : trigexpand(x);
-y_expand : trigexpand(y);
+x_expand : trigexpand(x_dist);
+y_expand : trigexpand(y_dist);
 
-args: "(double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double u0, double v0, double m_view, double m_nick)";
+args: "(double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick)";
 
 printfunc(name, expression) := sprint("static double", name, args, "{ return ", string(subst(pow, "^", expression)), ";}", "
 ");
@@ -32,13 +32,9 @@ printfunc("mac_x_dc_tilt", diff(x_expand, c_tilt));
 printfunc("mac_x_dscale", diff(x_expand, scale));
 printfunc("mac_x_dk0", diff(x_expand, k0));
 printfunc("mac_x_dk1", diff(x_expand, k1));
-printfunc("mac_x_du0", diff(x_expand, u0));
-printfunc("mac_x_dv0", diff(x_expand, v0));
 printfunc("mac_y_dc_view", diff(y_expand, c_view));
 printfunc("mac_y_dc_nick", diff(y_expand, c_nick));
 printfunc("mac_y_dc_tilt", diff(y_expand, c_tilt));
 printfunc("mac_y_dscale", diff(y_expand, scale));
 printfunc("mac_y_dk0", diff(y_expand, k0));
 printfunc("mac_y_dk1", diff(y_expand, k1));
-printfunc("mac_y_du0", diff(x_expand, u0));
-printfunc("mac_y_dv0", diff(x_expand, v0));

@@ -214,8 +214,6 @@ void
 GipfelWidget::draw() {
 	Hills *mnts;
 	Hill *m;
-	int center_x = w() / 2;
-	int center_y = h() / 2;
 	int i;
 
 	if (img == NULL) {
@@ -230,6 +228,8 @@ GipfelWidget::draw() {
 	mnts = pan->get_visible_mountains();
 	for (i=0; i<mnts->get_num(); i++) {
 		m = mnts->get(i);
+		int m_x = w() / 2 + x() + (int) rint(m->x);
+		int m_y = h() / 2 + y() + (int) rint(m->y);
 
 		if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT)) {
 			continue;
@@ -241,29 +241,17 @@ GipfelWidget::draw() {
 
 		if (known_hills->contains(m)) {
 			fl_color(FL_RED);
-			draw_flag(center_x + m->x + x(), center_y + m->y + y(), "1");
+			draw_flag(m_x, m_y, "1");
 		} else if (m->flags & Hill::HIDDEN) {
 			fl_color(FL_BLUE);
 		} else {
 			fl_color(FL_BLACK);
 		}
 
-		fl_xyline(center_x + m->x + x() - CROSS_SIZE, center_y + m->y + y(), center_x + m->x + x() + CROSS_SIZE);
-		fl_yxline(center_x + m->x + x(), center_y + m->y + m->label_y + y() - CROSS_SIZE, center_y + m->y + y() + CROSS_SIZE);
+		fl_xyline(m_x- CROSS_SIZE, m_y, m_x + CROSS_SIZE);
+		fl_yxline(m_x, m_y + m->label_y - CROSS_SIZE, m_y + CROSS_SIZE);
 
-		fl_draw(m->name, 
-			center_x + m->x + x(), 
-			center_y + m->y + m->label_y + y());
-	}
-
-	/* markers */
-	for (i=0; i<marker->get_num(); i++) {
-		m = marker->get(i);
-
-		fl_color(FL_GREEN);
-		fl_xyline(center_x + m->x + x() - CROSS_SIZE * 2, center_y + m->y + y(), center_x + m->x + x() + CROSS_SIZE * 2);
-		fl_yxline(center_x + m->x + x(), center_y + m->y + y() - CROSS_SIZE * 2, center_y + m->y + y() + CROSS_SIZE * 2);
-		draw_flag(center_x + m->x + x(), center_y + m->y + y(), NULL);
+		fl_draw(m->name, m_x , m_y + m->label_y);
 	}
 
 	/* track */
@@ -271,6 +259,9 @@ GipfelWidget::draw() {
 		int last_x, last_y, last_initialized = 0;
 
 		for (i=1; i<track_points->get_num(); i++) {
+			m = mnts->get(i);
+			int m_x = w() / 2 + x() + (int) rint(m->x);
+			int m_y = h() / 2 + y() + (int) rint(m->y);
 			if (!(track_points->get(i)->flags & Hill::VISIBLE)) {
 				continue;
 			}
@@ -285,14 +276,13 @@ GipfelWidget::draw() {
 				get_rel_track_width(track_points->get(i)));
 			if (last_initialized) {
 				fl_begin_line();
-				fl_vertex(center_x + x() + last_x, center_y + y() + last_y);
-				fl_vertex(center_x + x() + track_points->get(i)->x, 
-					center_y + y() + track_points->get(i)->y);
+				fl_vertex(last_x, last_y);
+				fl_vertex(m_x, m_y);
 				fl_end_line();
 			}
 
-			last_x = track_points->get(i)->x;
-			last_y = track_points->get(i)->y;
+			last_x = m_x;
+			last_y = m_y;
 			last_initialized++;
 		}
 		fl_line_style(0);
@@ -303,7 +293,7 @@ GipfelWidget::draw() {
 
 
 static int 
-overlap(int m1, int n1, int m2, int n2) {
+overlap(double m1, double n1, double m2, double n2) {
 	return m1 <= n2 && n1 >= m2; 
 }
 
