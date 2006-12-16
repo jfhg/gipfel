@@ -15,6 +15,7 @@
 #include "Stitch.H"
 
 static double pi_d = asin(1.0) * 2.0;
+static double deg2rad = pi_d / 180.0;
 
 Stitch::Stitch() {
 	for (int i=0; i<MAX_PICS; i++) {
@@ -79,6 +80,10 @@ Stitch::set_output(const char *file, OutputImage *img) {
 int
 Stitch::resample(int w, int h,
 	double view_start, double view_end) {
+
+	view_start = view_start * deg2rad;
+	view_end = view_end * deg2rad;
+
 	double step_view = (view_end - view_start) / w;
 	uchar r, g, b;
 	int y_off = h / 2;
