@@ -52,7 +52,7 @@ Fl_Menu_Bar *mb;
 #define STITCH_PREVIEW 1
 #define STITCH_JPEG    2
 #define STITCH_TIFF    4
-static int stitch(int stitch_w, int stitch_h, int type, const char *path,
+static int stitch(int stitch_w, int stitch_h, double from, double to, int type, const char *path,
 	int argc, char **argv);
 
 void set_values() {
@@ -324,12 +324,13 @@ int main(int argc, char** argv) {
 	int err, bflag = 0, dflag = 0, my_argc;
 	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
 	int jpeg_flag = 0, tiff_flag = 0;
+	double stitch_from = 0.0, stitch_to = 380.0;
 	char *outpath;
 	Fl_Scroll *scroll;
 
 
 	err = 0;
-	while ((c = getopt(argc, argv, "?d:v:sw:h:j:t:")) != EOF) {
+	while ((c = getopt(argc, argv, ":?d:v:s:w:h:j:t:")) != EOF) {
 		switch (c) {  
 			case '?':
 				usage();
@@ -343,6 +344,12 @@ int main(int argc, char** argv) {
 				break;
 			case 's':
 				stitch_flag++;
+				if (optarg && strcmp(optarg, ":")) {
+					stitch_from = atof(optarg);
+					if (strchr(optarg, ',')) {
+						stitch_to = atof(strchr(optarg, ',') + 1);
+					}
+				}
 				break;
 			case 'j':
 				jpeg_flag++;
@@ -383,7 +390,9 @@ int main(int argc, char** argv) {
 		} else if (tiff_flag) {
 			type = STITCH_TIFF;
 		}
-		stitch(stitch_w, stitch_h, type, outpath, my_argc, my_argv);
+
+		stitch(stitch_w, stitch_h, stitch_from, stitch_to,
+			type, outpath, my_argc, my_argv);
 		exit(0);
 	}
 
@@ -434,7 +443,10 @@ int main(int argc, char** argv) {
 	return Fl::run();
 }
 
-static int stitch(int stitch_w, int stitch_h, int type, const char *path, int argc, char **argv) {
+static int
+stitch(int stitch_w, int stitch_h, double from, double to,
+	int type, const char *path, int argc, char **argv) {
+
 	Fl_Window *win;
 	Fl_Scroll *scroll;
 	Stitch *st = new Stitch();
@@ -446,7 +458,7 @@ static int stitch(int stitch_w, int stitch_h, int type, const char *path, int ar
 	if (type == STITCH_JPEG) {
 
 		st->set_output((OutputImage*) new JPEGOutputImage(path, 90));
-		st->resample(stitch_w, stitch_h, 0.0, 7.0);
+		st->resample(stitch_w, stitch_h, from, to);
 
 	} else if (type == STITCH_TIFF) {
 
@@ -462,7 +474,7 @@ static int stitch(int stitch_w, int stitch_h, int type, const char *path, int ar
 			st->set_output(argv[i], (OutputImage*) new TIFFOutputImage(buf));
 		}
 
-		st->resample(stitch_w, stitch_h, 0.0, 7.0);
+		st->resample(stitch_w, stitch_h, from, to);
 
 	} else {
 		win = new Fl_Window(0,0, stitch_w, stitch_h);
@@ -473,7 +485,7 @@ static int stitch(int stitch_w, int stitch_h, int type, const char *path, int ar
 		win->resizable(scroll);
 		win->show(0, argv); 
 		st->set_output((OutputImage*) img);
-		st->resample(stitch_w, stitch_h, 0.0, 7.0);
+		st->resample(stitch_w, stitch_h, from, to);
 		img->redraw();
 		Fl::run();
 	}
