@@ -41,8 +41,7 @@ class ImageMetaData {
 		double get_tilt();
 		double get_focal_length_35mm();
 		int    get_projection_type();
-		void get_distortion_params(double *_k0, double *_k1,
-			double *_u0, double *_v0);
+		void get_distortion_params(double *_k0, double *_k1);
 
 		void set_longitude(double v);
 		void set_latitude(double v);
@@ -52,7 +51,6 @@ class ImageMetaData {
 		void set_tilt(double v);
 		void set_focal_length_35mm(double v);
 		void set_projection_type(int v);
-		void set_distortion_params(double _k0, double _k1,
-			double _u0, double _v0);
+		void set_distortion_params(double _k0, double _k1);
 };
 #endif

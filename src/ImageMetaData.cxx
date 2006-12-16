@@ -128,7 +128,7 @@ ImageMetaData::load_image_exif(char *name) {
 
 
 #define GIPFEL_FORMAT_1 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, scale %lf, projection type %d"
-#define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focal_length_35mm %lf, projection type %d, k0 %lf, k1 %lf, u0 %lf, v0 %lf"
+#define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focal_length_35mm %lf, projection type %d, k0 %lf, k1 %lf"
 
 int
 ImageMetaData::load_image_jpgcom(char *name) {
@@ -137,7 +137,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
     pid_t pid;
     int status;
     char buf[1024];
-    double lo, la, he, dir, ni, ti, fr, _k0, _k1, _u0, _v0;
+    double lo, la, he, dir, ni, ti, fr, _k0, _k1;
     int pt;
     int n, ret = 1;
 
@@ -150,7 +150,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
     if (p) {
         while (fgets(buf, sizeof(buf), p) != NULL) {
             if ((n = sscanf(buf, GIPFEL_FORMAT_2,
-                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &_k0, &_k1, &_u0, &_v0)) >= 8) {
+                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &_k0, &_k1)) >= 8) {
 
                 longitude = lo;
                 latitude  = la;
@@ -161,11 +161,9 @@ ImageMetaData::load_image_jpgcom(char *name) {
                 focal_length_35mm = fr;
                 projection_type = pt;
 
-				if (n >= 12) {
+				if (n >= 10) {
 					k0 = _k0;
 					k1 = _k1;
-					u0 = _u0;
-					v0 = _v0;
 				}
 
                 ret = 0;
@@ -352,19 +350,13 @@ ImageMetaData::set_projection_type(int v) {
 }
 
 void
-ImageMetaData::get_distortion_params(double *_k0, double *_k1,
-	double *_u0, double *_v0) {
+ImageMetaData::get_distortion_params(double *_k0, double *_k1) {
 	*_k0 = k0;	
 	*_k1 = k1;	
-	*_u0 = u0;	
-	*_v0 = v0;	
 }
 
 void
-ImageMetaData::set_distortion_params(double _k0, double _k1,
-	double _u0, double _v0) {
+ImageMetaData::set_distortion_params(double _k0, double _k1) {
 	k0 = _k0;	
 	k1 = _k1;	
-	u0 = _u0;	
-	v0 = _v0;	
 }

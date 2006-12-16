@@ -43,8 +43,6 @@ ProjectionTangentialLSQ::comp_params(const Hills *h, ViewParams *parms) {
 		fprintf(stderr, "Performing calibration\n");
 		parms->k0 = 0.0;
 		parms->k1 = 0.0;
-		parms->u0 = 0.0;
-		parms->v0 = 0.0;
 	}
 
 	m1 = h->get(0);
