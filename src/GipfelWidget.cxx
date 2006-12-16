@@ -673,7 +673,7 @@ GipfelWidget::handle(int event) {
 
 int
 GipfelWidget::get_pixel(double a_view, double a_nick,
-	char *r, char *g, char *b) {
+	uchar *r, uchar *g, uchar *b) {
 	double px, py;
 
 
@@ -685,13 +685,13 @@ GipfelWidget::get_pixel(double a_view, double a_nick,
 		return 1;
 	}
 
-	return get_pixel_nearest(img, px + ((double) img->w()) / 2.0,
+	return get_pixel_bilinear(img, px + ((double) img->w()) / 2.0,
 		py + ((double) img->h()) / 2.0, r, g, b);
 }
 
 int
 GipfelWidget::get_pixel_nearest(Fl_Image *img, double x, double y,
-	char *r, char *g, char *b) {
+	uchar *r, uchar *g, uchar *b) {
 	if (isnan(x) || isnan(y)) {
 		return 1;
 	} else {
@@ -699,10 +699,48 @@ GipfelWidget::get_pixel_nearest(Fl_Image *img, double x, double y,
 	}
 }
 
+int
+GipfelWidget::get_pixel_bilinear(Fl_Image *img, double x, double y,
+	uchar *r, uchar *g, uchar *b) {
+	uchar a_r[4] = {0, 0, 0, 0};
+	uchar a_g[4] = {0, 0, 0, 0};
+	uchar a_b[4] = {0, 0, 0, 0};
+	float v0 , v1;
+	int fl_x = (int) floor(x);
+	int fl_y = (int) floor(y);
+	int i, n;
+
+	i = 0;
+	n = 0;
+	for (int iy = 0; iy <= 1; iy++) {
+		for (int ix = 0; ix <= 1; ix++) {
+			n += get_pixel(img, fl_x + ix, fl_y + iy, &(a_r[i]), &(a_g[i]), &(a_b[i]));
+			i++;
+		}
+	}
+
+	v0 = a_r[0] * (1 - (x - fl_x)) + a_r[1] * (x - fl_x);
+	v1 = a_r[2] * (1 - (x - fl_x)) + a_r[3] * (x - fl_x);
+	*r = (uchar) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
+
+	v0 = a_g[0] * (1 - (x - fl_x)) + a_g[1] * (x - fl_x);
+	v1 = a_g[2] * (1 - (x - fl_x)) + a_g[3] * (x - fl_x);
+	*g = (uchar) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
+
+	v0 = a_b[0] * (1 - (x - fl_x)) + a_b[1] * (x - fl_x);
+	v1 = a_b[2] * (1 - (x - fl_x)) + a_b[3] * (x - fl_x);
+	*b = (uchar) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
+
+	if (n >= 1) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
 
 int
 GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
-	char *r, char *g, char *b) {
+                     uchar *r, uchar *g, uchar *b) {
 	if ( img->d() == 0 ) {
 		return 1;
 	}

@@ -37,10 +37,13 @@ class GipfelWidget : public Fl_Widget {
 		int get_rel_track_width(Hill *m);
 
 		static int get_pixel_nearest(Fl_Image *img, double x, double y,
-			char *r, char *g, char *b);
+                     uchar *r, uchar *g, uchar *b);
+
+  static int get_pixel_bilinear(Fl_Image *img, double x, double y,
+                     uchar *r, uchar *g, uchar *b);
 
 		static int get_pixel(Fl_Image *img, int x, int y,
-			char *r, char *g, char *b);
+                     uchar *r, uchar *g, uchar *b);
 
 	public:
 		GipfelWidget(int X,int Y,int W, int H);
@@ -114,7 +117,7 @@ class GipfelWidget : public Fl_Widget {
 		int update();
 
 		int get_pixel(double a_view, double a_nick,
-			char *r, char *g, char *b);
+                    uchar *r, uchar *g, uchar *b);
 
 		void draw();
 };
