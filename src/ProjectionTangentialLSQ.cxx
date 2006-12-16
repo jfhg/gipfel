@@ -193,10 +193,7 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 	int status;
 	int num_params = h->get_num()>3?6:4;
 
-	fprintf(stderr, "x %f, y %f\n",
-		h->get(0)->x,
-		h->get(0)->y);
-
+	fprintf(stderr, "k0 %f, k1 %f num %d\n", parms->k0, parms->k1, num_params);
 
 	dat.h = h;
 	dat.old_params = parms;

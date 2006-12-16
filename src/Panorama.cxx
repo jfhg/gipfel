@@ -583,20 +583,9 @@ Panorama::get_real_distance(Hill *m) {
 }
 
 int
-Panorama::get_coordinates(double a_view, double a_nick, double *x, double *y) {
-	a_view = a_view - parms.a_center;
+Panorama::get_coordinates(double a_alph, double a_nick, double *x, double *y) {
 
-	if (a_view > pi_d) {
-		a_view -= 2.0*pi_d;
-	} else if (a_view < -pi_d) {
-		a_view += 2.0*pi_d;
-	}
-
-	if (a_view > view_angle || a_view < - view_angle) {
-		return 1;
-	}
-
-	proj->get_coordinates(a_view, a_nick, &parms, x, y);
+	proj->get_coordinates(a_alph, a_nick, &parms, x, y);
 
 	return 0;
 }

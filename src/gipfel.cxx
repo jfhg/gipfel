@@ -324,7 +324,7 @@ int main(int argc, char** argv) {
 	char *view_point = NULL;
 	int err, bflag = 0, dflag = 0, my_argc;
 	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
-	int jpeg_flag = 0, tiff_flag = 0;
+	int jpeg_flag = 0, tiff_flag = 0, distortion_flag = 0;
 	double stitch_from = 0.0, stitch_to = 380.0;
 	double dist_k0 = 0.0, dist_k1 = 0.0;
 	char *outpath;
@@ -354,6 +354,7 @@ int main(int argc, char** argv) {
 				}
 				break;
 			case 'u':
+				distortion_flag++;
 				if (optarg && strcmp(optarg, ":")) {
 					dist_k0 = atof(optarg);
 					if (strchr(optarg, ',')) {
@@ -429,7 +430,10 @@ int main(int argc, char** argv) {
 		control_win->label(img_file);
 	}
 
-	gipf->set_distortion_params(dist_k0, dist_k1);
+	if (distortion_flag) {
+		gipf->set_distortion_params(dist_k0, dist_k1);
+	}
+
 	view_win->size(gipf->w(), gipf->h());
 	scroll->size(gipf->w(), gipf->h());
 

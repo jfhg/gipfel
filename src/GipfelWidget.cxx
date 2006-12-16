@@ -678,16 +678,15 @@ GipfelWidget::handle(int event) {
 }
 
 int
-GipfelWidget::get_pixel(double a_view, double a_nick,
+GipfelWidget::get_pixel(double a_alph, double a_nick,
 	uchar *r, uchar *g, uchar *b) {
 	double px, py;
-
 
 	if (img == NULL) {
 		return 1;
 	}
 
-	if (pan->get_coordinates(a_view, a_nick, &px, &py) != 0) {
+	if (pan->get_coordinates(a_alph, a_nick, &px, &py) != 0) {
 		return 1;
 	}
 
