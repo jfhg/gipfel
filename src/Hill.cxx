@@ -40,7 +40,7 @@ Hill::Hill(const Hill& h) {
 	flags = h.flags;
 }
 
-Hill::Hill(int x_tmp, int y_tmp) {
+Hill::Hill(double x_tmp, double y_tmp) {
 	name = NULL;
 	phi = 0.0;
 	lam = 0.0;

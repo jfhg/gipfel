@@ -99,7 +99,7 @@ struct data {
 	const ViewParams *old_params;
 };
 
-#define CALL(A) A(c_view, c_nick, c_tilt, scale, k0, k1, m->a_view, m->a_nick) 
+#define CALL(A) A(c_view, c_nick, c_tilt, scale, k0, k1, m->alph, m->a_nick) 
 
 static int
 lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
@@ -244,9 +244,13 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 
 	gsl_multifit_fdfsolver_free (s);
 
-	fprintf(stderr, "center %f, x %f, dx %f, y %f, dy %f\n",
+	double t_x, t_y;
+	get_coordinates(h->get(0)->a_view, h->get(0)->a_nick, parms, &t_x, &t_y);
+	fprintf(stderr, "center %f, view %f, nick %f, x %f (%f), dx %f, y %f (%f), dy %f\n",
 		parms->a_center / deg2rad,
+		h->get(0)->a_view, h->get(0)->a_nick,
 		h->get(0)->x,
+		t_x,
 		h->get(0)->x - mac_x(parms->a_center, 
 			parms->a_nick,
 			parms->a_tilt,
@@ -255,6 +259,7 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 			parms->k1,
 			h->get(0)->a_view, h->get(0)->a_nick),
 		h->get(0)->y,
+		t_y,
 		h->get(0)->y - mac_y(parms->a_center, 
 			parms->a_nick,
 			parms->a_tilt,
@@ -269,15 +274,13 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 }
 
 void 
-ProjectionTangentialLSQ::get_coordinates(double a_view, double a_nick,
+ProjectionTangentialLSQ::get_coordinates(double alph, double a_nick,
 	const ViewParams *parms, double *x, double *y) {
 
 	*x = mac_x(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale,
-		parms->k0, parms->k1, a_view, a_nick); 
+		parms->k0, parms->k1, alph, a_nick); 
 	*y = mac_y(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale,
-		parms->k0, parms->k1, a_view, a_nick); 
-
-	fprintf(stderr, "==> %f %f\n", *x, *y);
+		parms->k0, parms->k1, alph, a_nick); 
 }
 
 double

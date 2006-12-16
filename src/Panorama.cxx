@@ -498,7 +498,7 @@ Panorama::update_coordinates() {
 
 	for (int i=0; i<visible_mountains->get_num(); i++) {
 		m = visible_mountains->get(i);
-		proj->get_coordinates(m->a_view, m->a_nick, &parms, &m->x, &m->y);
+		proj->get_coordinates(m->alph, m->a_nick, &parms, &m->x, &m->y);
 	}
 }
 

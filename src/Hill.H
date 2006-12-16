@@ -36,7 +36,7 @@ class Hill {
 
 		Hill(const Hill& h);
 
-		Hill(int x_tmp, int y_tmp);
+		Hill(double x_tmp, double y_tmp);
 
 		~Hill();  
 };
