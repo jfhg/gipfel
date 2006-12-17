@@ -1,5 +1,5 @@
 /*
- * This is the basic pinhole projection model with distortion correction
+ * rectilinear (pinhole) projection model with distortion correction
  */
 
 x : tan(m_view - c_view)$
