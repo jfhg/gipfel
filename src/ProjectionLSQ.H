@@ -20,11 +20,19 @@ class ProjectionLSQ {
 		double sec(double a);
 
 	public:
+		typedef enum {
+			RECTILINEAR = 0,
+			CYLINDRICAL = 1
+		} Projection_t;
 
 		ProjectionLSQ();
 
-#define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick
+		void get_coordinates(double a_view, double a_nick,
+			const ViewParams *parms, double *x, double *y);
 
+		int comp_params(const Hills *h, ViewParams *parms);
+
+#define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick
 		virtual double mac_x(ARGS);
 		virtual double mac_y(ARGS);
 		virtual double mac_x_dc_view(ARGS);
@@ -39,18 +47,7 @@ class ProjectionLSQ {
 		virtual double mac_y_dscale(ARGS);
 		virtual double mac_y_dk0(ARGS);
 		virtual double mac_y_dk1(ARGS);
-
 #undef ARGS
 
-
-		typedef enum {
-			RECTILINEAR = 0,
-			CYLINDRICAL = 1
-		} Projection_t;
-
-		void get_coordinates(double a_view, double a_nick,
-			const ViewParams *parms, double *x, double *y);
-
-		int comp_params(const Hills *h, ViewParams *parms);
 };
 #endif

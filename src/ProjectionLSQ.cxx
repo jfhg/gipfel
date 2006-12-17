@@ -267,4 +267,3 @@ double ProjectionLSQ::mac_y_dc_tilt(ARGS) {return NAN;}
 double ProjectionLSQ::mac_y_dscale(ARGS) {return NAN;}
 double ProjectionLSQ::mac_y_dk0(ARGS) {return NAN;}
 double ProjectionLSQ::mac_y_dk1(ARGS) {return NAN;}
-
