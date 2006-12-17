@@ -10,7 +10,6 @@
 #include <math.h>
 
 #include "Panorama.H"
-#include "ProjectionTangential.H"
 #include "ProjectionTangentialLSQ.H"
 #include "ProjectionSphaeric.H"
 

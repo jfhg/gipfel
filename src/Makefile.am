@@ -6,7 +6,6 @@ gipfel_SOURCES = \
 	GipfelWidget.cxx \
 	Panorama.cxx \
 	Projection.cxx \
-	ProjectionTangential.cxx \
 	ProjectionTangentialLSQ.cxx \
 	ProjectionSphaeric.cxx \
 	Hill.cxx \
@@ -24,7 +23,6 @@ noinst_HEADERS = \
 	GipfelWidget.H \
 	Panorama.H \
 	Projection.H \
-	ProjectionTangential.H \
 	ProjectionTangentialLSQ.H \
 	ProjectionSphaeric.H \
 	Hill.H \

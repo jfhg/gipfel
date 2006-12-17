@@ -22,7 +22,7 @@ Requirements
 - libtiff (http://www.remotesensing.org/libtiff/)
 - libjpeg (http://www.ijg.org/)
 - exif utility (http://libexif.sourceforge.net/)
-- ccmath library (http://freshmeat.net/projects/ccmath/)
+- GSL - GNU Scientific Library (http://www.gnu.org/software/gsl/)
 - gipfel works on UNIX-like system (e.g. Linux, *BSD and probably others)
 
 
