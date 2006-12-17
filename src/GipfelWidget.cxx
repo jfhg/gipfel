@@ -237,8 +237,12 @@ GipfelWidget::draw() {
 		}
 
 		if (known_hills->contains(m)) {
-			fl_color(FL_RED);
-			draw_flag(m_x, m_y, "1");
+			if (known_hills->get_num() > 3) {
+				fl_color(FL_GREEN);
+			} else {
+				fl_color(FL_RED);
+			}
+			draw_flag(m_x, m_y, "");
 		} else if (m->flags & Hill::HIDDEN) {
 			fl_color(FL_BLUE);
 		} else {
