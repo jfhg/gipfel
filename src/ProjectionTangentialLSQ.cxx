@@ -28,12 +28,14 @@ int
 ProjectionTangentialLSQ::comp_params(const Hills *h, ViewParams *parms) {
 	const Hill *tmp, *m1, *m2;
 	double scale_tmp;
+	int distortion_correct = 0;
 
 	if (h->get_num() < 2) {
 		fprintf(stderr, "Please position at least 2 hills\n");
 		return 1;
 	} else if (h->get_num() > 3) {
 		fprintf(stderr, "Performing calibration\n");
+		distortion_correct = 1;
 		parms->k0 = 0.0;
 		parms->k1 = 0.0;
 	}
@@ -60,13 +62,18 @@ ProjectionTangentialLSQ::comp_params(const Hills *h, ViewParams *parms) {
 		parms->a_nick   = 0.0;
 		parms->a_tilt   = 0.0;
 
-		lsq(h, parms);
+		lsq(h, parms, 0);
+
+		if (distortion_correct) {
+			lsq(h, parms, 1);
+		}
 
 		return 0;
 	}
 }
 
 struct data {
+	int distortion_correct;
 	const Hills *h;
 	const ViewParams *old_params;
 };
@@ -77,12 +84,12 @@ static int
 lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
 	struct data *dat = (struct data *) data;
 	double c_view, c_nick, c_tilt, scale, k0, k1;
-
+fprintf(stderr, "===> dist %d\n", dat->distortion_correct);
 	c_view = gsl_vector_get (x, 0);
 	c_nick = gsl_vector_get (x, 1);
 	c_tilt = gsl_vector_get (x, 2);
 	scale = gsl_vector_get (x, 3);
-	if (x->size >= 6) {
+	if (dat->distortion_correct) {
 		k0  = gsl_vector_get (x, 4);
 		k1 = gsl_vector_get (x, 5);
 	} else {
@@ -113,7 +120,7 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
     c_nick = gsl_vector_get (x, 1);
     c_tilt = gsl_vector_get (x, 2);
     scale = gsl_vector_get (x, 3);
-    if (x->size >= 6) {
+    if (dat->distortion_correct) {
         k0  = gsl_vector_get (x, 4);
         k1 = gsl_vector_get (x, 5);
     } else {
@@ -128,7 +135,7 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 		gsl_matrix_set (J, 2*i, 1, CALL(mac_x_dc_nick));
 		gsl_matrix_set (J, 2*i, 2, CALL(mac_x_dc_tilt));
 		gsl_matrix_set (J, 2*i, 3, CALL(mac_x_dscale));
-		if (x->size >= 6) {
+		if (dat->distortion_correct) {
 			gsl_matrix_set (J, 2*i, 4, CALL(mac_x_dk0));
 			gsl_matrix_set (J, 2*i, 5, CALL(mac_x_dk1));
 		}
@@ -137,7 +144,7 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 		gsl_matrix_set (J, 2*i+1, 1, CALL(mac_y_dc_nick));
 		gsl_matrix_set (J, 2*i+1, 2, CALL(mac_y_dc_tilt));
 		gsl_matrix_set (J, 2*i+1, 3, CALL(mac_y_dscale));
-		if (x->size >= 6) {
+		if (dat->distortion_correct) {
 			gsl_matrix_set (J, 2*i+1, 4, CALL(mac_y_dk0));
 			gsl_matrix_set (J, 2*i+1, 5, CALL(mac_y_dk1));
 		}
@@ -155,7 +162,9 @@ lsq_fdf (const gsl_vector * x, void *data, gsl_vector * f, gsl_matrix * J) {
 }
 
 int
-ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
+ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms,
+	int distortion_correct) {
+
 	const gsl_multifit_fdfsolver_type *T;
 	gsl_multifit_fdfsolver *s;
 	gsl_multifit_function_fdf f;
@@ -163,10 +172,11 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 	double x_init[8];
 	gsl_vector_view x;
 	int status;
-	int num_params = h->get_num()>3?6:4;
+	int num_params = distortion_correct?6:4;
 
 	fprintf(stderr, "k0 %f, k1 %f num %d\n", parms->k0, parms->k1, num_params);
 
+	dat.distortion_correct = distortion_correct;
 	dat.h = h;
 	dat.old_params = parms;
 
@@ -206,7 +216,7 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms) {
 	parms->a_tilt = gsl_vector_get(s->x, 2);
 	parms->scale = gsl_vector_get(s->x, 3);
 
-	if (num_params == 6) {
+	if (distortion_correct) {
 		parms->k0 = gsl_vector_get(s->x, 4);
 		parms->k1 = gsl_vector_get(s->x, 5);
 	}
