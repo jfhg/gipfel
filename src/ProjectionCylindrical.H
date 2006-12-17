@@ -12,8 +12,9 @@
 class ProjectionCylindrical : public ProjectionLSQ {
 	public:
 
-#define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick
+		virtual double get_view_angle() {return 6.2831853;}; /* 360 deg */
 
+#define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick
 		virtual double mac_x(ARGS);
 		virtual double mac_y(ARGS);
         virtual double mac_x_dc_view(ARGS);
@@ -24,7 +25,6 @@ class ProjectionCylindrical : public ProjectionLSQ {
 		virtual double mac_y_dc_nick(ARGS);
 		virtual double mac_y_dc_tilt(ARGS);
 		virtual double mac_y_dscale(ARGS);
-
 #undef ARGS
 
 };

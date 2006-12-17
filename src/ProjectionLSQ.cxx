@@ -26,6 +26,11 @@ ProjectionLSQ::sec(double a) {
 	return 1.0 / cos(a);
 }
 
+double
+ProjectionLSQ::get_view_angle() {
+	return 0.0;
+}
+
 int
 ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 	const Hill *tmp, *m1, *m2;

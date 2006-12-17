@@ -230,13 +230,12 @@ Panorama::set_projection(ProjectionLSQ::Projection_t p) {
 	switch(projection_type) {
 		case ProjectionLSQ::RECTILINEAR:
 			proj = new ProjectionRectilinear();
-			view_angle = pi_d / 3.0;
 			break;
 		case ProjectionLSQ::CYLINDRICAL:
 			proj = new ProjectionCylindrical();
-			view_angle = pi_d * 2.0;
 			break;
 	}
+
 	update_angles();
 }
 
@@ -400,7 +399,6 @@ Panorama::update_close_mountains() {
 void 
 Panorama::update_visible_mountains() {
 	int i;
-	double a_view;
 	Hill *m;
 
 	visible_mountains->clear();
@@ -408,14 +406,7 @@ Panorama::update_visible_mountains() {
 	for (i=0; i<close_mountains->get_num(); i++) {
 		m = close_mountains->get(i);
 
-		a_view = m->alph - parms.a_center;
-		if (a_view > pi_d) {
-			a_view -= 2.0*pi_d;
-		} else if (a_view < -pi_d) {
-			a_view += 2.0*pi_d;
-		}
-
-		if (a_view < view_angle && a_view > - view_angle) {
+		if (is_visible(m->alph)) {
 			visible_mountains->add(m);
 			m->flags |= Hill::VISIBLE;
 		} else {
@@ -510,9 +501,22 @@ Panorama::get_real_distance(Hill *m) {
 }
 
 int
+Panorama::is_visible(double a_alph) {
+	double center_dist;
+
+	center_dist = fabs(fmod(a_alph - parms.a_center, 2.0 * pi_d));
+
+	return center_dist < proj->get_view_angle();
+}
+
+int
 Panorama::get_coordinates(double a_alph, double a_nick, double *x, double *y) {
 
-	proj->get_coordinates(a_alph, a_nick, &parms, x, y);
 
-	return 0;
+	if (is_visible(a_alph)) {
+		proj->get_coordinates(a_alph, a_nick, &parms, x, y);
+		return 0;
+	} else {
+		return 1;
+	}
 }

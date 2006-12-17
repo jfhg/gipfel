@@ -32,6 +32,8 @@ class ProjectionLSQ {
 
 		int comp_params(const Hills *h, ViewParams *parms);
 
+		virtual double get_view_angle();
+
 #define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick
 		virtual double mac_x(ARGS);
 		virtual double mac_y(ARGS);

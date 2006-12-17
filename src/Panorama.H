@@ -18,7 +18,6 @@ class Panorama {
 		double view_phi, view_lam, view_height;
 		char *view_name;
 		double height_dist_ratio;
-		double view_angle;
 		double hide_value;
 		Hills *mountains;
 		Hills *close_mountains;
@@ -57,6 +56,8 @@ class Panorama {
 		int optimize(Hill *m1, Hill *m2);
 
 		double get_value(Hills *p);
+
+		int is_visible(double a_alph);
 
 		double pi_d, deg2rad;
 
