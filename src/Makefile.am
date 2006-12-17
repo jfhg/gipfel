@@ -5,9 +5,9 @@ gipfel_SOURCES = \
 	util.c \
 	GipfelWidget.cxx \
 	Panorama.cxx \
-	Projection.cxx \
-	ProjectionTangentialLSQ.cxx \
-	ProjectionSphaeric.cxx \
+	ProjectionLSQ.cxx \
+	ProjectionRectilinear.cxx \
+	ProjectionCylindrical.cxx \
 	Hill.cxx \
 	Fl_Value_Dial.cxx \
 	Fl_Search_Chooser.cxx \
@@ -22,9 +22,9 @@ gipfel_SOURCES = \
 noinst_HEADERS = \
 	GipfelWidget.H \
 	Panorama.H \
-	Projection.H \
-	ProjectionTangentialLSQ.H \
-	ProjectionSphaeric.H \
+	ProjectionLSQ.H \
+	ProjectionRectilinear.H \
+	ProjectionCylindrical.H \
 	Hill.H \
 	ViewParams.H \
 	Fl_Value_Dial.H \

@@ -10,8 +10,8 @@
 #include <math.h>
 
 #include "Panorama.H"
-#include "ProjectionTangentialLSQ.H"
-#include "ProjectionSphaeric.H"
+#include "ProjectionRectilinear.H"
+#include "ProjectionCylindrical.H"
 
 #define EARTH_RADIUS 6371010.0
 
@@ -32,7 +32,7 @@ Panorama::Panorama() {
 	view_lam = 0.0;
 	view_height = 0.0;
 	proj = NULL;
-	set_projection(Projection::TANGENTIAL);
+	set_projection(ProjectionLSQ::RECTILINEAR);
 }
 
 Panorama::~Panorama() {
@@ -220,7 +220,7 @@ Panorama::set_view_height(double v) {
 }
 
 void
-Panorama::set_projection(Projection::Projection_t p) {
+Panorama::set_projection(ProjectionLSQ::Projection_t p) {
 	projection_type = p;
 
 	if (proj) {
@@ -228,12 +228,12 @@ Panorama::set_projection(Projection::Projection_t p) {
 	}
 
 	switch(projection_type) {
-		case Projection::TANGENTIAL:
-			proj = new ProjectionTangentialLSQ();
+		case ProjectionLSQ::RECTILINEAR:
+			proj = new ProjectionRectilinear();
 			view_angle = pi_d / 3.0;
 			break;
-		case Projection::SPHAERIC:
-			proj = new ProjectionSphaeric();
+		case ProjectionLSQ::CYLINDRICAL:
+			proj = new ProjectionCylindrical();
 			view_angle = pi_d * 2.0;
 			break;
 	}
@@ -285,7 +285,7 @@ Panorama::get_view_height() {
 	return view_height;
 }
 
-Projection::Projection_t
+ProjectionLSQ::Projection_t
 Panorama::get_projection() {
 	return projection_type;
 }

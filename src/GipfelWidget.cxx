@@ -98,7 +98,7 @@ GipfelWidget::load_image(char *file) {
 	set_center_angle(md->get_direction());
 	set_nick_angle(md->get_nick());
 	set_tilt_angle(md->get_tilt());
-	set_projection((Projection::Projection_t) md->get_projection_type());
+	set_projection((ProjectionLSQ::Projection_t) md->get_projection_type());
 	set_focal_length_35mm(md->get_focal_length_35mm());
 	md->get_distortion_params(&pan->parms.k0, &pan->parms.k1);
 	fprintf(stderr, "%f %f\n", pan->parms.k0, pan->parms.k1);
@@ -470,7 +470,7 @@ GipfelWidget::set_focal_length_35mm(double s) {
 }
 
 void
-GipfelWidget::set_projection(Projection::Projection_t p) {
+GipfelWidget::set_projection(ProjectionLSQ::Projection_t p) {
 	pan->set_projection(p);
 	set_labels(pan->get_visible_mountains());
 	redraw();
@@ -482,7 +482,7 @@ GipfelWidget::set_distortion_params(double k0, double k1) {
 	redraw();
 }
 
-Projection::Projection_t
+ProjectionLSQ::Projection_t
 GipfelWidget::get_projection() {
 	return pan->get_projection();
 }

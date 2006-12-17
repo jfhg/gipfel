@@ -65,7 +65,7 @@ void set_values() {
 	i_view_long->value(gipf->get_view_long());
 	i_view_height->value(gipf->get_view_height());
 	b_viewpoint->label(gipf->get_viewpoint());
-	if (gipf->get_projection() == Projection::TANGENTIAL) {
+	if (gipf->get_projection() == ProjectionLSQ::RECTILINEAR) {
 		mb->mode(8, FL_MENU_RADIO|FL_MENU_VALUE);
 		mb->mode(9, FL_MENU_RADIO);
 	} else {
@@ -148,9 +148,9 @@ void viewpoint_cb(Fl_Value_Input* o, void*) {
 
 void proj_cb(Fl_Value_Input* o, void*d) {
 	if(d == NULL) {
-		gipf->set_projection(Projection::TANGENTIAL);
+		gipf->set_projection(ProjectionLSQ::RECTILINEAR);
 	} else {
-		gipf->set_projection(Projection::SPHAERIC);
+		gipf->set_projection(ProjectionLSQ::CYLINDRICAL);
 	}
 }
 

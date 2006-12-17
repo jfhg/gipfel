@@ -104,9 +104,9 @@ class GipfelWidget : public Fl_Widget {
 
 		void set_track_width(double w);
 
-		Projection::Projection_t get_projection();
+		ProjectionLSQ::Projection_t get_projection();
 
-		void set_projection(Projection::Projection_t p);
+		void set_projection(ProjectionLSQ::Projection_t p);
 
 		void set_distortion_params(double k0, double k1);
 

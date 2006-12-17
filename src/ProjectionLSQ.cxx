@@ -15,17 +15,16 @@
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_multifit_nlin.h>
 
-#include "ProjectionTangentialLSQ.H"
+#include "ProjectionLSQ.H"
 
 
-static double sec(double a) {
+double
+ProjectionLSQ::sec(double a) {
 	return 1.0 / cos(a);
 }
 
-#include "lsq_funcs.c"
-
 int
-ProjectionTangentialLSQ::comp_params(const Hills *h, ViewParams *parms) {
+ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 	const Hill *tmp, *m1, *m2;
 	double scale_tmp;
 	int distortion_correct = 0;
@@ -73,12 +72,13 @@ ProjectionTangentialLSQ::comp_params(const Hills *h, ViewParams *parms) {
 }
 
 struct data {
+	ProjectionLSQ *p;
 	int distortion_correct;
 	const Hills *h;
 	const ViewParams *old_params;
 };
 
-#define CALL(A) A(c_view, c_nick, c_tilt, scale, k0, k1, m->alph, m->a_nick) 
+#define CALL(A) dat->p->A(c_view, c_nick, c_tilt, scale, k0, k1, m->alph, m->a_nick) 
 
 static int
 lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
@@ -162,7 +162,7 @@ lsq_fdf (const gsl_vector * x, void *data, gsl_vector * f, gsl_matrix * J) {
 }
 
 int
-ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms,
+ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
 	int distortion_correct) {
 
 	const gsl_multifit_fdfsolver_type *T;
@@ -174,6 +174,7 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms,
 	int status;
 	int num_params = distortion_correct?6:4;
 
+	dat.p = this;
 	dat.distortion_correct = distortion_correct;
 	dat.h = h;
 	dat.old_params = parms;
@@ -225,7 +226,7 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms,
 }
 
 void 
-ProjectionTangentialLSQ::get_coordinates(double alph, double a_nick,
+ProjectionLSQ::get_coordinates(double alph, double a_nick,
 	const ViewParams *parms, double *x, double *y) {
 
 	*x = mac_x(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale,
@@ -235,7 +236,7 @@ ProjectionTangentialLSQ::get_coordinates(double alph, double a_nick,
 }
 
 double
-ProjectionTangentialLSQ::comp_scale(double a1, double a2, double d1, double d2) {
+ProjectionLSQ::comp_scale(double a1, double a2, double d1, double d2) {
 	double sign1 = 1.0;
 	double sc, tan_a1, tan_a2;
 

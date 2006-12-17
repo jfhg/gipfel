@@ -8,7 +8,7 @@
 #define PANORAMA_H
 
 #include "Hill.H"
-#include "Projection.H"
+#include "ProjectionLSQ.H"
 #include "ViewParams.H"
 
 
@@ -23,8 +23,8 @@ class Panorama {
 		Hills *mountains;
 		Hills *close_mountains;
 		Hills *visible_mountains;
-		Projection::Projection *proj;
-		Projection::Projection_t projection_type;
+		ProjectionLSQ *proj;
+		ProjectionLSQ::Projection_t projection_type;
 
 		Hill * get_pos(const char *name);
 
@@ -125,9 +125,9 @@ class Panorama {
 
 		int comp_params(Hills *h);
 
-		Projection::Projection_t get_projection();
+		ProjectionLSQ::Projection_t get_projection();
 
-		void set_projection(Projection::Projection_t p);
+		void set_projection(ProjectionLSQ::Projection_t p);
 
 		void set_distortion_params(double k0, double k1);
 
