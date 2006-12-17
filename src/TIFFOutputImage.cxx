@@ -72,8 +72,6 @@ TIFFOutputImage::set_pixel_internal(int x, char r, char g, char b) {
 
 int
 TIFFOutputImage::next_line_internal() {
-	int ret;
-
 	TIFFWriteEncodedStrip(tiff, line -1 , row, W * 4);
 
 	memset(row, 0, sizeof(char) * 4 * W);

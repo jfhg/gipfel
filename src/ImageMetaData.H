@@ -17,8 +17,6 @@ class ImageMetaData {
 		double tilt;
 		double k0;
 		double k1;
-		double u0;
-		double v0;
 		double focal_length_35mm;
 		double scale;
 		int    projection_type;

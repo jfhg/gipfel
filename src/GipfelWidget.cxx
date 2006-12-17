@@ -62,7 +62,6 @@ int
 GipfelWidget::load_image(char *file) {
 	Fl_Image *new_img;
 	ImageMetaData *md;
-	int ret;
 
 	new_img = new Fl_JPEG_Image(file);
 
@@ -254,7 +253,7 @@ GipfelWidget::draw() {
 
 	/* track */
 	if (track_points && track_points->get_num() > 0) {
-		int last_x, last_y, last_initialized = 0;
+		int last_x = 0, last_y = 0, last_initialized = 0;
 
 		for (i=1; i<track_points->get_num(); i++) {
 			m = mnts->get(i);
@@ -334,7 +333,7 @@ GipfelWidget::set_labels(Hills *v) {
 					overlap(m->y + m->label_y - height, m->y + m->label_y, n->y + n->label_y - height, n->y + n->label_y)) ||
 				(overlap(m->x, m->x + m->label_x, n->x - 2, n->x + 2) &&
 				 overlap(m->y + m->label_y - height, m->y + m->label_y, n->y - 2, n->y + 2))) {
-				m->label_y = n->y + n->label_y - m->y - height - 1;
+				m->label_y = (int) rint(n->y + n->label_y - m->y - height - 1);
 			}
 		}
 	}
@@ -417,8 +416,8 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
 		return 1;
 	}
 
-	old_x = cur_mountain->x;
-	old_y = cur_mountain->y;
+	old_x = (int) rint(cur_mountain->x);
+	old_y = (int) rint(cur_mountain->y);
 	old_label_y = cur_mountain->label_y;
 
 	cur_mountain->x = m_x - center_x;
@@ -429,8 +428,9 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
 		center_y + y() + old_y + old_label_y - 2*CROSS_SIZE - 20,
 		MAX(20, cur_mountain->label_x) + 2*CROSS_SIZE + 2,
 		MAX(20, old_label_y) + 22 ); 
-	damage(4, center_x + x() + cur_mountain->x - 2*CROSS_SIZE - 1,
-		center_y + y() + cur_mountain->y + cur_mountain->label_y - 2*CROSS_SIZE - 20,
+	damage(4,
+		(int) rint(center_x + x() + cur_mountain->x - 2*CROSS_SIZE - 1),
+		(int) rint(center_y + y() + cur_mountain->y + cur_mountain->label_y - 2*CROSS_SIZE - 20),
 		MAX(20, cur_mountain->label_x) + 2*CROSS_SIZE + 2,
 		MAX(20, cur_mountain->label_y) + 22 ); 
 
@@ -598,41 +598,26 @@ GipfelWidget::get_mountains() {
 
 int
 GipfelWidget::comp_params() {
+	int ret;
+
 	if (known_hills->get_num() < 2) {
 		fprintf(stderr, "Position m1 and m2 first.\n");
 		return 1;
 	}
 	fl_cursor(FL_CURSOR_WAIT);
-	pan->comp_params(known_hills);
+	ret = pan->comp_params(known_hills);
 	set_labels(pan->get_visible_mountains());
 	redraw();
 	fl_cursor(FL_CURSOR_DEFAULT);
-}
 
-int
-GipfelWidget::guess() {
-	if (known_hills->get_num() < 1) {
-		fprintf(stderr, "Position m1 first.\n");
-		return 1;
-	}
-	fl_cursor(FL_CURSOR_WAIT);
-	pan->guess(marker, known_hills->get(0));
-	set_labels(pan->get_visible_mountains());
-	redraw();
-	fl_cursor(FL_CURSOR_DEFAULT);
-}
-
-int
-GipfelWidget::update() {
-	redraw();
-	Fl::wait(1.0);
+	return ret;
 }
 
 int
 GipfelWidget::get_rel_track_width(Hill *m) {
 	double dist = pan->get_real_distance(m);
 
-	return MAX((pan->get_scale() * track_width) / (dist * 10.0), 1.0);
+	return (int) rint(MAX((pan->get_scale()*track_width)/(dist*10.0), 1.0));
 }
 
 void

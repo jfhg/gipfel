@@ -163,11 +163,6 @@ void comp_cb(Fl_Widget *, void *) {
 	set_values();
 }
 
-void guess_cb(Fl_Widget *, void *) {
-	gipf->guess();
-	set_values();
-}
-
 void about_cb() {
 	fl_message("gipfel -- and you know what you see.\n"
 		"Version %s\n\n"
@@ -227,11 +222,10 @@ create_control_window() {
 	s_center->angles(180, 540);
 	s_center->callback((Fl_Callback*)angle_cb);
 
-	Fl_Box *north = new Fl_Box(95, 40, 40, 20, "North");
-	Fl_Box *south = new Fl_Box(95, 210, 40, 20, "South");
-	Fl_Box *east = new Fl_Box(190, 125, 40, 20, "East");
-	Fl_Box *west = new Fl_Box(0, 125, 40, 20, "West");
-
+	win->add(new Fl_Box(95, 40, 40, 20, "North"));
+	win->add(new Fl_Box(95, 210, 40, 20, "South"));
+	win->add(new Fl_Box(190, 125, 40, 20, "East"));
+	win->add(new Fl_Box(0, 125, 40, 20, "West"));
 
 	s_focal_length = new Fl_Value_Slider(235, 60, 160, 15, "Focal Length in 35mm");
 	s_focal_length->type(1);
@@ -311,23 +305,20 @@ create_control_window() {
 	Fl_Button *b = new Fl_Button(240, 210, 60, 20, "comp");
 	b->color(FL_RED);
 	b->callback(comp_cb);
-	Fl_Button *b1 = new Fl_Button(320, 210, 60, 20, "guess");
-	b1->callback(guess_cb);
-	b1->color(FL_GREEN);
 
 	win->end();
 	return win;
 }
 
 int main(int argc, char** argv) {
-	char c, *sep, *tmp, **my_argv;
+	char c, **my_argv;
 	char *view_point = NULL;
-	int err, bflag = 0, dflag = 0, my_argc;
+	int err, my_argc;
 	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
 	int jpeg_flag = 0, tiff_flag = 0, distortion_flag = 0;
 	double stitch_from = 0.0, stitch_to = 380.0;
 	double dist_k0 = 0.0, dist_k1 = 0.0;
-	char *outpath;
+	char *outpath = "/tmp";
 	Fl_Scroll *scroll;
 
 

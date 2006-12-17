@@ -15,7 +15,7 @@ class OutputImage {
 	public:
 		OutputImage();
 
-		~OutputImage();
+		virtual ~OutputImage();
 		
 		virtual int init(int w1, int h1);
 

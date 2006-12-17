@@ -26,8 +26,6 @@ ImageMetaData::ImageMetaData() {
 	tilt = 0.0;
 	k0 = 0.0;
 	k1 = 0.0;
-	u0 = 0.0;
-	v0 = 0.0;
 	focal_length_35mm = 35.0;
 	scale = NAN;
 	projection_type = 0;
@@ -236,7 +234,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
         tilt,
         focal_length_35mm,
         projection_type,
-		k0, k1, u0, v0);
+		k0, k1);
 
     // try to save gipfel data in JPEG comment section
     args[0] = "wrjpgcom";

@@ -49,7 +49,7 @@ Stitch::load_image(char *file) {
 		}
 	}
 
-
+	return 0;
 }
 
 OutputImage*
@@ -138,4 +138,6 @@ Stitch::resample(int w, int h,
 			single_images[i]->done();
 		}
 	}
+
+	return 0;
 }

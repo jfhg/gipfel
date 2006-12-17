@@ -114,10 +114,6 @@ class GipfelWidget : public Fl_Widget {
 
 		int comp_params();
 
-		int guess();
-
-		int update();
-
 		int get_pixel(double a_alph, double a_nick,
                     uchar *r, uchar *g, uchar *b);
 

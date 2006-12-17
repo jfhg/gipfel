@@ -12,12 +12,7 @@
 
 class ProjectionTangentialLSQ : public Projection {
 	private:
-		double comp_center_angle(double alph_a, double alph_b,
-			double d1, double d2);
-
 		double comp_scale(double alph_a, double alph_b, double d1, double d2);
-
-		double angle_dist(double a1, double a2);
 
 		int lsq(const Hills *m, ViewParams *parms);
 
@@ -26,6 +21,5 @@ class ProjectionTangentialLSQ : public Projection {
 			const ViewParams *parms, double *x, double *y);
 
 		int comp_params(const Hills *h, ViewParams *parms);
-
 };
 #endif

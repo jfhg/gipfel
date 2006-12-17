@@ -131,7 +131,6 @@ Panorama::get_visible_mountains() {
 double
 Panorama::get_value(Hills *p) {
 	int i, j;
-	Hill *m;
 	double v = 0.0, d_min, d;
 
 	if (isnan(parms.scale) || isnan(parms.a_center) || isnan(parms.a_tilt) || isnan(parms.a_nick) ||
@@ -155,72 +154,6 @@ Panorama::get_value(Hills *p) {
 	}
 
 	return v;
-}
-
-int 
-Panorama::guess(Hills *p, Hill *m1) {
-	Hill *p2, *m_tmp1, *m_tmp2;
-	Hill *m2;
-	Hills h;
-	double best = 100000000.0, v;
-	double a_center_best, a_nick_best, a_tilt_best, scale_best;
-	double x1_sav, y1_sav;
-	int i, j;
-
-	if (m1 == NULL) {
-		fprintf(stderr, "Position one mountain first.\n");
-		return 1;
-	}
-
-	m_tmp1 = m1;
-	x1_sav = m1->x;
-	y1_sav = m1->y;
-
-	for (i=0; i<p->get_num(); i++) {
-		p2 = p->get(i);
-		for (j=0; j<close_mountains->get_num(); j++) {
-			m_tmp2 = close_mountains->get(j);
-
-			m1 = m_tmp1;
-			m1->x = x1_sav;
-			m1->y = y1_sav;
-
-			if (m_tmp2->flags & Hill::TRACK_POINT || 
-				m1 == m_tmp2 || fabs(m1->alph - m_tmp2->alph) > pi_d *0.7) {
-				continue;
-			}
-
-			m2 = m_tmp2;
-			m2->x = p2->x;
-			m2->y = p2->y;
-
-			h.clear();
-			h.add(m1);
-			h.add(m2);
-			comp_params(&h);
-
-			v = get_value(p);
-
-			if (v < best) {
-				best = v;
-				a_center_best = parms.a_center;
-				a_nick_best = parms.a_nick;
-				a_tilt_best = parms.a_tilt;
-				scale_best = parms.scale;
-			}
-		}     
-	}
-
-	if (best < 4000.0) {
-		parms.a_center = a_center_best;
-		parms.a_nick = a_nick_best;
-		parms.a_tilt = a_tilt_best;
-		parms.scale = scale_best;
-	} else {
-		fprintf(stderr, "No solution found.\n");
-	}
-	update_visible_mountains();
-	return 0;
 }
 
 int
@@ -361,25 +294,19 @@ Panorama::get_projection() {
 Hill *
 Panorama::get_pos(const char *name) {
 	int i;
-	int found = 0;
-	double p, l, h;
-	Hill *m, *ret;
+	Hill *m, *ret = NULL;
 
 	for (i=0; i<mountains->get_num(); i++) {
 		m = mountains->get(i);
 
 		if (strcmp(m->name, name) == 0) {
 			ret = m;
-			fprintf(stderr, "Found matching entry: %s (%fm)\n", m->name, m->height);
-			found++;
+			fprintf(stderr, "Found matching entry: %s (%fm)\n",
+				m->name, m->height);
 		}
 	}
 
-	if (found == 1) {
-		return ret;
-	}
-
-	return NULL;
+	return ret;
 }
 
 void 

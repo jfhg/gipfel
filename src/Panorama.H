@@ -125,8 +125,6 @@ class Panorama {
 
 		int comp_params(Hills *h);
 
-		int guess(Hills *p1, Hill *m1);
-
 		Projection::Projection_t get_projection();
 
 		void set_projection(Projection::Projection_t p);
