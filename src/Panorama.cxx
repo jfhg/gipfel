@@ -504,7 +504,10 @@ int
 Panorama::is_visible(double a_alph) {
 	double center_dist;
 
-	center_dist = fabs(fmod(a_alph - parms.a_center, 2.0 * pi_d));
+	center_dist = fabs(a_alph - parms.a_center);
+	if (center_dist > pi_d) {
+		center_dist = 2*pi_d - center_dist;
+	}
 
 	return center_dist < proj->get_view_angle();
 }
