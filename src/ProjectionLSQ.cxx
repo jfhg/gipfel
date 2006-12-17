@@ -18,6 +18,9 @@
 #include "ProjectionLSQ.H"
 
 
+ProjectionLSQ::ProjectionLSQ() {
+}
+
 double
 ProjectionLSQ::sec(double a) {
 	return 1.0 / cos(a);
@@ -247,3 +250,21 @@ ProjectionLSQ::comp_scale(double a1, double a2, double d1, double d2) {
 
 	return sc;
 }
+
+#define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick
+
+double ProjectionLSQ::mac_x(ARGS) {return NAN;}
+double ProjectionLSQ::mac_y(ARGS) {return NAN;}
+double ProjectionLSQ::mac_x_dc_view(ARGS) {return NAN;}
+double ProjectionLSQ::mac_x_dc_nick(ARGS) {return NAN;}
+double ProjectionLSQ::mac_x_dc_tilt(ARGS) {return NAN;}
+double ProjectionLSQ::mac_x_dscale(ARGS) {return NAN;}
+double ProjectionLSQ::mac_x_dk0(ARGS) {return NAN;}
+double ProjectionLSQ::mac_x_dk1(ARGS) {return NAN;}
+double ProjectionLSQ::mac_y_dc_view(ARGS) {return NAN;}
+double ProjectionLSQ::mac_y_dc_nick(ARGS) {return NAN;}
+double ProjectionLSQ::mac_y_dc_tilt(ARGS) {return NAN;}
+double ProjectionLSQ::mac_y_dscale(ARGS) {return NAN;}
+double ProjectionLSQ::mac_y_dk0(ARGS) {return NAN;}
+double ProjectionLSQ::mac_y_dk1(ARGS) {return NAN;}
+

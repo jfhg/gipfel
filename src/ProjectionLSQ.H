@@ -21,6 +21,8 @@ class ProjectionLSQ {
 
 	public:
 
+		ProjectionLSQ();
+
 #define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick
 
 		virtual double mac_x(ARGS);
