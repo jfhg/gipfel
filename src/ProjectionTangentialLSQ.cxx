@@ -84,7 +84,7 @@ static int
 lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
 	struct data *dat = (struct data *) data;
 	double c_view, c_nick, c_tilt, scale, k0, k1;
-fprintf(stderr, "===> dist %d\n", dat->distortion_correct);
+
 	c_view = gsl_vector_get (x, 0);
 	c_nick = gsl_vector_get (x, 1);
 	c_tilt = gsl_vector_get (x, 2);
@@ -174,8 +174,6 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms,
 	int status;
 	int num_params = distortion_correct?6:4;
 
-	fprintf(stderr, "k0 %f, k1 %f num %d\n", parms->k0, parms->k1, num_params);
-
 	dat.distortion_correct = distortion_correct;
 	dat.h = h;
 	dat.old_params = parms;
@@ -207,8 +205,6 @@ ProjectionTangentialLSQ::lsq(const Hills *h, ViewParams *parms,
 			fprintf(stderr, "gsl_multifit_fdfsolver_iterate: %d\n", status);
 			break;
 		}
-
-		fprintf(stderr, "%d, |f(x)| = %g\n", i, gsl_blas_dnrm2 (s->f));
 	} 
 
 	parms->a_center = gsl_vector_get(s->x, 0);
