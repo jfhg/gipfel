@@ -24,7 +24,6 @@ class Hill {
 		double phi, lam;
 		double height;
 		double alph;
-		double a_view;
 		double a_nick;
 		double dist;
 		double x, y;

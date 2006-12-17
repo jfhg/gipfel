@@ -400,6 +400,7 @@ Panorama::update_close_mountains() {
 void 
 Panorama::update_visible_mountains() {
 	int i;
+	double a_view;
 	Hill *m;
 
 	visible_mountains->clear();
@@ -407,14 +408,14 @@ Panorama::update_visible_mountains() {
 	for (i=0; i<close_mountains->get_num(); i++) {
 		m = close_mountains->get(i);
 
-		m->a_view = m->alph - parms.a_center;
-		if (m->a_view > pi_d) {
-			m->a_view -= 2.0*pi_d;
-		} else if (m->a_view < -pi_d) {
-			m->a_view += 2.0*pi_d;
+		a_view = m->alph - parms.a_center;
+		if (a_view > pi_d) {
+			a_view -= 2.0*pi_d;
+		} else if (a_view < -pi_d) {
+			a_view += 2.0*pi_d;
 		}
 
-		if (m->a_view < view_angle && m->a_view > - view_angle) {
+		if (a_view < view_angle && a_view > - view_angle) {
 			visible_mountains->add(m);
 			m->flags |= Hill::VISIBLE;
 		} else {

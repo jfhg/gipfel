@@ -30,8 +30,6 @@ Hill::Hill(const Hill& h) {
 	lam = h.lam;
 	height = h.height;
 	alph = h.alph;
-	a_view = h.a_view;
-	a_view = h.a_view;
 	dist = h.dist;
 	x = h.x;
 	y = h.y;
