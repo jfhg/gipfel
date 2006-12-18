@@ -27,6 +27,8 @@ Panorama::Panorama() {
 	parms.a_nick = 0.0;
 	parms.a_tilt = 0.0;
 	parms.scale = 3500.0;
+	parms.k0 = 0.0;
+	parms.k1 = 0.0;
 	view_name = NULL;
 	view_phi = 0.0;
 	view_lam = 0.0;

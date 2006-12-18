@@ -625,10 +625,6 @@ int
 GipfelWidget::comp_params() {
 	int ret;
 
-	if (known_hills->get_num() < 2) {
-		fprintf(stderr, "Position m1 and m2 first.\n");
-		return 1;
-	}
 	fl_cursor(FL_CURSOR_WAIT);
 	ret = pan->comp_params(known_hills);
 	set_labels(pan->get_visible_mountains());

@@ -46,6 +46,7 @@ Fl_Window *control_win, *view_win;
 Fl_Dial *s_center = NULL;
 Fl_Slider *s_nick, *s_focal_length, *s_tilt, *s_height_dist, *s_track_width;
 Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
+Fl_Value_Input *i_distortion_k0, *i_distortion_k1;
 Fl_Box *b_viewpoint;
 Fl_Menu_Bar *mb;
 
@@ -57,6 +58,8 @@ static int stitch(GipfelWidget::sample_mode_t m ,int stitch_w, int stitch_h,
 	double from, double to, int type, const char *path, int argc, char **argv);
 
 void set_values() {
+	double k0 = 0.0, k1 = 0.0;
+
 	s_center->value(gipf->get_center_angle());
 	s_nick->value(gipf->get_nick_angle());
 	s_focal_length->value(gipf->get_focal_length_35mm());
@@ -73,6 +76,10 @@ void set_values() {
 		mb->mode(9, FL_MENU_RADIO|FL_MENU_VALUE);
 		mb->mode(8, FL_MENU_RADIO);
 	}
+
+	gipf->get_distortion_params(&k0, &k1);
+	i_distortion_k0->value(k0);
+	i_distortion_k1->value(k1);
 }
 
 void quit_cb() {
@@ -200,6 +207,10 @@ void load_distortion_cb(Fl_Widget *, void *) {
 	}
 }
 
+void distortion_cb(Fl_Value_Input*, void*) {
+	gipf->set_distortion_params(i_distortion_k0->value(),
+		i_distortion_k1->value());
+}
 
 void about_cb() {
 	fl_message("gipfel -- and you know what you see.\n"
@@ -252,7 +263,7 @@ void usage() {
 
 Fl_Window * 
 create_control_window() {
-	Fl_Window *win = new Fl_Window(400,350);
+	Fl_Window *win = new Fl_Window(400,400);
 	mb = new Fl_Menu_Bar(0, 0, 400, 30);
 	fill_menubar(mb);
 
@@ -320,32 +331,48 @@ create_control_window() {
 	s_track_width->callback((Fl_Callback*)track_width_cb);
 	s_track_width->align(FL_ALIGN_TOP);
 	s_track_width->deactivate();
-	// Viewpoint Stuff
 
-	b_viewpoint = new Fl_Box(FL_DOWN_BOX, 30, 255, 300, 80, "");
+	// Viewpoint Stuff
+	b_viewpoint = new Fl_Box(FL_DOWN_BOX, 30, 305, 300, 80, "");
 	b_viewpoint->align(FL_ALIGN_TOP);
 
-	i_view_lat = new Fl_Value_Input(40, 270, 100, 20, "Latitude");
+	i_view_lat = new Fl_Value_Input(40, 320, 100, 20, "Latitude");
 	i_view_lat->labelsize(10);
 	i_view_lat->align(FL_ALIGN_TOP);
 	i_view_lat->when(FL_WHEN_ENTER_KEY);
 	i_view_lat->callback((Fl_Callback*)view_lat_cb);
 
-	i_view_long = new Fl_Value_Input(200, 270, 100, 20, "Longitude");
+	i_view_long = new Fl_Value_Input(200, 320, 100, 20, "Longitude");
 	i_view_long->labelsize(10);
 	i_view_long->align(FL_ALIGN_TOP);
 	i_view_long->when(FL_WHEN_ENTER_KEY);
 	i_view_long->callback((Fl_Callback*)view_long_cb);
 
-	i_view_height = new Fl_Value_Input(40, 310, 80, 20, "Height");
+	i_view_height = new Fl_Value_Input(40, 360, 80, 20, "Height");
 	i_view_height->labelsize(10);
 	i_view_height->align(FL_ALIGN_TOP);
 	i_view_height->when(FL_WHEN_ENTER_KEY);
 	i_view_height->callback((Fl_Callback*)view_height_cb);
 
+	i_distortion_k0 = new Fl_Value_Input(235, 220, 80, 20, "Distortion (k0)");
+	i_distortion_k0->labelsize(10);
+	i_distortion_k0->textsize(10);
+	i_distortion_k0->align(FL_ALIGN_TOP);
+	i_distortion_k0->when(FL_WHEN_ENTER_KEY);
+	i_distortion_k0->callback((Fl_Callback*)distortion_cb);
+
+	i_distortion_k1 = new Fl_Value_Input(315, 220, 80,  20, "Distortion (k1)");
+	i_distortion_k1->labelsize(10);
+	i_distortion_k1->textsize(10);
+	i_distortion_k1->align(FL_ALIGN_TOP);
+	i_distortion_k1->when(FL_WHEN_ENTER_KEY);
+	i_distortion_k1->callback((Fl_Callback*)distortion_cb);
+
+
 	// Buttons
-	Fl_Button *b = new Fl_Button(240, 210, 60, 20, "comp");
+	Fl_Button *b = new Fl_Button(260, 260, 100, 20, "comp");
 	b->color(FL_RED);
+	b->tooltip("compute view parameter from given mountains");
 	b->callback(comp_cb);
 
 	win->end();
