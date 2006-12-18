@@ -18,19 +18,26 @@
 #include "ImageMetaData.H"
 
 ImageMetaData::ImageMetaData() {
+	manufacturer = NULL;
+	model = NULL;
 	longitude = NAN;
 	latitude = NAN;
-	height = 0.0;
-	direction = 0.0;
-	nick = 0.0;
-	tilt = 0.0;
-	k0 = 0.0;
-	k1 = 0.0;
-	focal_length_35mm = 35.0;
+	height = NAN;
+	direction = NAN;
+	nick = NAN;
+	tilt = NAN;
+	k0 = NAN;
+	k1 = NAN;
+	focal_length = NAN;
+	focal_length_35mm = NAN;
 	scale = NAN;
 	projection_type = 0;
 }
 
+ImageMetaData::~ImageMetaData() {
+	if (manufacturer) free(manufacturer);
+	if (model) free(model);
+}
 
 int
 ImageMetaData::load_image(char *name, int img_width) {
@@ -39,9 +46,15 @@ ImageMetaData::load_image(char *name, int img_width) {
 	ret = load_image_jpgcom(name);
 	if (ret == 2) { // old format
 		focal_length_35mm = scale * 35.0 / (double) img_width;
-	} else if (ret == 1) { // get reasonable defaults from exif data
-		ret = load_image_exif(name);
 	}
+
+	load_image_exif(name); // fill missing values from exif data
+
+	if (isnan(direction)) direction = 0.0;
+	if (isnan(nick)) nick = 0.0;
+	if (isnan(tilt)) tilt = 0.0;
+	if (isnan(k0)) k0 = 0.0;
+	if (isnan(k1)) k1 = 0.0;
 
 	return ret;
 }
@@ -69,6 +82,9 @@ degminsecstr2double(char *val) {
     return ret;
 }
 
+#define EXIF_MANUFACTURER              0x010f
+#define EXIF_MODEL                     0x0110
+#define EXIF_FOCAL_LENGTH              0x920a
 #define EXIF_FOCAL_LENGTH_IN_35MM_FILM 0xa405
 #define EXIF_GPS_LATIITUDE             0x0002
 #define EXIF_GPS_LONGITUDE             0x0004
@@ -99,17 +115,26 @@ ImageMetaData::load_image_exif(char *name) {
             }
 
             switch(id) {
+                case EXIF_MANUFACTURER:
+                    if (!manufacturer) manufacturer = strdup(val);
+                    break;
+                case EXIF_MODEL:
+                    if (!model) model = strdup(val);
+                    break;
+                case EXIF_FOCAL_LENGTH:
+                    if (isnan(focal_length)) focal_length = atof(val);
+                    break;
                 case EXIF_FOCAL_LENGTH_IN_35MM_FILM:
-                    focal_length_35mm = atof(val);
+                    if (isnan(focal_length_35mm)) focal_length_35mm = atof(val);
                     break;
                 case EXIF_GPS_LONGITUDE:
-                    longitude = degminsecstr2double(val);
+                    if (isnan(longitude)) longitude = degminsecstr2double(val);
                     break;
                 case EXIF_GPS_LATIITUDE:
-                    latitude = degminsecstr2double(val);
+                    if (isnan(latitude)) latitude = degminsecstr2double(val);
                     break;
                 case EXIF_GPS_ALTITUDE:
-                    height = atof(val);
+                    if (isnan(height)) height = atof(val);
                     break;
             }
         }
@@ -266,6 +291,15 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
     return 0;
 }
 
+const char*
+ImageMetaData::get_manufacturer() {
+	return manufacturer;
+}
+
+const char*
+ImageMetaData::get_model() {
+	return model;
+}
 
 double
 ImageMetaData::get_longitude() {
@@ -295,6 +329,11 @@ ImageMetaData::get_nick() {
 double
 ImageMetaData::get_tilt() {
 	return tilt;
+}
+
+double
+ImageMetaData::get_focal_length() {
+	return focal_length;
 }
 
 double

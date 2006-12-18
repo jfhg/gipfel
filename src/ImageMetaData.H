@@ -9,6 +9,8 @@
 
 class ImageMetaData {
 	private:
+		char *manufacturer;
+		char *model;
 		double longitude;
 		double latitude;
 		double height;
@@ -17,6 +19,7 @@ class ImageMetaData {
 		double tilt;
 		double k0;
 		double k1;
+		double focal_length;
 		double focal_length_35mm;
 		double scale;
 		int    projection_type;
@@ -27,16 +30,20 @@ class ImageMetaData {
 
 	public:
 		ImageMetaData();
+		~ImageMetaData();
 
 		int load_image(char *name, int img_width);
 		int save_image(char *in_img, char *out_img);
 
+		const char *get_manufacturer();
+		const char *get_model();
  		double get_longitude();
 		double get_latitude();
 		double get_height();
 		double get_direction();
 		double get_nick();
 		double get_tilt();
+		double get_focal_length();
 		double get_focal_length_35mm();
 		int    get_projection_type();
 		void get_distortion_params(double *_k0, double *_k1);
