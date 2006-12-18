@@ -521,7 +521,11 @@ GipfelWidget::get_tilt_angle() {
 
 double
 GipfelWidget::get_focal_length_35mm() {
-	return pan->get_scale() * 35.0 / (double) img->w();
+	if (img == NULL) {
+		return NAN;
+	} else {
+		return pan->get_scale() * 35.0 / (double) img->w();
+	}
 }
 
 double
