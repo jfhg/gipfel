@@ -189,6 +189,12 @@ Panorama::set_scale(double s) {
 }
 
 void
+Panorama::get_distortion_params(double *k0, double *k1) {
+	*k0 = parms.k0;
+	*k1 = parms.k1;
+}
+
+void
 Panorama::set_distortion_params(double k0, double k1) {
 	parms.k0 = k0;
 	parms.k1 = k1;
