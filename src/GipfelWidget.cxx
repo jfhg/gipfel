@@ -114,7 +114,6 @@ GipfelWidget::load_image(char *file) {
 			pan->parms.k1 = 0.0;
 		}
 	}
-	fprintf(stderr, "%f %f\n", pan->parms.k0, pan->parms.k1);
 
 	return 0;
 }

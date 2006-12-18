@@ -211,7 +211,6 @@ ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
 
 		status = gsl_multifit_fdfsolver_iterate (s);
 		if (status) {
-			fprintf(stderr, "gsl_multifit_fdfsolver_iterate: %d\n", status);
 			break;
 		}
 	} 
@@ -227,8 +226,6 @@ ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
 	}
 
 	gsl_multifit_fdfsolver_free (s);
-
-	fprintf(stderr, "k0 %f, k1 %f\n", parms->k0, parms->k1);
 
 	return 0;
 }
