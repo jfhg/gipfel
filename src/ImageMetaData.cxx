@@ -18,8 +18,18 @@
 #include "ImageMetaData.H"
 
 ImageMetaData::ImageMetaData() {
+	clear();
+}
+
+ImageMetaData::~ImageMetaData() {
+	if (manufacturer) free(manufacturer);
+	if (model) free(model);
+}
+
+void
+ImageMetaData::clear() {
 	manufacturer = NULL;
-	model = NULL;
+    model = NULL;
 	longitude = NAN;
 	latitude = NAN;
 	height = NAN;
@@ -34,14 +44,13 @@ ImageMetaData::ImageMetaData() {
 	projection_type = 0;
 }
 
-ImageMetaData::~ImageMetaData() {
-	if (manufacturer) free(manufacturer);
-	if (model) free(model);
-}
-
 int
 ImageMetaData::load_image(char *name, int img_width) {
 	int ret;
+
+	if (manufacturer) free(manufacturer);
+	if (model) free(model);
+	clear();
 
 	ret = load_image_jpgcom(name);
 	if (ret == 2) { // old format
@@ -53,8 +62,6 @@ ImageMetaData::load_image(char *name, int img_width) {
 	if (isnan(direction)) direction = 0.0;
 	if (isnan(nick)) nick = 0.0;
 	if (isnan(tilt)) tilt = 0.0;
-	if (isnan(k0)) k0 = 0.0;
-	if (isnan(k1)) k1 = 0.0;
 
 	return ret;
 }

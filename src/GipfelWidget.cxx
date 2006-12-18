@@ -20,9 +20,9 @@
 #include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Shared_Image.H>
 #include <FL/Fl_JPEG_Image.H>
+#include <FL/Fl_Preferences.H>
 #include <FL/fl_draw.H>
 
-#include "ImageMetaData.H"
 #include "Fl_Search_Chooser.H"
 #include "choose_hill.H"
 #include "GipfelWidget.H"
@@ -50,6 +50,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
 	img_file = NULL;
 	track_width = 200.0;
 	show_hidden = 0;
+	md = new ImageMetaData();
 
 	for (i=0; i<=3; i++) {
 		marker->add(new Hill(i * 10, 0));
@@ -61,7 +62,6 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
 int
 GipfelWidget::load_image(char *file) {
 	Fl_Image *new_img;
-	ImageMetaData *md;
 
 	new_img = new Fl_JPEG_Image(file);
 
@@ -90,7 +90,6 @@ GipfelWidget::load_image(char *file) {
 	mb->add("Center Peak", 0, (Fl_Callback*) center_cb, this);
 
 	// try to retrieve gipfel data from JPEG meta data
-	md = new ImageMetaData();
 	md->load_image(file, img->w());
 	set_view_long(md->get_longitude());
 	set_view_lat(md->get_latitude());
@@ -100,9 +99,22 @@ GipfelWidget::load_image(char *file) {
 	set_tilt_angle(md->get_tilt());
 	set_projection((ProjectionLSQ::Projection_t) md->get_projection_type());
 	set_focal_length_35mm(md->get_focal_length_35mm());
+	
+	// try to get distortion parameters in the following ordering:
+	// 1. gipfel data in JPEG comment
+	// 2. matching distortion profile
+	// 3. set the to 0.0, 0.0
 	md->get_distortion_params(&pan->parms.k0, &pan->parms.k1);
+	if (isnan(pan->parms.k0)) {
+		char buf[1024];
+		get_distortion_profile_name(buf, sizeof(buf));
+		load_distortion_params(buf);
+		if (isnan(pan->parms.k0)) {
+			pan->parms.k0 = 0.0;
+			pan->parms.k1 = 0.0;
+		}
+	}
 	fprintf(stderr, "%f %f\n", pan->parms.k0, pan->parms.k1);
-	delete md;
 
 	return 0;
 }
@@ -780,4 +792,42 @@ GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
 
 	return 0;
 
+}
+
+int
+GipfelWidget::get_distortion_profile_name(char *buf, int buflen) {
+	int n;
+	
+	if (md && md->get_manufacturer() && md->get_model()) {
+		n = snprintf(buf, buflen, "%s_%s_%.2f_mm",
+			md->get_manufacturer(), md->get_model(), md->get_focal_length());
+
+		return n > buflen;
+	} else {
+		return 1;
+	}
+}
+
+static Fl_Preferences dist_prefs(Fl_Preferences::USER,
+	"Johannes.HofmannATgmx.de", "gipfel/DistortionProfiles");
+
+int
+GipfelWidget::load_distortion_params(const char *prof_name) {
+	int ret = 0;
+
+	Fl_Preferences prof(dist_prefs, prof_name);
+	ret += prof.get("k0", pan->parms.k0, pan->parms.k0);
+	ret += prof.get("k1", pan->parms.k1, pan->parms.k1);
+
+	return !ret;
+}
+
+int
+GipfelWidget::save_distortion_params(const char *prof_name) {
+
+	Fl_Preferences prof(dist_prefs, prof_name);
+	prof.set("k0", pan->parms.k0);
+	prof.set("k1", pan->parms.k1);
+
+	return 0;
 }

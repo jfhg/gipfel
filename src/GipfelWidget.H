@@ -10,6 +10,7 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Menu_Button.H>
 #include "Panorama.H"
+#include "ImageMetaData.H"
 
 class GipfelWidget : public Fl_Widget {
 	private:
@@ -22,6 +23,8 @@ class GipfelWidget : public Fl_Widget {
 		Fl_Menu_Button *mb;
 		char *img_file;
 		double track_width;
+		ImageMetaData *md;
+
 		int show_hidden;
 
 		int handle(int event);
@@ -123,6 +126,12 @@ class GipfelWidget : public Fl_Widget {
 
 		int get_pixel(GipfelWidget::sample_mode_t,
 			double a_alph, double a_nick, uchar *r, uchar *g, uchar *b);
+
+		int get_distortion_profile_name(char *buf, int buflen);
+
+		int save_distortion_params(const char *prof_name);
+
+		int load_distortion_params(const char *prof_name);
 
 		void draw();
 };

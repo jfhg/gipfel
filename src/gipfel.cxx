@@ -164,6 +164,43 @@ void comp_cb(Fl_Widget *, void *) {
 	set_values();
 }
 
+void save_distortion_cb(Fl_Widget *, void *) {
+	char buf[1024];
+	const char * prof_name;
+	double k0, k1;
+
+	gipf->get_distortion_params(&k0, &k1);
+	gipf->get_distortion_profile_name(buf, sizeof(buf));
+	prof_name = fl_input("Save Distortion Profile (k0=%f, k1=%f)",
+		buf, k0, k1);
+
+	if (prof_name == NULL) {
+		return;
+	}
+
+	gipf->save_distortion_params(prof_name);
+	set_values();
+}
+
+void load_distortion_cb(Fl_Widget *, void *) {
+	char buf[1024];
+	const char * prof_name;
+
+	gipf->get_distortion_profile_name(buf, sizeof(buf));
+	prof_name = fl_input("Load Distortion Profile", buf);
+
+	if (prof_name == NULL) {
+		return;
+	}
+
+	if (gipf->load_distortion_params(prof_name) != 0) {
+		fl_alert("Could not load profile %s.", prof_name);
+	} else {
+		set_values();
+	}
+}
+
+
 void about_cb() {
 	fl_message("gipfel -- and you know what you see.\n"
 		"Version %s\n\n"
@@ -184,6 +221,9 @@ void fill_menubar(Fl_Menu_Bar* mb) {
 		(void *)0, FL_MENU_RADIO|FL_MENU_VALUE);
 	mb->add("&Projection/Panoramic Projection", 0, (Fl_Callback *)proj_cb, 
 		(void *)1, FL_MENU_RADIO);
+
+	mb->add("&Distortion/Load Profile", 0, (Fl_Callback *)load_distortion_cb);
+	mb->add("&Distortion/Save Profile", 0, (Fl_Callback *)save_distortion_cb);
 
 	mb->add("&Option/Show Hidden", 0, (Fl_Callback *) hidden_cb, 
 		(void *)0, FL_MENU_TOGGLE);

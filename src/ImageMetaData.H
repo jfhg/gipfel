@@ -27,6 +27,7 @@ class ImageMetaData {
 		int load_image_jpgcom(char *name);
 		int save_image_jpgcom(char *in_img, char *out_img);
 		int load_image_exif(char *name);
+		void clear();
 
 	public:
 		ImageMetaData();
