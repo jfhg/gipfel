@@ -78,8 +78,8 @@ Stitch::set_output(const char *file, OutputImage *img) {
 }
 
 int
-Stitch::resample(int w, int h,
-	double view_start, double view_end) {
+Stitch::resample(GipfelWidget::sample_mode_t m,
+	int w, int h, double view_start, double view_end) {
 
 	view_start = view_start * deg2rad;
 	view_end = view_end * deg2rad;
@@ -109,7 +109,8 @@ Stitch::resample(int w, int h,
 			for (int i=0; i<MAX_PICS; i++) {
 				if (gipf[i] == NULL) {
 					break;
-				} else if (gipf[i]->get_pixel(a_view, a_nick, &r, &g, &b)==0) {
+				} else if (gipf[i]->get_pixel(m, a_view, a_nick,
+						&r, &g, &b) == 0) {
 					if (single_images[i]) {
 						single_images[i]->set_pixel(x, r, g, b);
 					}

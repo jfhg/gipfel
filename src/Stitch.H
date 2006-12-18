@@ -31,8 +31,8 @@ class Stitch {
 
 		OutputImage * set_output(const char *file, OutputImage *img);
 
-		int resample(int w, int h,
-			double view_start, double view_end);
+		int resample(GipfelWidget::sample_mode_t m,
+			int w, int h, double view_start, double view_end);
 };
 
 #endif

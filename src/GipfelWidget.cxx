@@ -667,8 +667,8 @@ GipfelWidget::handle(int event) {
 }
 
 int
-GipfelWidget::get_pixel(double a_alph, double a_nick,
-	uchar *r, uchar *g, uchar *b) {
+GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
+	double a_alph, double a_nick, uchar *r, uchar *g, uchar *b) {
 	double px, py;
 
 	if (img == NULL) {
@@ -679,8 +679,13 @@ GipfelWidget::get_pixel(double a_alph, double a_nick,
 		return 1;
 	}
 
-	return get_pixel_bilinear(img, px + ((double) img->w()) / 2.0,
-		py + ((double) img->h()) / 2.0, r, g, b);
+	if (m == GipfelWidget::BILINEAR) {
+		return get_pixel_bilinear(img, px + ((double) img->w()) / 2.0,
+			py + ((double) img->h()) / 2.0, r, g, b);
+	} else {
+		return get_pixel_nearest(img, px + ((double) img->w()) / 2.0,
+			py + ((double) img->h()) / 2.0, r, g, b);
+	}
 }
 
 int

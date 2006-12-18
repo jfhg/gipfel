@@ -46,6 +46,11 @@ class GipfelWidget : public Fl_Widget {
 			uchar *r, uchar *g, uchar *b);
 
 	public:
+		typedef enum {
+			NEAREST  = 0,
+			BILINEAR = 1
+		} sample_mode_t;
+	
 		GipfelWidget(int X,int Y,int W, int H);
 
 		void center();
@@ -114,8 +119,8 @@ class GipfelWidget : public Fl_Widget {
 
 		int comp_params();
 
-		int get_pixel(double a_alph, double a_nick,
-                    uchar *r, uchar *g, uchar *b);
+		int get_pixel(GipfelWidget::sample_mode_t,
+			double a_alph, double a_nick, uchar *r, uchar *g, uchar *b);
 
 		void draw();
 };

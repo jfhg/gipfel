@@ -52,8 +52,9 @@ Fl_Menu_Bar *mb;
 #define STITCH_PREVIEW 1
 #define STITCH_JPEG    2
 #define STITCH_TIFF    4
-static int stitch(int stitch_w, int stitch_h, double from, double to, int type, const char *path,
-	int argc, char **argv);
+
+static int stitch(GipfelWidget::sample_mode_t m ,int stitch_w, int stitch_h,
+	double from, double to, int type, const char *path, int argc, char **argv);
 
 void set_values() {
 	s_center->value(gipf->get_center_angle());
@@ -201,6 +202,7 @@ void usage() {
 		"   -d <datafile>   Use <datafile> for GPS data.\n"
 		"   -u <k0>,<k1>    Use distortion correction values k0,k1.\n"
 		"   -s              Stitch mode.\n"
+		"   -b              Use bilinear interpolation for stitching.\n"
 		"   -w <width>      Width of result image.\n"
 		"   -h <height>     Height of result image.\n"
 		"   -j <outfile>    JPEG output file for Stitch mode.\n"
@@ -316,6 +318,7 @@ int main(int argc, char** argv) {
 	int err, my_argc;
 	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
 	int jpeg_flag = 0, tiff_flag = 0, distortion_flag = 0;
+	int bilinear_flag = 0;
 	double stitch_from = 0.0, stitch_to = 380.0;
 	double dist_k0 = 0.0, dist_k1 = 0.0;
 	char *outpath = "/tmp";
@@ -323,7 +326,7 @@ int main(int argc, char** argv) {
 
 
 	err = 0;
-	while ((c = getopt(argc, argv, ":?d:v:s:w:h:j:t:u:")) != EOF) {
+	while ((c = getopt(argc, argv, ":?d:v:s:w:h:j:t:u:b")) != EOF) {
 		switch (c) {  
 			case '?':
 				usage();
@@ -367,6 +370,9 @@ int main(int argc, char** argv) {
 			case 'h':
 				stitch_h = atoi(optarg);
 				break;
+			case 'b':
+				bilinear_flag++;
+				break;
 			default:
 				err++;
 		}
@@ -393,8 +399,10 @@ int main(int argc, char** argv) {
 			type = STITCH_TIFF;
 		}
 
-		stitch(stitch_w, stitch_h, stitch_from, stitch_to,
+		stitch(bilinear_flag?GipfelWidget::BILINEAR:GipfelWidget::NEAREST,
+			stitch_w, stitch_h, stitch_from, stitch_to,
 			type, outpath, my_argc, my_argv);
+
 		exit(0);
 	}
 
@@ -450,7 +458,8 @@ int main(int argc, char** argv) {
 }
 
 static int
-stitch(int stitch_w, int stitch_h, double from, double to,
+stitch(GipfelWidget::sample_mode_t m,
+	int stitch_w, int stitch_h, double from, double to,
 	int type, const char *path, int argc, char **argv) {
 
 	Fl_Window *win;
@@ -464,7 +473,7 @@ stitch(int stitch_w, int stitch_h, double from, double to,
 	if (type == STITCH_JPEG) {
 
 		st->set_output((OutputImage*) new JPEGOutputImage(path, 90));
-		st->resample(stitch_w, stitch_h, from, to);
+		st->resample(m, stitch_w, stitch_h, from, to);
 
 	} else if (type == STITCH_TIFF) {
 
@@ -480,7 +489,7 @@ stitch(int stitch_w, int stitch_h, double from, double to,
 			st->set_output(argv[i], (OutputImage*) new TIFFOutputImage(buf));
 		}
 
-		st->resample(stitch_w, stitch_h, from, to);
+		st->resample(m, stitch_w, stitch_h, from, to);
 
 	} else {
 		win = new Fl_Window(0,0, stitch_w, stitch_h);
@@ -491,7 +500,7 @@ stitch(int stitch_w, int stitch_h, double from, double to,
 		win->resizable(scroll);
 		win->show(0, argv); 
 		st->set_output((OutputImage*) img);
-		st->resample(stitch_w, stitch_h, from, to);
+		st->resample(m, stitch_w, stitch_h, from, to);
 		img->redraw();
 		Fl::run();
 	}
