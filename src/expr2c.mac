@@ -9,12 +9,12 @@ block2c(expr) :=
 	if ?equal(op(expr), block) then (
 		printdecl(first(expr)),
 		for d in reverse(rest(reverse(rest(expr)))) do printdef(d),
-		sprint("return", string(last(expr)), ";}", "
-"))
+		sprint("return", string(last(expr)), ";"))
 	else
-		sprint("return", string(expr), ";}", "
-")$
+		sprint("return", string(expr), ";")$
 
-expr2c(funcname, args, expr) := (
-	sprint("double", funcname, "(", args, ") {"),
-	block2c(subst(pow, "^", optimize(expr))))$
+expr2c(funcname, argstr, expr) := (
+	sprint("double", funcname, "(", argstr, ") {"),
+	block2c(subst(pow, "^", optimize(expr))),
+	sprint("}", "
+"))$
