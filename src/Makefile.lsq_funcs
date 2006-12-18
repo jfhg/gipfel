@@ -1,7 +1,7 @@
 all: ProjectionRectilinear_funcs.cxx ProjectionCylindrical_funcs.cxx
 
-ProjectionRectilinear_funcs.cxx: lsq_rectilinear.mac
-	maxima -b lsq_rectilinear.mac | grep "^double" > ProjectionRectilinear_funcs.cxx
+ProjectionRectilinear_funcs.cxx: lsq_rectilinear.mac expr2c.mac
+	maxima -b lsq_rectilinear.mac | grep "^double" | sed s/%/_/g > ProjectionRectilinear_funcs.cxx
 
-ProjectionCylindrical_funcs.cxx: lsq_cylindrical.mac
-	maxima -b lsq_cylindrical.mac | grep "^double" > ProjectionCylindrical_funcs.cxx
+ProjectionCylindrical_funcs.cxx: lsq_cylindrical.mac expr2c.mac
+	maxima -b lsq_cylindrical.mac | grep "^double" | sed s/%/_/g > ProjectionCylindrical_funcs.cxx

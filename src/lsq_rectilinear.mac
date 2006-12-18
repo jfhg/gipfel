@@ -15,26 +15,25 @@ y_dist : y_rot * (1 + dist_fact) * scale$
  * Some mangling for C code generation
  */
 
+load("expr2c.mac")$
+
 x_expand : trigexpand(x_dist)$
 y_expand : trigexpand(y_dist)$
 
-args: "(double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick)"$
+args: "double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick"$
 
-printfunc(name, expression) := sprint("double ProjectionRectilinear::", name, args, "{ return ", string(subst(pow, "^", expression)), ";}", "
-")$
+expr2c("ProjectionRectilinear::mac_x", args, x_expand)$
+expr2c("ProjectionRectilinear::mac_y", args, y_expand)$
 
-printfunc("mac_x", x_expand)$
-printfunc("mac_y", y_expand)$
-
-printfunc("mac_x_dc_view", diff(x_expand, c_view))$
-printfunc("mac_x_dc_nick", diff(x_expand, c_nick))$
-printfunc("mac_x_dc_tilt", diff(x_expand, c_tilt))$
-printfunc("mac_x_dscale", diff(x_expand, scale))$
-printfunc("mac_x_dk0", diff(x_expand, k0))$
-printfunc("mac_x_dk1", diff(x_expand, k1))$
-printfunc("mac_y_dc_view", diff(y_expand, c_view))$
-printfunc("mac_y_dc_nick", diff(y_expand, c_nick))$
-printfunc("mac_y_dc_tilt", diff(y_expand, c_tilt))$
-printfunc("mac_y_dscale", diff(y_expand, scale))$
-printfunc("mac_y_dk0", diff(y_expand, k0))$
-printfunc("mac_y_dk1", diff(y_expand, k1))$
+expr2c("ProjectionRectilinear::mac_x_dc_view", args, diff(x_expand, c_view))$
+expr2c("ProjectionRectilinear::mac_x_dc_nick", args, diff(x_expand, c_nick))$
+expr2c("ProjectionRectilinear::mac_x_dc_tilt", args, diff(x_expand, c_tilt))$
+expr2c("ProjectionRectilinear::mac_x_dscale", args, diff(x_expand, scale))$
+expr2c("ProjectionRectilinear::mac_x_dk0", args, diff(x_expand, k0))$
+expr2c("ProjectionRectilinear::mac_x_dk1", args, diff(x_expand, k1))$
+expr2c("ProjectionRectilinear::mac_y_dc_view", args, diff(y_expand, c_view))$
+expr2c("ProjectionRectilinear::mac_y_dc_nick", args, diff(y_expand, c_nick))$
+expr2c("ProjectionRectilinear::mac_y_dc_tilt", args, diff(y_expand, c_tilt))$
+expr2c("ProjectionRectilinear::mac_y_dscale", args, diff(y_expand, scale))$
+expr2c("ProjectionRectilinear::mac_y_dk0", args, diff(y_expand, k0))$
+expr2c("ProjectionRectilinear::mac_y_dk1", args, diff(y_expand, k1))$
