@@ -253,6 +253,7 @@ void usage() {
 		"   -d <datafile>   Use <datafile> for GPS data.\n"
 		"   -u <k0>,<k1>    Use distortion correction values k0,k1.\n"
 		"   -s              Stitch mode.\n"
+		"   -r <from>,<to>  Stitch range in degrees (e.g. 100.0,200.0).\n"
 		"   -b              Use bilinear interpolation for stitching.\n"
 		"   -w <width>      Width of result image.\n"
 		"   -h <height>     Height of result image.\n"
@@ -393,7 +394,7 @@ int main(int argc, char** argv) {
 
 
 	err = 0;
-	while ((c = getopt(argc, argv, ":?d:v:s:w:h:j:t:u:b")) != EOF) {
+	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:")) != EOF) {
 		switch (c) {  
 			case '?':
 				usage();
@@ -406,6 +407,9 @@ int main(int argc, char** argv) {
 				view_point = optarg;
 				break;
 			case 's':
+				stitch_flag++;
+				break;
+			case 'r':
 				stitch_flag++;
 				if (optarg && strcmp(optarg, ":")) {
 					stitch_from = atof(optarg);
