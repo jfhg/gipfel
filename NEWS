@@ -7,7 +7,16 @@ gipfel-0.2.0
  - gipfel now tries to find a reasonable default for the scale value
    when opening new images based on the "Focal Length In 35mm" Exif 
    tag, if it exists.
- - GPS position Exif tags are used if they exist.
+ - GPS Exif tags are used if they exist.
+ - gipfel can now correct lens distortion (see README).
+ - Switched to use maxima for symbolic computation and code generation.
+ - Switched to use th GNU Scientific Library instead of ccmath.
+ - Major simplifications of the projection code.
+ - Removed the "guess" button.
+ - Added bilinear interpolation for image stitching (-b option).
+ - Added range option (-r) for image stitching.
+ - Known mountains must now be marked with the middle mouse button
+   and positioned by dragging them with the left button pressed.
 
 gipfel-0.1.3
  - Add stitching mode (gipfel -s). See README  for details.
