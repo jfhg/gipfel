@@ -24,7 +24,9 @@ noinst_HEADERS = \
 	Panorama.H \
 	ProjectionLSQ.H \
 	ProjectionRectilinear.H \
+	ProjectionRectilinear_funcs.cxx \
 	ProjectionCylindrical.H \
+	ProjectionCylindrical_funcs.cxx \
 	Hill.H \
 	ViewParams.H \
 	Fl_Value_Dial.H \
