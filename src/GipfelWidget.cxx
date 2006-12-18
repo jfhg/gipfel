@@ -271,7 +271,7 @@ GipfelWidget::draw() {
 		int last_x = 0, last_y = 0, last_initialized = 0;
 
 		for (i=1; i<track_points->get_num(); i++) {
-			m = mnts->get(i);
+			m = track_points->get(i);
 			int m_x = w() / 2 + x() + (int) rint(m->x);
 			int m_y = h() / 2 + y() + (int) rint(m->y);
 			if (!(track_points->get(i)->flags & Hill::VISIBLE)) {
