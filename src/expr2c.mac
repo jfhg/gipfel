@@ -1,17 +1,21 @@
+load("stringproc")$
+
+varsubst(v) := ssubst("_", "%", string(v))$
+
 printdecl(vars) := (
-	sprint("double", first(vars)),
-	for v in rest(vars) do sprint(",", v),
+	sprint("double", varsubst(first(vars))),
+	for v in rest(vars) do sprint(",", varsubst(v)),
 	sprint(";"))$
 
-printdef(expr) := sprint(first(expr), "=", second(expr), ";")$
+printdef(expr) := sprint(varsubst(first(expr)), "=", varsubst(second(expr)), ";")$
 
 block2c(expr) := 
 	if ?equal(op(expr), block) then (
 		printdecl(first(expr)),
 		for d in reverse(rest(reverse(rest(expr)))) do printdef(d),
-		sprint("return", string(last(expr)), ";"))
+		sprint("return", varsubst(last(expr)), ";"))
 	else
-		sprint("return", string(expr), ";")$
+		sprint("return", varsubst(expr), ";")$
 
 expr2c(funcname, argstr, expr) := (
 	sprint("double", funcname, "(", argstr, ") {"),
