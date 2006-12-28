@@ -9,7 +9,7 @@
 #include <string.h>
 
 #include <Fl/Fl.H>
-#include <Fl/fl_draw.h>
+#include <Fl/fl_draw.H>
 
 #include "PreviewOutputImage.H"
 
