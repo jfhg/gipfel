@@ -13,7 +13,7 @@
 #include "ProjectionRectilinear.H"
 #include "ProjectionCylindrical.H"
 
-#define EARTH_RADIUS 6371010.0
+#define EARTH_RADIUS 6371000.785
 
 Panorama::Panorama() {
 	mountains = new Hills();
@@ -393,7 +393,7 @@ Panorama::update_close_mountains() {
 
 		if (m->flags & Hill::TRACK_POINT ||
 			((m->phi != view_phi || m->lam != view_lam) &&
-			 (m->height / (m->dist * get_earth_radius(m)) 
+			 (m->height / (m->dist * get_earth_radius(m->phi)) 
 			  > height_dist_ratio))) {
 
 			close_mountains->add(m);
@@ -450,7 +450,7 @@ Panorama::alpha(double phi, double lam) {
 	cos_alph = (sin(phi) - sin(view_phi) * cos(dist)) /
 		(cos(view_phi) * sin(dist));
 
-	return atan2(sin_alph, cos_alph);
+	return fmod(atan2(sin_alph, cos_alph) + 2.0 * pi_d, 2.0 * pi_d);
 }
 
 
@@ -459,8 +459,8 @@ Panorama::nick(double dist, double height) {
 	double a, b, c;
 	double beta;
 
-	b = height + EARTH_RADIUS;
-	c = view_height + EARTH_RADIUS;
+	b = height + get_earth_radius(view_phi);
+	c = view_height + get_earth_radius(view_phi);
 
 	a = pow(((b * (b - (2.0 * c * cos(dist)))) + (c * c)), (1.0 / 2.0));
 	beta = acos((-(b*b) + (a*a) + (c*c))/(2 * a * c));
@@ -469,7 +469,7 @@ Panorama::nick(double dist, double height) {
 }
 
 double
-Panorama::get_earth_radius(Hill *m) {
+Panorama::get_earth_radius(double latitude) {
 	return EARTH_RADIUS;
 }
 
@@ -477,8 +477,8 @@ double
 Panorama::get_real_distance(Hill *m) {
 	double a, b, c, gam;
 
-	a = view_height + get_earth_radius(m); // using m here is not quite right
-	b = m->height + get_earth_radius(m); 
+	a = view_height + get_earth_radius(m->phi);
+	b = m->height + get_earth_radius(m->phi); 
 	gam = m->dist;
 
 	c = sqrt(pow(a, 2.0) + pow(b, 2.0) - 2.0 * a * b * cos(gam));

@@ -116,7 +116,7 @@ class Panorama {
 
 		double get_view_height();
 
-		double get_earth_radius(Hill *m);
+		double get_earth_radius(double latitude);
 
 		double get_real_distance(Hill *m);
 

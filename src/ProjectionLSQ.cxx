@@ -52,7 +52,7 @@ ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 
 	scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
 
-	if (isnan(scale_tmp) || scale_tmp < 100.0) {
+	if (isnan(scale_tmp) || scale_tmp < 50.0) {
 		fprintf(stderr, "Could not determine initial scale value (%f)\n",
 			scale_tmp);
 		return 1;
@@ -235,7 +235,6 @@ ProjectionLSQ::get_coordinates(double alph, double a_nick,
 
 double
 ProjectionLSQ::comp_scale(double a1, double a2, double d1, double d2) {
-
 	return (fabs(d1 - d2) / fabs(a1 - a2));
 }
 
