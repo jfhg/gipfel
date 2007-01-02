@@ -39,10 +39,6 @@ class Panorama {
 
 		double distance(double phi, double lam);
 
-		double sin_alpha(double lam, double phi, double c);
-
-		double cos_alpha(double phi, double c);
-
 		double alpha(double phi, double lam);
 
 		double nick(double dist, double height);

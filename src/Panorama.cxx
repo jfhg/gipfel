@@ -442,38 +442,15 @@ Panorama::distance(double phi, double lam) {
 }
 
 double 
-Panorama::sin_alpha(double lam, double phi, double c) {
-	return sin(lam - view_lam) * cos(phi) / sin(c);
-}
-
-
-double
-Panorama::cos_alpha(double phi, double c) {
-	return (sin(phi) - sin(view_phi) * cos(c)) / (cos(view_phi) * sin(c));
-}
-
-
-double 
 Panorama::alpha(double phi, double lam) {
 	double dist, sin_alph, cos_alph, alph;
 
 	dist = distance(phi, lam);
-	sin_alph = sin_alpha(lam, phi, dist);
-	cos_alph = cos_alpha(phi, dist);
+	sin_alph = sin(lam - view_lam) * cos(phi) / sin(dist);
+	cos_alph = (sin(phi) - sin(view_phi) * cos(dist)) /
+		(cos(view_phi) * sin(dist));
 
-	if (sin_alph > 0) {
-		alph = acos(cos_alph);
-	} else {
-		alph = 2.0 * pi_d - acos(cos_alph);
-	}
-
-
-	if (alph > 2.0 * pi_d) {
-		alph = alph - 2.0 *  pi_d;
-	} else if (alph < 0.0) {
-		alph = alph + 2.0 * pi_d;
-	}
-	return alph;
+	return atan2(sin_alph, cos_alph);
 }
 
 
