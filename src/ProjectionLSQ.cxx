@@ -51,32 +51,25 @@ ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 	m2 = h->get(1);
 
 	scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
-	if (isnan(scale_tmp) || scale_tmp < 100.0) {
-		// try again with mountains swapped
-		tmp = m1;
-		m1 = m2;
-		m2 = tmp;
-		scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
-	}
-
 
 	if (isnan(scale_tmp) || scale_tmp < 100.0) {
+		fprintf(stderr, "Could not determine initial scale value (%f)\n",
+			scale_tmp);
 		return 1;
-	} else {
-
-		parms->a_center = m1->alph;
-		parms->scale    = scale_tmp;
-		parms->a_nick   = 0.0;
-		parms->a_tilt   = 0.0;
-
-		lsq(h, parms, 0);
-
-		if (distortion_correct) {
-			lsq(h, parms, 1);
-		}
-
-		return 0;
 	}
+
+	parms->a_center = m1->alph;
+	parms->scale    = scale_tmp;
+	parms->a_nick   = 0.0;
+	parms->a_tilt   = 0.0;
+
+	lsq(h, parms, 0);
+
+	if (distortion_correct) {
+		lsq(h, parms, 1);
+	}
+
+	return 0;
 }
 
 struct data {
@@ -242,15 +235,8 @@ ProjectionLSQ::get_coordinates(double alph, double a_nick,
 
 double
 ProjectionLSQ::comp_scale(double a1, double a2, double d1, double d2) {
-	double sign1 = 1.0;
-	double sc, tan_a1, tan_a2;
 
-	tan_a1 = tan(a1);
-	tan_a2 = tan(a2);
-
-	sc = ((((1.0 + (tan_a1 * tan_a2)) * (d1 - d2)) - (sign1 * pow((((1.0 + pow((tan_a1 * tan_a2), 2.0)) * ((d1 * d1) + (d2 * d2))) + (2.0 * ((tan_a1 * tan_a2 * pow((d1 + d2), 2.0)) - (d1 * d2 * (((tan_a1 * tan_a1) * (2.0 + (tan_a2 * tan_a2))) + 1.0 + (2.0 * (tan_a2 * tan_a2))))))), (1.0 / 2.0)))) / (2.0 * (tan_a1 - tan_a2)));
-
-	return sc;
+	return (fabs(d1 - d2) / fabs(a1 - a2));
 }
 
 #define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick
