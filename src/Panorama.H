@@ -41,7 +41,7 @@ class Panorama {
 
 		double alpha(double phi, double lam);
 
-		double nick(double dist, double height);
+		double nick(Hill *m);
 
 		double comp_center_angle(double alph_a, double alph_b, double d1, double d2);
 

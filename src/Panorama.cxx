@@ -327,7 +327,7 @@ Panorama::update_angles() {
 		if (m->phi != view_phi || m->lam != view_lam) {
 
 			m->alph = alpha(m->phi, m->lam);
-			m->a_nick = nick(m->dist, m->height);
+			m->a_nick = nick(m);
 		}
 	}
 
@@ -393,7 +393,7 @@ Panorama::update_close_mountains() {
 
 		if (m->flags & Hill::TRACK_POINT ||
 			((m->phi != view_phi || m->lam != view_lam) &&
-			 (m->height / (m->dist * get_earth_radius(m->phi)) 
+			 (m->height / (m->dist * EARTH_RADIUS) 
 			  > height_dist_ratio))) {
 
 			close_mountains->add(m);
@@ -455,29 +455,39 @@ Panorama::alpha(double phi, double lam) {
 
 
 double
-Panorama::nick(double dist, double height) {
+Panorama::nick(Hill *m) {
 	double a, b, c;
 	double beta;
 
-	b = height + get_earth_radius(view_phi);
+	b = m->height + get_earth_radius(m->phi);
 	c = view_height + get_earth_radius(view_phi);
 
-	a = pow(((b * (b - (2.0 * c * cos(dist)))) + (c * c)), (1.0 / 2.0));
+	a = pow(((b * (b - (2.0 * c * cos(m->dist)))) + (c * c)), (1.0 / 2.0));
 	beta = acos((-(b*b) + (a*a) + (c*c))/(2 * a * c));
 
 	return beta - pi_d / 2.0;
 }
 
 double
-Panorama::get_earth_radius(double latitude) {
-	return EARTH_RADIUS;
+Panorama::get_earth_radius(double phi) {
+	double a = 6378137.000;
+	double b = 6356752.315;
+	double x, y, r;
+
+	x = a*b*pow(pow(a,2)*pow(tan(phi),2)+pow(b,2),-1.0/2.0);
+	y = a*b*tan(phi)*pow(pow(a,2)*pow(tan(phi),2)+pow(b,2),-1.0/2.0);
+
+	r = sqrt(pow(x, 2) + pow(y, 2));	
+
+	fprintf(stderr, "==> %f %f %f %f\n", phi, x, y, r);
+	return r;
 }
 
 double
 Panorama::get_real_distance(Hill *m) {
 	double a, b, c, gam;
 
-	a = view_height + get_earth_radius(m->phi);
+	a = view_height + get_earth_radius(view_phi);
 	b = m->height + get_earth_radius(m->phi); 
 	gam = m->dist;
 
