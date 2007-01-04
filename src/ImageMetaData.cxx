@@ -169,7 +169,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
     int status;
     char buf[1024];
     double lo, la, he, dir, ni, ti, fr, _k0, _k1;
-    int pt;
+    int pt = 0;
     int n, ret = 1;
 
     args[0] = "rdjpgcom";
