@@ -56,17 +56,18 @@ static void input_cb(Fl_Input* in, void*c) {
 
 static void ok_cb(Fl_Input* in, void*c) {
 	Fl_Search_Chooser *sc = (Fl_Search_Chooser *) c;
-	sc->hide();
+	sc->close();
 } 
 
 
 static void cancel_cb(Fl_Input* in, void*c) {
 	Fl_Search_Chooser *sc = (Fl_Search_Chooser *) c;
 	sc->sb->deselect();
-	sc->hide();
+	sc->close();
 }    
 
 Fl_Search_Chooser::Fl_Search_Chooser(const char *title) : Fl_Window(320, 320, title?title:"Choose") {
+	visible_focus = Fl::visible_focus();
 	Fl::visible_focus(0);
 	Fl_Group *g = new Fl_Group(10, 10, w() - 10, h() - 10);
 	sb = new Fl_Search_Browser(g->x(), g->y(), g->w() , g->h() - 100, NULL);
@@ -81,6 +82,12 @@ Fl_Search_Chooser::Fl_Search_Chooser(const char *title) : Fl_Window(320, 320, ti
 	Fl::focus(in);
 	g->end();
 	end();
+}
+
+void
+Fl_Search_Chooser::close() {
+	hide();
+	Fl::visible_focus(visible_focus);
 }
 
 void
@@ -108,10 +115,8 @@ Fl_Search_Chooser::handle(int event) {
 			if (key == FL_Up || key == FL_Down) {
 				return sb->handle(event);
 			} else if (key == FL_Enter) {
-				hide();
-				return 1;
+				close();
 			}
-
 	}
 
 	return Fl_Window::handle(event);

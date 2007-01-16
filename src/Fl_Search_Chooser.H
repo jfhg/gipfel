@@ -24,10 +24,14 @@ class Fl_Search_Browser : public Fl_Select_Browser {
 
 class Fl_Search_Chooser : public Fl_Window {
 	private:
+		int visible_focus;
+
 	public:
 		Fl_Search_Browser *sb;
 
 		Fl_Search_Chooser(const char *title);
+
+		void close();
 
 		void add(const char *t, void *d);
 
