@@ -35,6 +35,9 @@ Panorama::Panorama() {
 	view_height = 0.0;
 	proj = NULL;
 	set_projection(ProjectionLSQ::RECTILINEAR);
+
+
+fprintf(stderr, "=> %f, %f\n", get_earth_radius(0.0), get_earth_radius(pi_d/2.0));
 }
 
 Panorama::~Panorama() {
@@ -474,14 +477,11 @@ double
 Panorama::get_earth_radius(double phi) {
 	double a = 6378137.000;
 	double b = 6356752.315;
-	double x, y, r;
+	double r;
+	double ata = tan(phi);
 
-	x = a*b*pow(pow(a,2)*pow(tan(phi),2)+pow(b,2),-1.0/2.0);
-	y = a*b*tan(phi)*pow(pow(a,2)*pow(tan(phi),2)+pow(b,2),-1.0/2.0);
+	r = a*pow(pow(ata,2)+1,1.0/2.0)*fabs(b)*pow(pow(b,2)+pow(a,2)*pow(ata,2),-1.0/2.0);
 
-	r = sqrt(pow(x, 2) + pow(y, 2));	
-
-	fprintf(stderr, "==> %f %f %f %f\n", phi, x, y, r);
 	return r;
 }
 
