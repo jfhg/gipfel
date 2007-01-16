@@ -22,7 +22,7 @@ Fl_Search_Browser::find_prefix(const char *p) {
 		select(i);
 		return 0;
 	}
-};
+}
 
 int
 Fl_Search_Browser::find_prefix(const char *p, int s, int e) {
