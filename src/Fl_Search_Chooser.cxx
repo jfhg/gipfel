@@ -56,19 +56,19 @@ static void input_cb(Fl_Input* in, void*c) {
 
 static void ok_cb(Fl_Input* in, void*c) {
 	Fl_Search_Chooser *sc = (Fl_Search_Chooser *) c;
-	sc->w->hide();
+	sc->hide();
 } 
 
 
 static void cancel_cb(Fl_Input* in, void*c) {
 	Fl_Search_Chooser *sc = (Fl_Search_Chooser *) c;
 	sc->sb->deselect();
-	sc->w->hide();
+	sc->hide();
 }    
 
-Fl_Search_Chooser::Fl_Search_Chooser(const char *title) {
-	w = new Fl_Window(320, 320, title?title:"Choose");
-	Fl_Group *g = new Fl_Group(10, 10, w->w() - 10, w->h() - 10);
+Fl_Search_Chooser::Fl_Search_Chooser(const char *title) : Fl_Window(320, 320, title?title:"Choose") {
+	Fl::visible_focus(0);
+	Fl_Group *g = new Fl_Group(10, 10, w() - 10, h() - 10);
 	sb = new Fl_Search_Browser(g->x(), g->y(), g->w() , g->h() - 100, NULL);
 	sb->type(FL_HOLD_BROWSER);
 	Fl_Input *in = new Fl_Input(g->x()+50, g->h()-80, g->w()-80, 20, "Search");
@@ -80,7 +80,7 @@ Fl_Search_Chooser::Fl_Search_Chooser(const char *title) {
 	ok_b->callback((Fl_Callback*) ok_cb, this);
 	Fl::focus(in);
 	g->end();
-	w->end();
+	end();
 }
 
 void
@@ -98,12 +98,21 @@ Fl_Search_Chooser::data() {
 	}
 }
 
-void
-Fl_Search_Chooser::show() {
-	w->show();
-}
 
 int
-Fl_Search_Chooser::shown() {
-	return w->shown();
+Fl_Search_Chooser::handle(int event) {
+	switch(event) {
+		case FL_KEYBOARD:
+			int key = Fl::event_key();
+
+			if (key == FL_Up || key == FL_Down) {
+				return sb->handle(event);
+			} else if (key == FL_Enter) {
+				hide();
+				return 1;
+			}
+
+	}
+
+	return Fl_Window::handle(event);
 }

@@ -193,7 +193,7 @@ GipfelWidget::set_viewpoint(const char *pos) {
 
 	r = pan->set_viewpoint(pos);
 	set_labels(pan->get_visible_mountains());
-
+	redraw();
 	return r;
 }
 
@@ -201,6 +201,7 @@ void
 GipfelWidget::set_viewpoint(const Hill *m) {
 	pan->set_viewpoint(m);
 	set_labels(pan->get_visible_mountains());
+	redraw();
 }
 
 static void
