@@ -233,6 +233,7 @@ Panorama::set_projection(ProjectionLSQ::Projection_t p) {
 
 	if (proj) {
 		delete proj;
+		proj = NULL;
 	}
 
 	switch(projection_type) {

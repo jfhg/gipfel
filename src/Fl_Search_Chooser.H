@@ -17,22 +17,27 @@ class Fl_Search_Browser : public Fl_Select_Browser {
 		Fl_Search_Browser(int X, int Y, int W, int H, const char *c):Fl_Select_Browser(X,Y,W,H,c){};
 
 		int find_prefix(const char *p);
+
 	private:
 		int find_prefix(const char *p, int s, int e);
 };
 
-class Fl_Search_Chooser {
+class Fl_Search_Chooser : public Fl_Window {
 	private:
+		int visible_focus;
+
 	public:
-		Fl_Window *w;
 		Fl_Search_Browser *sb;
 
 		Fl_Search_Chooser(const char *title);
 
+		void close();
+
 		void add(const char *t, void *d);
+
 		void *data();
-		void show();
-		int shown();
+
+		int handle(int event);
 };
 
 #endif
