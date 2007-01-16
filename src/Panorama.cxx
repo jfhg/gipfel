@@ -132,34 +132,6 @@ Panorama::get_visible_mountains() {
 	return visible_mountains;
 }
 
-double
-Panorama::get_value(Hills *p) {
-	int i, j;
-	double v = 0.0, d_min, d;
-
-	if (isnan(parms.scale) || isnan(parms.a_center) || isnan(parms.a_tilt) || isnan(parms.a_nick) ||
-		parms.scale < 500.0 || parms.scale > 100000.0 || 
-		parms.a_nick > pi_d/4.0 || parms.a_nick < - pi_d/4.0 || 
-		parms.a_tilt > pi_d/16.0 || parms.a_tilt < - pi_d/16.0) {
-		return 10000000.0;
-	}
-
-
-	for (i=0; i<p->get_num(); i++) {
-		d_min = 1000.0;
-		for (j=0; j<visible_mountains->get_num(); j++) {
-			d = pow(p->get(i)->x - visible_mountains->get(j)->x, 2.0) + 
-				pow(p->get(i)->y - visible_mountains->get(j)->y, 2.0);
-			if (d < d_min) {
-				d_min = d;
-			}
-		}
-		v = v + d_min;
-	}
-
-	return v;
-}
-
 int
 Panorama::comp_params(Hills *h) {
 	int ret;

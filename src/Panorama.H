@@ -51,8 +51,6 @@ class Panorama {
 
 		int optimize(Hill *m1, Hill *m2);
 
-		double get_value(Hills *p);
-
 		int is_visible(double a_alph);
 
 		double pi_d, deg2rad;
