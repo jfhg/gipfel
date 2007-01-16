@@ -468,6 +468,7 @@ Panorama::nick(Hill *m) {
 	return beta - pi_d / 2.0;
 }
 
+// return local distance to center of WGS84 ellipsoid
 double
 Panorama::get_earth_radius(double phi) {
 	double a = 6378137.000;
