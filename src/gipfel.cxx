@@ -554,7 +554,9 @@ stitch(GipfelWidget::sample_mode_t m,
 
 			snprintf(buf, sizeof(buf), "%s/%s", path, argv[i]);
 			dot = strrchr(buf, '.');
-			*dot = '\0';
+			if (dot) {
+				*dot = '\0';
+			}
 			strncat(buf, ".tiff", sizeof(buf));
 
 			st->set_output(argv[i], (OutputImage*) new TIFFOutputImage(buf));
