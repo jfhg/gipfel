@@ -483,8 +483,6 @@ Panorama::is_visible(double a_alph) {
 
 int
 Panorama::get_coordinates(double a_alph, double a_nick, double *x, double *y) {
-
-
 	if (is_visible(a_alph)) {
 		proj->get_coordinates(a_alph, a_nick, &parms, x, y);
 		return 0;
