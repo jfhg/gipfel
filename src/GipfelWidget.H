@@ -16,7 +16,6 @@ class GipfelWidget : public Fl_Widget {
 	private:
 		Fl_Image *img;
 		Hill *cur_mountain;
-		Hills *marker;
 		Hills *track_points;
 		Hills *known_hills;
 		Panorama *pan;
