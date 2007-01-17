@@ -45,16 +45,11 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
 	pan = new Panorama();
 	cur_mountain = NULL;
 	mb = NULL;
-	marker = new Hills();
 	known_hills = new Hills();
 	img_file = NULL;
 	track_width = 200.0;
 	show_hidden = 0;
 	md = new ImageMetaData();
-
-	for (i=0; i<=3; i++) {
-		marker->add(new Hill(i * 10, 0));
-	}
 	track_points = NULL;
 	fl_register_images();
 }
@@ -401,17 +396,6 @@ GipfelWidget::toggle_known_mountain(int m_x, int m_y) {
 				known_hills->add(m);
 			}
 
-			redraw();
-			return 0;
-		}
-	}
-
-	for (i=0; i<marker->get_num(); i++) {
-		m = marker->get(i);
-
-		if (m_x - center_x >= m->x - 2 && m_x - center_x < m->x + 2 &&
-			m_y - center_y >= m->y - 2 && m_y - center_y < m->y + 2) {
-			cur_mountain = m;
 			redraw();
 			return 0;
 		}

@@ -1,5 +1,9 @@
 gipfel ChangeLog
 =================
+
+gipfel-0.2.1
+ - Improve "Choose Viewpoint" dialog.
+
 gipfel-0.2.0
  - Change scale factor to "focal length in 35mm" this makes it 
    independent of the image size. One can now scale an already 
