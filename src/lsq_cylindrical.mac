@@ -18,7 +18,7 @@ load("expr2c.mac")$
 x_expand : trigexpand(x_scale)$
 y_expand : trigexpand(y_scale)$
 
-args: "double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick"$
+args: "double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double x0, double m_view, double m_nick"$
 
 expr2c("ProjectionCylindrical::mac_x", args, x_expand)$
 expr2c("ProjectionCylindrical::mac_y", args, y_expand)$

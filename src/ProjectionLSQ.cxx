@@ -45,6 +45,7 @@ ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 		distortion_correct = 1;
 		parms->k0 = 0.0;
 		parms->k1 = 0.0;
+		parms->x0 = 0.0;
 	}
 
 	m1 = h->get(0);
@@ -68,7 +69,7 @@ ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 	if (distortion_correct) {
 		lsq(h, parms, 1);
 	}
-
+fprintf(stderr, "===> x0 %f\n", parms->x0);
 	return 0;
 }
 
@@ -79,12 +80,12 @@ struct data {
 	const ViewParams *old_params;
 };
 
-#define CALL(A) dat->p->A(c_view, c_nick, c_tilt, scale, k0, k1, m->alph, m->a_nick) 
+#define CALL(A) dat->p->A(c_view, c_nick, c_tilt, scale, k0, k1, x0, m->alph, m->a_nick) 
 
 static int
 lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
 	struct data *dat = (struct data *) data;
-	double c_view, c_nick, c_tilt, scale, k0, k1;
+	double c_view, c_nick, c_tilt, scale, k0, k1, x0;
 
 	c_view = gsl_vector_get (x, 0);
 	c_nick = gsl_vector_get (x, 1);
@@ -93,9 +94,11 @@ lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
 	if (dat->distortion_correct) {
 		k0  = gsl_vector_get (x, 4);
 		k1 = gsl_vector_get (x, 5);
+		x0 = gsl_vector_get (x, 6);
 	} else {
 		k0 = dat->old_params->k0;
 		k1 = dat->old_params->k1;
+		x0 = dat->old_params->x0;
 	}
 
 	for (int i=0; i<dat->h->get_num(); i++) {
@@ -115,7 +118,7 @@ lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
 static int
 lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 	struct data *dat = (struct data *) data;
-    double c_view, c_nick, c_tilt, scale, k0, k1;
+    double c_view, c_nick, c_tilt, scale, k0, k1, x0;
 
     c_view = gsl_vector_get (x, 0);
     c_nick = gsl_vector_get (x, 1);
@@ -124,9 +127,11 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
     if (dat->distortion_correct) {
         k0  = gsl_vector_get (x, 4);
         k1 = gsl_vector_get (x, 5);
+        x0 = gsl_vector_get (x, 6);
     } else {
         k0 = dat->old_params->k0;
         k1 = dat->old_params->k1;
+        x0 = dat->old_params->x0;
     }            
 
 	for (int i=0; i<dat->h->get_num(); i++) {
@@ -139,6 +144,7 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 		if (dat->distortion_correct) {
 			gsl_matrix_set (J, 2*i, 4, CALL(mac_x_dk0));
 			gsl_matrix_set (J, 2*i, 5, CALL(mac_x_dk1));
+			gsl_matrix_set (J, 2*i, 6, CALL(mac_x_dx0));
 		}
 
 		gsl_matrix_set (J, 2*i+1, 0, CALL(mac_y_dc_view));
@@ -148,6 +154,7 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 		if (dat->distortion_correct) {
 			gsl_matrix_set (J, 2*i+1, 4, CALL(mac_y_dk0));
 			gsl_matrix_set (J, 2*i+1, 5, CALL(mac_y_dk1));
+			gsl_matrix_set (J, 2*i+1, 6, CALL(mac_y_dx0));
 		}
 	}
 
@@ -173,7 +180,7 @@ ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
 	double x_init[8];
 	gsl_vector_view x;
 	int status;
-	int num_params = distortion_correct?6:4;
+	int num_params = distortion_correct?7:4;
 
 	dat.p = this;
 	dat.distortion_correct = distortion_correct;
@@ -186,6 +193,7 @@ ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
 	x_init[3] = parms->scale;
 	x_init[4] = parms->k0;
 	x_init[5] = parms->k1;
+	x_init[6] = parms->x0;
 
 	x = gsl_vector_view_array (x_init, num_params);
 
@@ -216,6 +224,7 @@ ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
 	if (distortion_correct) {
 		parms->k0 = gsl_vector_get(s->x, 4);
 		parms->k1 = gsl_vector_get(s->x, 5);
+		parms->x0 = gsl_vector_get(s->x, 6);
 	}
 
 	gsl_multifit_fdfsolver_free (s);
@@ -228,9 +237,9 @@ ProjectionLSQ::get_coordinates(double alph, double a_nick,
 	const ViewParams *parms, double *x, double *y) {
 
 	*x = mac_x(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale,
-		parms->k0, parms->k1, alph, a_nick); 
+		parms->k0, parms->k1, parms->x0, alph, a_nick); 
 	*y = mac_y(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale,
-		parms->k0, parms->k1, alph, a_nick); 
+		parms->k0, parms->k1, parms->x0, alph, a_nick); 
 }
 
 double
@@ -238,7 +247,7 @@ ProjectionLSQ::comp_scale(double a1, double a2, double d1, double d2) {
 	return (fabs(d1 - d2) / fabs(a1 - a2));
 }
 
-#define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick
+#define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double x0, double m_view, double m_nick
 
 double ProjectionLSQ::mac_x(ARGS) {return NAN;}
 double ProjectionLSQ::mac_y(ARGS) {return NAN;}
@@ -248,9 +257,11 @@ double ProjectionLSQ::mac_x_dc_tilt(ARGS) {return NAN;}
 double ProjectionLSQ::mac_x_dscale(ARGS) {return NAN;}
 double ProjectionLSQ::mac_x_dk0(ARGS) {return NAN;}
 double ProjectionLSQ::mac_x_dk1(ARGS) {return NAN;}
+double ProjectionLSQ::mac_x_dx0(ARGS) {return NAN;}
 double ProjectionLSQ::mac_y_dc_view(ARGS) {return NAN;}
 double ProjectionLSQ::mac_y_dc_nick(ARGS) {return NAN;}
 double ProjectionLSQ::mac_y_dc_tilt(ARGS) {return NAN;}
 double ProjectionLSQ::mac_y_dscale(ARGS) {return NAN;}
 double ProjectionLSQ::mac_y_dk0(ARGS) {return NAN;}
 double ProjectionLSQ::mac_y_dk1(ARGS) {return NAN;}
+double ProjectionLSQ::mac_y_dx0(ARGS) {return NAN;}

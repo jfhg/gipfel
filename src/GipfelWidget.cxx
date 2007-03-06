@@ -802,6 +802,7 @@ GipfelWidget::load_distortion_params(const char *prof_name) {
 	Fl_Preferences prof(dist_prefs, prof_name);
 	ret += prof.get("k0", pan->parms.k0, pan->parms.k0);
 	ret += prof.get("k1", pan->parms.k1, pan->parms.k1);
+	ret += prof.get("x0", pan->parms.k1, pan->parms.x0);
 
 	return !ret;
 }
@@ -812,6 +813,7 @@ GipfelWidget::save_distortion_params(const char *prof_name) {
 	Fl_Preferences prof(dist_prefs, prof_name);
 	prof.set("k0", pan->parms.k0);
 	prof.set("k1", pan->parms.k1);
+	prof.set("x0", pan->parms.x0);
 
 	return 0;
 }
