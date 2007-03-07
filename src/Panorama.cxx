@@ -166,15 +166,17 @@ Panorama::set_scale(double s) {
 }
 
 void
-Panorama::get_distortion_params(double *k0, double *k1) {
+Panorama::get_distortion_params(double *k0, double *k1, double *x0) {
 	*k0 = parms.k0;
 	*k1 = parms.k1;
+	*x0 = parms.x0;
 }
 
 void
-Panorama::set_distortion_params(double k0, double k1) {
+Panorama::set_distortion_params(double k0, double k1, double x0) {
 	parms.k0 = k0;
 	parms.k1 = k1;
+	parms.x0 = x0;
 	update_coordinates();
 }
 
@@ -451,7 +453,7 @@ Panorama::get_earth_radius(double phi) {
 	double b = 6356752.315;
 	double r;
 	double ata = tan(phi);
-
+return EARTH_RADIUS;
 	r = a*pow(pow(ata,2)+1,1.0/2.0)*fabs(b)*pow(pow(b,2)+pow(a,2)*pow(ata,2),-1.0/2.0);
 
 	return r;

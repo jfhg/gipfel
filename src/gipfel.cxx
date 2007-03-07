@@ -46,7 +46,7 @@ Fl_Window *control_win, *view_win;
 Fl_Dial *s_center = NULL;
 Fl_Slider *s_nick, *s_focal_length, *s_tilt, *s_height_dist, *s_track_width;
 Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
-Fl_Value_Input *i_distortion_k0, *i_distortion_k1;
+Fl_Value_Input *i_distortion_k0, *i_distortion_k1, *i_distortion_x0;
 Fl_Box *b_viewpoint;
 Fl_Menu_Bar *mb;
 
@@ -58,7 +58,7 @@ static int stitch(GipfelWidget::sample_mode_t m ,int stitch_w, int stitch_h,
 	double from, double to, int type, const char *path, int argc, char **argv);
 
 void set_values() {
-	double k0 = 0.0, k1 = 0.0;
+	double k0 = 0.0, k1 = 0.0, x0 = 0.0;
 
 	s_center->value(gipf->get_center_angle());
 	s_nick->value(gipf->get_nick_angle());
@@ -77,9 +77,10 @@ void set_values() {
 		mb->mode(8, FL_MENU_RADIO);
 	}
 
-	gipf->get_distortion_params(&k0, &k1);
+	gipf->get_distortion_params(&k0, &k1, &x0);
 	i_distortion_k0->value(k0);
 	i_distortion_k1->value(k1);
+	i_distortion_x0->value(x0);
 }
 
 void quit_cb() {
@@ -174,12 +175,12 @@ void comp_cb(Fl_Widget *, void *) {
 void save_distortion_cb(Fl_Widget *, void *) {
 	char buf[1024];
 	const char * prof_name;
-	double k0, k1;
+	double k0, k1, x0;
 
-	gipf->get_distortion_params(&k0, &k1);
+	gipf->get_distortion_params(&k0, &k1, &x0);
 	gipf->get_distortion_profile_name(buf, sizeof(buf));
-	prof_name = fl_input("Save Distortion Profile (k0=%f, k1=%f)",
-		buf, k0, k1);
+	prof_name = fl_input("Save Distortion Profile (k0=%f, k1=%f, x0=%f)",
+		buf, k0, k1, x0);
 
 	if (prof_name == NULL) {
 		return;
@@ -208,8 +209,10 @@ void load_distortion_cb(Fl_Widget *, void *) {
 }
 
 void distortion_cb(Fl_Value_Input*, void*) {
-	gipf->set_distortion_params(i_distortion_k0->value(),
-		i_distortion_k1->value());
+	gipf->set_distortion_params(
+		i_distortion_k0->value(),
+		i_distortion_k1->value(),
+		i_distortion_x0->value());
 }
 
 void about_cb() {
@@ -355,23 +358,31 @@ create_control_window() {
 	i_view_height->when(FL_WHEN_ENTER_KEY);
 	i_view_height->callback((Fl_Callback*)view_height_cb);
 
-	i_distortion_k0 = new Fl_Value_Input(235, 220, 80, 20, "Distortion (k0)");
+	i_distortion_k0 = new Fl_Value_Input(250, 200, 80, 20, "k0");
 	i_distortion_k0->labelsize(10);
 	i_distortion_k0->textsize(10);
-	i_distortion_k0->align(FL_ALIGN_TOP);
+	i_distortion_k0->align(FL_ALIGN_LEFT);
 	i_distortion_k0->when(FL_WHEN_ENTER_KEY);
 	i_distortion_k0->callback((Fl_Callback*)distortion_cb);
 
-	i_distortion_k1 = new Fl_Value_Input(315, 220, 80,  20, "Distortion (k1)");
+	i_distortion_k1 = new Fl_Value_Input(250, 225, 80,  20, "k1");
 	i_distortion_k1->labelsize(10);
 	i_distortion_k1->textsize(10);
-	i_distortion_k1->align(FL_ALIGN_TOP);
+	i_distortion_k1->align(FL_ALIGN_LEFT);
 	i_distortion_k1->when(FL_WHEN_ENTER_KEY);
 	i_distortion_k1->callback((Fl_Callback*)distortion_cb);
 
+	i_distortion_x0 = new Fl_Value_Input(250, 250, 80,  20, "x0");
+	i_distortion_x0->labelsize(10);
+	i_distortion_x0->textsize(10);
+	i_distortion_x0->align(FL_ALIGN_LEFT);
+	i_distortion_x0->when(FL_WHEN_ENTER_KEY);
+	i_distortion_x0->callback((Fl_Callback*)distortion_cb);
+
+
 
 	// Buttons
-	Fl_Button *b = new Fl_Button(260, 260, 100, 20, "comp");
+	Fl_Button *b = new Fl_Button(280, 280, 100, 20, "comp");
 	b->color(FL_RED);
 	b->tooltip("compute view parameter from given mountains");
 	b->callback(comp_cb);
@@ -388,7 +399,7 @@ int main(int argc, char** argv) {
 	int jpeg_flag = 0, tiff_flag = 0, distortion_flag = 0;
 	int bilinear_flag = 0;
 	double stitch_from = 0.0, stitch_to = 380.0;
-	double dist_k0 = 0.0, dist_k1 = 0.0;
+	double dist_k0 = 0.0, dist_k1 = 0.0, dist_x0 = 0.0;
 	char *outpath = "/tmp";
 	Fl_Scroll *scroll;
 
@@ -419,11 +430,17 @@ int main(int argc, char** argv) {
 				}
 				break;
 			case 'u':
+				char *c;
 				distortion_flag++;
 				if (optarg && strcmp(optarg, ":")) {
 					dist_k0 = atof(optarg);
-					if (strchr(optarg, ',')) {
+					c = strchr(optarg, ',');
+					if (c) {
 						dist_k1 = atof(strchr(optarg, ',') + 1);
+						c = strchr(c + 1, ',');
+						if (c) {
+							dist_x0 = atof(strchr(optarg, ',') + 1);
+						}
 					}
 				}
 				break;
@@ -501,7 +518,7 @@ int main(int argc, char** argv) {
 	}
 
 	if (distortion_flag) {
-		gipf->set_distortion_params(dist_k0, dist_k1);
+		gipf->set_distortion_params(dist_k0, dist_k1, dist_x0);
 	}
 
 	view_win->size(gipf->w(), gipf->h());

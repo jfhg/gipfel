@@ -38,6 +38,7 @@ ImageMetaData::clear() {
 	tilt = NAN;
 	k0 = NAN;
 	k1 = NAN;
+	x0 = NAN;
 	focal_length = NAN;
 	focal_length_35mm = NAN;
 	scale = NAN;
@@ -159,7 +160,7 @@ ImageMetaData::load_image_exif(char *name) {
 
 
 #define GIPFEL_FORMAT_1 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, scale %lf, projection type %d"
-#define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focal_length_35mm %lf, projection type %d, k0 %lf, k1 %lf"
+#define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focal_length_35mm %lf, projection type %d, k0 %lf, k1 %lf, x0 %lf"
 
 int
 ImageMetaData::load_image_jpgcom(char *name) {
@@ -168,7 +169,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
     pid_t pid;
     int status;
     char buf[1024];
-    double lo, la, he, dir, ni, ti, fr, _k0, _k1;
+    double lo, la, he, dir, ni, ti, fr, _k0, _k1, _x0 = 0.0;
     int pt = 0;
     int n, ret = 1;
 
@@ -181,7 +182,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
     if (p) {
         while (fgets(buf, sizeof(buf), p) != NULL) {
             if ((n = sscanf(buf, GIPFEL_FORMAT_2,
-                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &_k0, &_k1)) >= 8) {
+                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &_k0, &_k1, &_x0)) >= 8) {
 
                 longitude = lo;
                 latitude  = la;
@@ -195,6 +196,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
 				if (n >= 10) {
 					k0 = _k0;
 					k1 = _k1;
+					x0 = _x0;
 				}
 
                 ret = 0;
@@ -395,13 +397,15 @@ ImageMetaData::set_projection_type(int v) {
 }
 
 void
-ImageMetaData::get_distortion_params(double *_k0, double *_k1) {
+ImageMetaData::get_distortion_params(double *_k0, double *_k1, double *_x0) {
 	*_k0 = k0;	
 	*_k1 = k1;	
+	*_x0 = x0;	
 }
 
 void
-ImageMetaData::set_distortion_params(double _k0, double _k1) {
+ImageMetaData::set_distortion_params(double _k0, double _k1, double _x0) {
 	k0 = _k0;	
 	k1 = _k1;	
+	x0 = _x0;	
 }

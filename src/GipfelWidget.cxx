@@ -99,7 +99,7 @@ GipfelWidget::load_image(char *file) {
 	// 1. gipfel data in JPEG comment
 	// 2. matching distortion profile
 	// 3. set the to 0.0, 0.0
-	md->get_distortion_params(&pan->parms.k0, &pan->parms.k1);
+	md->get_distortion_params(&pan->parms.k0, &pan->parms.k1, &pan->parms.x0);
 	if (isnan(pan->parms.k0)) {
 		char buf[1024];
 		get_distortion_profile_name(buf, sizeof(buf));
@@ -138,7 +138,7 @@ GipfelWidget::save_image(char *file) {
 	md->set_tilt(get_tilt_angle());
 	md->set_focal_length_35mm(get_focal_length_35mm());
 	md->set_projection_type((int) get_projection());
-	md->set_distortion_params(pan->parms.k0, pan->parms.k1);
+	md->set_distortion_params(pan->parms.k0, pan->parms.k1, pan->parms.x0);
 
 	ret = md->save_image(img_file, file);
 	delete md;
@@ -473,13 +473,13 @@ GipfelWidget::set_projection(ProjectionLSQ::Projection_t p) {
 }
 
 void
-GipfelWidget::get_distortion_params(double *k0, double *k1) {
-	pan->get_distortion_params(k0, k1);
+GipfelWidget::get_distortion_params(double *k0, double *k1, double *x0) {
+	pan->get_distortion_params(k0, k1, x0);
 }
 
 void
-GipfelWidget::set_distortion_params(double k0, double k1) {
-	pan->set_distortion_params(k0, k1);
+GipfelWidget::set_distortion_params(double k0, double k1, double x0) {
+	pan->set_distortion_params(k0, k1, x0);
 	redraw();
 }
 
@@ -802,7 +802,7 @@ GipfelWidget::load_distortion_params(const char *prof_name) {
 	Fl_Preferences prof(dist_prefs, prof_name);
 	ret += prof.get("k0", pan->parms.k0, pan->parms.k0);
 	ret += prof.get("k1", pan->parms.k1, pan->parms.k1);
-	ret += prof.get("x0", pan->parms.k1, pan->parms.x0);
+	ret += prof.get("x0", pan->parms.x0, pan->parms.x0);
 
 	return !ret;
 }
