@@ -31,6 +31,7 @@
 
 
 #define MAX(A,B) ((A)>(B)?(A):(B))
+#define MIN(A,B) ((A)<(B)?(A):(B))
 
 static double pi_d, deg2rad;
 
@@ -671,6 +672,8 @@ int
 GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
 	double a_alph, double a_nick, uchar *r, uchar *g, uchar *b) {
 	double px, py;
+	uchar r_tmp, g_tmp, b_tmp;
+	int ret;
 
 	if (img == NULL) {
 		return 1;
@@ -681,12 +684,36 @@ GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
 	}
 
 	if (m == GipfelWidget::BILINEAR) {
-		return get_pixel_bilinear(img, px + ((double) img->w()) / 2.0,
+		ret = get_pixel_bilinear(img, px + ((double) img->w()) / 2.0,
 			py + ((double) img->h()) / 2.0, r, g, b);
 	} else {
-		return get_pixel_nearest(img, px + ((double) img->w()) / 2.0,
+		ret = get_pixel_nearest(img, px + ((double) img->w()) / 2.0,
 			py + ((double) img->h()) / 2.0, r, g, b);
 	}
+
+#if 0
+	if (ret == 0) {
+fprintf(stderr, "===> %d\n", ret);
+		double angle =  atan(pow(pow(tan(a_alph - pan->parms.a_center), 2.0) +
+				pow(tan(a_nick - pan->parms.a_nick), 2.0), 0.5));
+		double devign = 1.0 / pow(cos(angle), 1.5);
+		fprintf(stderr, "===> %lf\n", devign);
+
+		*r = (uchar) MIN(rint((double) r_tmp * devign), 255);
+		*g = (uchar) MIN(rint((double) g_tmp * devign), 255);
+		*b = (uchar) MIN(rint((double) b_tmp * devign), 255);
+	}
+#endif
+
+	return ret;
+}
+
+double
+GipfelWidget::get_angle_off(double a_alph, double a_nick) {
+	double angle =  atan(pow(pow(tan(a_alph - pan->parms.a_center), 2.0) +
+			pow(tan(a_nick - pan->parms.a_nick), 2.0), 0.5));
+
+	return angle;
 }
 
 int
