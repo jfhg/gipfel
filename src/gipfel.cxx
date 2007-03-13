@@ -585,10 +585,6 @@ stitch(GipfelWidget::sample_mode_t m,
 
 		st->resample(m, stitch_w, stitch_h, from, to);
 
-	} else if (type = STITCH_VIGNETTE_CALIB) {
-		
-		st->vignette_calib(m, stitch_w, stitch_h, from, to);
-
 	} else {
 		win = new Fl_Window(0,0, stitch_w, stitch_h);
 		scroll = new Fl_Scroll(0, 0, win->w(), win->h());
@@ -598,7 +594,13 @@ stitch(GipfelWidget::sample_mode_t m,
 		win->resizable(scroll);
 		win->show(0, argv); 
 		st->set_output((OutputImage*) img);
-		st->resample(m, stitch_w, stitch_h, from, to);
+
+		if (type == STITCH_VIGNETTE_CALIB) {
+			st->vignette_calib(m, stitch_w, stitch_h, from, to);
+		} else {
+			st->resample(m, stitch_w, stitch_h, from, to);
+		}
+
 		img->redraw();
 		Fl::run();
 	}
