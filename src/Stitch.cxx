@@ -95,16 +95,15 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	int merged_pixel_set;
 	double radius = (double) w / (view_end -view_start);
 
-	double V1 = 6.220359, V2 = -13.874930, V3 = 9.992582;
 	int max_samples = 10000, n_samples = 0;
 	gsl_matrix *X, *cov;
 	gsl_vector *yv,  *c;
 	double chisq;
 
-	X = gsl_matrix_alloc(max_samples, 1);
+	X = gsl_matrix_alloc(max_samples, 2);
 	yv = gsl_vector_alloc(max_samples);
-	c = gsl_vector_alloc(1);
-	cov = gsl_matrix_alloc (1, 1);
+	c = gsl_vector_alloc(2);
+	cov = gsl_matrix_alloc (2, 2);
 
 	if (merged_image) {
 		merged_image->init(w, h);
@@ -127,23 +126,34 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 					break;
 				} else if (gipf[i]->get_pixel(m, a_view, a_nick,
 						&c2[0], &c2[1], &c2[2]) == 0) {
-					l2 = (double) c2[0] + c2[1] + c2[2];
-					a2 = fabs(gipf[i]->get_angle_off(a_view, a_nick));
+					l2 = (double) c2[0] + (double) c2[1] + (double) c2[2];
+					a2 = gipf[i]->get_angle_off(a_view, a_nick);
 
-					if (l1 > 0.0 && n_samples < max_samples &&
-						fabs(a1 - a2) > 0.1 &&
-						fabs(((double) c1[1]) / ((double) c1[0]) -
-							((double) c2[1]) / ((double) c2[0])) < 0.2 && 
-						fabs(((double) c1[2]) / ((double) c1[0]) -
-							((double) c2[2]) / ((double) c2[0])) < 0.2) {
+					if (l1 > 0.0) {
 
-						gsl_matrix_set(X, n_samples, 0, l1 * a1 * a1 - l2 * a2 * a2);
-						gsl_vector_set(yv, n_samples, l2 - l1);
-						n_samples++;
+						if (n_samples < max_samples &&
+							fabs(a1 - a2) > 0.02 &&
+							c1[0] < 200 && c1[1] < 200 && c1[2] < 200 &&
+							c2[0] < 200 && c2[1] < 200 && c2[2] < 200 &&
+							fabs(((double) c1[1]) / ((double) c1[0]) -
+								((double) c2[1]) / ((double) c2[0])) < 0.02 && 
+							fabs(((double) c1[2]) / ((double) c1[0]) -
+								((double) c2[2]) / ((double) c2[0])) < 0.02) {
 
-						if (merged_image) {
-							merged_image->set_pixel(x, 255, 0, 0);	
-							merged_pixel_set++;
+							gsl_matrix_set(X, n_samples, 0, l2 *  a2 * a2 *a2 * a2 - l1 * a1 *a1 *a1 * a1);
+							gsl_matrix_set(X, n_samples, 1, l2 * a2 * a2 - l1 * a1 * a1);
+							gsl_vector_set(yv, n_samples, l1 - l2);
+							n_samples++;
+
+							if (merged_image) {
+								double V1 = -0.57301, V2 = 0.85233;
+								double d = fabs(V2 * (l2 * a2 * a2 - l1 * a1 * a1) + V1 * (l2 *  a2 * a2 *a2 - l1 * a1 * a1 *a1) - (l1 -l2)); 
+
+								merged_image->set_pixel(x, (uchar) rint(d * 2), 0, 0);	
+								merged_pixel_set++;
+							}
+
+
 						}
 					}
 						
@@ -154,7 +164,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 					c1[2] = c2[2];
 
 					if (!merged_pixel_set && merged_image) {
-						merged_image->set_pixel(x, r, g, b);
+						merged_image->set_pixel(x, c1[0], c1[1], c1[2]);
 					}
 				}
 			}
@@ -169,13 +179,13 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	}
 
 	gsl_multifit_linear_workspace * work 
-           = gsl_multifit_linear_alloc (n_samples, 1);
+           = gsl_multifit_linear_alloc (n_samples, 2);
 
 	gsl_multifit_linear (X, yv, c, cov, &chisq, work);
          gsl_multifit_linear_free (work);
 
-	fprintf(stderr, "===>  v2 %lf, (i %d)\n", 
-		gsl_vector_get(c,0), n_samples);
+	fprintf(stderr, "===>  v1 %lf v2 %lf, (i %d)\n", 
+		gsl_vector_get(c,0),gsl_vector_get(c,1), n_samples);
 
 	return 0;
 }
@@ -193,7 +203,7 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 	int y_off = h / 2;
 	int merged_pixel_set;
 	double radius = (double) w / (view_end -view_start);
-	double V1 = 0.0, V2 = 0.16435;
+	double V1 = 0.213895, V2 = 0.089561;
 
 	if (merged_image) {
 		merged_image->init(w, h);
@@ -217,13 +227,8 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 					break;
 				} else if (gipf[i]->get_pixel(m, a_view, a_nick,
 						&r, &g, &b) == 0) {
-					double l2 = (double) r + g + b;
-					double a2 = fabs(gipf[i]->get_angle_off(a_view, a_nick));
-					double devign = ( 1 + a2 * V1 + a2 * a2 * V2);
-if (a2 > a_max) {
-fprintf(stderr, "==> %lf %lf\n", devign, a2);
-a_max = a2;
-}
+					double a2 = gipf[i]->get_angle_off(a_view, a_nick);
+					double devign = ( 1 + a2 * a2 * V2 + a2*a2*a2*a2 * V1);
 
 #if 1 
 					r = (uchar) MIN(rint((double) r * devign), 255);
@@ -231,19 +236,17 @@ a_max = a2;
 					b = (uchar) MIN(rint((double) b * devign), 255);
 #else 
 
-					r = (uchar) MIN(rint((double) 250 * devign), 255);
-					g = (uchar) MIN(rint((double) 250 * devign), 255);
-					b = (uchar) MIN(rint((double) 250 * devign), 255);
+					r = (uchar) MIN(rint((double) 100 * devign), 255);
+					g = (uchar) MIN(rint((double) 100 * devign), 255);
+					b = (uchar) MIN(rint((double) 100 * devign), 255);
 #endif
 
 
 					if (single_images[i]) {
-						single_images[i]->set_pixel(x, r
-							, g, b);
+						single_images[i]->set_pixel(x, r, g, b);
 					}
 					if (!merged_pixel_set && merged_image) {
-						merged_image->set_pixel(x, r, g,
-							b);
+						merged_image->set_pixel(x, r, g, b);
 						merged_pixel_set++;
 					}
 				}
