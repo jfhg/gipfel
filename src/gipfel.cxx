@@ -484,13 +484,17 @@ int main(int argc, char** argv) {
 	}
 
 	if (stitch_flag) {
-		int type = STITCH_PREVIEW;
+		int type = 0;
 		if (jpeg_flag) {
 			type = STITCH_JPEG;
 		} else if (tiff_flag) {
 			type = STITCH_TIFF;
-		} else if (vignette_flag) {
-			type = STITCH_VIGNETTE_CALIB;
+		} else {
+			type = STITCH_PREVIEW;
+		}
+
+		if (vignette_flag) {
+			type |= STITCH_VIGNETTE_CALIB;
 		}
 
 		stitch(bilinear_flag?GipfelWidget::BILINEAR:GipfelWidget::NEAREST,
@@ -564,12 +568,17 @@ stitch(GipfelWidget::sample_mode_t m,
 		st->load_image(argv[i]);
 	}
 
-	if (type == STITCH_JPEG) {
+	if (type & STITCH_VIGNETTE_CALIB) {
+		st->color_calib(m, stitch_w, stitch_h, from, to);
+		//st->vignette_calib(m, stitch_w, stitch_h, from, to);
+	}
+
+	if (type & STITCH_JPEG) {
 
 		st->set_output((OutputImage*) new JPEGOutputImage(path, 90));
 		st->resample(m, stitch_w, stitch_h, from, to);
 
-	} else if (type == STITCH_TIFF) {
+	} else if (type & STITCH_TIFF) {
 
 		for (int i=0; i<argc; i++) {
 			char buf[1024];
@@ -595,13 +604,7 @@ stitch(GipfelWidget::sample_mode_t m,
 		win->show(0, argv); 
 		st->set_output((OutputImage*) img);
 
-		if (type == STITCH_VIGNETTE_CALIB) {
-			st->color_calib(m, stitch_w, stitch_h, from, to);
-			//st->vignette_calib(m, stitch_w, stitch_h, from, to);
-			st->resample(m, stitch_w, stitch_h, from, to);
-		} else {
-			st->resample(m, stitch_w, stitch_h, from, to);
-		}
+		st->resample(m, stitch_w, stitch_h, from, to);
 
 		img->redraw();
 		Fl::run();

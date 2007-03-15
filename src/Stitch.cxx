@@ -192,7 +192,7 @@ Stitch::color_calib(GipfelWidget::sample_mode_t m,
 								c2[l]=((uchar)MIN(rint((double) c2[l] * devign), 255));
 							}
 
-							if (fabs(a1-a2) < 0.02 &&
+							if (fabs(a1-a2) < 0.01 &&
 								fabs(((double) c1[1]) / ((double) c1[0]) -
 									((double) c2[1]) / ((double) c2[0])) < 1.0 && 
 								fabs(((double) c1[2]) / ((double) c1[0]) -
