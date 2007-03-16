@@ -35,7 +35,7 @@ OutputImage::init_internal(int w1, int h1) {
 }
 
 int
-OutputImage::set_pixel(int x, char r, char g, char b) {
+OutputImage::set_pixel(int x, int r, int g, int b) {
 	if (!initialized || x < 0 || x >= W) {
 		return 1;
 	} else {
@@ -44,7 +44,7 @@ OutputImage::set_pixel(int x, char r, char g, char b) {
 }
 
 int
-OutputImage::set_pixel_internal(int x, char r, char g, char b) {
+OutputImage::set_pixel_internal(int x, int r, int g, int b) {
 	return 0;
 }
 

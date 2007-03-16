@@ -68,10 +68,10 @@ JPEGOutputImage::init_internal(int w1, int h1) {
 }
 
 int
-JPEGOutputImage::set_pixel_internal(int x, char r, char g, char b) {
-	row[x*3+0] = r;
-	row[x*3+1] = g;
-	row[x*3+2] = b;
+JPEGOutputImage::set_pixel_internal(int x, int r, int g, int b) {
+	row[x*3+0] = (unsigned char) r;
+	row[x*3+1] = (unsigned char) g;
+	row[x*3+2] = (unsigned char) b;
 
 	return 0;
 }

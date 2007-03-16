@@ -39,13 +39,13 @@ class GipfelWidget : public Fl_Widget {
 		int get_rel_track_width(Hill *m);
 
 		static int get_pixel_nearest(Fl_Image *img, double x, double y,
-			uchar *r, uchar *g, uchar *b);
+			int *r, int *g, int *b);
 
 		static int get_pixel_bilinear(Fl_Image *img, double x, double y,
-			uchar *r, uchar *g, uchar *b);
+			int *r, int *g, int *b);
 
 		static int get_pixel(Fl_Image *img, int x, int y,
-			uchar *r, uchar *g, uchar *b);
+			int *r, int *g, int *b);
 
 	public:
 		typedef enum {
@@ -124,7 +124,7 @@ class GipfelWidget : public Fl_Widget {
 		int comp_params();
 
 		int get_pixel(GipfelWidget::sample_mode_t,
-			double a_alph, double a_nick, uchar *r, uchar *g, uchar *b);
+			double a_alph, double a_nick, int *r, int *g, int *b);
 
 		double get_angle_off(double view, double nick);
 

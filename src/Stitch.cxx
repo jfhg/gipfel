@@ -17,7 +17,7 @@
 #include "Stitch.H"
 
 #define MIN(A,B) ((A)<(B)?(A):(B))
-
+#define MAX_VALUE 65025
 
 static double pi_d = asin(1.0) * 2.0;
 static double deg2rad = pi_d / 180.0;
@@ -99,12 +99,12 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	view_end = view_end * deg2rad;
 
 	double step_view = (view_end - view_start) / w;
-	uchar r, g, b;
+	int r, g, b;
 	int y_off = h / 2;
 	int merged_pixel_set;
 	double radius = (double) w / (view_end -view_start);
 
-	int max_samples = 5000 * 3, n_samples = 0;
+	int max_samples = 50000 * 3, n_samples = 0;
 	int ret;
 	int n_vars = 2 + num_pics * 3 ;
 	gsl_matrix *X, *cov;
@@ -129,7 +129,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 			a_view = view_start + x * step_view;
 			merged_pixel_set = 0;
 			double a1, a2;
-			uchar c1[3], c2[3];
+			int c1[3], c2[3];
 			double c1d[3], c2d[3];
 
 			for (int p1=0; p1<num_pics; p1++) {
@@ -137,7 +137,6 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 					break;
 				} else if (gipf[p1]->get_pixel(m, a_view, a_nick,
 						&c1[0], &c1[1], &c1[2]) == 0) {
-
 					for (int l = 0; l<3; l++) {	
 						c1d[l] = (double) c1[l];
 					}
@@ -159,12 +158,20 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 							a2 = gipf[p2]->get_angle_off(a_view, a_nick);
 
 							if (n_samples < max_samples &&
-								c1[0] < 200 && c1[1] < 200 && c1[2] < 200 &&
-								c2[0] < 200 && c2[1] < 200 && c2[2] < 200 &&
-								c1[0] > 20 && c1[1] > 20 && c1[2] > 20 &&
-								c2[0] > 20 && c2[1] > 20 && c2[2] > 20 &&
-								fabs(c1d[1] / c1d[0] - c2d[1] / c2d[0]) < 0.02 && 
-								fabs(c1d[2] / c1d[0] - c2d[2] / c2d[0]) < 0.02 ) {
+								c1[0] < MAX_VALUE * 0.8 &&
+								c1[1] < MAX_VALUE * 0.8 &&
+								c1[2] < MAX_VALUE * 0.8 &&
+								c2[0] < MAX_VALUE * 0.8 &&
+								c2[1] < MAX_VALUE * 0.8 &&
+								c2[2] < MAX_VALUE * 0.8 &&
+								c1[0] > MAX_VALUE * 0.2 &&
+								c1[1] > MAX_VALUE * 0.2 &&
+								c1[2] > MAX_VALUE * 0.2 &&
+								c2[0] > MAX_VALUE * 0.2 &&
+								c2[1] > MAX_VALUE * 0.2 &&
+								c2[2] > MAX_VALUE * 0.2) { 
+//								fabs(c1d[1] / c1d[0] - c2d[1] / c2d[0]) < 0.2 && 
+//								fabs(c1d[2] / c1d[0] - c2d[2] / c2d[0]) < 0.2 ) {
 
 								for (int l = 0; l<3; l++) {	
 									if (p1 == 0) {
@@ -186,7 +193,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 								}
 
 								if (merged_image) {
-									merged_image->set_pixel(x, 255, 0, 0);	
+									merged_image->set_pixel(x, 65025, 0, 0);	
 									merged_pixel_set++;
 								}
 							}
@@ -233,15 +240,15 @@ fprintf(stderr, "==> V1 %f V2 %f\n", V1, V2);
 	return 0;
 }
 
-uchar
-Stitch::color_correct(uchar c, double a, int pic, int color) {
+int
+Stitch::color_correct(int c, double a, int pic, int color) {
 	double cd = (double) c;
 	
 	cd = cd * (color_adjust[pic][color] +
 		V1 * a * a + 
 		V2 * a * a * a * a);
 
-	return (uchar) MIN(rint(cd), 255.0);
+	return (int) MIN(rint(cd), 65025.0);
 }
 
 int
@@ -252,7 +259,7 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 	view_end = view_end * deg2rad;
 
 	double step_view = (view_end - view_start) / w;
-	uchar r, g, b;
+	int r, g, b;
 	int y_off = h / 2;
 	int merged_pixel_set;
 	double radius = (double) w / (view_end -view_start);

@@ -23,7 +23,7 @@ class Stitch {
 		OutputImage *single_images[MAX_PICS];
 		OutputImage *merged_image;
 
-		uchar color_correct(uchar c, double a, int pic, int color);
+		int color_correct(int c, double a, int pic, int color);
 
 	public:
 		Stitch();

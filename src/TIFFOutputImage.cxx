@@ -61,10 +61,10 @@ TIFFOutputImage::init_internal(int w1, int h1) {
 }
 
 int
-TIFFOutputImage::set_pixel_internal(int x, char r, char g, char b) {
-	row[x*4+0] = r;
-	row[x*4+1] = g;
-	row[x*4+2] = b;
+TIFFOutputImage::set_pixel_internal(int x, int r, int g, int b) {
+	row[x*4+0] = (unsigned char) r;
+	row[x*4+1] = (unsigned char) g;
+	row[x*4+2] = (unsigned char) b;
 	row[x*4+3] = 255;
 
 	return 0;

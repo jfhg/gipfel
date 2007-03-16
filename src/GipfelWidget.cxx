@@ -670,9 +670,9 @@ GipfelWidget::handle(int event) {
 
 int
 GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
-	double a_alph, double a_nick, uchar *r, uchar *g, uchar *b) {
+	double a_alph, double a_nick, int *r, int *g, int *b) {
 	double px, py;
-	uchar r_tmp, g_tmp, b_tmp;
+	int r_tmp, g_tmp, b_tmp;
 	int ret;
 
 	if (img == NULL) {
@@ -691,20 +691,6 @@ GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
 			py + ((double) img->h()) / 2.0, r, g, b);
 	}
 
-#if 0
-	if (ret == 0) {
-fprintf(stderr, "===> %d\n", ret);
-		double angle =  atan(pow(pow(tan(a_alph - pan->parms.a_center), 2.0) +
-				pow(tan(a_nick - pan->parms.a_nick), 2.0), 0.5));
-		double devign = 1.0 / pow(cos(angle), 1.5);
-		fprintf(stderr, "===> %lf\n", devign);
-
-		*r = (uchar) MIN(rint((double) r_tmp * devign), 255);
-		*g = (uchar) MIN(rint((double) g_tmp * devign), 255);
-		*b = (uchar) MIN(rint((double) b_tmp * devign), 255);
-	}
-#endif
-
 	return ret;
 }
 
@@ -718,7 +704,7 @@ GipfelWidget::get_angle_off(double a_alph, double a_nick) {
 
 int
 GipfelWidget::get_pixel_nearest(Fl_Image *img, double x, double y,
-	uchar *r, uchar *g, uchar *b) {
+	int *r, int *g, int *b) {
 	if (isnan(x) || isnan(y)) {
 		return 1;
 	} else {
@@ -728,10 +714,10 @@ GipfelWidget::get_pixel_nearest(Fl_Image *img, double x, double y,
 
 int
 GipfelWidget::get_pixel_bilinear(Fl_Image *img, double x, double y,
-	uchar *r, uchar *g, uchar *b) {
-	uchar a_r[4] = {0, 0, 0, 0};
-	uchar a_g[4] = {0, 0, 0, 0};
-	uchar a_b[4] = {0, 0, 0, 0};
+	int *r, int *g, int *b) {
+	int a_r[4] = {0, 0, 0, 0};
+	int a_g[4] = {0, 0, 0, 0};
+	int a_b[4] = {0, 0, 0, 0};
 	float v0 , v1;
 	int fl_x = (int) floor(x);
 	int fl_y = (int) floor(y);
@@ -748,15 +734,15 @@ GipfelWidget::get_pixel_bilinear(Fl_Image *img, double x, double y,
 
 	v0 = a_r[0] * (1 - (x - fl_x)) + a_r[1] * (x - fl_x);
 	v1 = a_r[2] * (1 - (x - fl_x)) + a_r[3] * (x - fl_x);
-	*r = (uchar) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
+	*r = (int) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
 
 	v0 = a_g[0] * (1 - (x - fl_x)) + a_g[1] * (x - fl_x);
 	v1 = a_g[2] * (1 - (x - fl_x)) + a_g[3] * (x - fl_x);
-	*g = (uchar) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
+	*g = (int) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
 
 	v0 = a_b[0] * (1 - (x - fl_x)) + a_b[1] * (x - fl_x);
 	v1 = a_b[2] * (1 - (x - fl_x)) + a_b[3] * (x - fl_x);
-	*b = (uchar) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
+	*b = (int) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
 
 	if (n >= 1) {
 		return 1;
@@ -767,7 +753,7 @@ GipfelWidget::get_pixel_bilinear(Fl_Image *img, double x, double y,
 
 int
 GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
-                     uchar *r, uchar *g, uchar *b) {
+                     int *r, int *g, int *b) {
 	if ( img->d() == 0 ) {
 		return 1;
 	}
@@ -779,16 +765,16 @@ GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
 	switch (img->count()) {
 		case 1:
 		{                                            // bitmap
-			const char *buf = img->data()[0];
+			const unsigned char *buf = (const unsigned char*) img->data()[0];
 			switch (img->d())
 			{
 				case 1:
 					*r = *g = *b = *(buf+index);
 					break;
 				case 3:                              // 24bit
-					*r = *(buf+index+0);
-					*g = *(buf+index+1);
-					*b = *(buf+index+2);
+					*r = (int) *(buf+index+0);
+					*g = (int) *(buf+index+1);
+					*b = (int) *(buf+index+2);
 					break;
 				default:                             // ??
 					printf("Not supported: chans=%d\n", img->d());
@@ -801,8 +787,11 @@ GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
 		return 1;
 	}
 
-	return 0;
+	*r = *r * 255;
+	*g = *g * 255;
+	*b = *b * 255;
 
+	return 0;
 }
 
 int
