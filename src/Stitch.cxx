@@ -86,6 +86,10 @@ Stitch::set_output(const char *file, OutputImage *img) {
 	return ret;
 }
 
+static int
+var_offset(int pic, int color, int pow) {
+	return 9 * (pic - 1) + 3 * color + pow;
+}
 
 int
 Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
@@ -100,7 +104,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	int merged_pixel_set;
 	double radius = (double) w / (view_end -view_start);
 
-	int max_samples = 10 * 3, n_samples = 0;
+	int max_samples = 10000 * 3, n_samples = 0;
 	int ret;
 	int n_vars = (num_pics-1) * 9;
 	gsl_matrix *X, *cov;
@@ -108,6 +112,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	double chisq;
 
 	X = gsl_matrix_alloc(max_samples, n_vars);
+	gsl_matrix_set_zero(X);
 	yv = gsl_vector_alloc(max_samples);
 	c = gsl_vector_alloc(n_vars);
 	cov = gsl_matrix_alloc (n_vars, n_vars);
@@ -157,25 +162,23 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 								c1[0] < 200 && c1[1] < 200 && c1[2] < 200 &&
 								c2[0] < 200 && c2[1] < 200 && c2[2] < 200 &&
 								c1[0] > 20 && c1[1] > 20 && c1[2] > 20 &&
-								c2[0] > 20 && c2[1] > 20 && c2[2] > 20 &&
-								fabs(c1d[1] / c1d[0] - c2d[1] / c2d[0]) < 0.01 && 
-								fabs(c1d[2] / c1d[0] - c2d[2] / c2d[0]) < 0.01 ) {
+								c2[0] > 20 && c2[1] > 20 && c2[2] > 20) {
+	//							fabs(c1d[1] / c1d[0] - c2d[1] / c2d[0]) < 0.01 && 
+	//							fabs(c1d[2] / c1d[0] - c2d[2] / c2d[0]) < 0.01 ) {
 
 								for (int l = 0; l<3; l++) {	
-									gsl_matrix_set_zero(X);
 									if (p1 == 0) {
-fprintf(stderr, "==> p1 = 0 p2 = %d\n", p2);
-									//	gsl_matrix_set(X, n_samples, (p2-1) * 9 + 3 * l + 2, c2d[l] * a2 *a2 * a2 * a2);
-									//	gsl_matrix_set(X, n_samples, (p2-1) * 9 + 3 * l + 1, c2d[l] * a2 * a2);
-										gsl_matrix_set(X, n_samples, (p2-1) * 9 + 3 * l + 0, c2d[l]);
+										gsl_matrix_set(X, n_samples, var_offset(p2, l, 2), c2d[l] * a2 *a2 * a2 * a2);
+										gsl_matrix_set(X, n_samples, var_offset(p2, l, 1), c2d[l] * a2 * a2);
+										gsl_matrix_set(X, n_samples, var_offset(p2, l, 0), c2d[l]);
 										gsl_vector_set(yv, n_samples, c1d[l]);
 									} else {
-									//	gsl_matrix_set(X, n_samples, (p1-1) * 9 + 3 * l + 2, - c1d[l] * a1 *a1 * a1 * a1);
-									//	gsl_matrix_set(X, n_samples, (p2-1) * 9 + 3 * l + 2, c2d[l] * a2 * a2 * a2 * a2);
-									//	gsl_matrix_set(X, n_samples, (p1-1) * 9 + 3 * l + 1, - c1d[l] * a1 * a1);
-									//	gsl_matrix_set(X, n_samples, (p2-1) * 9 + 3 * l + 1, c2d[l] * a2 * a2);
-										gsl_matrix_set(X, n_samples, (p1-1) * 9 + 3 * l + 0, - c1d[l]);
-										gsl_matrix_set(X, n_samples, (p2-1) * 9 + 3 * l + 0, c2d[l]);
+										gsl_matrix_set(X, n_samples, var_offset(p1, l, 2), - c1d[l] * a1 *a1 * a1 * a1);
+										gsl_matrix_set(X, n_samples, var_offset(p2, l, 2), c2d[l] * a2 * a2 * a2 * a2);
+										gsl_matrix_set(X, n_samples, var_offset(p1, l, 1), - c1d[l] * a1 * a1);
+										gsl_matrix_set(X, n_samples, var_offset(p2, l, 1), c2d[l] * a2 * a2);
+										gsl_matrix_set(X, n_samples, var_offset(p1, l, 0), - c1d[l]);
+										gsl_matrix_set(X, n_samples, var_offset(p2, l, 0), c2d[l]);
 										gsl_vector_set(yv, n_samples, 0.0);
 									}
 									n_samples++;
@@ -206,7 +209,7 @@ fprintf(stderr, "==> p1 = 0 p2 = %d\n", p2);
 	if (merged_image) {
 		merged_image->done();
 	}
-gsl_vector_fprintf(stderr, yv, "%f");
+
 	gsl_multifit_linear_workspace * work 
            = gsl_multifit_linear_alloc (n_samples, n_vars);
 
@@ -223,10 +226,8 @@ gsl_vector_fprintf(stderr, yv, "%f");
 				color_adjust[p1][l][2] = 0.0;
 			} else {
 				for (int k = 0; k<3; k++) {	
-					color_adjust[p1][l][k] = gsl_vector_get(c, (p1-1) * 9 + 3 * l + k);
+					color_adjust[p1][l][k] = gsl_vector_get(c, var_offset(p1, l, k)); 
 				}
-				color_adjust[p1][l][1] = 0.0;
-				color_adjust[p1][l][2] = 0.0;
 			}
 		}
 fprintf(stderr, "==> color_adjust(%d) %f %f %f\n", p1, color_adjust[p1][0][0], color_adjust[p1][1][0],color_adjust[p1][2][0]);
