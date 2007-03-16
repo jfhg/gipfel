@@ -568,10 +568,6 @@ stitch(GipfelWidget::sample_mode_t m,
 		st->load_image(argv[i]);
 	}
 
-	if (type & STITCH_VIGNETTE_CALIB) {
-		st->color_calib(m, stitch_w, stitch_h, from, to);
-		//st->vignette_calib(m, stitch_w, stitch_h, from, to);
-	}
 
 	if (type & STITCH_JPEG) {
 
@@ -604,6 +600,9 @@ stitch(GipfelWidget::sample_mode_t m,
 		win->show(0, argv); 
 		st->set_output((OutputImage*) img);
 
+		if (type & STITCH_VIGNETTE_CALIB) {
+			st->vignette_calib(m, stitch_w, stitch_h, from, to);
+		}
 		st->resample(m, stitch_w, stitch_h, from, to);
 
 		img->redraw();

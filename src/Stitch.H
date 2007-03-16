@@ -17,10 +17,12 @@
 class Stitch {
 	private:
 		GipfelWidget *gipf[MAX_PICS];
-		double color_adjust[MAX_PICS][3];
-		double V1, V2;
+		int num_pics;
+		double color_adjust[MAX_PICS][3][3];
 		OutputImage *single_images[MAX_PICS];
 		OutputImage *merged_image;
+
+		uchar color_correct(uchar c, double a, int pic, int color);
 
 	public:
 		Stitch();
@@ -34,9 +36,6 @@ class Stitch {
 		OutputImage * set_output(const char *file, OutputImage *img);
 
 		int resample(GipfelWidget::sample_mode_t m,
-			int w, int h, double view_start, double view_end);
-
-		int color_calib(GipfelWidget::sample_mode_t m,
 			int w, int h, double view_start, double view_end);
 
 		int vignette_calib(GipfelWidget::sample_mode_t m,
