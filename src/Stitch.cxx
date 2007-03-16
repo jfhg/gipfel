@@ -88,7 +88,7 @@ Stitch::set_output(const char *file, OutputImage *img) {
 
 static int
 var_offset(int pic, int color) {
-	return 2 + (pic - 1) * 3 + color;
+	return 2 + pic* 3 + color;
 }
 
 int
@@ -106,7 +106,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 
 	int max_samples = 5000 * 3, n_samples = 0;
 	int ret;
-	int n_vars = 2 + (num_pics-1) * 3 ;
+	int n_vars = 2 + num_pics * 3 ;
 	gsl_matrix *X, *cov;
 	gsl_vector *yv,  *c;
 	double chisq;
@@ -167,20 +167,21 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 								fabs(c1d[2] / c1d[0] - c2d[2] / c2d[0]) < 0.02 ) {
 
 								for (int l = 0; l<3; l++) {	
-									if ( p1 == 0) {
-										gsl_matrix_set(X, n_samples, 0, c2d[l] * a2 * a2);
-										gsl_matrix_set(X, n_samples, 1, c2d[l] * a2 *a2 * a2 * a2);
-										gsl_matrix_set(X, n_samples, var_offset(p2, l), c2d[l]);
+									if (p1 == 0) {
+										gsl_matrix_set(X, n_samples, 0, c1d[l] * a1 * a1);
+										gsl_matrix_set(X, n_samples, 1, c1d[l] * a1 *a1 * a1 * a1);
+										gsl_matrix_set(X, n_samples, var_offset(p1, l), c1d[l]);
 										gsl_vector_set(yv, n_samples, c1d[l]);
-									} else {
-										gsl_matrix_set(X, n_samples, 0, - c1d[l] * a1 * a1);
-										gsl_matrix_set(X, n_samples, 0, c2d[l] * a2 * a2);
-										gsl_matrix_set(X, n_samples, 1, - c1d[l] * a1 *a1 * a1 * a1);
-										gsl_matrix_set(X, n_samples, 1, c2d[l] * a2 * a2 * a2 * a2);
-										gsl_matrix_set(X, n_samples, var_offset(p1, l), - c1d[l]);
-										gsl_matrix_set(X, n_samples, var_offset(p2, l), c2d[l]);
-										gsl_vector_set(yv, n_samples, 0.0);
+										n_samples++;
 									}
+
+									gsl_matrix_set(X, n_samples, 0, c1d[l] * a1 * a1);
+									gsl_matrix_set(X, n_samples, 0, - c2d[l] * a2 * a2);
+									gsl_matrix_set(X, n_samples, 1, c1d[l] * a1 *a1 * a1 * a1);
+									gsl_matrix_set(X, n_samples, 1, - c2d[l] * a2 * a2 * a2 * a2);
+									gsl_matrix_set(X, n_samples, var_offset(p1, l), c1d[l]);
+									gsl_matrix_set(X, n_samples, var_offset(p2, l), - c2d[l]);
+									gsl_vector_set(yv, n_samples, 0.0);
 									n_samples++;
 								}
 
@@ -220,14 +221,14 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 
 	for (int p1=0; p1 < num_pics; p1++) {
 		for (int l = 0; l<3; l++) {	
-			if (p1 == 0) {
-				color_adjust[p1][l] = 1.0;
-			} else {
-				color_adjust[p1][l] = gsl_vector_get(c, var_offset(p1, l)); 
-			}
+			color_adjust[p1][l] = gsl_vector_get(c, var_offset(p1, l)); 
 		}
 fprintf(stderr, "==> color_adjust(%d) %f %f %f\n", p1, color_adjust[p1][0], color_adjust[p1][1],color_adjust[p1][2]);
-	}		
+	}
+
+	V1 = gsl_vector_get(c, 0); 
+	V2 = gsl_vector_get(c, 1); 
+fprintf(stderr, "==> V1 %f V2 %f\n", V1, V2);
 
 	return 0;
 }
@@ -236,8 +237,7 @@ uchar
 Stitch::color_correct(uchar c, double a, int pic, int color) {
 	double cd = (double) c;
 	
-	cd = cd * (
-		color_adjust[pic][color] + 
+	cd = cd * (color_adjust[pic][color] +
 		V1 * a * a + 
 		V2 * a * a * a * a);
 
