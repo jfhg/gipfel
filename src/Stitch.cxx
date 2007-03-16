@@ -95,6 +95,9 @@ int
 Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	int w, int h, double view_start, double view_end) {
 
+	w = 1500;
+	h = 400;
+
 	view_start = view_start * deg2rad;
 	view_end = view_end * deg2rad;
 
@@ -108,20 +111,20 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	int ret;
 	int n_vars = 2 + num_pics * 3 ;
 	gsl_matrix *X, *cov;
-	gsl_vector *yv,  *c;
+	gsl_vector *yv,  *c, *wv;
 	double chisq;
 
-	X = gsl_matrix_alloc(max_samples, n_vars);
-	gsl_matrix_set_zero(X);
-	yv = gsl_vector_alloc(max_samples);
-	c = gsl_vector_alloc(n_vars);
-	cov = gsl_matrix_alloc (n_vars, n_vars);
+	X = gsl_matrix_calloc(max_samples, n_vars);
+	yv = gsl_vector_calloc(max_samples);
+	wv = gsl_vector_calloc(max_samples);
+	c = gsl_vector_calloc(n_vars);
+	cov = gsl_matrix_calloc (n_vars, n_vars);
 
 	if (merged_image) {
 		merged_image->init(w, h);
 	}
 
-	for (int y=0; y<h; y++) {
+	for (int y=0; y<h; y++ ) {
 		double a_nick = atan((double)(y_off - y)/radius);
 
 		for (int x=0; x<w; x++) {
@@ -158,22 +161,24 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 							a2 = gipf[p2]->get_angle_off(a_view, a_nick);
 
 							if (n_samples < max_samples &&
-								c1[0] < MAX_VALUE * 0.8 &&
-								c1[1] < MAX_VALUE * 0.8 &&
-								c1[2] < MAX_VALUE * 0.8 &&
-								c2[0] < MAX_VALUE * 0.8 &&
-								c2[1] < MAX_VALUE * 0.8 &&
-								c2[2] < MAX_VALUE * 0.8 &&
-								c1[0] > MAX_VALUE * 0.2 &&
-								c1[1] > MAX_VALUE * 0.2 &&
-								c1[2] > MAX_VALUE * 0.2 &&
-								c2[0] > MAX_VALUE * 0.2 &&
-								c2[1] > MAX_VALUE * 0.2 &&
-								c2[2] > MAX_VALUE * 0.2 &&
-								fabs(c1d[1] / c1d[0] - c2d[1] / c2d[0]) < 0.2 && 
-								fabs(c1d[2] / c1d[0] - c2d[2] / c2d[0]) < 0.2 ) {
+								c1[0] < MAX_VALUE * 0.9 &&
+								c1[1] < MAX_VALUE * 0.9 &&
+								c1[2] < MAX_VALUE * 0.9 &&
+								c2[0] < MAX_VALUE * 0.9 &&
+								c2[1] < MAX_VALUE * 0.9 &&
+								c2[2] < MAX_VALUE * 0.9 &&
+								c1[0] > MAX_VALUE * 0.1 &&
+								c1[1] > MAX_VALUE * 0.1 &&
+								c1[2] > MAX_VALUE * 0.1 &&
+								c2[0] > MAX_VALUE * 0.1 &&
+								c2[1] > MAX_VALUE * 0.1 &&
+								c2[2] > MAX_VALUE * 0.1 &&
+								fabs(c1d[1] / c1d[0] - c2d[1] / c2d[0]) < 0.02 && 
+								fabs(c1d[1] / c1d[2] - c2d[1] / c2d[2]) < 0.02 && 
+								fabs(c1d[2] / c1d[0] - c2d[2] / c2d[0]) < 0.02 ) {
 
 								for (int l = 0; l<3; l++) {	
+									gsl_vector_set(wv, n_samples, 1.0); 
 									if (p1 == 0) {
 										// no color correction for first image
 										gsl_matrix_set(X, n_samples, 0, c1d[l] * a1 * a1);
@@ -225,9 +230,9 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	}
 
 	gsl_multifit_linear_workspace * work 
-           = gsl_multifit_linear_alloc (n_samples, n_vars);
+           = gsl_multifit_linear_alloc (max_samples, n_vars);
 
-	ret = gsl_multifit_linear (X, yv, c, cov, &chisq, work);
+	ret = gsl_multifit_wlinear (X, wv, yv, c, cov, &chisq, work);
 	gsl_multifit_linear_free (work);
 
 	fprintf(stderr, "gsl_multifit_linear returned %d\n", ret);
