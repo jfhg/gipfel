@@ -69,9 +69,9 @@ JPEGOutputImage::init_internal(int w1, int h1) {
 
 int
 JPEGOutputImage::set_pixel_internal(int x, int r, int g, int b) {
-	row[x*3+0] = (unsigned char) r;
-	row[x*3+1] = (unsigned char) g;
-	row[x*3+2] = (unsigned char) b;
+	row[x*3+0] = (unsigned char) (r / 255);
+	row[x*3+1] = (unsigned char) (g / 255);
+	row[x*3+2] = (unsigned char) (b / 255);
 
 	return 0;
 }
