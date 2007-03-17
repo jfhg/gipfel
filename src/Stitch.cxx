@@ -109,7 +109,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 
 	int max_samples = 20000 * 3, n_samples = 0;
 	int ret;
-	int n_vars = 2 + num_pics * 3 ;
+	int n_vars = 2 ;
 	gsl_matrix *X, *cov;
 	gsl_vector *yv,  *c, *wv;
 	double chisq;
@@ -179,27 +179,12 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 
 								for (int l = 0; l<3; l++) {	
 									gsl_vector_set(wv, n_samples, 1.0); 
-									if (p1 == 0) {
-										// no color correction for first image
-										gsl_matrix_set(X, n_samples, 0, c1d[l] * a1 * a1);
-										gsl_matrix_set(X, n_samples, 1, c1d[l] * a1 *a1 * a1 * a1);
-										gsl_vector_set(yv, n_samples, -c1d[l]);
-									} else {
-										gsl_matrix_set(X, n_samples, 0, c1d[l] * a1 * a1);
-										gsl_matrix_set(X, n_samples, 1, c1d[l] * a1 *a1 * a1 * a1);
-										gsl_matrix_set(X, n_samples, var_offset(p1, l), c1d[l]);
-										gsl_vector_set(yv, n_samples, 0.0);
-									}
-									if (p2 == 0) {
-										// no color correction for first image
-										gsl_matrix_set(X, n_samples, 0, -c2d[l] * a1 * a1);
-										gsl_matrix_set(X, n_samples, 1, -c2d[l] * a1 *a1 * a1 * a1);
-										gsl_vector_set(yv, n_samples, c2d[l]);
-									} else {
-										gsl_matrix_set(X, n_samples, 0, - c2d[l] * a2 * a2);
-										gsl_matrix_set(X, n_samples, 1, - c2d[l] * a2 * a2 * a2 * a2);
-										gsl_matrix_set(X, n_samples, var_offset(p2, l), - c2d[l]);
-									}
+									gsl_matrix_set(X, n_samples, 0, c1d[l] * a1 * a1);
+									gsl_matrix_set(X, n_samples, 1, c1d[l] * a1 *a1 * a1 * a1);
+									gsl_matrix_set(X, n_samples, 0, -c2d[l] * a2 * a2);
+									gsl_matrix_set(X, n_samples, 1, -c2d[l] * a2 *a2 * a2 * a2);
+
+									gsl_vector_set(yv, n_samples, c2d[l]-c1d[l]);
 									n_samples++;
 								}
 
@@ -239,11 +224,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 
 	for (int p1=0; p1 < num_pics; p1++) {
 		for (int l = 0; l<3; l++) {	
-			if (p1 == 0) {
-				color_adjust[p1][l] = 1.0;
-			} else {
-				color_adjust[p1][l] = gsl_vector_get(c, var_offset(p1, l)); 
-			}
+			color_adjust[p1][l] = 1.0;
 		}
 fprintf(stderr, "==> color_adjust(%d) %f %f %f\n", p1, color_adjust[p1][0], color_adjust[p1][1],color_adjust[p1][2]);
 	}
