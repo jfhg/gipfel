@@ -569,6 +569,17 @@ stitch(GipfelWidget::sample_mode_t m,
 	}
 
 
+	if (type & STITCH_VIGNETTE_CALIB) {
+		win = new Fl_Window(0,0, 1000, 400);
+		scroll = new Fl_Scroll(0, 0, win->w(), win->h());
+		PreviewOutputImage *img =
+			new PreviewOutputImage(0, 0, 1000, 400);
+
+		win->resizable(scroll);
+		win->show(0, argv); 
+		st->set_output((OutputImage*) img);
+		st->vignette_calib(m, stitch_w, stitch_h, from, to);
+	}
 	if (type & STITCH_JPEG) {
 
 		st->set_output((OutputImage*) new JPEGOutputImage(path, 90));
@@ -600,9 +611,6 @@ stitch(GipfelWidget::sample_mode_t m,
 		win->show(0, argv); 
 		st->set_output((OutputImage*) img);
 
-		if (type & STITCH_VIGNETTE_CALIB) {
-			st->vignette_calib(m, stitch_w, stitch_h, from, to);
-		}
 		st->resample(m, stitch_w, stitch_h, from, to);
 
 		img->redraw();

@@ -107,7 +107,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	int merged_pixel_set;
 	double radius = (double) w / (view_end -view_start);
 
-	int max_samples = 10000 * 3, n_samples = 0;
+	int max_samples = 20000 * 3, n_samples = 0;
 	int ret;
 	int n_vars = 2 + num_pics * 3 ;
 	gsl_matrix *X, *cov;
@@ -173,9 +173,9 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 								c2[0] > MAX_VALUE * 0.1 &&
 								c2[1] > MAX_VALUE * 0.1 &&
 								c2[2] > MAX_VALUE * 0.1 &&
-								fabs(c1d[1] / c1d[0] - c2d[1] / c2d[0]) < 0.02 && 
-								fabs(c1d[1] / c1d[2] - c2d[1] / c2d[2]) < 0.02 && 
-								fabs(c1d[2] / c1d[0] - c2d[2] / c2d[0]) < 0.02 ) {
+								fabs(c1d[1] / c1d[0] - c2d[1] / c2d[0]) < 0.05 && 
+								fabs(c1d[1] / c1d[2] - c2d[1] / c2d[2]) < 0.05 && 
+								fabs(c1d[2] / c1d[0] - c2d[2] / c2d[0]) < 0.05 ) {
 
 								for (int l = 0; l<3; l++) {	
 									gsl_vector_set(wv, n_samples, 1.0); 
