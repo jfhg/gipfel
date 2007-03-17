@@ -192,8 +192,8 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 									}
 									if (p2 == 0) {
 										// no color correction for first image
-										gsl_matrix_set(X, n_samples, 0, -c2d[l] * a1 * a1);
-										gsl_matrix_set(X, n_samples, 1, -c2d[l] * a1 *a1 * a1 * a1);
+										gsl_matrix_set(X, n_samples, 0, -c2d[l] * a2 * a2);
+										gsl_matrix_set(X, n_samples, 1, -c2d[l] * a2 *a2 * a2 * a2);
 										gsl_vector_set(yv, n_samples, c2d[l]);
 									} else {
 										gsl_matrix_set(X, n_samples, 0, - c2d[l] * a2 * a2);
