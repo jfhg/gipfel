@@ -497,7 +497,7 @@ int main(int argc, char** argv) {
 			type |= STITCH_VIGNETTE_CALIB;
 		}
 
-		stitch(bilinear_flag?GipfelWidget::BILINEAR:GipfelWidget::NEAREST,
+		stitch(bilinear_flag?GipfelWidget::BICUBIC:GipfelWidget::NEAREST,
 			stitch_w, stitch_h, stitch_from, stitch_to,
 			type, outpath, my_argc, my_argv);
 

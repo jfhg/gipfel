@@ -44,13 +44,17 @@ class GipfelWidget : public Fl_Widget {
 		static int get_pixel_bilinear(Fl_Image *img, double x, double y,
 			int *r, int *g, int *b);
 
+		static int get_pixel_bicubic(Fl_Image *img, double x, double y,
+			int *r, int *g, int *b);
+
 		static int get_pixel(Fl_Image *img, int x, int y,
 			int *r, int *g, int *b);
 
 	public:
 		typedef enum {
 			NEAREST  = 0,
-			BILINEAR = 1
+			BILINEAR = 1,
+			BICUBIC  = 2
 		} sample_mode_t;
 	
 		GipfelWidget(int X,int Y,int W, int H);

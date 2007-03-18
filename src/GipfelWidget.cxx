@@ -686,6 +686,9 @@ GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
 	if (m == GipfelWidget::BILINEAR) {
 		ret = get_pixel_bilinear(img, px + ((double) img->w()) / 2.0,
 			py + ((double) img->h()) / 2.0, r, g, b);
+	} else if (m == GipfelWidget::BICUBIC) {
+		ret = get_pixel_bicubic(img, px + ((double) img->w()) / 2.0,
+			py + ((double) img->h()) / 2.0, r, g, b);
 	} else {
 		ret = get_pixel_nearest(img, px + ((double) img->w()) / 2.0,
 			py + ((double) img->h()) / 2.0, r, g, b);
@@ -749,6 +752,53 @@ GipfelWidget::get_pixel_bilinear(Fl_Image *img, double x, double y,
 	} else {
 		return 0;
 	}
+}
+
+static double
+interp_cubic(double x, double *v) {
+	double a0, a1, a2, a3;
+	double x2 = x * x;
+
+	a0 = v[3] - v[2] - v[0] + v[1];
+	a1 = v[0] - v[1] - a0;
+	a2 = v[2] - v[0];
+	a3 = v[1];
+
+	return a0 * x * x2 +a1 * x2 + a2 * x + a3;
+}
+
+int
+GipfelWidget::get_pixel_bicubic(Fl_Image *img, double x, double y,
+	int *r, int *g, int *b) {
+
+	int fl_x = (int) rint(x);
+	int fl_y = (int) rint(y);
+	int ic[3];
+	double c[3][4];
+	double c1[3][4];
+
+	for (int iy = 0; iy < 4; iy++) {
+		for (int ix = 0; ix < 4; ix++) {
+			if (get_pixel(img, fl_x + ix - 2, fl_y + iy - 2,
+					&ic[0], &ic[1], &ic[2]) != 0) {
+				return 1;
+			}
+
+			for (int l = 0; l < 3; l++) {
+				c[l][ix] = (double) ic[l];
+			}
+		}
+
+		for (int l = 0; l < 3; l++) {
+			c1[l][iy] = interp_cubic(x - fl_x, c[l]);
+		}
+	}
+
+	*r = (int) rint(interp_cubic(x - fl_x, c1[0]));
+	*g = (int) rint(interp_cubic(x - fl_x, c1[1]));
+	*b = (int) rint(interp_cubic(x - fl_x, c1[2]));
+
+	return 0;
 }
 
 int
