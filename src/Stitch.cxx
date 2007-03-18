@@ -220,15 +220,6 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	ret = gsl_multifit_wlinear (X, wv, yv, c, cov, &chisq, work);
 	gsl_multifit_linear_free (work);
 
-	fprintf(stderr, "gsl_multifit_linear returned %d\n", ret);
-
-	for (int p1=0; p1 < num_pics; p1++) {
-		for (int l = 0; l<3; l++) {	
-			color_adjust[p1][l] = 1.0;
-		}
-fprintf(stderr, "==> color_adjust(%d) %f %f %f\n", p1, color_adjust[p1][0], color_adjust[p1][1],color_adjust[p1][2]);
-	}
-
 	V1 = gsl_vector_get(c, 0); 
 	V2 = gsl_vector_get(c, 1); 
 fprintf(stderr, "==> V1 %f V2 %f\n", V1, V2);
@@ -240,7 +231,7 @@ int
 Stitch::color_correct(int c, double a, int pic, int color) {
 	double cd = (double) c;
 	
-	cd = cd * (color_adjust[pic][color] +
+	cd = cd * (1.0 +
 		V1 * a * a + 
 		V2 * a * a * a * a);
 
