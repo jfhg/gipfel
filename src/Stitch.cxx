@@ -17,6 +17,7 @@
 #include "Stitch.H"
 
 #define MIN(A,B) ((A)<(B)?(A):(B))
+#define MAX(A,B) ((A)>(B)?(A):(B))
 #define MAX_VALUE 65025
 
 static double pi_d = asin(1.0) * 2.0;
@@ -235,7 +236,7 @@ Stitch::color_correct(int c, double a, int pic, int color) {
 		V1 * a * a + 
 		V2 * a * a * a * a);
 
-	return (int) MIN(rint(cd), 65025.0);
+	return MAX(MIN((int) rint(cd), 65025), 0);
 }
 
 int
