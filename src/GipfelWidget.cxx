@@ -738,7 +738,7 @@ GipfelWidget::get_pixel_bicubic(Fl_Image *img, double x, double y,
 
 	for (int iy = 0; iy < 4; iy++) {
 		for (int ix = 0; ix < 4; ix++) {
-			if (get_pixel(img, (int) fl_x + ix, (int) fl_y + iy,
+			if (get_pixel(img, (int) fl_x + ix - 1, (int) fl_y + iy - 1,
 					&ic[0], &ic[1], &ic[2]) != 0) {
 				return 1;
 			}
