@@ -398,7 +398,7 @@ int main(int argc, char** argv) {
 	int err, my_argc;
 	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
 	int jpeg_flag = 0, tiff_flag = 0, distortion_flag = 0;
-	int bilinear_flag = 0, vignette_flag = 0;
+	int bicubic_flag = 0, vignette_flag = 0;
 	double stitch_from = 0.0, stitch_to = 380.0;
 	double dist_k0 = 0.0, dist_k1 = 0.0, dist_x0 = 0.0;
 	char *outpath = "/tmp";
@@ -463,7 +463,7 @@ int main(int argc, char** argv) {
 				stitch_h = atoi(optarg);
 				break;
 			case 'b':
-				bilinear_flag++;
+				bicubic_flag++;
 				break;
 			default:
 				err++;
@@ -497,7 +497,7 @@ int main(int argc, char** argv) {
 			type |= STITCH_VIGNETTE_CALIB;
 		}
 
-		stitch(bilinear_flag?GipfelWidget::BICUBIC:GipfelWidget::NEAREST,
+		stitch(bicubic_flag?GipfelWidget::BICUBIC:GipfelWidget::NEAREST,
 			stitch_w, stitch_h, stitch_from, stitch_to,
 			type, outpath, my_argc, my_argv);
 
