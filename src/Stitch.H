@@ -19,10 +19,16 @@ class Stitch {
 		GipfelWidget *gipf[MAX_PICS];
 		int num_pics;
 		double V1, V2;
+		double color_adjust[MAX_PICS][3];
 		OutputImage *single_images[MAX_PICS];
 		OutputImage *merged_image;
 
+		double vignetting_parameter(int pic, double a_view, double a_nick);
+
 		int color_correct(int c, double a, int pic, int color);
+
+		int get_pixel(GipfelWidget::sample_mode_t m, int pic,
+			double a_view, double a_nick, int *r, int *g, int *b);
 
 	public:
 		Stitch();

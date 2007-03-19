@@ -27,10 +27,14 @@ Stitch::Stitch() {
 	for (int i=0; i<MAX_PICS; i++) {
 		gipf[i] = NULL;
 		single_images[i] = NULL;
+		for (int l=0; l<3; l++) {
+			color_adjust[i][l] = 1.0;
+		}
 	}
 	merged_image = NULL;
 	num_pics = 0;
-
+	V1 = 0.0;
+	V2 = 0.0;
 }
 
 Stitch::~Stitch() {
@@ -110,6 +114,11 @@ similar_color(double *c1, double *c2) {
 	}
 }
 
+double
+Stitch::vignetting_parameter(int pic, double a_view, double a_nick) {
+	return pow(cos(gipf[pic]->get_angle_off(a_view, a_nick)), 4.0);
+}
+
 int
 Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	int w, int h, double view_start, double view_end) {
@@ -121,7 +130,6 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	view_end = view_end * deg2rad;
 
 	double step_view = (view_end - view_start) / w;
-	int r, g, b;
 	int y_off = h / 2;
 	int merged_pixel_set;
 	double radius = (double) w / (view_end -view_start);
@@ -149,37 +157,35 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 			double a_view;
 			a_view = view_start + x * step_view;
 			merged_pixel_set = 0;
-			double a1, a2;
 			int c1[3], c2[3];
 			double c1d[3], c2d[3];
 
 			for (int p1=0; p1<num_pics; p1++) {
 				if (gipf[p1] == NULL) {
 					break;
-				} else if (gipf[p1]->get_pixel(m, a_view, a_nick,
+				} else if (get_pixel(m, p1, a_view, a_nick,
 						&c1[0], &c1[1], &c1[2]) == 0) {
+
 					for (int l = 0; l<3; l++) {	
 						c1d[l] = (double) c1[l];
 					}
 
-					a1 = gipf[p1]->get_angle_off(a_view, a_nick);
+					double a1 = vignetting_parameter(p1, a_view, a_nick);
 
-					for (int p2=0; p2<num_pics; p2++) {
-						if (p1 == p2) {
-							continue;
-						} else if (gipf[p2] == NULL) {
-							break;
-						} else if (gipf[p2]->get_pixel(m, a_view, a_nick,
+					for (int p2 = p1 + 1; p2 < num_pics; p2++) {
+
+						if (get_pixel(m, p2, a_view, a_nick,
 								&c2[0], &c2[1], &c2[2]) == 0) {
 
 							for (int l = 0; l<3; l++) {	
 								c2d[l] = (double) c2[l];
 							}
 
-							a2 = pow(cos(gipf[p2]->get_angle_off(a_view, a_nick)), 4.0);
 
 							if (n_samples < max_samples &&
 								similar_color(c1d, c2d)) {
+
+								double a2 = vignetting_parameter(p2, a_view, a_nick);
 
 								for (int l = 0; l<3; l++) {	
 									gsl_matrix_set(X, n_samples, 0, c1d[l] * a1);
@@ -187,7 +193,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 									gsl_matrix_set(X, n_samples, 0, -c2d[l] * a2);
 									gsl_matrix_set(X, n_samples, 1, -c2d[l] * a2 * a2);
 
-									gsl_vector_set(yv, n_samples, c2d[l]-c1d[l]);
+									gsl_vector_set(yv, n_samples, c2d[l] - c1d[l]);
 									n_samples++;
 								}
 
@@ -234,9 +240,26 @@ int
 Stitch::color_correct(int c, double a, int pic, int color) {
 	double cd = (double) c;
 	
-	cd = cd * (1.0 + V1 * a + V2 * a * a);
+	cd = cd * color_adjust[pic][color] * (1.0 + V1 * a + V2 * a * a);
 
 	return MAX(MIN((int) rint(cd), 65025), 0);
+}
+
+int
+Stitch::get_pixel(GipfelWidget::sample_mode_t m, int pic,
+	double a_view, double a_nick, int *r, int *g, int *b) {
+
+	if (gipf[pic]->get_pixel(m, a_view, a_nick, r, g, b) != 0) {
+		return 1;
+	}
+
+	double a = vignetting_parameter(pic, a_view, a_nick);
+
+	*r = color_correct(*r, a, pic, 0);
+	*g = color_correct(*g, a, pic, 1);
+	*b = color_correct(*b, a, pic, 2);
+
+	return 0;
 }
 
 int
@@ -272,13 +295,8 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 			for (int i=0; i<MAX_PICS; i++) {
 				if (gipf[i] == NULL) {
 					break;
-				} else if (gipf[i]->get_pixel(m, a_view, a_nick,
+				} else if (get_pixel(m, i, a_view, a_nick,
 						&r, &g, &b) == 0) {
-					double a = pow(cos(gipf[i]->get_angle_off(a_view, a_nick)), 4.0);
-
-					r = color_correct(r, a, i, 0);
-					g = color_correct(g, a, i, 1);
-					b = color_correct(b, a, i, 2);
 
 					if (single_images[i]) {
 						single_images[i]->set_pixel(x, r, g, b);
