@@ -31,6 +31,7 @@ Stitch::Stitch() {
 			color_adjust[i][l] = 1.0;
 		}
 	}
+
 	merged_image = NULL;
 	num_pics = 0;
 	V1 = 0.0;
@@ -150,20 +151,18 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 		merged_image->init(w, h);
 	}
 
-	for (int y=0; y<h; y++ ) {
+	for (int y = 0; y < h; y++) {
 		double a_nick = atan((double)(y_off - y)/radius);
 
-		for (int x=0; x<w; x++) {
+		for (int x = 0; x < w; x++) {
 			double a_view;
 			a_view = view_start + x * step_view;
 			merged_pixel_set = 0;
 			int c1[3], c2[3];
 			double c1d[3], c2d[3];
 
-			for (int p1=0; p1<num_pics; p1++) {
-				if (gipf[p1] == NULL) {
-					break;
-				} else if (get_pixel(m, p1, a_view, a_nick,
+			for (int p1 = 0; p1 < num_pics; p1++) {
+				if (get_pixel(m, p1, a_view, a_nick,
 						&c1[0], &c1[1], &c1[2]) == 0) {
 
 					for (int l = 0; l<3; l++) {	
