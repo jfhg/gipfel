@@ -257,7 +257,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 
 	int max_samples = 20000 * 3, n_samples = 0;
 	int ret;
-	int n_vars = 2 ;
+	int n_vars = 2;
 	gsl_matrix *X, *cov;
 	gsl_vector *yv,  *c;
 	double chisq;
