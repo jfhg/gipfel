@@ -92,10 +92,6 @@ Stitch::set_output(const char *file, OutputImage *img) {
 	return ret;
 }
 
-static int
-var_offset(int pic, int color) {
-	return 2 + pic* 3 + color;
-}
 
 static int
 similar_color(double *c1, double *c2) {
@@ -113,6 +109,130 @@ similar_color(double *c1, double *c2) {
 	} else {
 		return 0;
 	}
+}
+
+static int
+var_offset(int pic, int color) {
+	return (pic - 1) * 3 + color;
+}
+
+int
+Stitch::color_calib(GipfelWidget::sample_mode_t m,
+	int w, int h, double view_start, double view_end) {
+
+	w = 1500;
+	h = 400;
+
+	view_start = view_start * deg2rad;
+	view_end = view_end * deg2rad;
+
+	double step_view = (view_end - view_start) / w;
+	int y_off = h / 2;
+	int merged_pixel_set;
+	double radius = (double) w / (view_end -view_start);
+
+	int max_samples = 20000 * 3, n_samples = 0;
+	int ret;
+	int n_vars = (num_pics - 1) * 3;
+	gsl_matrix *X, *cov;
+	gsl_vector *yv,  *c;
+	double chisq;
+
+	X = gsl_matrix_calloc(max_samples, n_vars);
+	yv = gsl_vector_calloc(max_samples);
+	c = gsl_vector_calloc(n_vars);
+	cov = gsl_matrix_calloc (n_vars, n_vars);
+
+	if (merged_image) {
+		merged_image->init(w, h);
+	}
+
+	for (int y = 0; y < h; y++) {
+		double a_nick = atan((double)(y_off - y)/radius);
+
+		for (int x = 0; x < w; x++) {
+			double a_view;
+			a_view = view_start + x * step_view;
+			merged_pixel_set = 0;
+			int c1[3], c2[3];
+			double c1d[3], c2d[3];
+
+			for (int p1 = 0; p1 < num_pics; p1++) {
+				if (get_pixel(m, p1, a_view, a_nick,
+						&c1[0], &c1[1], &c1[2]) == 0) {
+
+					for (int l = 0; l<3; l++) {	
+						c1d[l] = (double) c1[l];
+					}
+
+					for (int p2 = p1 + 1; p2 < num_pics; p2++) {
+
+						if (get_pixel(m, p2, a_view, a_nick,
+								&c2[0], &c2[1], &c2[2]) == 0) {
+
+							for (int l = 0; l<3; l++) {	
+								c2d[l] = (double) c2[l];
+							}
+
+
+							if (n_samples < max_samples &&
+								similar_color(c1d, c2d)) {
+
+								for (int l = 0; l<3; l++) {	
+									if (p1 == 0) {
+										gsl_matrix_set(X, n_samples, var_offset(p2, l), c2d[l]);
+
+										gsl_vector_set(yv, n_samples, c1d[l]);
+									} else {
+										gsl_matrix_set(X, n_samples, var_offset(p1, l), c1d[l]);
+										gsl_matrix_set(X, n_samples, var_offset(p2, l), -c2d[l]);
+
+										gsl_vector_set(yv, n_samples, 0.0);
+									}
+									n_samples++;
+								}
+
+								if (merged_image) {
+									merged_image->set_pixel(x, 0, 0, 65025);	
+									merged_pixel_set++;
+								}
+							}
+
+						}
+					}
+
+					if (!merged_pixel_set && merged_image) {
+						merged_image->set_pixel(x, c1[0], c1[1], c1[2]);
+						merged_pixel_set++;
+					}
+
+				}
+			}
+		}
+		if (merged_image) {
+			merged_image->next_line();
+		}
+	}
+
+	if (merged_image) {
+		merged_image->done();
+	}
+
+	gsl_multifit_linear_workspace * work 
+           = gsl_multifit_linear_alloc (max_samples, n_vars);
+
+	ret = gsl_multifit_linear (X, yv, c, cov, &chisq, work);
+	gsl_multifit_linear_free (work);
+	
+	for (int i = 1; i < num_pics; i++) {
+		for (int l = 0; l<3; l++) {	
+			color_adjust[i][l] = gsl_vector_get(c, var_offset(i, l));
+		}
+
+		fprintf(stderr, "color_adjust(%d) %f\n", i, color_adjust[i][0]);
+	}
+
+	return 0;
 }
 
 double

@@ -46,6 +46,9 @@ class Stitch {
 
 		int vignette_calib(GipfelWidget::sample_mode_t m,
 			int w, int h, double view_start, double view_end);
+
+		int color_calib(GipfelWidget::sample_mode_t m,
+			int w, int h, double view_start, double view_end);
 };
 
 #endif

@@ -579,6 +579,7 @@ stitch(GipfelWidget::sample_mode_t m,
 		win->show(0, argv); 
 		st->set_output((OutputImage*) img);
 		st->vignette_calib(m, stitch_w, stitch_h, from, to);
+	//	st->color_calib(m, stitch_w, stitch_h, from, to);
 	}
 	if (type & STITCH_JPEG) {
 
