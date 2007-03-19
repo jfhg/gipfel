@@ -277,24 +277,23 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 	if (merged_image) {
 		merged_image->init(w, h);
 	}
+
 	for (int i=0; i<MAX_PICS; i++) {
 		if (single_images[i]) {
 			single_images[i]->init(w, h);
 		}
 	}
 
-	for (int y=0; y<h; y++) {
+	for (int y = 0; y < h; y++) {
 		double a_nick = atan((double)(y_off - y)/radius);
 		double a_max = 0.0;
 
-		for (int x=0; x<w; x++) {
+		for (int x = 0; x < w; x++) {
 			double a_view;
 			a_view = view_start + x * step_view;
 			merged_pixel_set = 0;
-			for (int i=0; i<MAX_PICS; i++) {
-				if (gipf[i] == NULL) {
-					break;
-				} else if (get_pixel(m, i, a_view, a_nick,
+			for (int i = 0; i < num_pics; i++) {
+				if (get_pixel(m, i, a_view, a_nick,
 						&r, &g, &b) == 0) {
 
 					if (single_images[i]) {
