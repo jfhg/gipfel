@@ -34,8 +34,10 @@ Stitch::Stitch() {
 
 	merged_image = NULL;
 	num_pics = 0;
-	V1 = 0.0;
-	V2 = 0.0;
+	V[0] = 0.0;
+	V[1] = 0.0;
+	V[2] = 0.0;
+	V[3] = 0.0;
 }
 
 Stitch::~Stitch() {
@@ -237,7 +239,7 @@ Stitch::color_calib(GipfelWidget::sample_mode_t m,
 
 double
 Stitch::vignetting_parameter(int pic, double a_view, double a_nick) {
-	return pow(cos(gipf[pic]->get_angle_off(a_view, a_nick)), 4.0);
+	return 1.0/pow(cos(gipf[pic]->get_angle_off(a_view, a_nick)), 4.0);
 }
 
 int
@@ -257,7 +259,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 
 	int max_samples = 20000 * 3, n_samples = 0;
 	int ret;
-	int n_vars = 2;
+	int n_vars = 1;
 	gsl_matrix *X, *cov;
 	gsl_vector *yv,  *c;
 	double chisq;
@@ -307,10 +309,7 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 								double a2 = vignetting_parameter(p2, a_view, a_nick);
 
 								for (int l = 0; l<3; l++) {	
-									gsl_matrix_set(X, n_samples, 0, c1d[l] * a1);
-									gsl_matrix_set(X, n_samples, 1, c1d[l] * a1 * a1);
-									gsl_matrix_set(X, n_samples, 0, -c2d[l] * a2);
-									gsl_matrix_set(X, n_samples, 1, -c2d[l] * a2 * a2);
+									gsl_matrix_set(X, n_samples, 0, a1 * c1d[l] - a2 * c2d[l]);
 
 									gsl_vector_set(yv, n_samples, c2d[l] - c1d[l]);
 									n_samples++;
@@ -348,18 +347,19 @@ Stitch::vignette_calib(GipfelWidget::sample_mode_t m,
 	ret = gsl_multifit_linear (X, yv, c, cov, &chisq, work);
 	gsl_multifit_linear_free (work);
 
-	V1 = gsl_vector_get(c, 0); 
-	V2 = gsl_vector_get(c, 1); 
-	fprintf(stderr, "==> V1 %f V2 %f\n", V1, V2);
-
+	for (int i=0; i < n_vars; i++) {
+		V[i] = gsl_vector_get(c, i); 
+		fprintf(stderr, "==> V[i] %f\n", V[i]);
+	}
+	
 	return 0;
 }
 
 int
 Stitch::color_correct(int c, double a, int pic, int color) {
 	double cd = (double) c;
-	
-	cd = cd * color_adjust[pic][color] * (1.0 + V1 * a + V2 * a * a);
+
+	cd = cd * color_adjust[pic][color] * a;
 
 	return MAX(MIN((int) rint(cd), 65025), 0);
 }

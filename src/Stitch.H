@@ -18,7 +18,7 @@ class Stitch {
 	private:
 		GipfelWidget *gipf[MAX_PICS];
 		int num_pics;
-		double V1, V2;
+		double V[4];
 		double color_adjust[MAX_PICS][3];
 		OutputImage *single_images[MAX_PICS];
 		OutputImage *merged_image;
