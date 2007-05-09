@@ -53,7 +53,6 @@ Fl_Menu_Bar *mb;
 #define STITCH_PREVIEW           1
 #define STITCH_JPEG              2
 #define STITCH_TIFF              4
-#define STITCH_VIGNETTE_CALIB    8
 
 static int stitch(GipfelWidget::sample_mode_t m ,int stitch_w, int stitch_h,
 	double from, double to, int type, const char *path, int argc, char **argv);
@@ -398,7 +397,7 @@ int main(int argc, char** argv) {
 	int err, my_argc;
 	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
 	int jpeg_flag = 0, tiff_flag = 0, distortion_flag = 0;
-	int bicubic_flag = 0, vignette_flag = 0;
+	int bicubic_flag = 0;
 	double stitch_from = 0.0, stitch_to = 380.0;
 	double dist_k0 = 0.0, dist_k1 = 0.0, dist_x0 = 0.0;
 	char *outpath = "/tmp";
@@ -406,7 +405,7 @@ int main(int argc, char** argv) {
 
 
 	err = 0;
-	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:V")) != EOF) {
+	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:")) != EOF) {
 		switch (c) {  
 			case '?':
 				usage();
@@ -420,9 +419,6 @@ int main(int argc, char** argv) {
 				break;
 			case 's':
 				stitch_flag++;
-				break;
-			case 'V':
-				vignette_flag++;
 				break;
 			case 'r':
 				stitch_flag++;
@@ -491,10 +487,6 @@ int main(int argc, char** argv) {
 			type = STITCH_TIFF;
 		} else {
 			type = STITCH_PREVIEW;
-		}
-
-		if (vignette_flag) {
-			type |= STITCH_VIGNETTE_CALIB;
 		}
 
 		stitch(bicubic_flag?GipfelWidget::BICUBIC:GipfelWidget::NEAREST,
@@ -569,18 +561,6 @@ stitch(GipfelWidget::sample_mode_t m,
 	}
 
 
-	if (type & STITCH_VIGNETTE_CALIB) {
-		win = new Fl_Window(0,0, 1000, 400);
-		scroll = new Fl_Scroll(0, 0, win->w(), win->h());
-		PreviewOutputImage *img =
-			new PreviewOutputImage(0, 0, 1000, 400);
-
-		win->resizable(scroll);
-		win->show(0, argv); 
-		st->set_output((OutputImage*) img);
-		st->vignette_calib(m, stitch_w, stitch_h, from, to);
-		//st->color_calib(m, stitch_w, stitch_h, from, to);
-	}
 	if (type & STITCH_JPEG) {
 
 		st->set_output((OutputImage*) new JPEGOutputImage(path, 90));
