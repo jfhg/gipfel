@@ -756,7 +756,6 @@ GipfelWidget::get_pixel_bicubic(Fl_Image *img, double x, double y,
 	*r = (int) rint(interp_cubic(dy, dy2, dy3, c1[0]));
 	*g = (int) rint(interp_cubic(dy, dy2, dy3, c1[1]));
 	*b = (int) rint(interp_cubic(dy, dy2, dy3, c1[2]));
-
 	return 0;
 }
 

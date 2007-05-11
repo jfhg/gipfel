@@ -122,6 +122,10 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 				if (gipf[i]->get_pixel(m, a_view, a_nick,
 						&r, &g, &b) == 0) {
 
+					r = MAX(MIN(r, MAX_VALUE), 0);
+					g = MAX(MIN(g, MAX_VALUE), 0);
+					b = MAX(MIN(b, MAX_VALUE), 0);
+
 					if (single_images[i]) {
 						single_images[i]->set_pixel(x, r, g, b);
 					}
