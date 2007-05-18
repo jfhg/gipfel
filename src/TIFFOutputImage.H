@@ -12,14 +12,15 @@
 
 #include "OutputImage.H"
 
-class TIFFOutputImage : OutputImage {
+class TIFFOutputImage : public OutputImage {
 	private:
+		int bitspersample;
 		unsigned char *row;
 		char *file;
 		TIFF *tiff;
 
 	public:
-		TIFFOutputImage(const char *file);
+		TIFFOutputImage(const char *file, int b = 8);
 
 		~TIFFOutputImage();
 

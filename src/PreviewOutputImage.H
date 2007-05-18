@@ -14,7 +14,7 @@
 
 #include "OutputImage.H"
 
-class PreviewOutputImage : OutputImage , public Fl_Widget {
+class PreviewOutputImage : public OutputImage , public Fl_Widget {
 	private:
 		uchar *data;
 		int d;

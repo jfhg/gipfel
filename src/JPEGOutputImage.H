@@ -15,7 +15,7 @@ extern "C" {
 
 #include "OutputImage.H"
 
-class JPEGOutputImage : OutputImage {
+class JPEGOutputImage : public OutputImage {
 	private:
 		unsigned char *row;
 		char *file;
