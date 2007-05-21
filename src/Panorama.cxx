@@ -29,12 +29,16 @@ Panorama::Panorama() {
 	parms.scale = 3500.0;
 	parms.k0 = 0.0;
 	parms.k1 = 0.0;
+	parms.x0 = 0.0;
 	view_name = NULL;
 	view_phi = 0.0;
 	view_lam = 0.0;
 	view_height = 0.0;
 	proj = NULL;
 	set_projection(ProjectionLSQ::RECTILINEAR);
+
+
+fprintf(stderr, "=> %f, %f\n", get_earth_radius(0.0), get_earth_radius(pi_d/2.0));
 }
 
 Panorama::~Panorama() {
@@ -129,34 +133,6 @@ Panorama::get_visible_mountains() {
 	return visible_mountains;
 }
 
-double
-Panorama::get_value(Hills *p) {
-	int i, j;
-	double v = 0.0, d_min, d;
-
-	if (isnan(parms.scale) || isnan(parms.a_center) || isnan(parms.a_tilt) || isnan(parms.a_nick) ||
-		parms.scale < 500.0 || parms.scale > 100000.0 || 
-		parms.a_nick > pi_d/4.0 || parms.a_nick < - pi_d/4.0 || 
-		parms.a_tilt > pi_d/16.0 || parms.a_tilt < - pi_d/16.0) {
-		return 10000000.0;
-	}
-
-
-	for (i=0; i<p->get_num(); i++) {
-		d_min = 1000.0;
-		for (j=0; j<visible_mountains->get_num(); j++) {
-			d = pow(p->get(i)->x - visible_mountains->get(j)->x, 2.0) + 
-				pow(p->get(i)->y - visible_mountains->get(j)->y, 2.0);
-			if (d < d_min) {
-				d_min = d;
-			}
-		}
-		v = v + d_min;
-	}
-
-	return v;
-}
-
 int
 Panorama::comp_params(Hills *h) {
 	int ret;
@@ -191,15 +167,17 @@ Panorama::set_scale(double s) {
 }
 
 void
-Panorama::get_distortion_params(double *k0, double *k1) {
+Panorama::get_distortion_params(double *k0, double *k1, double *x0) {
 	*k0 = parms.k0;
 	*k1 = parms.k1;
+	*x0 = parms.x0;
 }
 
 void
-Panorama::set_distortion_params(double k0, double k1) {
+Panorama::set_distortion_params(double k0, double k1, double x0) {
 	parms.k0 = k0;
 	parms.k1 = k1;
+	parms.x0 = x0;
 	update_coordinates();
 }
 
@@ -328,7 +306,7 @@ Panorama::update_angles() {
 		if (m->phi != view_phi || m->lam != view_lam) {
 
 			m->alph = alpha(m->phi, m->lam);
-			m->a_nick = nick(m->dist, m->height);
+			m->a_nick = nick(m);
 		}
 	}
 
@@ -394,7 +372,7 @@ Panorama::update_close_mountains() {
 
 		if (m->flags & Hill::TRACK_POINT ||
 			((m->phi != view_phi || m->lam != view_lam) &&
-			 (m->height / (m->dist * get_earth_radius(m->phi)) 
+			 (m->height / (m->dist * EARTH_RADIUS) 
 			  > height_dist_ratio))) {
 
 			close_mountains->add(m);
@@ -456,29 +434,37 @@ Panorama::alpha(double phi, double lam) {
 
 
 double
-Panorama::nick(double dist, double height) {
+Panorama::nick(Hill *m) {
 	double a, b, c;
 	double beta;
 
-	b = height + get_earth_radius(view_phi);
+	b = m->height + get_earth_radius(m->phi);
 	c = view_height + get_earth_radius(view_phi);
 
-	a = pow(((b * (b - (2.0 * c * cos(dist)))) + (c * c)), (1.0 / 2.0));
+	a = pow(((b * (b - (2.0 * c * cos(m->dist)))) + (c * c)), (1.0 / 2.0));
 	beta = acos((-(b*b) + (a*a) + (c*c))/(2 * a * c));
 
 	return beta - pi_d / 2.0;
 }
 
+// return local distance to center of WGS84 ellipsoid
 double
-Panorama::get_earth_radius(double latitude) {
-	return EARTH_RADIUS;
+Panorama::get_earth_radius(double phi) {
+	double a = 6378137.000;
+	double b = 6356752.315;
+	double r;
+	double ata = tan(phi);
+return EARTH_RADIUS;
+	r = a*pow(pow(ata,2)+1,1.0/2.0)*fabs(b)*pow(pow(b,2)+pow(a,2)*pow(ata,2),-1.0/2.0);
+
+	return r;
 }
 
 double
 Panorama::get_real_distance(Hill *m) {
 	double a, b, c, gam;
 
-	a = view_height + get_earth_radius(m->phi);
+	a = view_height + get_earth_radius(view_phi);
 	b = m->height + get_earth_radius(m->phi); 
 	gam = m->dist;
 
@@ -500,8 +486,6 @@ Panorama::is_visible(double a_alph) {
 
 int
 Panorama::get_coordinates(double a_alph, double a_nick, double *x, double *y) {
-
-
 	if (is_visible(a_alph)) {
 		proj->get_coordinates(a_alph, a_nick, &parms, x, y);
 		return 0;

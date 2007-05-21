@@ -4,7 +4,7 @@
 
 x : tan(m_view - c_view)$
 y : tan(c_nick - m_nick)$ 
-x_rot : y * sin(c_tilt) + x * cos(c_tilt)$
+x_rot : y * sin(c_tilt) + x * cos(c_tilt)+x0$
 y_rot : y * cos(c_tilt) - x * sin(c_tilt)$
 d : x_rot ^ 2 + y_rot ^ 2$
 dist_fact : d ^ 2 * k1 + d * k0$
@@ -20,7 +20,7 @@ load("expr2c.mac")$
 x_expand : trigexpand(x_dist)$
 y_expand : trigexpand(y_dist)$
 
-args: "double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double m_view, double m_nick"$
+args: "double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double x0, double m_view, double m_nick"$
 
 expr2c("ProjectionRectilinear::mac_x", args, x_expand)$
 expr2c("ProjectionRectilinear::mac_y", args, y_expand)$
@@ -31,9 +31,11 @@ expr2c("ProjectionRectilinear::mac_x_dc_tilt", args, diff(x_expand, c_tilt))$
 expr2c("ProjectionRectilinear::mac_x_dscale", args, diff(x_expand, scale))$
 expr2c("ProjectionRectilinear::mac_x_dk0", args, diff(x_expand, k0))$
 expr2c("ProjectionRectilinear::mac_x_dk1", args, diff(x_expand, k1))$
+expr2c("ProjectionRectilinear::mac_x_dx0", args, diff(x_expand, x0))$
 expr2c("ProjectionRectilinear::mac_y_dc_view", args, diff(y_expand, c_view))$
 expr2c("ProjectionRectilinear::mac_y_dc_nick", args, diff(y_expand, c_nick))$
 expr2c("ProjectionRectilinear::mac_y_dc_tilt", args, diff(y_expand, c_tilt))$
 expr2c("ProjectionRectilinear::mac_y_dscale", args, diff(y_expand, scale))$
 expr2c("ProjectionRectilinear::mac_y_dk0", args, diff(y_expand, k0))$
 expr2c("ProjectionRectilinear::mac_y_dk1", args, diff(y_expand, k1))$
+expr2c("ProjectionRectilinear::mac_y_dx0", args, diff(y_expand, x0))$

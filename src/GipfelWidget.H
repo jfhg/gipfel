@@ -39,18 +39,18 @@ class GipfelWidget : public Fl_Widget {
 		int get_rel_track_width(Hill *m);
 
 		static int get_pixel_nearest(Fl_Image *img, double x, double y,
-			uchar *r, uchar *g, uchar *b);
+			int *r, int *g, int *b);
 
-		static int get_pixel_bilinear(Fl_Image *img, double x, double y,
-			uchar *r, uchar *g, uchar *b);
+		static int get_pixel_bicubic(Fl_Image *img, double x, double y,
+			int *r, int *g, int *b);
 
 		static int get_pixel(Fl_Image *img, int x, int y,
-			uchar *r, uchar *g, uchar *b);
+			int *r, int *g, int *b);
 
 	public:
 		typedef enum {
 			NEAREST  = 0,
-			BILINEAR = 1
+			BICUBIC  = 1
 		} sample_mode_t;
 	
 		GipfelWidget(int X,int Y,int W, int H);
@@ -115,16 +115,18 @@ class GipfelWidget : public Fl_Widget {
 
 		void set_projection(ProjectionLSQ::Projection_t p);
 
-		void get_distortion_params(double *k0, double *k1);
+		void get_distortion_params(double *k0, double *k1i, double *x0);
 
-		void set_distortion_params(double k0, double k1);
+		void set_distortion_params(double k0, double k1, double x0);
 
 		Hills *get_mountains();
 
 		int comp_params();
 
 		int get_pixel(GipfelWidget::sample_mode_t,
-			double a_alph, double a_nick, uchar *r, uchar *g, uchar *b);
+			double a_alph, double a_nick, int *r, int *g, int *b);
+
+		double get_angle_off(double view, double nick);
 
 		int get_distortion_profile_name(char *buf, int buflen);
 

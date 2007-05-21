@@ -31,6 +31,7 @@
 
 
 #define MAX(A,B) ((A)>(B)?(A):(B))
+#define MIN(A,B) ((A)<(B)?(A):(B))
 
 static double pi_d, deg2rad;
 
@@ -99,14 +100,19 @@ GipfelWidget::load_image(char *file) {
 	// 1. gipfel data in JPEG comment
 	// 2. matching distortion profile
 	// 3. set the to 0.0, 0.0
-	md->get_distortion_params(&pan->parms.k0, &pan->parms.k1);
+	md->get_distortion_params(&pan->parms.k0, &pan->parms.k1, &pan->parms.x0);
 	if (isnan(pan->parms.k0)) {
 		char buf[1024];
 		get_distortion_profile_name(buf, sizeof(buf));
 		load_distortion_params(buf);
 		if (isnan(pan->parms.k0)) {
 			pan->parms.k0 = 0.0;
+		}
+		if (isnan(pan->parms.k1)) {
 			pan->parms.k1 = 0.0;
+		}
+		if (isnan(pan->parms.x0)) {
+			pan->parms.x0 = 0.0;
 		}
 	}
 
@@ -138,7 +144,7 @@ GipfelWidget::save_image(char *file) {
 	md->set_tilt(get_tilt_angle());
 	md->set_focal_length_35mm(get_focal_length_35mm());
 	md->set_projection_type((int) get_projection());
-	md->set_distortion_params(pan->parms.k0, pan->parms.k1);
+	md->set_distortion_params(pan->parms.k0, pan->parms.k1, pan->parms.x0);
 
 	ret = md->save_image(img_file, file);
 	delete md;
@@ -473,13 +479,13 @@ GipfelWidget::set_projection(ProjectionLSQ::Projection_t p) {
 }
 
 void
-GipfelWidget::get_distortion_params(double *k0, double *k1) {
-	pan->get_distortion_params(k0, k1);
+GipfelWidget::get_distortion_params(double *k0, double *k1, double *x0) {
+	pan->get_distortion_params(k0, k1, x0);
 }
 
 void
-GipfelWidget::set_distortion_params(double k0, double k1) {
-	pan->set_distortion_params(k0, k1);
+GipfelWidget::set_distortion_params(double k0, double k1, double x0) {
+	pan->set_distortion_params(k0, k1, x0);
 	redraw();
 }
 
@@ -669,8 +675,10 @@ GipfelWidget::handle(int event) {
 
 int
 GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
-	double a_alph, double a_nick, uchar *r, uchar *g, uchar *b) {
+	double a_alph, double a_nick, int *r, int *g, int *b) {
 	double px, py;
+	int r_tmp, g_tmp, b_tmp;
+	int ret;
 
 	if (img == NULL) {
 		return 1;
@@ -680,18 +688,28 @@ GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
 		return 1;
 	}
 
-	if (m == GipfelWidget::BILINEAR) {
-		return get_pixel_bilinear(img, px + ((double) img->w()) / 2.0,
+	if (m == GipfelWidget::BICUBIC) {
+		ret = get_pixel_bicubic(img, px + ((double) img->w()) / 2.0,
 			py + ((double) img->h()) / 2.0, r, g, b);
 	} else {
-		return get_pixel_nearest(img, px + ((double) img->w()) / 2.0,
+		ret = get_pixel_nearest(img, px + ((double) img->w()) / 2.0,
 			py + ((double) img->h()) / 2.0, r, g, b);
 	}
+
+	return ret;
+}
+
+double
+GipfelWidget::get_angle_off(double a_alph, double a_nick) {
+	double angle =  atan(pow(pow(tan(a_alph - pan->parms.a_center), 2.0) +
+			pow(tan(a_nick - pan->parms.a_nick), 2.0), 0.5));
+
+	return angle;
 }
 
 int
 GipfelWidget::get_pixel_nearest(Fl_Image *img, double x, double y,
-	uchar *r, uchar *g, uchar *b) {
+	int *r, int *g, int *b) {
 	if (isnan(x) || isnan(y)) {
 		return 1;
 	} else {
@@ -699,48 +717,56 @@ GipfelWidget::get_pixel_nearest(Fl_Image *img, double x, double y,
 	}
 }
 
-int
-GipfelWidget::get_pixel_bilinear(Fl_Image *img, double x, double y,
-	uchar *r, uchar *g, uchar *b) {
-	uchar a_r[4] = {0, 0, 0, 0};
-	uchar a_g[4] = {0, 0, 0, 0};
-	uchar a_b[4] = {0, 0, 0, 0};
-	float v0 , v1;
-	int fl_x = (int) floor(x);
-	int fl_y = (int) floor(y);
-	int i, n;
+static inline double
+interp_cubic(double x, double x2, double x3, double *v) {
+	double a0, a1, a2, a3;
 
-	i = 0;
-	n = 0;
-	for (int iy = 0; iy <= 1; iy++) {
-		for (int ix = 0; ix <= 1; ix++) {
-			n += get_pixel(img, fl_x + ix, fl_y + iy, &(a_r[i]), &(a_g[i]), &(a_b[i]));
-			i++;
+	a0 = v[3] - v[2] - v[0] + v[1];
+	a1 = v[0] - v[1] - a0;
+	a2 = v[2] - v[0];
+	a3 = v[1];
+
+	return a0 * x3 + a1 * x2 + a2 * x + a3;
+}
+
+int
+GipfelWidget::get_pixel_bicubic(Fl_Image *img, double x, double y,
+	int *r, int *g, int *b) {
+
+	double fl_x = floor(x);
+	double fl_y = floor(y);
+	double dx = x - fl_x, dx2 = dx * dx, dx3 = dx2 * dx;
+	double dy = y - fl_y, dy2 = dy * dy, dy3 = dy2 * dy;
+	int ic[3];
+	double c[3][4];
+	double c1[3][4];
+
+	for (int iy = 0; iy < 4; iy++) {
+		for (int ix = 0; ix < 4; ix++) {
+			if (get_pixel(img, (int) fl_x + ix - 1, (int) fl_y + iy - 1,
+					&ic[0], &ic[1], &ic[2]) != 0) {
+				return 1;
+			}
+
+			for (int l = 0; l < 3; l++) {
+				c[l][ix] = (double) ic[l];
+			}
+		}
+
+		for (int l = 0; l < 3; l++) {
+			c1[l][iy] = interp_cubic(dx, dx2, dx3, c[l]);
 		}
 	}
 
-	v0 = a_r[0] * (1 - (x - fl_x)) + a_r[1] * (x - fl_x);
-	v1 = a_r[2] * (1 - (x - fl_x)) + a_r[3] * (x - fl_x);
-	*r = (uchar) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
-
-	v0 = a_g[0] * (1 - (x - fl_x)) + a_g[1] * (x - fl_x);
-	v1 = a_g[2] * (1 - (x - fl_x)) + a_g[3] * (x - fl_x);
-	*g = (uchar) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
-
-	v0 = a_b[0] * (1 - (x - fl_x)) + a_b[1] * (x - fl_x);
-	v1 = a_b[2] * (1 - (x - fl_x)) + a_b[3] * (x - fl_x);
-	*b = (uchar) rint(v0 * (1 - (y - fl_y)) + v1 * (y - fl_y));
-
-	if (n >= 1) {
-		return 1;
-	} else {
-		return 0;
-	}
+	*r = (int) rint(interp_cubic(dy, dy2, dy3, c1[0]));
+	*g = (int) rint(interp_cubic(dy, dy2, dy3, c1[1]));
+	*b = (int) rint(interp_cubic(dy, dy2, dy3, c1[2]));
+	return 0;
 }
 
 int
 GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
-                     uchar *r, uchar *g, uchar *b) {
+                     int *r, int *g, int *b) {
 	if ( img->d() == 0 ) {
 		return 1;
 	}
@@ -752,16 +778,16 @@ GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
 	switch (img->count()) {
 		case 1:
 		{                                            // bitmap
-			const char *buf = img->data()[0];
+			const unsigned char *buf = (const unsigned char*) img->data()[0];
 			switch (img->d())
 			{
 				case 1:
 					*r = *g = *b = *(buf+index);
 					break;
 				case 3:                              // 24bit
-					*r = *(buf+index+0);
-					*g = *(buf+index+1);
-					*b = *(buf+index+2);
+					*r = (int) *(buf+index+0);
+					*g = (int) *(buf+index+1);
+					*b = (int) *(buf+index+2);
 					break;
 				default:                             // ??
 					printf("Not supported: chans=%d\n", img->d());
@@ -774,8 +800,11 @@ GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
 		return 1;
 	}
 
-	return 0;
+	*r = *r * 255;
+	*g = *g * 255;
+	*b = *b * 255;
 
+	return 0;
 }
 
 int
@@ -802,6 +831,7 @@ GipfelWidget::load_distortion_params(const char *prof_name) {
 	Fl_Preferences prof(dist_prefs, prof_name);
 	ret += prof.get("k0", pan->parms.k0, pan->parms.k0);
 	ret += prof.get("k1", pan->parms.k1, pan->parms.k1);
+	ret += prof.get("x0", pan->parms.x0, pan->parms.x0);
 
 	return !ret;
 }
@@ -818,6 +848,7 @@ GipfelWidget::save_distortion_params(const char *prof_name, int force) {
 
 	prof.set("k0", pan->parms.k0);
 	prof.set("k1", pan->parms.k1);
+	prof.set("x0", pan->parms.x0);
 
 	return 0;
 }

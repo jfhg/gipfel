@@ -41,7 +41,7 @@ class Panorama {
 
 		double alpha(double phi, double lam);
 
-		double nick(double dist, double height);
+		double nick(Hill *m);
 
 		double comp_center_angle(double alph_a, double alph_b, double d1, double d2);
 
@@ -50,8 +50,6 @@ class Panorama {
 		int get_matrix(double m[]);
 
 		int optimize(Hill *m1, Hill *m2);
-
-		double get_value(Hills *p);
 
 		int is_visible(double a_alph);
 
@@ -126,9 +124,9 @@ class Panorama {
 
 		void set_projection(ProjectionLSQ::Projection_t p);
 
-		void get_distortion_params(double *k0, double *k1);
+		void get_distortion_params(double *k0, double *k1, double *x0);
 
-		void set_distortion_params(double k0, double k1);
+		void set_distortion_params(double k0, double k1, double x0);
 
 		int get_coordinates(double a_alph, double a_nick, double *x, double *y);
 };

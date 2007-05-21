@@ -12,21 +12,22 @@
 
 #include "OutputImage.H"
 
-class TIFFOutputImage : OutputImage {
+class TIFFOutputImage : public OutputImage {
 	private:
+		int bitspersample;
 		unsigned char *row;
 		char *file;
 		TIFF *tiff;
 
 	public:
-		TIFFOutputImage(const char *file);
+		TIFFOutputImage(const char *file, int b = 8);
 
 		~TIFFOutputImage();
 
 	protected:
 		int init_internal(int w, int h);
 
-		int set_pixel_internal(int x, char r, char g, char b);	
+		int set_pixel_internal(int x, int r, int g, int b);	
 
 		int next_line_internal();
 

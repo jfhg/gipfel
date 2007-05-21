@@ -10,7 +10,8 @@
 
 #include "TIFFOutputImage.H"
 
-TIFFOutputImage::TIFFOutputImage(const char *f) {
+TIFFOutputImage::TIFFOutputImage(const char *f, int b) {
+	bitspersample = (b==16)?16:8;
 	file = strdup(f);
 	tiff = NULL;
 	row = NULL;
@@ -32,12 +33,12 @@ TIFFOutputImage::init_internal(int w1, int h1) {
 		row = NULL;
 	}
 
-	row = (unsigned char*) malloc(sizeof(char) * 4 * w1);
+	row = (unsigned char*) malloc(sizeof(char) * (bitspersample / 8) * 4 * w1);
 	if (!row) {
 		perror("malloc");
 		return 1;
 	}
-	memset(row, 0, sizeof(char) * 4 * w1);
+	memset(row, 0, sizeof(char) * (bitspersample / 8) * 4 * w1);
 
 	if (tiff) {
 		TIFFClose(tiff);
@@ -54,25 +55,33 @@ TIFFOutputImage::init_internal(int w1, int h1) {
 	TIFFSetField(tiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 	TIFFSetField(tiff, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
 	TIFFSetField(tiff, TIFFTAG_ROWSPERSTRIP, 1);
-	TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, 8);
+	TIFFSetField(tiff, TIFFTAG_BITSPERSAMPLE, bitspersample);
 	TIFFSetField(tiff, TIFFTAG_SAMPLESPERPIXEL, 4);
 
 	return 0;
 }
 
 int
-TIFFOutputImage::set_pixel_internal(int x, char r, char g, char b) {
-	row[x*4+0] = r;
-	row[x*4+1] = g;
-	row[x*4+2] = b;
-	row[x*4+3] = 255;
+TIFFOutputImage::set_pixel_internal(int x, int r, int g, int b) {
+	if (bitspersample == 8) {	
+		row[x*4+0] = (unsigned char) (r / 255);
+		row[x*4+1] = (unsigned char) (g / 255);
+		row[x*4+2] = (unsigned char) (b / 255);
+		row[x*4+3] = 255;
+	} else if (bitspersample == 16) {
+		unsigned short *row16 = (unsigned short*) row;
+		row16[x*4+0] = (unsigned short) r;
+		row16[x*4+1] = (unsigned short) g;
+		row16[x*4+2] = (unsigned short) b;
+		row16[x*4+3] = 65025;
+	}
 
 	return 0;
 }
 
 int
 TIFFOutputImage::next_line_internal() {
-	TIFFWriteEncodedStrip(tiff, line -1 , row, W * 4);
+	TIFFWriteEncodedStrip(tiff, line - 1 , row, W * (bitspersample / 8) * 4);
 
 	memset(row, 0, sizeof(char) * 4 * W);
 	return 0;

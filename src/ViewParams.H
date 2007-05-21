@@ -15,6 +15,7 @@ class ViewParams {
 		double a_tilt;
 		double k0;
 		double k1;
+		double x0;
 };
 
 #endif

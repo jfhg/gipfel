@@ -13,12 +13,13 @@
 #define MAX_PICS 256
 
 
+
 class Stitch {
 	private:
 		GipfelWidget *gipf[MAX_PICS];
+		int num_pics;
 		OutputImage *single_images[MAX_PICS];
 		OutputImage *merged_image;
-
 
 	public:
 		Stitch();

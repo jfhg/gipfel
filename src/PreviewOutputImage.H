@@ -14,7 +14,7 @@
 
 #include "OutputImage.H"
 
-class PreviewOutputImage : OutputImage , public Fl_Widget {
+class PreviewOutputImage : public OutputImage , public Fl_Widget {
 	private:
 		uchar *data;
 		int d;
@@ -29,7 +29,7 @@ class PreviewOutputImage : OutputImage , public Fl_Widget {
 	protected:
 		int init_internal(int w, int h);
 
-		int set_pixel_internal(int x, char r, char g, char b);	
+		int set_pixel_internal(int x, int r, int g, int b);	
 
 		int next_line_internal();
 

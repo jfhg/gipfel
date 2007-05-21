@@ -10,4 +10,3 @@
 #include "ProjectionRectilinear.H"
 
 #include "ProjectionRectilinear_funcs.cxx"
-

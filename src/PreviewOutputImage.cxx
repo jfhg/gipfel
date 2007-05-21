@@ -35,15 +35,15 @@ PreviewOutputImage::init_internal(int w, int h) {
 
 
 int
-PreviewOutputImage::set_pixel_internal(int x, char r, char g, char b) {
+PreviewOutputImage::set_pixel_internal(int x, int r, int g, int b) {
 	if (!data) {
 		return 1;
 	}
 
 	long index = (line * w() * d + (x * d));
-	*(data+index+0) = r;
-	*(data+index+1) = g;
-	*(data+index+2) = b;
+	*(data+index+0) = (unsigned char) (r / 255);
+	*(data+index+1) = (unsigned char) (g / 255);
+	*(data+index+2) = (unsigned char) (b / 255);
 
 	return 0;
 }

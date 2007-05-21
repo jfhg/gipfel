@@ -15,7 +15,7 @@ extern "C" {
 
 #include "OutputImage.H"
 
-class JPEGOutputImage : OutputImage {
+class JPEGOutputImage : public OutputImage {
 	private:
 		unsigned char *row;
 		char *file;
@@ -32,7 +32,7 @@ class JPEGOutputImage : OutputImage {
 	protected:
 		int init_internal(int w, int h);
 
-		int set_pixel_internal(int x, char r, char g, char b);	
+		int set_pixel_internal(int x, int r, int g, int b);	
 
 		int next_line_internal();
 
