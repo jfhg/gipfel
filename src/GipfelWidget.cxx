@@ -838,11 +838,9 @@ GipfelWidget::load_distortion_params(const char *prof_name) {
 
 int
 GipfelWidget::save_distortion_params(const char *prof_name, int force) {
-	int dummy;
-
 	Fl_Preferences prof(dist_prefs, prof_name);
 
-	if (!force && (prof.get("k0", dummy, 0) == 0)) {
+	if (!force && prof.entryExists("k0")) {
 		return 1;
 	}
 
