@@ -176,6 +176,8 @@ void save_distortion_cb(Fl_Widget *, void *) {
 	const char * prof_name;
 	double k0, k1;
 
+	buf[0] = '\0';
+
 	gipf->get_distortion_params(&k0, &k1);
 	gipf->get_distortion_profile_name(buf, sizeof(buf));
 	prof_name = fl_input("Save Distortion Profile (k0=%f, k1=%f)",
@@ -185,7 +187,12 @@ void save_distortion_cb(Fl_Widget *, void *) {
 		return;
 	}
 
-	gipf->save_distortion_params(prof_name);
+	if (gipf->save_distortion_params(prof_name, 0) != 0) {
+		if (fl_choice("A profile with this name exists.\n",
+				"Cancel", "Overwrite", NULL) == 1) {
+			gipf->save_distortion_params(prof_name, 1);
+		}
+	}
 	set_values();
 }
 

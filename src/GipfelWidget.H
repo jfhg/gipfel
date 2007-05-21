@@ -128,7 +128,7 @@ class GipfelWidget : public Fl_Widget {
 
 		int get_distortion_profile_name(char *buf, int buflen);
 
-		int save_distortion_params(const char *prof_name);
+		int save_distortion_params(const char *prof_name, int force);
 
 		int load_distortion_params(const char *prof_name);
 
