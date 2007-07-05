@@ -1,5 +1,5 @@
 //
-// Copyright 2006 Johannes Hofmann <Johannes.Hofmann@gmx.de>
+// Copyright 2007 Johannes Hofmann <Johannes.Hofmann@gmx.de>
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
@@ -226,7 +226,7 @@ void distortion_cb(Fl_Value_Input*, void*) {
 void about_cb() {
 	fl_message("gipfel -- and you know what you see.\n"
 		"Version %s\n\n"
-		"(c) Johannes Hofmann 2006\n\n"
+		"(c) Johannes Hofmann 2007\n\n"
 		"Default datafile by http://www.alpin-koordinaten.de\n",
 		VERSION);
 
