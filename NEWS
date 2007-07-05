@@ -2,7 +2,14 @@ gipfel ChangeLog
 =================
 
 gipfel-0.2.1
- - Improve "Choose Viewpoint" dialog.
+ - Fix compilation problem.
+ - Replace bilinear with bicubic interpolation in stitching mode (-b option).
+ - Improve usability of "Choose Viewpoint" dialog.
+   Up/Down/Return now do what one would expect.
+ - Improve lens distortion correction.
+   Horizontal main point offsets are taken into account now.
+ - Ask before overwriting existing lens profiles.
+ - Update alpinkoordinaten.dat datafile.
 
 gipfel-0.2.0
  - Change scale factor to "focal length in 35mm" this makes it 
