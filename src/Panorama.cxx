@@ -36,9 +36,6 @@ Panorama::Panorama() {
 	view_height = 0.0;
 	proj = NULL;
 	set_projection(ProjectionLSQ::RECTILINEAR);
-
-
-fprintf(stderr, "=> %f, %f\n", get_earth_radius(0.0), get_earth_radius(pi_d/2.0));
 }
 
 Panorama::~Panorama() {

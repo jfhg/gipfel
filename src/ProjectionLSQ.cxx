@@ -69,7 +69,7 @@ ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 	if (distortion_correct) {
 		lsq(h, parms, 1);
 	}
-fprintf(stderr, "===> x0 %f\n", parms->x0);
+
 	return 0;
 }
 
