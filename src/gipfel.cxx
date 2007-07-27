@@ -202,6 +202,7 @@ void load_distortion_cb(Fl_Widget *, void *) {
 	char buf[1024];
 	const char * prof_name;
 
+	buf[0] = '\0';
 	gipf->get_distortion_profile_name(buf, sizeof(buf));
 	prof_name = fl_input("Load Distortion Profile", buf);
 

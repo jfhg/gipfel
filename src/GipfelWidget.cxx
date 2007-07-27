@@ -103,11 +103,14 @@ GipfelWidget::load_image(char *file) {
 	md->get_distortion_params(&pan->parms.k0, &pan->parms.k1, &pan->parms.x0);
 	if (isnan(pan->parms.k0)) {
 		char buf[1024];
-		get_distortion_profile_name(buf, sizeof(buf));
-		load_distortion_params(buf);
+		if (get_distortion_profile_name(buf, sizeof(buf)) == 0) {
+			load_distortion_params(buf);
+		}
+
 		if (isnan(pan->parms.k0)) {
 			pan->parms.k0 = 0.0;
 		}
+
 		if (isnan(pan->parms.k1)) {
 			pan->parms.k1 = 0.0;
 		}
