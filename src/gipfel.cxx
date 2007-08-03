@@ -42,6 +42,7 @@ char *img_file;
 char *data_file = DEFAULT_DATAFILE;
 
 GipfelWidget *gipf = NULL;
+Fl_Scroll *scroll;
 Fl_Window *control_win, *view_win;
 Fl_Dial *s_center = NULL;
 Fl_Slider *s_nick, *s_focal_length, *s_tilt, *s_height_dist, *s_track_width;
@@ -92,7 +93,9 @@ void open_cb() {
 	char *file = fl_file_chooser("Open File?", "*.jpg", img_file);
 	if(file != NULL) {
 		gipf->load_image(file);
+		scroll->position(0, 0);
 		view_win->label(file);
+		view_win->redraw();
 		control_win->label(file);
 		set_values();
 	}  
@@ -411,8 +414,6 @@ int main(int argc, char** argv) {
 	double stitch_from = 0.0, stitch_to = 380.0;
 	double dist_k0 = 0.0, dist_k1 = 0.0, dist_x0 = 0.0;
 	char *outpath = "/tmp";
-	Fl_Scroll *scroll;
-
 
 	err = 0;
 	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:4")) != EOF) {
