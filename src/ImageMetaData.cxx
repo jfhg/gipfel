@@ -18,6 +18,8 @@
 #include "ImageMetaData.H"
 
 ImageMetaData::ImageMetaData() {
+	manufacturer = NULL;
+    model = NULL;
 	clear();
 }
 
@@ -28,7 +30,9 @@ ImageMetaData::~ImageMetaData() {
 
 void
 ImageMetaData::clear() {
+	if (manufacturer) free(manufacturer);
 	manufacturer = NULL;
+	if (model) free(model);
     model = NULL;
 	longitude = NAN;
 	latitude = NAN;
@@ -49,8 +53,6 @@ int
 ImageMetaData::load_image(char *name, int img_width) {
 	int ret;
 
-	if (manufacturer) free(manufacturer);
-	if (model) free(model);
 	clear();
 
 	ret = load_image_jpgcom(name);
