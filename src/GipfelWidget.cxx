@@ -129,7 +129,6 @@ GipfelWidget::get_image_filename() {
 
 int
 GipfelWidget::save_image(char *file) {
-	ImageMetaData *md;
 	int ret;
 
 	if (img_file == NULL) {
@@ -150,7 +149,6 @@ GipfelWidget::save_image(char *file) {
 	md->set_distortion_params(pan->parms.k0, pan->parms.k1, pan->parms.x0);
 
 	ret = md->save_image(img_file, file);
-	delete md;
 
 	return ret;
 }
