@@ -34,7 +34,7 @@ class ImageMetaData {
 		ImageMetaData();
 		~ImageMetaData();
 
-		int load_image(char *name, int img_width);
+		int load_image(char *name);
 		int save_image(char *in_img, char *out_img);
 
 		const char *get_manufacturer();

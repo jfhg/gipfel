@@ -50,15 +50,12 @@ ImageMetaData::clear() {
 }
 
 int
-ImageMetaData::load_image(char *name, int img_width) {
+ImageMetaData::load_image(char *name) {
 	int ret;
 
 	clear();
 
 	ret = load_image_jpgcom(name);
-	if (ret == 2) { // old format
-		focal_length_35mm = scale * 35.0 / (double) img_width;
-	}
 
 	load_image_exif(name); // fill missing values from exif data
 
@@ -161,7 +158,6 @@ ImageMetaData::load_image_exif(char *name) {
 }
 
 
-#define GIPFEL_FORMAT_1 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, scale %lf, projection type %d"
 #define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focal_length_35mm %lf, projection type %d, k0 %lf, k1 %lf, x0 %lf"
 
 int
@@ -202,22 +198,6 @@ ImageMetaData::load_image_jpgcom(char *name) {
 				}
 
                 ret = 0;
-
-                break;
-            } else if (sscanf(buf, GIPFEL_FORMAT_1,
-                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt) >= 7) {
-
-                longitude = lo;
-                latitude  = la;
-                height    = he;
-                direction = dir;
-                nick      = ni;
-                tilt      = ti;
-                scale     = fr;
-                projection_type = pt;
-
-                ret = 2; // special return value for compatibility with
-                         // old format
 
                 break;
             }

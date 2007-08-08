@@ -86,7 +86,7 @@ GipfelWidget::load_image(char *file) {
 	mb->add("Center Peak", 0, (Fl_Callback*) center_cb, this);
 
 	// try to retrieve gipfel data from JPEG meta data
-	md->load_image(file, img->w());
+	md->load_image(file);
 	set_view_long(md->get_longitude());
 	set_view_lat(md->get_latitude());
 	set_view_height(md->get_height());
