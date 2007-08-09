@@ -87,7 +87,7 @@ int
 Panorama::set_viewpoint(const char *name) {
 	Hill *m = get_pos(name);
 	if (m == NULL) {
-		fprintf(stderr, "Could not find exactly one entry for %s.\n");
+		fprintf(stderr, "Could not find exactly one entry for %s.\n", name);
 		return 1;
 	}
 
