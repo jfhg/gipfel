@@ -675,17 +675,9 @@ GipfelWidget::handle(int event) {
 }
 
 int
-GipfelWidget::export_hills(const char *file) {
-	FILE *fp;
+GipfelWidget::export_hills(FILE *fp) {
 	Hills *mnts;
 	Hill  *m;
-
-	fp = fopen(file, "wb");
-
-	if (fp == NULL) {
-		perror("fopen");
-		return 1;
-	}
 
 	fprintf(fp, "#\n# name\theight\tx\ty\tdistance\n#\n");
 
@@ -703,7 +695,6 @@ GipfelWidget::export_hills(const char *file) {
 			(int) rint(pan->get_real_distance(m)));
 	}
 
-	fclose(fp);
 	return 0;
 }
 
