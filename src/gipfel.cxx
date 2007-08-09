@@ -59,7 +59,7 @@ static int stitch(GipfelWidget::sample_mode_t m , int b_16,
 	int stitch_w, int stitch_h,
 	double from, double to, int type, const char *path, int argc, char **argv);
 
-static int export_hills(const char *file);
+static int export_hills(const char *file, double visibility);
 
 void set_values() {
 	double k0 = 0.0, k1 = 0.0, x0 = 0.0;
@@ -521,7 +521,7 @@ int main(int argc, char** argv) {
 			type, outpath, my_argc, my_argv);
 
 	} else if (export_file) {
-		return export_hills(export_file);
+		return export_hills(export_file, visibility);
 	}
 
 	Fl::get_system_colors();
@@ -633,13 +633,14 @@ stitch(GipfelWidget::sample_mode_t m, int b_16,
 }
 
 static int
-export_hills(const char *file) {
+export_hills(const char *file, double visibility) {
 	int ret = 1;
 
 	if (img_file) {
 		gipf = new GipfelWidget(0,0,800,600);
 		gipf->load_image(img_file);
 		gipf->load_data(data_file);
+		gipf->set_height_dist_ratio(visibility);
 		ret = gipf->export_hills(file);
 		delete gipf;
 		gipf = NULL;
