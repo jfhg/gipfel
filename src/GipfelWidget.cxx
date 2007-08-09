@@ -675,6 +675,39 @@ GipfelWidget::handle(int event) {
 }
 
 int
+GipfelWidget::export_hills(const char *file) {
+	FILE *fp;
+	Hills *mnts;
+	Hill  *m;
+
+	fp = fopen(file, "wb");
+
+	if (fp == NULL) {
+		perror("fopen");
+		return 1;
+	}
+
+	fprintf(fp, "#\n# name\theight\tx\ty\tdistance\n#\n");
+
+	mnts = pan->get_visible_mountains();
+	for (int i=0; i<mnts->get_num(); i++) {
+		m = mnts->get(i);
+
+		if (m->x < 0 || m->x > w() || m->y < 0 || m->y > h()) {
+			continue;
+		}
+
+		fprintf(fp, "%s\t%d\t%d\t%d\t%d\n",
+			m->name, (int) rint(m->height),
+			(int) rint( m->x), (int) rint(m->y),
+			(int) rint(pan->get_real_distance(m)));
+	}
+
+	fclose(fp);
+	return 0;
+}
+
+int
 GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
 	double a_alph, double a_nick, int *r, int *g, int *b) {
 	double px, py;

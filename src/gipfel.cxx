@@ -59,6 +59,8 @@ static int stitch(GipfelWidget::sample_mode_t m , int b_16,
 	int stitch_w, int stitch_h,
 	double from, double to, int type, const char *path, int argc, char **argv);
 
+static int export_hills(const char *file);
+
 void set_values() {
 	double k0 = 0.0, k1 = 0.0, x0 = 0.0;
 
@@ -259,13 +261,14 @@ void fill_menubar(Fl_Menu_Bar* mb) {
 
 void usage() {
 	fprintf(stderr,
-		"usage: gipfel [-v <viewpoint>] [-d <datafile>]\n"
-		"          [-s] [-j <outfile>] [-t <outdir] [-w <width>] [-h <height>]\n"
+		"usage: gipfel [-v <viewpoint>] [-d <file>]\n"
+		"          [-s] [-j <file>] [-t <dir] [-w <width>] [-h <height>]\n"
+		"          [-e <file>]\n"
 		"          [<image(s)>]\n"
 		"   -v <viewpoint>  Set point from which the picture was taken.\n"
 		"                   This must be a string that unambiguously \n"
 		"                   matches the name of an entry in the data file.\n"
-		"   -d <datafile>   Use <datafile> for GPS data.\n"
+		"   -d <file>       Use <file> for GPS data.\n"
 		"   -u <k0>,<k1>    Use distortion correction values k0,k1.\n"
 		"   -s              Stitch mode.\n"
 		"   -4              Create 16bit output (only with TIFF stitching).\n"
@@ -273,8 +276,9 @@ void usage() {
 		"   -b              Use bilinear interpolation for stitching.\n"
 		"   -w <width>      Width of result image.\n"
 		"   -h <height>     Height of result image.\n"
-		"   -j <outfile>    JPEG output file for Stitch mode.\n"
-		"   -t <outdir>     Output directory for TIFF images in Stitch mode.\n"
+		"   -j <file>       JPEG output file for Stitch mode.\n"
+		"   -t <dir>        Output directory for TIFF images in Stitch mode.\n"
+		"   -e <file>       Export positions on image to file <file>.\n"
 		"      <image(s)>   JPEG file(s) to use.\n");
 }
 
@@ -414,9 +418,10 @@ int main(int argc, char** argv) {
 	double stitch_from = 0.0, stitch_to = 380.0;
 	double dist_k0 = 0.0, dist_k1 = 0.0, dist_x0 = 0.0;
 	char *outpath = "/tmp";
+	char *export_file = NULL;
 
 	err = 0;
-	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:4")) != EOF) {
+	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:4e:")) != EOF) {
 		switch (c) {  
 			case '?':
 				usage();
@@ -424,6 +429,9 @@ int main(int argc, char** argv) {
 				break;
 			case 'd':
 				data_file = optarg;
+				break;
+			case 'e':
+				export_file = optarg;
 				break;
 			case 'v':
 				view_point = optarg;
@@ -480,7 +488,6 @@ int main(int argc, char** argv) {
 		}
 	}
 
-
 	my_argc = argc - optind;
 	my_argv = argv + optind;
 
@@ -503,12 +510,13 @@ int main(int argc, char** argv) {
 			type = STITCH_PREVIEW;
 		}
 
-		stitch(bicubic_flag?GipfelWidget::BICUBIC:GipfelWidget::NEAREST,
+		return stitch(bicubic_flag?GipfelWidget::BICUBIC:GipfelWidget::NEAREST,
 			b_16_flag,
 			stitch_w, stitch_h, stitch_from, stitch_to,
 			type, outpath, my_argc, my_argv);
 
-		exit(0);
+	} else if (export_file) {
+		return export_hills(export_file);
 	}
 
 	Fl::get_system_colors();
@@ -575,7 +583,6 @@ stitch(GipfelWidget::sample_mode_t m, int b_16,
 		st->load_image(argv[i]);
 	}
 
-
 	if (type & STITCH_JPEG) {
 
 		st->set_output(new JPEGOutputImage(path, 90));
@@ -616,4 +623,20 @@ stitch(GipfelWidget::sample_mode_t m, int b_16,
 	}
 
 	return 0;
+}
+
+static int
+export_hills(const char *file) {
+	int ret = 1;
+
+	if (img_file) {
+		gipf = new GipfelWidget(0,0,800,600);
+		gipf->load_image(img_file);
+		gipf->load_data(data_file);
+		ret = gipf->export_hills(file);
+		delete gipf;
+		gipf = NULL;
+	}
+
+	return ret;
 }
