@@ -269,6 +269,7 @@ void usage() {
 		"                   This must be a string that unambiguously \n"
 		"                   matches the name of an entry in the data file.\n"
 		"   -d <file>       Use <file> for GPS data.\n"
+		"   -V <visibility> Set initial visibility.\n"
 		"   -u <k0>,<k1>    Use distortion correction values k0,k1.\n"
 		"   -s              Stitch mode.\n"
 		"   -4              Create 16bit output (only with TIFF stitching).\n"
@@ -417,11 +418,12 @@ int main(int argc, char** argv) {
 	int bicubic_flag = 0, b_16_flag = 0;
 	double stitch_from = 0.0, stitch_to = 380.0;
 	double dist_k0 = 0.0, dist_k1 = 0.0, dist_x0 = 0.0;
+	double visibility = 0.07;
 	char *outpath = "/tmp";
 	char *export_file = NULL;
 
 	err = 0;
-	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:4e:")) != EOF) {
+	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:4e:V:")) != EOF) {
 		switch (c) {  
 			case '?':
 				usage();
@@ -435,6 +437,9 @@ int main(int argc, char** argv) {
 				break;
 			case 'v':
 				view_point = optarg;
+				break;
+			case 'V':
+				visibility = atof(optarg);
 				break;
 			case 's':
 				stitch_flag++;
@@ -550,6 +555,8 @@ int main(int argc, char** argv) {
 	scroll->size(gipf->w(), gipf->h());
 
 	gipf->load_data(data_file);
+	gipf->set_height_dist_ratio(visibility);
+
 	scroll->end();  
 
 	set_values();
