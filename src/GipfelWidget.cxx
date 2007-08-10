@@ -677,22 +677,28 @@ GipfelWidget::handle(int event) {
 int
 GipfelWidget::export_hills(FILE *fp) {
 	Hills *mnts;
-	Hill  *m;
 
-	fprintf(fp, "#\n# name\theight\tx\ty\tdistance\n#\n");
+	fprintf(fp, "#\n# name\theight\tx\ty\tdistance\tflags\n#\n");
 
 	mnts = pan->get_visible_mountains();
 	for (int i=0; i<mnts->get_num(); i++) {
-		m = mnts->get(i);
+		Hill *m = mnts->get(i);
+		char *flags;
+		int _x = (int) rint(m->x) + w() / 2;
+		int _y = (int) rint(m->y) + h() / 2;
 
-		if (m->x < 0 || m->x > w() || m->y < 0 || m->y > h()) {
+		if (_x < 0 || _x > w() || _y < 0 || _y > h()) {
 			continue;
 		}
 
-		fprintf(fp, "%s\t%d\t%d\t%d\t%d\n",
-			m->name, (int) rint(m->height),
-			(int) rint( m->x), (int) rint(m->y),
-			(int) rint(pan->get_real_distance(m)));
+		if (m->flags & Hill::HIDDEN) {
+			flags = "HIDDEN";
+		} else {
+			flags = "";
+		}
+		fprintf(fp, "%s\t%d\t%d\t%d\t%d\t%s\n",
+			m->name, (int) rint(m->height), _x, _y,
+			(int) rint(pan->get_real_distance(m)), flags);
 	}
 
 	return 0;

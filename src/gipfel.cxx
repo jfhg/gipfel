@@ -658,9 +658,9 @@ export_hills(const char *export_mode, double visibility) {
 	} else {
 		ImageMetaData md;
 		if (md.load_image(img_file) == 0) {
-			printf(",,%s,,%f,%f,%d\n", img_file,
-				md.get_longitude(),
+			printf(",%s,,%f,%f,%d\n", img_file,
 				md.get_latitude(),
+				md.get_longitude(),
 				(int) rint(md.get_height()));
 			ret = 0;
 		}

@@ -1,14 +1,15 @@
-images := $(wildcard *.jpg)
-slides := $(addprefix gipfelweb/slides/, $(images))
-thumbs := $(addprefix gipfelweb/thumbs/, $(images))
-html   := $(addprefix gipfelweb/, $(addsuffix .html, $(basename $(images))))
-
+images    := $(wildcard *.jpg)
+slides    := $(addprefix gipfelweb/slides/, $(images))
+thumbs    := $(addprefix gipfelweb/thumbs/, $(images))
+positions := $(addprefix gipfelweb/gipfel/, $(addsuffix .pos, $(basename $(images))))
+dumps     := $(addprefix gipfelweb/gipfel/, $(addsuffix .gipf, $(basename $(images))))
+html      := $(addprefix gipfelweb/, $(addsuffix .html, $(basename $(images))))
 
 all:
 	echo "make gipfelweb - create a HTML based we of gipfel oriented"
 	echo "images in the current directory."
 
-gipfelweb: dirs $(slides) $(thumbs) $(html)
+gipfelweb: dirs $(slides) $(thumbs) $(dumps) $(html)
 
 clean:
 	rm -rf gipfelweb
@@ -16,16 +17,22 @@ clean:
 dirs:
 	mkdir -p gipfelweb/slides
 	mkdir -p gipfelweb/thumbs
+	mkdir -p gipfelweb/gipfel
 
 gipfelweb/slides/%.jpg: %.jpg
-	anytopnm $< | pamscale -xyfit 200000 600 | convert -unsharp 0.5x0.5 - - | pnmtojpeg -quality=85 > $@
+	convert -resize '10000x600>' -unsharp 0.5x0.5 -quality 90 $< $@
 
 gipfelweb/thumbs/%.jpg: %.jpg
-	anytopnm $< | pamscale -xyfit 200000 200 | pnmtojpeg -quality=80 > $@
+	convert -resize '1000x150>' -quality 80 $< $@
 
-gipfelweb/%.html: %.jpg index.gipfel
-	echo tbd
+gipfelweb/gipfel/%.pos: %.jpg
+	gipfel -e position $< > $@
 
-index.gipfel: $(images)
-	echo tbd
+gipfelweb/gipfel/%.gipf: gipfelweb/slides/%.jpg gipfelweb/gipfel/index.gipfel
+	gipfel -v 0.03 -d gipfelweb/gipfel/index.gipfel -e hills $< > $@
 
+gipfelweb/gipfel/index.gipfel: $(positions)
+	cat $(positions) > gipfelweb/gipfel/index.gipfel
+
+gipfelweb/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.gipf $(thumbs)
+	gipfel2html $* > $@
