@@ -72,7 +72,7 @@ echo "<h3>$TITLE</h3>"
 if [ "$MODE" = "images" ]; then
 	echo "<a href=\"hills/${FILE}.html\">show hill names</a>"
 else
-	echo "<a href=\"../${FILE}.html\">back to gipfelweb</a>"
+	echo "<a href=\"javascript:history.back()\">back to gipfelweb</a>"
 fi
 
 cat << EOF
