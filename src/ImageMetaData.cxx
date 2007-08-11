@@ -51,20 +51,12 @@ ImageMetaData::clear() {
 
 int
 ImageMetaData::load_image(char *name) {
-	int ret;
-
 	clear();
 
-	ret = load_image_jpgcom(name);
-
+	load_image_jpgcom(name);
 	load_image_exif(name); // fill missing values from exif data
 
-	if (isnan(direction)) direction = 0.0;
-	if (isnan(nick)) nick = 0.0;
-	if (isnan(tilt)) tilt = 0.0;
-	if (isnan(focal_length_35mm)) focal_length_35mm = 35.0;
-
-	return ret;
+	return 0;
 }
 
 int

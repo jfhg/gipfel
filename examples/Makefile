@@ -20,7 +20,7 @@ dirs:
 	mkdir -p gipfelweb/gipfel
 
 gipfelweb/slides/%.jpg: %.jpg
-	convert -resize '10000x600>' -unsharp 0.5x0.5 -quality 90 $< $@
+	convert -resize '10000x600>' -quality 90 $< $@
 
 gipfelweb/thumbs/%.jpg: %.jpg
 	convert -resize '1000x150>' -quality 80 $< $@

@@ -50,6 +50,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
 	img_file = NULL;
 	track_width = 200.0;
 	show_hidden = 0;
+	have_gipfel_info = 0;
 	md = new ImageMetaData();
 	track_points = NULL;
 	fl_register_images();
@@ -58,6 +59,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
 int
 GipfelWidget::load_image(char *file) {
 	Fl_Image *new_img;
+	double direction, nick, tilt, fl;
 
 	new_img = new Fl_JPEG_Image(file);
 
@@ -90,11 +92,40 @@ GipfelWidget::load_image(char *file) {
 	set_view_long(md->get_longitude());
 	set_view_lat(md->get_latitude());
 	set_view_height(md->get_height());
-	set_center_angle(md->get_direction());
-	set_nick_angle(md->get_nick());
-	set_tilt_angle(md->get_tilt());
 	set_projection((ProjectionLSQ::Projection_t) md->get_projection_type());
-	set_focal_length_35mm(md->get_focal_length_35mm());
+
+	have_gipfel_info = 1;
+	direction = md->get_direction();
+	if (isnan(direction)) {
+		set_center_angle(0.0);
+		have_gipfel_info = 0;
+	} else {
+		set_center_angle(direction);
+	}
+
+	nick = md->get_nick();
+	if (isnan(nick)) {
+		set_nick_angle(0.0);
+		have_gipfel_info = 0;
+	} else {
+		set_nick_angle(nick);
+	}
+
+	tilt = md->get_tilt();
+	if (isnan(tilt)) {
+		set_tilt_angle(0.0);
+		have_gipfel_info = 0;
+	} else {
+		set_tilt_angle(tilt);
+	}
+
+	fl = md->get_focal_length_35mm();
+	if (isnan(fl)) {
+		set_focal_length_35mm(35.0);
+		have_gipfel_info = 0;
+	} else {
+		set_focal_length_35mm(fl);
+	}
 	
 	// try to get distortion parameters in the following ordering:
 	// 1. gipfel data in JPEG comment
@@ -677,6 +708,10 @@ GipfelWidget::handle(int event) {
 int
 GipfelWidget::export_hills(FILE *fp) {
 	Hills *mnts;
+
+	if (!have_gipfel_info) {
+		return 0;
+	}
 
 	fprintf(fp, "#\n# name\theight\tx\ty\tdistance\tflags\n#\n");
 

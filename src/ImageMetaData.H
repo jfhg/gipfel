@@ -24,6 +24,7 @@ class ImageMetaData {
 		double focal_length_35mm;
 		double scale;
 		int    projection_type;
+		int    have_gipfel_info;
 
 		int load_image_jpgcom(char *name);
 		int save_image_jpgcom(char *in_img, char *out_img);

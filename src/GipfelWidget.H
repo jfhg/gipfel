@@ -22,6 +22,7 @@ class GipfelWidget : public Fl_Widget {
 		Fl_Menu_Button *mb;
 		char *img_file;
 		double track_width;
+		int have_gipfel_info;
 		ImageMetaData *md;
 
 		int show_hidden;
