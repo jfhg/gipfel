@@ -1,8 +1,17 @@
 #!/bin/sh
 
+MODE="$1"
+FILE="$2"
+
+if [ "$MODE" = "images" ]; then
+	DATAFILE="gipfelweb/gipfel/${FILE}.imgs"
+else
+	DATAFILE="gipfelweb/gipfel/${FILE}.hills"
+fi
+
 TITLE=""
-if [ -e "$1.title" ]; then
-	TITLE=`cat $1.title`
+if [ -e "${FILE}.title" ]; then
+	TITLE=`cat ${FILE}.title`
 fi
 
 cat << EOF
@@ -16,18 +25,24 @@ cat << EOF
 #gipfel li:hover span {visibility: visible;}
 EOF
 
+IFS="	"
 i=0
-grep -v "^#" gipfelweb/gipfel/${1}.gipf | \
+grep -v "^#" ${DATAFILE} | \
 while read name height x y dist flags dummy; do
 	if [ "${flags}" = "HIDDEN" ]; then
 		continue
 	fi
 
-	thumb_w=`identify -format %w gipfelweb/thumbs/${name}`
-	thumb_h=`identify -format %h gipfelweb/thumbs/${name}`
+	if [ "$MODE" = "images" ]; then
+		thumb_w=`identify -format %w gipfelweb/thumbs/${name}`
+		thumb_h=`identify -format %h gipfelweb/thumbs/${name}`
 
-	echo "#id_${i} {left:$((${x} - 10 / 2))px; top: $((${y} - 6 / 2))px; width: 10px; height: 6px;}"
-	echo "#id_${i}:hover {width: ${thumb_w}px; height: ${thumb_h}px; background: url(thumbs/${name});}"
+		echo "#id_${i} {left:$((${x} - 10 / 2))px; top: $((${y} - 6 / 2))px; width: 10px; height: 6px;}"
+		echo "#id_${i}:hover {width: ${thumb_w}px; height: ${thumb_h}px; background: url(thumbs/${name});}"
+	else
+		echo "#id_${i} {left:$((${x} - 4 / 2))px; top: $((${y} - 4 / 2))px; width: 4px; height: 4px;}"
+		echo "#id_${i}:hover {width: 200px; height: 20px;}"
+	fi
 
 	i=$((${i} + 1))
 done
@@ -54,6 +69,12 @@ EOF
 
 echo "<h3>$TITLE</h3>"
 
+if [ "$MODE" = "images" ]; then
+	echo "<a href=\"hills/${FILE}.html\">show hill names</a>"
+else
+	echo "<a href=\"../${FILE}.html\">back to gipfelweb</a>"
+fi
+
 cat << EOF
 <table border="0" cellpadding="0" cellspacing="1" bgcolor="black">
 <tr><td>
@@ -62,21 +83,28 @@ cat << EOF
 <div id="gipfel">
 EOF
 
-echo "<img src=\"slides/${1}.jpg\"/>"
+if [ "$MODE" = "images" ]; then
+	echo "<img src=\"slides/${FILE}.jpg\"/>"
+else
+	echo "<img src=\"../slides/${FILE}.jpg\"/>"
+fi
 
 i=0
-grep -v "^#" gipfelweb/gipfel/${1}.gipf | \
+grep -v "^#" ${DATAFILE} | \
 while read name height x y dist flags dummy; do
 	if [ "${flags}" = "HIDDEN" ]; then
 		continue
 	fi
 
-	THUMB_TITLE="${name%.jpg}"
-	if [ -e "${name%.jpg}.title" ]; then
-		THUMB_TITLE=`cat ${name%.jpg}.title`
+	if [ "$MODE" = "images" ]; then
+		THUMB_TITLE="${name%.jpg}"
+		if [ -e "${name%.jpg}.title" ]; then
+			THUMB_TITLE=`cat ${name%.jpg}.title`
+		fi
+		echo "<li id=\"id_${i}\"><a href=\"${name%.jpg}.html\"><span>${THUMB_TITLE} (${height}m)</span></a></li>"
+	else
+		echo "<li id=\"id_${i}\"><span>${name} (${height}m)</span></li>"
 	fi
-
-	echo "<li id=\"id_${i}\"><a href=\"${name%.jpg}.html\"><span>${THUMB_TITLE} (${height}m)</span></a></li>"
 
 	i=$((${i} + 1))
 done

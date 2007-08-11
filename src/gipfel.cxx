@@ -264,7 +264,7 @@ void usage() {
 	fprintf(stderr,
 		"usage: gipfel [-v <viewpoint>] [-d <file>]\n"
 		"          [-s] [-j <file>] [-t <dir] [-w <width>] [-h <height>]\n"
-		"          [-e <file>] -p]\n"
+		"          [-e <file>] [-E] [-p]\n"
 		"          [<image(s)>]\n"
 		"   -v <viewpoint>  Set point from which the picture was taken.\n"
 		"                   This must be a string that unambiguously \n"
@@ -281,9 +281,8 @@ void usage() {
 		"   -j <file>       JPEG output file for Stitch mode.\n"
 		"   -t <dir>        Output directory for TIFF images in Stitch mode.\n"
 		"   -p              Export position of image to stdout.\n"
-		"   -e <file>       Export positions of hills from <file> on image\n"
-		"                   to stdout. Uses hills from default data file if\n"
-		"                   <file> is omitted.\n"
+		"   -e <file>       Export positions of hills from <file> on image.\n"
+		"   -E              Export hills from default data file.\n"
 		"      <image(s)>   JPEG file(s) to use.\n");
 }
 
@@ -428,7 +427,7 @@ int main(int argc, char** argv) {
 	char *export_file = NULL;
 
 	err = 0;
-	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:4e:V:p")) != EOF) {
+	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:4e:V:pE")) != EOF) {
 		switch (c) {  
 			case '?':
 				usage();
@@ -440,6 +439,9 @@ int main(int argc, char** argv) {
 			case 'e':
 				export_flag++;
 				export_file = optarg;
+				break;
+			case 'E':
+				export_flag++;
 				break;
 			case 'v':
 				view_point = optarg;
