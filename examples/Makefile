@@ -29,7 +29,7 @@ gipfelweb/gipfel/%.pos: %.jpg
 	gipfel -e position $< > $@
 
 gipfelweb/gipfel/%.gipf: gipfelweb/slides/%.jpg gipfelweb/gipfel/index.gipfel
-	gipfel -v 0.03 -d gipfelweb/gipfel/index.gipfel -e hills $< > $@
+	gipfel -v 0.02 -d gipfelweb/gipfel/index.gipfel -e hills $< > $@
 
 gipfelweb/gipfel/index.gipfel: $(positions)
 	cat $(positions) > gipfelweb/gipfel/index.gipfel

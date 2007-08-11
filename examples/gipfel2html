@@ -14,6 +14,10 @@ EOF
 i=0
 grep -v "^#" gipfelweb/gipfel/${1}.gipf | \
 while read name height x y dist flags dummy; do
+	if [ "${flags}" = "HIDDEN" ]; then
+		continue
+	fi
+
 	thumb_w=`identify -format %w gipfelweb/thumbs/${name}`
 	thumb_h=`identify -format %h gipfelweb/thumbs/${name}`
 
