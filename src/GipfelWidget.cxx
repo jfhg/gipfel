@@ -197,7 +197,7 @@ GipfelWidget::load_data(const char *file) {
 int
 GipfelWidget::load_track(const char *file) {
 	if (track_points) {
-		pan->remove_trackpoints();
+		pan->remove_hills(Hill::TRACK_POINT);
 		track_points->clobber();
 		delete track_points;
 	}
@@ -706,11 +706,24 @@ GipfelWidget::handle(int event) {
 }
 
 int
-GipfelWidget::export_hills(FILE *fp) {
-	Hills *mnts;
+GipfelWidget::export_hills(const char *file, FILE *fp) {
+	Hills export_hills, *mnts;
 
 	if (!have_gipfel_info) {
+		fprintf(stderr, "No gipfel info available for %s.\n", img_file);
 		return 0;
+	}
+
+	if (file) {
+		if (export_hills.load(file) != 0) {
+			return 1;
+		}
+
+		for (int i=0; i<export_hills.get_num(); i++) {
+			export_hills.get(i)->flags |= Hill::EXPORT;
+		}
+
+		pan->add_hills(&export_hills);  
 	}
 
 	fprintf(fp, "#\n# name\theight\tx\ty\tdistance\tflags\n#\n");
@@ -721,6 +734,10 @@ GipfelWidget::export_hills(FILE *fp) {
 		char *flags;
 		int _x = (int) rint(m->x) + w() / 2;
 		int _y = (int) rint(m->y) + h() / 2;
+
+		if (file && !(m->flags & Hill::EXPORT)) {
+			continue;
+		}
 
 		if (_x < 0 || _x > w() || _y < 0 || _y > h()) {
 			continue;
@@ -736,6 +753,8 @@ GipfelWidget::export_hills(FILE *fp) {
 			(int) rint(pan->get_real_distance(m)), flags);
 	}
 
+	pan->remove_hills(Hill::EXPORT);
+	
 	return 0;
 }
 

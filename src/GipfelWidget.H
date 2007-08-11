@@ -62,7 +62,7 @@ class GipfelWidget : public Fl_Widget {
 
 		int save_image(char *file);
 
-		int export_hills(FILE *fp);
+		int export_hills(const char *file, FILE *fp);
 
 		const char * get_image_filename();
 

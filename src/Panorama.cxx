@@ -67,13 +67,13 @@ Panorama::add_hills(Hills *h) {
 }
 
 void
-Panorama::remove_trackpoints() {
+Panorama::remove_hills(int flags) {
 	Hills *h_new = new Hills();
 	Hill *m;
 
 	for(int i=0; i<mountains->get_num(); i++) {
 		m = mountains->get(i);
-		if (! (m->flags & Hill::TRACK_POINT)) {
+		if (! (m->flags & flags)) {
 			h_new->add(m);
 		}
 	}

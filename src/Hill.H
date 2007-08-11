@@ -18,7 +18,8 @@ class Hill {
 			DUPLICATE   = 0x01,
 			TRACK_POINT = 0x02,
 			VISIBLE     = 0x04,
-			HIDDEN      = 0x08
+			HIDDEN      = 0x08,
+			EXPORT      = 0x10,
 		} flags_t;
 
 		double phi, lam;

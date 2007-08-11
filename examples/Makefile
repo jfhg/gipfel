@@ -26,10 +26,10 @@ gipfelweb/thumbs/%.jpg: %.jpg
 	convert -resize '1000x150>' -quality 80 $< $@
 
 gipfelweb/gipfel/%.pos: %.jpg
-	gipfel -e position $< > $@
+	gipfel -p $< > $@
 
 gipfelweb/gipfel/%.gipf: gipfelweb/slides/%.jpg gipfelweb/gipfel/index.gipfel
-	gipfel -v 0.02 -d gipfelweb/gipfel/index.gipfel -e hills $< > $@
+	gipfel -v 0.02 -e gipfelweb/gipfel/index.gipfel $< > $@
 
 gipfelweb/gipfel/index.gipfel: $(positions)
 	cat $(positions) > gipfelweb/gipfel/index.gipfel

@@ -59,7 +59,8 @@ static int stitch(GipfelWidget::sample_mode_t m , int b_16,
 	int stitch_w, int stitch_h,
 	double from, double to, int type, const char *path, int argc, char **argv);
 
-static int export_hills(const char *export_mode, double visibility);
+static int export_hills(const char *export_file, double visibility);
+static int export_position();
 
 void set_values() {
 	double k0 = 0.0, k1 = 0.0, x0 = 0.0;
@@ -263,7 +264,7 @@ void usage() {
 	fprintf(stderr,
 		"usage: gipfel [-v <viewpoint>] [-d <file>]\n"
 		"          [-s] [-j <file>] [-t <dir] [-w <width>] [-h <height>]\n"
-		"          [-e hills] -e [position]\n"
+		"          [-e <file>] -p]\n"
 		"          [<image(s)>]\n"
 		"   -v <viewpoint>  Set point from which the picture was taken.\n"
 		"                   This must be a string that unambiguously \n"
@@ -279,8 +280,10 @@ void usage() {
 		"   -h <height>     Height of result image.\n"
 		"   -j <file>       JPEG output file for Stitch mode.\n"
 		"   -t <dir>        Output directory for TIFF images in Stitch mode.\n"
-		"   -e position     Export position of image to stdout.\n"
-		"   -e hills        Export hill positions on image to stdout.\n"
+		"   -p              Export position of image to stdout.\n"
+		"   -e <file>       Export positions of hills from <file> on image\n"
+		"                   to stdout. Uses hills from default data file if\n"
+		"                   <file> is omitted.\n"
 		"      <image(s)>   JPEG file(s) to use.\n");
 }
 
@@ -415,16 +418,17 @@ int main(int argc, char** argv) {
 	char *view_point = NULL;
 	int err, my_argc;
 	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
-	int jpeg_flag = 0, tiff_flag = 0, distortion_flag = 0;
+	int jpeg_flag = 0, tiff_flag = 0, distortion_flag = 0, position_flag = 0;
+	int export_flag = 0;
 	int bicubic_flag = 0, b_16_flag = 0;
 	double stitch_from = 0.0, stitch_to = 380.0;
 	double dist_k0 = 0.0, dist_k1 = 0.0, dist_x0 = 0.0;
 	double visibility = 0.07;
 	char *outpath = "/tmp";
-	char *export_mode = NULL;
+	char *export_file = NULL;
 
 	err = 0;
-	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:4e:V:")) != EOF) {
+	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:4e:V:p")) != EOF) {
 		switch (c) {  
 			case '?':
 				usage();
@@ -434,12 +438,8 @@ int main(int argc, char** argv) {
 				data_file = optarg;
 				break;
 			case 'e':
-				if (strcmp(optarg, "position") && strcmp(optarg, "hills")) {
-					fprintf(stderr, "Unknown export mode %s.\n", optarg);
-					err++;
-				} else {
-					export_mode = optarg;
-				}
+				export_flag++;
+				export_file = optarg;
 				break;
 			case 'v':
 				view_point = optarg;
@@ -449,6 +449,9 @@ int main(int argc, char** argv) {
 				break;
 			case 's':
 				stitch_flag++;
+				break;
+			case 'p':
+				position_flag++;
 				break;
 			case '4':
 				b_16_flag++;
@@ -526,8 +529,10 @@ int main(int argc, char** argv) {
 			stitch_w, stitch_h, stitch_from, stitch_to,
 			type, outpath, my_argc, my_argv);
 
-	} else if (export_mode) {
-		return export_hills(export_mode, visibility);
+	} else if (export_flag) {
+		return export_hills(export_file, visibility);
+	} else if (position_flag) {
+		return export_position();
 	}
 
 	Fl::get_system_colors();
@@ -639,32 +644,42 @@ stitch(GipfelWidget::sample_mode_t m, int b_16,
 }
 
 static int
-export_hills(const char *export_mode, double visibility) {
-	int ret = 1;
+export_hills(const char *export_file, double visibility) {
+	int ret;
+		
+	if (!img_file) {
+		fprintf(stderr, "export: No image file given.\n");
+		return 1;
+	}
+
+	gipf = new GipfelWidget(0,0,800,600);
+	gipf->load_image(img_file);
+	gipf->load_data(data_file);
+	gipf->set_height_dist_ratio(visibility);
+	ret = gipf->export_hills(export_file, stdout);
+	delete gipf;
+	gipf = NULL;
+
+	return ret;
+}
+
+static int
+export_position() {
+	ImageMetaData md;
 
 	if (!img_file) {
 		fprintf(stderr, "export: No image file given.\n");
 		return 1;
 	}
 
-	if (strcmp(export_mode, "hills") == 0) {
-		gipf = new GipfelWidget(0,0,800,600);
-		gipf->load_image(img_file);
-		gipf->load_data(data_file);
-		gipf->set_height_dist_ratio(visibility);
-		ret = gipf->export_hills(stdout);
-		delete gipf;
-		gipf = NULL;
-	} else {
-		ImageMetaData md;
-		if (md.load_image(img_file) == 0) {
-			printf(",%s,,%f,%f,%d\n", img_file,
-				md.get_latitude(),
-				md.get_longitude(),
-				(int) rint(md.get_height()));
-			ret = 0;
-		}
-	}
+	if (md.load_image(img_file) == 0) {
+		printf(",%s,,%f,%f,%d\n", img_file,
+			md.get_latitude(),
+			md.get_longitude(),
+			(int) rint(md.get_height()));
 
-	return ret;
+		return 0;
+	} else {
+		return 1;
+	}
 }
