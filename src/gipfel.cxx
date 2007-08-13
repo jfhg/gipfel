@@ -320,7 +320,7 @@ create_control_window() {
 	s_nick->box(FL_THIN_DOWN_BOX);
 	s_nick->labelsize(10);
 	s_nick->step(0.01);
-	s_nick->bounds(-20.0, 20.0);
+	s_nick->bounds(-40.0, 20.0);
 	s_nick->slider(FL_UP_BOX);
 	s_nick->callback((Fl_Callback*)nick_cb);
 	s_nick->align(FL_ALIGN_TOP);
