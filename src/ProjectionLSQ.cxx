@@ -17,6 +17,7 @@
 
 #include "ProjectionLSQ.H"
 
+static double pi_d = asin(1.0) * 2.0;
 
 ProjectionLSQ::ProjectionLSQ() {
 }
@@ -235,6 +236,13 @@ ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
 void 
 ProjectionLSQ::get_coordinates(double alph, double a_nick,
 	const ViewParams *parms, double *x, double *y) {
+
+	// Normalize alph - parms->a_center to [-pi/2, pi/2]
+	if (alph - parms->a_center > pi_d) {
+		alph -= 2.0 * pi_d;
+	} else if (alph - parms->a_center < -pi_d) {
+		alph += 2.0 * pi_d;
+	}
 
 	*x = mac_x(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale,
 		parms->k0, parms->k1, parms->x0, alph, a_nick); 
