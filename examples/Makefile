@@ -26,13 +26,17 @@ dirs:
 	mkdir -p gipfelweb/gipfel
 
 gipfelweb/slides/%.jpg: %.jpg
-	convert -resize '10000x600>' -quality 90 $< $@
+	anytopnm $< | pamscale -xyfit 10000 500 | pnmtojpeg -quality 94 > $@
+	jhead -te $< $@
 
 gipfelweb/thumbs/%.jpg: %.jpg
-	convert -resize '1000x150>' -quality 80 $< $@
+	anytopnm $< | pamscale -xyfit 1000 150 | pnmtojpeg -quality 80 > $@
 
 gipfelweb/gipfel/%.pos: %.jpg
 	gipfel -p $< > $@
+
+gipfelweb/gipfel/%.imgs: gipfelweb/slides/%.jpg %.opts gipfelweb/gipfel/index.gipfel
+	gipfel `cat $*.opts` -e gipfelweb/gipfel/index.gipfel $< > $@
 
 gipfelweb/gipfel/%.imgs: gipfelweb/slides/%.jpg gipfelweb/gipfel/index.gipfel
 	gipfel -V 0.05 -e gipfelweb/gipfel/index.gipfel $< > $@
