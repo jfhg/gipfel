@@ -50,5 +50,8 @@ gipfelweb/gipfel/index.gipfel: $(positions)
 gipfelweb/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.imgs $(thumbs)
 	gipfel2html images $* > $@
 
+gipfelweb/hills/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.hills %.title
+	gipfel2html hills "`cat $*.title`" $* > $@
+
 gipfelweb/hills/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.hills
-	gipfel2html hills $* > $@
+	gipfel2html hills $* $* > $@

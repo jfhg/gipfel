@@ -1,17 +1,13 @@
 #!/bin/sh
 
 MODE="$1"
-FILE="$2"
+TITLE="$2"
+FILE="$3"
 
 if [ "$MODE" = "images" ]; then
 	DATAFILE="gipfelweb/gipfel/${FILE}.imgs"
 else
 	DATAFILE="gipfelweb/gipfel/${FILE}.hills"
-fi
-
-TITLE=""
-if [ -e "${FILE}.title" ]; then
-	TITLE=`cat ${FILE}.title`
 fi
 
 cat << EOF
