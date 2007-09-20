@@ -735,7 +735,8 @@ GipfelWidget::export_hills(const char *file, FILE *fp) {
 		int _x = (int) rint(m->x) + w() / 2;
 		int _y = (int) rint(m->y) + h() / 2;
 
-		if (m->flags & Hill::DUPLICATE || file && !(m->flags & Hill::EXPORT)) {
+		if (m->flags & Hill::DUPLICATE || m->flags & Hill::HIDDEN ||
+			file && !(m->flags & Hill::EXPORT)) {
 			continue;
 		}
 
@@ -743,14 +744,9 @@ GipfelWidget::export_hills(const char *file, FILE *fp) {
 			continue;
 		}
 
-		if (m->flags & Hill::HIDDEN) {
-			flags = "HIDDEN";
-		} else {
-			flags = "";
-		}
-		fprintf(fp, "%s\t%d\t%d\t%d\t%d\t%s\n",
+		fprintf(fp, "%s\t%d\t%d\t%d\t%d\n",
 			m->name, (int) rint(m->height), _x, _y,
-			(int) rint(pan->get_real_distance(m)), flags);
+			(int) rint(pan->get_real_distance(m)));
 	}
 
 	pan->remove_hills(Hill::EXPORT);

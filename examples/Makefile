@@ -30,7 +30,7 @@ gipfelweb/slides/%.jpg: %.jpg
 	jhead -te $< $@
 
 gipfelweb/thumbs/%.jpg: %.jpg
-	anytopnm $< | pamscale -xyfit 1000 150 | pnmtojpeg -quality 80 > $@
+	anytopnm $< | pamscale -xyfit 400 50 | pnmtojpeg -quality 80 > $@
 
 gipfelweb/gipfel/%.pos: %.jpg
 	gipfel -p $< > $@
@@ -47,11 +47,15 @@ gipfelweb/gipfel/%.hills: gipfelweb/slides/%.jpg
 gipfelweb/gipfel/index.gipfel: $(positions)
 	cat $(positions) > gipfelweb/gipfel/index.gipfel
 
+
+gipfelweb/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.imgs %.title $(thumbs)
+	gipfel2html images "`cat $*.title`" $* > $@
+
 gipfelweb/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.imgs $(thumbs)
-	gipfel2html images $* > $@
+	gipfel2html images $* $* > $@
 
 gipfelweb/hills/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.hills %.title
 	gipfel2html hills "`cat $*.title`" $* > $@
 
 gipfelweb/hills/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.hills
-	gipfel2html hills $* $* > $@
+	gipfel2html hills $* $*  > $@

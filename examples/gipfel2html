@@ -25,10 +25,6 @@ IFS="	"
 i=0
 grep -v "^#" ${DATAFILE} | \
 while read name height x y dist flags dummy; do
-	if [ "${flags}" = "HIDDEN" ]; then
-		continue
-	fi
-
 	if [ "$MODE" = "images" ]; then
 		thumb_w=`identify -format %w gipfelweb/thumbs/${name}`
 		thumb_h=`identify -format %h gipfelweb/thumbs/${name}`
@@ -88,10 +84,6 @@ fi
 i=0
 grep -v "^#" ${DATAFILE} | \
 while read name height x y dist flags dummy; do
-	if [ "${flags}" = "HIDDEN" ]; then
-		continue
-	fi
-
 	if [ "$MODE" = "images" ]; then
 		THUMB_TITLE="${name%.jpg}"
 		if [ -e "${name%.jpg}.title" ]; then
@@ -112,7 +104,23 @@ cat << EOF
 </table>
 </td></tr>
 </table>
-<small>copyright &copy; 2007 <ahref="http://www.ecademix.com/JohannesHofmann/impressum.html">Johannes Hofmann</a></small>
+<br/>
+<br/>
+<br/>
+
+This image is visible on these images:<br/>
+EOF
+
+grep -l ${FILE} gipfelweb/gipfel/*.imgs | \
+while read f; do
+	img="`basename ${f%.imgs}`"
+	echo "<a href=\"${img}.html\"><img src=\"thumbs/${img}.jpg\"></a><br/>"
+done
+
+
+cat << EOF
+</ul>
+<small>copyright &copy; 2007 <a href="http://www.ecademix.com/JohannesHofmann/impressum.html">Johannes Hofmann</a></small>
 </body>
 </html>
 EOF
