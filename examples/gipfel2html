@@ -10,9 +10,9 @@ else
 	DATAFILE="gipfelweb/gipfel/${FILE}.hills"
 fi
 
+echo "<html><head><title>$TITLE</title>"
+
 cat << EOF
-<html>
-<head>
 <style type="text/css">
 #gipfel { display: block; position: relative; margin: 0; padding: 0; }
 #gipfel li { visibility: hidden; list-style-type: none; position: absolute; background: url(25w.png); border: 1px solid black; font-family: sans-serif; font-size: x-small; color: #000; padding: 0; line-height: 1.3em; overflow: hidden; }
@@ -81,6 +81,8 @@ else
 	echo "<img src=\"../slides/${FILE}.jpg\"/>"
 fi
 
+
+echo "<ul>"
 i=0
 grep -v "^#" ${DATAFILE} | \
 while read name height x y dist flags dummy; do
@@ -96,9 +98,9 @@ while read name height x y dist flags dummy; do
 
 	i=$((${i} + 1))
 done
+echo "</ul>"
 
 cat << EOF
-</ul>
 </div>
 </td></tr>
 </table>
@@ -119,7 +121,6 @@ done
 
 
 cat << EOF
-</ul>
 <small>copyright &copy; 2007 <a href="http://www.ecademix.com/JohannesHofmann/impressum.html">Johannes Hofmann</a></small>
 </body>
 </html>
