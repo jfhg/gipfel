@@ -10,7 +10,13 @@ else
 	DATAFILE="gipfelweb/gipfel/${FILE}.hills"
 fi
 
-echo "<html><head><title>$TITLE</title>"
+cat << EOF
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+EOF
+
+echo "<title>$TITLE</title>"
 
 cat << EOF
 <style type="text/css">
@@ -64,7 +70,7 @@ echo "<h3>$TITLE</h3>"
 if [ "$MODE" = "images" ]; then
 	echo "<a href=\"hills/${FILE}.html\">show hill names</a>"
 else
-	echo "<a href=\"javascript:history.back()\">back to gipfelweb</a>"
+	echo "<a href=\"../${FILE}.html\">back to gipfelweb</a>"
 fi
 
 cat << EOF
@@ -107,6 +113,9 @@ cat << EOF
 </td></tr>
 </table>
 <br/>
+Move the mouse over the image to see other images of which the 
+viewpoint is visible.
+Move the mouse over the rectangle to see a thumbnail.
 <br/>
 <br/>
 
@@ -116,7 +125,11 @@ EOF
 grep -l ${FILE} gipfelweb/gipfel/*.imgs | \
 while read f; do
 	img="`basename ${f%.imgs}`"
-	echo "<a href=\"${img}.html\"><img src=\"thumbs/${img}.jpg\"></a><br/>"
+	if [ "$MODE" = "images" ]; then
+		echo "<a href=\"${img}.html\"><img src=\"thumbs/${img}.jpg\"></a><br/>"
+	else
+		echo "<a href=\"${img}.html\"><img src=\"../thumbs/${img}.jpg\"></a><br/>"
+	fi
 done
 
 
