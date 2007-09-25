@@ -128,7 +128,7 @@ while read f; do
 	if [ "$MODE" = "images" ]; then
 		echo "<a href=\"${img}.html\"><img src=\"thumbs/${img}.jpg\"></a><br/>"
 	else
-		echo "<a href=\"${img}.html\"><img src=\"../thumbs/${img}.jpg\"></a><br/>"
+		echo "<a href=\"../${img}.html\"><img src=\"../thumbs/${img}.jpg\"></a><br/>"
 	fi
 done
 
