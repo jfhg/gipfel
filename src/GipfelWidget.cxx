@@ -76,6 +76,8 @@ GipfelWidget::load_image(char *file) {
 
 	img_file = strdup(file);
 
+	known_hills->clear();
+
 	h(img->h());  
 	w(img->w());  
 
@@ -117,7 +119,7 @@ GipfelWidget::load_image(char *file) {
 	}
 
 	fl = md->get_focal_length_35mm();
-	if (isnan(fl)) {
+	if (isnan(fl) || fl == 0.0) {
 		set_focal_length_35mm(35.0);
 		have_gipfel_info = 0;
 	} else {
