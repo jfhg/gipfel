@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <math.h>
+#include <algorithm>
 
 #include <FL/Fl.H>
 #include <FL/Fl_Menu_Item.H>
@@ -28,10 +29,6 @@
 #include "GipfelWidget.H"
 
 #define CROSS_SIZE 2
-
-
-#define MAX(A,B) ((A)>(B)?(A):(B))
-#define MIN(A,B) ((A)<(B)?(A):(B))
 
 static double pi_d, deg2rad;
 
@@ -464,13 +461,13 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
 
 	damage(4, center_x + x() + old_x - 2*CROSS_SIZE - 1,
 		center_y + y() + old_y + old_label_y - 2*CROSS_SIZE - 20,
-		MAX(20, cur_mountain->label_x) + 2*CROSS_SIZE + 2,
-		MAX(20, old_label_y) + 22 ); 
+		std::max(20, cur_mountain->label_x) + 2*CROSS_SIZE + 2,
+		std::max(20, old_label_y) + 22 ); 
 	damage(4,
 		(int) rint(center_x + x() + cur_mountain->x - 2*CROSS_SIZE - 1),
 		(int) rint(center_y + y() + cur_mountain->y + cur_mountain->label_y - 2*CROSS_SIZE - 20),
-		MAX(20, cur_mountain->label_x) + 2*CROSS_SIZE + 2,
-		MAX(20, cur_mountain->label_y) + 22 ); 
+		std::max(20, cur_mountain->label_x) + 2*CROSS_SIZE + 2,
+		std::max(20, cur_mountain->label_y) + 22 ); 
 
 	return 0;
 }
@@ -660,7 +657,7 @@ int
 GipfelWidget::get_rel_track_width(Hill *m) {
 	double dist = pan->get_real_distance(m);
 
-	return (int) rint(MAX((pan->get_scale()*track_width)/(dist*10.0), 1.0));
+	return (int) rint(std::max((pan->get_scale()*track_width)/(dist*10.0), 1.0));
 }
 
 void

@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <algorithm>
 
 #include <gsl/gsl_multifit.h>
 
@@ -16,8 +17,6 @@
 #include "OutputImage.H"
 #include "Stitch.H"
 
-#define MIN(A,B) ((A)<(B)?(A):(B))
-#define MAX(A,B) ((A)>(B)?(A):(B))
 #define MAX_VALUE 65025
 
 static double pi_d = asin(1.0) * 2.0;
@@ -122,9 +121,9 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 				if (gipf[i]->get_pixel(m, a_view, a_nick,
 						&r, &g, &b) == 0) {
 
-					r = MAX(MIN(r, MAX_VALUE), 0);
-					g = MAX(MIN(g, MAX_VALUE), 0);
-					b = MAX(MIN(b, MAX_VALUE), 0);
+					r = std::max(std::min(r, MAX_VALUE), 0);
+					g = std::max(std::min(g, MAX_VALUE), 0);
+					b = std::max(std::min(b, MAX_VALUE), 0);
 
 					if (single_images[i]) {
 						single_images[i]->set_pixel(x, r, g, b);
