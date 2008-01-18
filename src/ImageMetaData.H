@@ -38,27 +38,27 @@ class ImageMetaData {
 		int load_image(char *name);
 		int save_image(char *in_img, char *out_img);
 
-		const char *get_manufacturer();
-		const char *get_model();
- 		double get_longitude();
-		double get_latitude();
-		double get_height();
-		double get_direction();
-		double get_nick();
-		double get_tilt();
-		double get_focal_length();
-		double get_focal_length_35mm();
-		int    get_projection_type();
+		const char *get_manufacturer() {return manufacturer;};
+		const char *get_model() {return model;};
+ 		double get_longitude() {return longitude;};
+		double get_latitude() {return latitude;};
+		double get_height() {return height;};
+		double get_direction() {return direction;};
+		double get_nick() {return nick;};
+		double get_tilt() {return tilt;};
+		double get_focal_length() {return focal_length;};
+		double get_focal_length_35mm() {return focal_length_35mm;};
+		int    get_projection_type() {return projection_type;};
 		void get_distortion_params(double *_k0, double *_k1, double *_x0);
 
-		void set_longitude(double v);
-		void set_latitude(double v);
-		void set_height(double v);
-		void set_direction(double v);
-		void set_nick(double v);
-		void set_tilt(double v);
-		void set_focal_length_35mm(double v);
-		void set_projection_type(int v);
+		void set_longitude(double v) {longitude = v;};
+		void set_latitude(double v) {latitude = v;};
+		void set_height(double v) {height = v;};
+		void set_direction(double v) {direction = v;};
+		void set_nick(double v) {nick = v;};
+		void set_tilt(double v) {tilt = v;};
+		void set_focal_length_35mm(double v) {focal_length_35mm = v;};
+		void set_projection_type(int v) {projection_type = v;};
 		void set_distortion_params(double _k0, double _k1, double _x0);
 };
 #endif
