@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <math.h>
+#include <algorithm>
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
@@ -415,7 +416,7 @@ create_control_window() {
 int main(int argc, char** argv) {
 	char c, **my_argv;
 	char *view_point = NULL;
-	int err, my_argc;
+	int err, my_argc, sx, sy, sw, sh;
 	int stitch_flag = 0, stitch_w = 2000, stitch_h = 500;
 	int jpeg_flag = 0, tiff_flag = 0, distortion_flag = 0, position_flag = 0;
 	int export_flag = 0;
@@ -564,8 +565,9 @@ int main(int argc, char** argv) {
 		gipf->set_distortion_params(dist_k0, dist_k1, dist_x0);
 	}
 
-	view_win->size(gipf->w(), gipf->h());
-	scroll->size(gipf->w(), gipf->h());
+	Fl::screen_xywh(sx, sy, sw, sh);
+	view_win->size(std::min(gipf->w(), sw), std::min(gipf->h(), sh));
+	scroll->size(view_win->w(), view_win->h());
 
 	gipf->load_data(data_file);
 	gipf->set_height_dist_ratio(visibility);
