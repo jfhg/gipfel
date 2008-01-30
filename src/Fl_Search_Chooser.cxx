@@ -64,6 +64,7 @@ static void cancel_cb(Fl_Input* in, void*c) {
 }    
 
 Fl_Search_Chooser::Fl_Search_Chooser(const char *title) : Fl_Window(320, 320, title?title:"Choose") {
+	callback((Fl_Callback*) cancel_cb, this);
 	visible_focus = Fl::visible_focus();
 	Fl::visible_focus(0);
 	Fl_Group *g = new Fl_Group(10, 10, w() - 10, h() - 10);
