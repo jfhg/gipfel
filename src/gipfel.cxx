@@ -276,7 +276,7 @@ void usage() {
 		"   -s              Stitch mode.\n"
 		"   -4              Create 16bit output (only with TIFF stitching).\n"
 		"   -r <from>,<to>  Stitch range in degrees (e.g. 100.0,200.0).\n"
-		"   -b              Use bilinear interpolation for stitching.\n"
+		"   -b              Use bicubic interpolation for stitching.\n"
 		"   -w <width>      Width of result image.\n"
 		"   -h <height>     Height of result image.\n"
 		"   -j <file>       JPEG output file for Stitch mode.\n"
