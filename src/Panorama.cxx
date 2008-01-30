@@ -431,8 +431,7 @@ Panorama::alpha(const Hill *m) {
 
 double
 Panorama::nick(const Hill *m) {
-	double a, b, c;
-	double beta;
+	double b, c;
 
 	b = m->height + get_earth_radius(m->phi);
 	c = view_height + get_earth_radius(view_phi);

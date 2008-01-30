@@ -65,6 +65,7 @@ JPEGOutputImage::init_internal(int w1, int h1) {
 
 	jpeg_start_compress(&cinfo, TRUE);
 
+	return 0;
 }
 
 int

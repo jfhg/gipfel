@@ -34,7 +34,7 @@ ProjectionLSQ::get_view_angle() {
 
 int
 ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
-	const Hill *tmp, *m1, *m2;
+	const Hill *m1, *m2;
 	double scale_tmp;
 	int distortion_correct = 0;
 

@@ -26,6 +26,7 @@ class ProjectionLSQ {
 		} Projection_t;
 
 		ProjectionLSQ();
+		virtual ~ProjectionLSQ() {};
 
 		void get_coordinates(double a_view, double a_nick,
 			const ViewParams *parms, double *x, double *y);

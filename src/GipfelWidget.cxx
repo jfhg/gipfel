@@ -719,7 +719,6 @@ GipfelWidget::export_hills(const char *file, FILE *fp) {
 	mnts = pan->get_visible_mountains();
 	for (int i=0; i<mnts->get_num(); i++) {
 		Hill *m = mnts->get(i);
-		char *flags;
 		int _x = (int) rint(m->x) + w() / 2;
 		int _y = (int) rint(m->y) + h() / 2;
 
@@ -746,7 +745,6 @@ int
 GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
 	double a_alph, double a_nick, int *r, int *g, int *b) {
 	double px, py;
-	int r_tmp, g_tmp, b_tmp;
 	int ret;
 
 	if (img == NULL) {
