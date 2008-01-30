@@ -9,6 +9,7 @@ gipfel-0.2.2
  - Add visibility command line option.
  - Reset known hills when loading new image.
  - Cancel "Choose Hill" dialog on Esc.
+ - Make code -Wall clean.
 
 gipfel-0.2.1
  - Fix compilation problem.
