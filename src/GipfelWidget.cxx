@@ -32,8 +32,6 @@
 
 static double pi_d, deg2rad;
 
-static void center_cb(Fl_Widget *o, void *f);
-
 GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
 	pi_d = asin(1.0) * 2.0;
 	deg2rad = pi_d / 180.0;
@@ -571,21 +569,17 @@ GipfelWidget::get_view_height() {
 }
 
 void 
-GipfelWidget::center() {
-	Hill *m = choose_hill(pan->get_close_mountains(), "Center Peak");
-	if (m) {
-		set_center_angle(m->alph / deg2rad);
-			
-		if (!known_hills->contains(m)) {
-			known_hills->add(m);
-		}
-	
-	}
-}
+GipfelWidget::center_cb(Fl_Widget *o, void *f) {
+	GipfelWidget *g = (GipfelWidget*) f;
 
-static void
-center_cb(Fl_Widget *o, void *f) {
-	((GipfelWidget*)f)->center();
+	Hill *m = choose_hill(g->pan->get_close_mountains(), "Center Peak");
+	if (m) {
+		g->set_center_angle(m->alph / deg2rad);
+			
+		if (!g->known_hills->contains(m)) {
+			g->known_hills->add(m);
+		}
+	}
 }
 
 void
@@ -610,8 +604,8 @@ GipfelWidget::set_show_hidden(int h) {
 	set_labels(pan->get_visible_mountains());
 
 	redraw();
-
 }
+
 void
 GipfelWidget::set_view_lat(double v) {
 	pan->set_view_lat(v);

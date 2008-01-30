@@ -48,6 +48,8 @@ class GipfelWidget : public Fl_Widget {
 		static int get_pixel(Fl_Image *img, int x, int y,
 			int *r, int *g, int *b);
 
+		static void center_cb(Fl_Widget *o, void *f);
+
 	public:
 		typedef enum {
 			NEAREST  = 0,
@@ -56,7 +58,6 @@ class GipfelWidget : public Fl_Widget {
 	
 		GipfelWidget(int X,int Y,int W, int H);
 
-		void center();
 
 		int load_image(char *file);
 
