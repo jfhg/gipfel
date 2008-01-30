@@ -129,8 +129,6 @@ class GipfelWidget : public Fl_Widget {
 		int get_pixel(GipfelWidget::sample_mode_t,
 			double a_alph, double a_nick, int *r, int *g, int *b);
 
-		double get_angle_off(double view, double nick);
-
 		int get_distortion_profile_name(char *buf, int buflen);
 
 		int save_distortion_params(const char *prof_name, int force);

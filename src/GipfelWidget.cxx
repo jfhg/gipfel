@@ -35,8 +35,6 @@ static double pi_d, deg2rad;
 static void center_cb(Fl_Widget *o, void *f);
 
 GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Widget(X, Y, W, H) {
-	int i;
-
 	pi_d = asin(1.0) * 2.0;
 	deg2rad = pi_d / 180.0;
 	img = NULL;
@@ -336,7 +334,6 @@ GipfelWidget::draw() {
 	fl_pop_clip();
 }
 
-
 static int 
 overlap(double m1, double n1, double m2, double n2) {
 	return m1 <= n2 && n1 >= m2; 
@@ -407,7 +404,6 @@ GipfelWidget::set_cur_mountain(int m_x, int m_y) {
 
 	return 1;
 }
-
 
 int
 GipfelWidget::toggle_known_mountain(int m_x, int m_y) {
@@ -668,7 +664,6 @@ GipfelWidget::set_track_width(double w) {
 	redraw();
 }
 
-
 int
 GipfelWidget::handle(int event) {
 	int mark_x, mark_y;
@@ -777,14 +772,6 @@ GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
 	}
 
 	return ret;
-}
-
-double
-GipfelWidget::get_angle_off(double a_alph, double a_nick) {
-	double angle =  atan(pow(pow(tan(a_alph - pan->parms.a_center), 2.0) +
-			pow(tan(a_nick - pan->parms.a_nick), 2.0), 0.5));
-
-	return angle;
 }
 
 int
