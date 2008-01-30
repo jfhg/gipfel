@@ -438,10 +438,7 @@ Panorama::nick(Hill *m) {
 	b = m->height + get_earth_radius(m->phi);
 	c = view_height + get_earth_radius(view_phi);
 
-	a = pow(((b * (b - (2.0 * c * cos(m->dist)))) + (c * c)), (1.0 / 2.0));
-	beta = acos((-(b*b) + (a*a) + (c*c))/(2 * a * c));
-
-	return beta - pi_d / 2.0;
+	return atan((cos(m->dist) * b - c) / (sin(m->dist) * b));
 }
 
 // return local distance to center of WGS84 ellipsoid
