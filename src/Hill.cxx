@@ -54,7 +54,6 @@ Hill::~Hill() {
 	}
 }
 
-
 Hills::Hills() {
 	num = 0;
 	cap = 100;
@@ -157,13 +156,11 @@ void Hills::mark_duplicates(double dist) {
 	}
 }
 
-
 Hills::~Hills() {
 	if (m) {
 		free(m);
 	}
 }
-
 
 void
 Hills::add(Hill *m1) {
