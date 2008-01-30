@@ -15,7 +15,7 @@ class OutputImage {
 	public:
 		OutputImage();
 
-		virtual ~OutputImage();
+		virtual ~OutputImage() {};
 		
 		virtual int init(int w1, int h1);
 
@@ -28,13 +28,13 @@ class OutputImage {
 	protected:
 		int W, H, line;
 
-		virtual int init_internal(int w1, int h1);
+		virtual int init_internal(int w1, int h1) {return 0;};
 
-		virtual int set_pixel_internal(int x, int r, int g, int b);	
+		virtual int set_pixel_internal(int x, int r, int g, int b) {return 0;};	
 	
-		virtual int next_line_internal();
+		virtual int next_line_internal() {return 0;};
 
-		virtual int done_internal();
+		virtual int done_internal() {return 0;};
 };
 
 #endif
