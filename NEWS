@@ -5,7 +5,7 @@ gipfel-0.2.2
  - Fix a segfault if exif tool is not installed.
  - Some optimizations.
  - Don't make view window larger than the screen.
- - Add export options.
+ - Add command line oprtions for data export.
  - Add visibility command line option.
  - Reset known hills when loading new image.
  - Cancel "Choose Hill" dialog on Esc.
