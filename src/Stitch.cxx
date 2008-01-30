@@ -42,7 +42,6 @@ Stitch::~Stitch() {
 	}
 }
 
-
 int
 Stitch::load_image(char *file) {
 	for (int i=0; i<MAX_PICS; i++) {
@@ -155,4 +154,3 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 
 	return 0;
 }
-
