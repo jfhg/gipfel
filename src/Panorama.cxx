@@ -302,7 +302,7 @@ Panorama::update_angles() {
 		m->dist = distance(m->phi, m->lam);
 		if (m->phi != view_phi || m->lam != view_lam) {
 
-			m->alph = alpha(m->phi, m->lam);
+			m->alph = alpha(m);
 			m->a_nick = nick(m);
 		}
 	}
@@ -418,13 +418,12 @@ Panorama::distance(double phi, double lam) {
 }
 
 double 
-Panorama::alpha(double phi, double lam) {
-	double dist, sin_alph, cos_alph, alph;
+Panorama::alpha(const Hill *m) {
+	double sin_alph, cos_alph;
 
-	dist = distance(phi, lam);
-	sin_alph = sin(lam - view_lam) * cos(phi) / sin(dist);
-	cos_alph = (sin(phi) - sin(view_phi) * cos(dist)) /
-		(cos(view_phi) * sin(dist));
+	sin_alph = sin(m->lam - view_lam) * cos(m->phi) / sin(m->dist);
+	cos_alph = (sin(m->phi) - sin(view_phi) * cos(m->dist)) /
+		(cos(view_phi) * sin(m->dist));
 
 	return fmod(atan2(sin_alph, cos_alph) + 2.0 * pi_d, 2.0 * pi_d);
 }

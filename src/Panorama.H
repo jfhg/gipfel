@@ -39,7 +39,7 @@ class Panorama {
 
 		double distance(double phi, double lam);
 
-		double alpha(double phi, double lam);
+		double alpha(const Hill *m);
 
 		double nick(Hill *m);
 
