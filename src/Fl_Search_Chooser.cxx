@@ -47,18 +47,15 @@ Fl_Search_Browser::find_prefix(const char *p, int s, int e) {
 	}
 } 
 
-
 static void input_cb(Fl_Input* in, void*c) {
 	Fl_Search_Browser *sb = ((Fl_Search_Chooser *) c)->sb;
 	sb->find_prefix(in->value()); 
 }    
 
-
 static void ok_cb(Fl_Input* in, void*c) {
 	Fl_Search_Chooser *sc = (Fl_Search_Chooser *) c;
 	sc->close();
 } 
-
 
 static void cancel_cb(Fl_Input* in, void*c) {
 	Fl_Search_Chooser *sc = (Fl_Search_Chooser *) c;
@@ -104,7 +101,6 @@ Fl_Search_Chooser::data() {
 		return NULL;
 	}
 }
-
 
 int
 Fl_Search_Chooser::handle(int event) {
