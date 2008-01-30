@@ -430,7 +430,7 @@ Panorama::alpha(const Hill *m) {
 
 
 double
-Panorama::nick(Hill *m) {
+Panorama::nick(const Hill *m) {
 	double a, b, c;
 	double beta;
 
