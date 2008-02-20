@@ -45,6 +45,13 @@ while read name height x y dist flags dummy; do
 	i=$((${i} + 1))
 done
 
+cat << EOF
+</style></head>
+<body bgcolor="#919faa">
+<br/>
+<br/>
+EOF
+
 echo "<h3>$TITLE</h3>"
 
 if [ "$MODE" = "images" ]; then
