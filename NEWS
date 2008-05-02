@@ -2,8 +2,8 @@ gipfel ChangeLog
 =================
 
 gipfel-0.2.3
- - Fix a major shprtcoming in the rectilinear projection
-   code. This improves accuracy quite a bit mostly in
+ - Fix a major shortcoming in the rectilinear projection
+   code. This improves accuracy quite a bit, mostly in
    wideangle images.
 
 gipfel-0.2.2
