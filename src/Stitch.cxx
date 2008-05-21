@@ -109,7 +109,7 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 	}
 
 	for (int y = 0; y < h; y++) {
-		double a_nick = atan((double)(y_off - y)/radius);
+		double a_nick = (double)20.0 - y * step_view;
 
 		for (int x = 0; x < w; x++) {
 			double a_view;

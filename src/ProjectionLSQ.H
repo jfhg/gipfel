@@ -17,6 +17,7 @@ class ProjectionLSQ {
 		int lsq(const Hills *m, ViewParams *parms, int distortion_correct);
 
 	protected:
+		static double pi;
 		double sec(double a);
 
 	public:

@@ -2,14 +2,37 @@
  * rectilinear (pinhole) projection model with distortion correction
  */
 
+c_x : cos(m_nick) * cos(m_view-c_view)$
+c_y : cos(m_nick) * sin(m_view-c_view)$
+c_z : sin(m_nick)$
+
+/*
+c_x_rot1 : cos(c_view) * c_x - sin(c_view) * c_y$
+c_y_rot1 : sin(c_view) * c_x + cos(c_view) * c_y$
+c_z_rot1 : c_z$
+
+c_x_rot2 : c_x_rot1$
+c_y_rot2 : cos(c_nick) * c_y_rot1 - sin(c_nick) * c_z_rot1$
+c_z_rot2 : sin(c_nick) * c_y_rot1 - cos(c_nick) * c_z_rot1$
+
+c_x_rot2 : cos(c_nick) * c_x_rot1$ + sin(c_nick) * c_z_rot1$
+c_y_rot2 : c_y_rot1$
+c_z_rot2 : -sin(c_nick) * c_x_rot1 + cos(c_nick) * c_z_rot1$
+*/
+
+a_h : c_nick - (\pi/2 - acos(c_z))$
+a_v : atan(c_y / c_x)$
+
+
 /* angle over horizon in view direction */
-a_h : atan (tan (m_nick) / cos(m_view - c_view))$
+/* a_h : atan (tan (m_nick) * sqrt(tan(m_view - c_view) ^2  + 1))$ */
 
 /* adjust angle according to nick value */
-a_v : atan(cos(c_nick + a_h) * tan(m_view - c_view) / cos(a_h))$
+/* a_v : atan(cos(c_nick - a_h  ) * tan((m_view - c_view) / cos(a_h)))$  */
+/* a_v : m_view - c_view$ */
 
 x : tan(a_v)$
-y : tan(c_nick - a_h)$ 
+y : tan(a_h)$ 
 x_rot : y * sin(c_tilt) + x * cos(c_tilt)+x0$
 y_rot : y * cos(c_tilt) - x * sin(c_tilt)$
 d : x_rot ^ 2 + y_rot ^ 2$
