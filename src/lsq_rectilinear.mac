@@ -7,12 +7,13 @@ c_x : cos(m_nick) * cos(m_view - c_view)$
 c_y : cos(m_nick) * sin(m_view - c_view)$
 c_z : sin(m_nick)$
 
+/* nick rotation */
 c_x_rot : cos(c_nick) * c_x$ + sin(c_nick) * c_z$
 c_y_rot : c_y$
 c_z_rot : -sin(c_nick) * c_x + cos(c_nick) * c_z$
 
-/* back to spheric coordinates */
-a_h : (\pi/2 - acos(c_z_rot))$
+/* back to spherical coordinates */
+a_h : \pi / 2 - acos(c_z_rot)$
 a_v : atan(c_y_rot / c_x_rot)$
 
 /* angle over horizon in view direction */
