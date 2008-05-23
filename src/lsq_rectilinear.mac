@@ -12,15 +12,8 @@ c_x_rot : cos(c_nick) * c_x$ + sin(c_nick) * c_z$
 c_y_rot : c_y$
 c_z_rot : -sin(c_nick) * c_x + cos(c_nick) * c_z$
 
-/* back to spherical coordinates */
-a_h : \pi / 2 - acos(c_z_rot)$
-a_v : atan(c_y_rot / c_x_rot)$
-
-/* angle over horizon in view direction */
-a_h_dir : atan (tan (a_h) * sqrt(tan(a_v) ^2  + 1))$ 
-
-x : tan(a_v)$
-y : tan(-a_h_dir)$ 
+x : c_y_rot / c_x_rot$
+y : - c_z_rot / c_x_rot$ 
 x_rot : y * sin(c_tilt) + x * cos(c_tilt)+x0$
 y_rot : y * cos(c_tilt) - x * sin(c_tilt)$
 
