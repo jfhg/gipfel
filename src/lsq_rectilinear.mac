@@ -14,10 +14,10 @@ c_z_rot : -sin(c_nick) * c_x + cos(c_nick) * c_z$
 
 /* pinhole projection */
 x : c_y_rot / c_x_rot$
-y : - c_z_rot / c_x_rot$ 
+y : -c_z_rot / c_x_rot$ 
 
 /* rotation around view axis */
-x_rot : y * sin(c_tilt) + x * cos(c_tilt)+x0$
+x_rot : y * sin(c_tilt) + x * cos(c_tilt) + x0$
 y_rot : y * cos(c_tilt) - x * sin(c_tilt)$
 
 /* distortion correction */
