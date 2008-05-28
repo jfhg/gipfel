@@ -1,6 +1,12 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.2.4
+ - Fix another issue in the rectilinear projection code
+   that affected non-horizontally shot pictures.
+ - Use a more robust forumla for spherical distance computation.
+ - Take refraction effect into account.
+
 gipfel-0.2.3
  - Fix a major shortcoming in the rectilinear projection
    code. This improves accuracy quite a bit, mostly in

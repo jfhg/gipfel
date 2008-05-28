@@ -431,6 +431,8 @@ Panorama::alpha(const Hill *m) {
 	return fmod(atan2(sin_alph, cos_alph) + 2.0 * pi_d, 2.0 * pi_d);
 }
 
+// approximation of refraction effect as described by Tom Chester at
+// http://tchester.org/sgm/analysis/peaks/refraction.html
 double
 Panorama::refraction(const Hill *m) {
 	double a, b, c, alpha = 6.5, T0 = 10.0;
