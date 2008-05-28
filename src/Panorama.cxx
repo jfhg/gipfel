@@ -413,8 +413,11 @@ Panorama::update_coordinates() {
 
 double 
 Panorama::distance(double phi, double lam) {
-	return acos(sin(view_phi) * sin(phi) + 
-		cos(view_phi) * cos(phi) * cos(view_lam - lam));
+	double d_lam = view_lam - lam;
+
+	return atan2(sqrt(pow(cos(phi) * sin(d_lam), 2.0) +
+				pow(cos(view_phi) * sin(phi) - sin(view_phi) * cos(phi) * cos(d_lam), 2.0)),
+		sin(view_phi) * sin(phi) + cos(view_phi) * cos(phi) * cos(d_lam));
 }
 
 double 
@@ -427,7 +430,6 @@ Panorama::alpha(const Hill *m) {
 
 	return fmod(atan2(sin_alph, cos_alph) + 2.0 * pi_d, 2.0 * pi_d);
 }
-
 
 double
 Panorama::nick(const Hill *m) {
