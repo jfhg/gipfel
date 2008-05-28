@@ -677,7 +677,6 @@ GipfelWidget::handle(int event) {
 			break;
 		case FL_DRAG:
 			set_mountain(Fl::event_x()-x(), Fl::event_y()-y());
-			comp_params();
 			return 1;
 			break;
 		case FL_RELEASE:
