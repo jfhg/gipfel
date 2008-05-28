@@ -303,7 +303,6 @@ Panorama::update_angles() {
 		if (m->phi != view_phi || m->lam != view_lam) {
 
 			m->alph = alpha(m);
-			m->a_nick = nick(m);
 		}
 	}
 
@@ -372,6 +371,7 @@ Panorama::update_close_mountains() {
 			 (m->height / (m->dist * EARTH_RADIUS) 
 			  > height_dist_ratio))) {
 
+			m->a_nick = nick(m);
 			close_mountains->add(m);
 		}
 	}
@@ -441,6 +441,7 @@ Panorama::refraction(const Hill *m) {
 
 	return c * get_real_distance(m) / (2000.0 * (1.0 + a));
 }
+
 double
 Panorama::nick(const Hill *m) {
 	double b, c, theta = refraction(m);
@@ -448,9 +449,6 @@ Panorama::nick(const Hill *m) {
 	b = m->height + get_earth_radius(m->phi);
 	c = view_height + get_earth_radius(view_phi);
 
-if (get_real_distance(m) < 100000)
-fprintf(stderr, "=== %s, %g, %g\n", m->name, get_real_distance(m), theta / deg2rad);
-	
 	return atan((cos(m->dist) * b - c) / (sin(m->dist) * b)) - theta;
 }
 
