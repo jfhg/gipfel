@@ -2,10 +2,25 @@
  * rectilinear (pinhole) projection model with distortion correction
  */
 
-x : tan(m_view - c_view)$
-y : tan(c_nick - m_nick)$ 
-x_rot : y * sin(c_tilt) + x * cos(c_tilt)+x0$
+/* switch to cartesian coordinates */
+c_x : cos(m_nick) * cos(m_view - c_view)$
+c_y : cos(m_nick) * sin(m_view - c_view)$
+c_z : sin(m_nick)$
+
+/* nick rotation */
+c_x_rot : cos(c_nick) * c_x + sin(c_nick) * c_z$
+c_y_rot : c_y$
+c_z_rot : -sin(c_nick) * c_x + cos(c_nick) * c_z$
+
+/* pinhole projection */
+x : c_y_rot / c_x_rot$
+y : -c_z_rot / c_x_rot$ 
+
+/* rotation around view axis */
+x_rot : y * sin(c_tilt) + x * cos(c_tilt) + x0$
 y_rot : y * cos(c_tilt) - x * sin(c_tilt)$
+
+/* distortion correction */
 d : x_rot ^ 2 + y_rot ^ 2$
 dist_fact : d ^ 2 * k1 + d * k0$
 x_dist : x_rot * (1 + dist_fact) * scale$

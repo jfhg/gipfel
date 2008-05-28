@@ -1,6 +1,11 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.2.3
+ - Fix a major shortcoming in the rectilinear projection
+   code. This improves accuracy quite a bit, mostly in
+   wideangle images.
+
 gipfel-0.2.2
  - Fix a segfault if exif tool is not installed.
  - Some optimizations.
