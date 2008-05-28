@@ -35,7 +35,7 @@ class Panorama {
 		double distance(double phi, double lam);
 		double alpha(const Hill *m);
 		double nick(const Hill *m);
-		double refraction_change(const Hill *m);
+		double refraction(const Hill *m);
 		double comp_center_angle(double alph_a, double alph_b, double d1, double d2);
 		double comp_scale(double alph_a, double alph_b, double d1, double d2);
 		int get_matrix(double m[]);

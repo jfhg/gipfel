@@ -429,25 +429,25 @@ Panorama::alpha(const Hill *m) {
 }
 
 double
-Panorama::refraction_change(const Hill *m) {
-	double a, b, c, alpha = 6.5 / 1000.0, T0 = 10.0;
+Panorama::refraction(const Hill *m) {
+	double a, b, c, alpha = 6.5, T0 = 0.0;
 
 	a = 2.9e-4 * exp (-view_height / 10000.0) / (1.0 + 2.9 * T0 / 760.0);
 	b = 2.9 * alpha / (760.0 * (1.0 + 2.9 * T0 / 760.0));
-	c = a * (b - 1.0 / 10000.0);
+	c = a * (b - 1.0 / 10.0);
 
-	return (c * get_real_distance(m) / (2.0 * (1.0 + a)));
+	return c * get_real_distance(m) / (2000.0 * (1.0 + a));
 }
 
 double
 Panorama::nick(const Hill *m) {
-	double b, c, theta = refraction_change(m);
+	double b, c, theta = refraction(m);
 
 	b = m->height + get_earth_radius(m->phi);
 	c = view_height + get_earth_radius(view_phi);
 
-if (get_real_distance(m) < 200000)
-fprintf(stderr, "=== %s, %g\n", m->name, theta);
+if (get_real_distance(m) < 100000)
+fprintf(stderr, "=== %s, %g, %g\n", m->name, get_real_distance(m), theta / deg2rad);
 	
 	return atan((cos(m->dist) * b - c) / (sin(m->dist) * b)) - theta;
 }
