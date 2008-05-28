@@ -433,7 +433,7 @@ Panorama::alpha(const Hill *m) {
 
 double
 Panorama::refraction(const Hill *m) {
-	double a, b, c, alpha = 6.5, T0 = 0.0;
+	double a, b, c, alpha = 6.5, T0 = 10.0;
 
 	a = 2.9e-4 * exp (-view_height / 10000.0) / (1.0 + 2.9 * T0 / 760.0);
 	b = 2.9 * alpha / (760.0 * (1.0 + 2.9 * T0 / 760.0));

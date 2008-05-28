@@ -125,6 +125,14 @@ not shown by default, but you can enable the display of hidden objects using
 the Option->Show Hidden menu entry. Hidden objects and hidden GPS way points
 are displayed in blue.
 
+Refraction
+==========
+
+Refraction caused by temperature and density gardients in the atmosphere is
+taken into account according to the approximation described by Tom Chester in:
+http://tchester.org/sgm/analysis/peaks/refraction_calculation.html
+under the assumption of a temperature change of 6.5°C per 1000m and a
+temperature T0 at view point level of 10°C.
 
 Stitching
 =========
