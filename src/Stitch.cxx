@@ -116,6 +116,9 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 			a_view = view_start + x * step_view;
 			merged_pixel_set = 0;
 			for (int i = 0; i < num_pics; i++) {
+				if (merged_pixel_set && !single_images[i])
+					continue;
+
 				if (gipf[i]->get_pixel(m, a_view, a_nick,
 						&r, &g, &b) == 0) {
 
