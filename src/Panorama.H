@@ -11,8 +11,6 @@
 #include "ProjectionLSQ.H"
 #include "ViewParams.H"
 
-
-
 class Panorama {
 	private:
 		double view_phi, view_lam, view_height;

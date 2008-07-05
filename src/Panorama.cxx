@@ -82,7 +82,6 @@ Panorama::remove_hills(int flags) {
 	mountains = h_new;
 }
 
-
 int
 Panorama::set_viewpoint(const char *name) {
 	Hill *m = get_pos(name);
@@ -113,7 +112,6 @@ Panorama::set_viewpoint(const Hill *m) {
 
 	update_angles();
 }
-
 
 Hills * 
 Panorama::get_mountains() {
@@ -329,31 +327,27 @@ Panorama::mark_hidden(Hills *hills) {
 
 		m->flags &= ~Hill::HIDDEN;
 
-		if (m->flags & Hill::DUPLICATE) {
+		if (m->flags & Hill::DUPLICATE)
 			continue;
-		}
 
 		for (j=0; j<hills->get_num(); j++) {
 			n = hills->get(j);
 
-			if (n->flags & Hill::DUPLICATE || n->flags & Hill::TRACK_POINT) {
+			if (n->flags & Hill::DUPLICATE || n->flags & Hill::TRACK_POINT)
 				continue;
-			}
-			if (m == n || fabs(m->alph - n->alph > pi_d / 2.0)) {
+
+			if (m == n || fabs(m->alph - n->alph > pi_d / 2.0))
 				continue;
-			}
-			if (m->dist < n->dist || m->a_nick > n->a_nick) {
+
+			if (m->dist < n->dist || m->a_nick > n->a_nick)
 				continue;
-			}
 
 			h = (n->a_nick - m->a_nick) / fabs(m->alph - n->alph);
 			if (isinf(h) || h > hide_value) {
 				m->flags |= Hill::HIDDEN;
 			}
 		}
-
 	}
-
 }
 
 void 
