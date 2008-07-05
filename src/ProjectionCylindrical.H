@@ -17,7 +17,7 @@ class ProjectionCylindrical : public ProjectionLSQ {
 #define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double x0, double m_view, double m_nick
 		virtual double mac_x(ARGS);
 		virtual double mac_y(ARGS);
-        virtual double mac_x_dc_view(ARGS);
+		virtual double mac_x_dc_view(ARGS);
 		virtual double mac_x_dc_nick(ARGS);
 		virtual double mac_x_dc_tilt(ARGS);
 		virtual double mac_x_dscale(ARGS);
