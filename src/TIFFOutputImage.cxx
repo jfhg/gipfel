@@ -18,20 +18,18 @@ TIFFOutputImage::TIFFOutputImage(const char *f, int b) {
 }
 
 TIFFOutputImage::~TIFFOutputImage() {
-	if (row) {
+	if (row)
 		free(row);
-	}
-	if (file) {
+
+	if (file)
 		free(file);
-	}
 }
 
 int
 TIFFOutputImage::init_internal() {
-	if (row) {
+	if (row)
 		free(row);
-		row = NULL;
-	}
+	row = NULL;
 
 	row = (unsigned char*) calloc((bitspersample / 8) * 4 * W, sizeof(char));
 	if (!row) {
@@ -39,9 +37,8 @@ TIFFOutputImage::init_internal() {
 		return 1;
 	}
 
-	if (tiff) {
+	if (tiff)
 		TIFFClose(tiff);
-	}
 
 	if((tiff = TIFFOpen(file, "w")) == NULL){
 		fprintf(stderr, "can't open %s\n", file);
@@ -88,15 +85,13 @@ TIFFOutputImage::next_line_internal() {
 
 int
 TIFFOutputImage::done_internal() {
-	if (tiff) {
+	if (tiff)
 		TIFFClose(tiff);
-		tiff = NULL;
-	}
+	tiff = NULL;
 
-	if (row) {
+	if (row)
 		free(row);
-		row = NULL;
-	}
+	row = NULL;
 
 	return 0;
 }	
