@@ -234,7 +234,7 @@ void distortion_cb(Fl_Value_Input*, void*) {
 void about_cb() {
 	fl_message("gipfel -- and you know what you see.\n"
 		"Version %s\n\n"
-		"(c) Johannes Hofmann 2007\n\n"
+		"(c) Johannes Hofmann 2006-2008\n\n"
 		"Default datafile by http://www.alpin-koordinaten.de\n",
 		VERSION);
 
