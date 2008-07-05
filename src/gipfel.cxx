@@ -8,6 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <libgen.h>
 #include <math.h>
 #include <algorithm>
 
@@ -616,11 +617,11 @@ stitch(GipfelWidget::sample_mode_t m, int b_16,
 			char buf[1024];
 			char *dot;
 
-			snprintf(buf, sizeof(buf), "%s/%s", path, argv[i]);
+			snprintf(buf, sizeof(buf), "%s/%s", path, basename(argv[i]));
 			dot = strrchr(buf, '.');
-			if (dot) {
+			if (dot)
 				*dot = '\0';
-			}
+
 			strncat(buf, ".tiff", sizeof(buf));
 
 			st->set_output(argv[i], new TIFFOutputImage(buf, b_16?16:8));
