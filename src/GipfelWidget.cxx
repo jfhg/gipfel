@@ -87,7 +87,7 @@ GipfelWidget::load_image(char *file) {
 	set_view_long(md->longitude());
 	set_view_lat(md->latitude());
 	set_view_height(md->height());
-	set_projection((ProjectionLSQ::Projection_t) md->projection_type());
+	projection((ProjectionLSQ::Projection_t) md->projection_type());
 
 	have_gipfel_info = 1;
 	direction = md->direction();
@@ -171,7 +171,7 @@ GipfelWidget::save_image(char *file) {
 	md->nick(get_nick_angle());
 	md->tilt(get_tilt_angle());
 	md->focal_length_35mm(get_focal_length_35mm());
-	md->projection_type((int) get_projection());
+	md->projection_type((int) projection());
 	md->distortion_params(pan->parms.k0, pan->parms.k1, pan->parms.x0);
 
 	ret = md->save_image(img_file, file);
@@ -239,7 +239,6 @@ draw_flag(int x, int y, char *s) {
 	fl_polygon(x, y - 10, x, y - 20, x + 10, y - 15);
 	fl_yxline(x, y, y - 10);
 
-
 	if (s) {
 		fl_color(FL_WHITE);
 		fl_draw(s, x , y - 12);
@@ -253,9 +252,8 @@ GipfelWidget::draw() {
 	Hill *m;
 	int i;
 
-	if (img == NULL) {
+	if (img == NULL)
 		return;
-	}
 
 	fl_push_clip(x(), y(), w(), h());
 	img->draw(x(),y(),w(),h(),0,0);
@@ -348,13 +346,11 @@ GipfelWidget::set_labels(Hills *v) {
 	for (i=0; i<v->get_num(); i++) {
 		m = v->get(i);
 
-		if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT)) {
+		if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT))
 			continue;
-		}
 
-		if (!show_hidden && (m->flags & Hill::HIDDEN)) {
+		if (!show_hidden && (m->flags & Hill::HIDDEN))
 			continue;
-		}
 
 		width = (int) ceilf(fl_width(m->name));
 		m->label_x = width;
@@ -362,20 +358,21 @@ GipfelWidget::set_labels(Hills *v) {
 		for (j=0; j < i; j++) {
 			n = v->get(j);
 
-			if (n->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
+			if (n->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
 				continue;
-			}
 
-			if (!show_hidden && (n->flags & Hill::HIDDEN)) {
+			if (!show_hidden && (n->flags & Hill::HIDDEN))
 				continue;
-			}
 
 			// Check for overlapping labels and
 			// overlaps between labels and peak markers
 			if ((overlap(m->x, m->x + m->label_x, n->x, n->x + n->label_x) &&
-					overlap(m->y + m->label_y - height, m->y + m->label_y, n->y + n->label_y - height, n->y + n->label_y)) ||
+					overlap(m->y + m->label_y - height, m->y + m->label_y,
+						n->y + n->label_y - height, n->y + n->label_y)) ||
 				(overlap(m->x, m->x + m->label_x, n->x - 2, n->x + 2) &&
-				 overlap(m->y + m->label_y - height, m->y + m->label_y, n->y - 2, n->y + 2))) {
+				 overlap(m->y + m->label_y - height,
+					 m->y + m->label_y, n->y - 2, n->y + 2))) {
+
 				m->label_y = (int) rint(n->y + n->label_y - m->y - height - 1);
 			}
 		}
@@ -413,9 +410,9 @@ GipfelWidget::toggle_known_mountain(int m_x, int m_y) {
 
 	for (i=0; i<mnts->get_num(); i++) {
 		m = mnts->get(i); 
-		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
+
+		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
 			continue;
-		}
 
 		if (m_x - center_x >= m->x - 2 && m_x - center_x < m->x + 2 &&
 			m_y - center_y >= m->y - 2 && m_y - center_y < m->y + 2) {
@@ -443,9 +440,8 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
 	int center_x = w() / 2;
 	int center_y = h() / 2;
 
-	if (cur_mountain == NULL) {
+	if (!cur_mountain)
 		return 1;
-	}
 
 	old_x = (int) rint(cur_mountain->x);
 	old_y = (int) rint(cur_mountain->y);
@@ -497,41 +493,16 @@ GipfelWidget::set_focal_length_35mm(double s) {
 }
 
 void
-GipfelWidget::set_projection(ProjectionLSQ::Projection_t p) {
+GipfelWidget::projection(ProjectionLSQ::Projection_t p) {
 	pan->set_projection(p);
 	set_labels(pan->get_visible_mountains());
 	redraw();
 }
 
 void
-GipfelWidget::get_distortion_params(double *k0, double *k1, double *x0) {
-	pan->get_distortion_params(k0, k1, x0);
-}
-
-void
 GipfelWidget::set_distortion_params(double k0, double k1, double x0) {
 	pan->set_distortion_params(k0, k1, x0);
 	redraw();
-}
-
-ProjectionLSQ::Projection_t
-GipfelWidget::get_projection() {
-	return pan->get_projection();
-}
-
-double
-GipfelWidget::get_center_angle() {
-	return pan->get_center_angle();
-}
-
-double
-GipfelWidget::get_nick_angle() {
-	return pan->get_nick_angle();
-}
-
-double
-GipfelWidget::get_tilt_angle() {
-	return pan->get_tilt_angle();
 }
 
 double
@@ -541,31 +512,6 @@ GipfelWidget::get_focal_length_35mm() {
 	} else {
 		return pan->get_scale() * 35.0 / (double) img->w();
 	}
-}
-
-double
-GipfelWidget::get_height_dist_ratio() {
-	return pan->get_height_dist_ratio();
-}
-
-const char *
-GipfelWidget::get_viewpoint() {
-	return pan->get_viewpoint();
-}
-
-double
-GipfelWidget::get_view_lat() {
-	return pan->get_view_lat();
-}
-
-double
-GipfelWidget::get_view_long() {
-	return pan->get_view_long();
-}
-
-double
-GipfelWidget::get_view_height() {
-	return pan->get_view_height();
 }
 
 void 
@@ -625,11 +571,6 @@ GipfelWidget::set_view_height(double v) {
 	pan->set_view_height(v);
 	set_labels(pan->get_visible_mountains());
 	redraw();
-}
-
-Hills*
-GipfelWidget::get_mountains() {
-	return pan->get_mountains();
 }
 
 int
@@ -826,13 +767,12 @@ GipfelWidget::get_pixel_bicubic(Fl_Image *img, double x, double y,
 int
 GipfelWidget::get_pixel(Fl_Image *img, int x, int y,
                      int *r, int *g, int *b) {
-	if ( img->d() == 0 ) {
+	if ( img->d() == 0 )
 		return 1;
-	}
 
-	if (x < 0 || x >=img->w() || y < 0 || y >= img->h()) {
+	if (x < 0 || x >=img->w() || y < 0 || y >= img->h())
 		return 1;
-	}
+
 	long index = (y * img->w() * img->d()) + (x * img->d()); // X/Y -> buf index  
 	switch (img->count()) {
 		case 1:

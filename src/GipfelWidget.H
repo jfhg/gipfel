@@ -95,35 +95,39 @@ class GipfelWidget : public Fl_Widget {
 
 		void set_view_height(double v);
 
-		const char * get_viewpoint();
+		const char * get_viewpoint() { return pan->get_viewpoint(); };
 
-		double get_center_angle();
+		double get_center_angle() { return pan->get_center_angle(); };
 
-		double get_nick_angle();
+		double get_nick_angle() { return pan->get_nick_angle(); };
 
-		double get_tilt_angle();
+		double get_tilt_angle() { return pan->get_tilt_angle(); };
 
 		double get_focal_length_35mm();
 
-		double get_height_dist_ratio();
+		double get_height_dist_ratio() { return pan->get_height_dist_ratio(); };
 
-		double get_view_lat();
+		double get_view_lat() { return pan->get_view_lat(); };
 
-		double get_view_long();
+		double get_view_long() { return pan->get_view_long(); };
 
-		double get_view_height();
+		double get_view_height() { return pan->get_view_height(); };
 
 		void set_track_width(double w);
 
-		ProjectionLSQ::Projection_t get_projection();
+		ProjectionLSQ::Projection_t projection() {
+			return pan->get_projection();
+		};
 
-		void set_projection(ProjectionLSQ::Projection_t p);
+		void projection(ProjectionLSQ::Projection_t p);
 
-		void get_distortion_params(double *k0, double *k1i, double *x0);
+		void get_distortion_params(double *k0, double *k1, double *x0) {
+			pan->get_distortion_params(k0, k1, x0);
+		};
 
 		void set_distortion_params(double k0, double k1, double x0);
 
-		Hills *get_mountains();
+		Hills *get_mountains() { return pan->get_mountains(); };
 
 		int comp_params();
 
