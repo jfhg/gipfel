@@ -14,7 +14,7 @@ class OutputImage {
 	protected:
 		int W, H, line;
 
-		virtual int init_internal(int w1, int h1) {return 0;};
+		virtual int init_internal() {return 0;};
 		virtual int set_pixel_internal(int x, int r, int g, int b) {return 0;};	
 		virtual int next_line_internal() {return 0;};
 		virtual int done_internal() {return 0;};

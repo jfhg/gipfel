@@ -27,18 +27,17 @@ TIFFOutputImage::~TIFFOutputImage() {
 }
 
 int
-TIFFOutputImage::init_internal(int w1, int h1) {
+TIFFOutputImage::init_internal() {
 	if (row) {
 		free(row);
 		row = NULL;
 	}
 
-	row = (unsigned char*) malloc(sizeof(char) * (bitspersample / 8) * 4 * w1);
+	row = (unsigned char*) calloc((bitspersample / 8) * 4 * W, sizeof(char));
 	if (!row) {
-		perror("malloc");
+		perror("calloc");
 		return 1;
 	}
-	memset(row, 0, sizeof(char) * (bitspersample / 8) * 4 * w1);
 
 	if (tiff) {
 		TIFFClose(tiff);
@@ -49,8 +48,8 @@ TIFFOutputImage::init_internal(int w1, int h1) {
 		return 1;
 	}
 
-	TIFFSetField(tiff, TIFFTAG_IMAGEWIDTH, w1);
-	TIFFSetField(tiff, TIFFTAG_IMAGELENGTH, h1);
+	TIFFSetField(tiff, TIFFTAG_IMAGEWIDTH, W);
+	TIFFSetField(tiff, TIFFTAG_IMAGELENGTH, H);
 	TIFFSetField(tiff, TIFFTAG_COMPRESSION, COMPRESSION_DEFLATE);
 	TIFFSetField(tiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 	TIFFSetField(tiff, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
@@ -83,7 +82,7 @@ int
 TIFFOutputImage::next_line_internal() {
 	TIFFWriteEncodedStrip(tiff, line - 1 , row, W * (bitspersample / 8) * 4);
 
-	memset(row, 0, sizeof(char) * 4 * W);
+	memset(row, 0, (bitspersample / 8) * 4 * W * sizeof(char));
 	return 0;
 }
 

@@ -19,21 +19,17 @@ class PreviewOutputImage : public OutputImage , public Fl_Widget {
 		uchar *data;
 		int d;
 
+	protected:
+		int init_internal(int w, int h);
+		int set_pixel_internal(int x, int r, int g, int b);	
+		int next_line_internal();
+		int done_internal();
+
 	public:
 		PreviewOutputImage(int X, int Y, int W, int H);
-
 		~PreviewOutputImage();
 
 		void draw();
-
-	protected:
-		int init_internal(int w, int h);
-
-		int set_pixel_internal(int x, int r, int g, int b);	
-
-		int next_line_internal();
-
-		int done_internal();
 };
 
 #endif

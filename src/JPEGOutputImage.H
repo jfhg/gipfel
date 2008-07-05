@@ -24,19 +24,15 @@ class JPEGOutputImage : public OutputImage {
 		FILE *fp;
 		int quality;
 
+	protected:
+		int init_internal();
+		int set_pixel_internal(int x, int r, int g, int b);	
+		int next_line_internal();
+		int done_internal();
+
 	public:
 		JPEGOutputImage(const char *file, int quality = 90);
-
 		~JPEGOutputImage();
-
-	protected:
-		int init_internal(int w, int h);
-
-		int set_pixel_internal(int x, int r, int g, int b);	
-
-		int next_line_internal();
-
-		int done_internal();
 };
 
 #endif

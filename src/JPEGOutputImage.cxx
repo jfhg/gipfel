@@ -21,31 +21,26 @@ JPEGOutputImage::JPEGOutputImage(const char *f, int q) {
 }
 
 JPEGOutputImage::~JPEGOutputImage() {
-	if (row) {
+	if (row)
 		free(row);
-	}
-	if (file) {
+	if (file)
 		free(file);
-	}
 }
 
 int
-JPEGOutputImage::init_internal(int w1, int h1) {
-	if (row) {
+JPEGOutputImage::init_internal() {
+	if (row)
 		free(row);
-		row = NULL;
-	}
+	row = NULL;
 
-	row = (unsigned char*) malloc(sizeof(char) * 3 * W);
+	row = (unsigned char*) calloc(3 * W, sizeof(char));
 	if (!row) {
-		perror("malloc");
+		perror("calloc");
 		return 1;
 	}
-	memset(row, 0, sizeof(char) * 3 * W);
 
-	if (fp) {
+	if (fp)
 		fclose(fp);
-	}
 
 	if ((fp = fopen(file, "wb")) == NULL) {
 		fprintf(stderr, "can't open %s\n", file);
@@ -92,18 +87,18 @@ JPEGOutputImage::done_internal() {
 	jpeg_finish_compress(&cinfo);
 	jpeg_destroy_compress(&cinfo);
 
-	if (fp) {
+	if (fp)
 		fclose(fp);
-		fp = NULL;
-	}
-	if (row) {
-		free(row);
-	}
+	fp = NULL;
 
-	if (fp) {
+	if (row)
+		free(row);
+	row = NULL;
+
+	if (fp)
 		fclose(fp);
-		fp = NULL;
-	}
+	fp = NULL;
+
 	return 0;
 }	
 

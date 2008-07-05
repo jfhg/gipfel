@@ -19,19 +19,15 @@ class TIFFOutputImage : public OutputImage {
 		char *file;
 		TIFF *tiff;
 
+	protected:
+		int init_internal();
+		int set_pixel_internal(int x, int r, int g, int b);	
+		int next_line_internal();
+		int done_internal();
+
 	public:
 		TIFFOutputImage(const char *file, int b = 8);
-
 		~TIFFOutputImage();
-
-	protected:
-		int init_internal(int w, int h);
-
-		int set_pixel_internal(int x, int r, int g, int b);	
-
-		int next_line_internal();
-
-		int done_internal();
 };
 
 #endif

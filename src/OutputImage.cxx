@@ -22,7 +22,7 @@ OutputImage::init(int w1, int h1) {
 	line = 0;
 	initialized = 1;
 
-	return init_internal(w1, h1);
+	return init_internal();
 }
 
 int
