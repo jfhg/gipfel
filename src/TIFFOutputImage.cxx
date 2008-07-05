@@ -40,7 +40,7 @@ TIFFOutputImage::init_internal() {
 	if (tiff)
 		TIFFClose(tiff);
 
-	if((tiff = TIFFOpen(file, "w")) == NULL){
+	if ((tiff = TIFFOpen(file, "w")) == NULL){
 		fprintf(stderr, "can't open %s\n", file);
 		return 1;
 	}

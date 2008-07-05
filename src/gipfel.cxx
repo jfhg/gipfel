@@ -401,8 +401,6 @@ create_control_window() {
 	i_distortion_x0->when(FL_WHEN_ENTER_KEY);
 	i_distortion_x0->callback((Fl_Callback*)distortion_cb);
 
-
-
 	// Buttons
 	Fl_Button *b = new Fl_Button(280, 280, 100, 20, "comp");
 	b->color(FL_RED);
