@@ -133,16 +133,12 @@ GipfelWidget::load_image(char *file) {
 			load_distortion_params(buf);
 		}
 
-		if (isnan(pan->parms.k0)) {
+		if (isnan(pan->parms.k0))
 			pan->parms.k0 = 0.0;
-		}
-
-		if (isnan(pan->parms.k1)) {
+		if (isnan(pan->parms.k1))
 			pan->parms.k1 = 0.0;
-		}
-		if (isnan(pan->parms.x0)) {
+		if (isnan(pan->parms.x0))
 			pan->parms.x0 = 0.0;
-		}
 	}
 
 	return 0;
