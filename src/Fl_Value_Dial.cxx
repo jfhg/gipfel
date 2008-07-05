@@ -10,12 +10,13 @@
 #include "Fl_Value_Dial.H"
 
 Fl_Value_Dial::Fl_Value_Dial(int X, int Y, int W, int H, const char*l)
-	: Fl_Dial(X,Y,W,H,l) {
-		step(1,100);
-		textfont_ = FL_HELVETICA;
-		textsize_ = 10;
-		textcolor_ = FL_BLACK;
-	}
+	: Fl_Dial(X,Y,W,H,l)
+{
+	step(1,100);
+	textfont_ = FL_HELVETICA;
+	textsize_ = 10;
+	textcolor_ = FL_BLACK;
+}
 
 void Fl_Value_Dial::draw() {
 	int sxx = x(), syy = y(), sww = w(), shh = h();
