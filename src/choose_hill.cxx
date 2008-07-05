@@ -19,21 +19,20 @@ choose_hill(const Hills *hills, const char *l) {
 
 	for (int i=0; i<h_sort->get_num(); i++) {
 		Hill *m = h_sort->get(i);
-		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT)) {
+		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
 			continue;
-		} 
+
 		sc->add(m->name, m);
 	} 
 
 	delete h_sort;
 
 	sc->show();
-	while (sc->shown()) {
+
+	while (sc->shown())
 		Fl::wait();
-	} 
 
 	ret = (Hill*) sc->data();
-
 	delete(sc);
 
 	return ret;
