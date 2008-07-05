@@ -12,9 +12,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-
 #include "util.h"
-
 #include "ImageMetaData.H"
 
 ImageMetaData::ImageMetaData() {
