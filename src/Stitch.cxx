@@ -98,15 +98,14 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 	int merged_pixel_set;
 	double radius = (double) w / (view_end -view_start);
 
-	if (merged_image) {
-		merged_image->init(w, h);
-	}
+	if (merged_image)
+		if (merged_image->init(w, h) != 0)
+			merged_image = NULL;
 
-	for (int i=0; i<MAX_PICS; i++) {
-		if (single_images[i]) {
-			single_images[i]->init(w, h);
-		}
-	}
+	for (int i=0; i<MAX_PICS; i++)
+		if (single_images[i]) 
+			if (single_images[i]->init(w, h) != 0)
+				single_images[i] = NULL;
 
 	for (int y = 0; y < h; y++) {
 		double a_nick = atan((double)(y_off - y)/radius);
@@ -146,14 +145,12 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 		}
 	}
 
-	if (merged_image) {
+	if (merged_image)
 		merged_image->done();
-	}
-	for (int i=0; i<MAX_PICS; i++) {
-		if (single_images[i]) {
+
+	for (int i=0; i<MAX_PICS; i++)
+		if (single_images[i])
 			single_images[i]->done();
-		}
-	}
 
 	return 0;
 }

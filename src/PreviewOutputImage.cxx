@@ -13,32 +13,29 @@
 
 #include "PreviewOutputImage.H"
 
-PreviewOutputImage::PreviewOutputImage(int X, int Y, int W, int H): Fl_Widget(X, Y, W, H) {
+PreviewOutputImage::PreviewOutputImage(int X, int Y, int W, int H):
+	OutputImage(), Fl_Widget(X, Y, W, H) {
 	d = 3;
 	data = NULL;
 }
 
 PreviewOutputImage::~PreviewOutputImage() {
-	if (data) {
+	if (data)
 		free(data);
-	}
 }
 
 int
-PreviewOutputImage::init_internal(int w, int h) {
-	data = (uchar*) malloc(w * h * d);
-	memset(data, 0, w * h * d);
-	size(w, h);
+PreviewOutputImage::init_internal() {
+	data = (uchar*) malloc(W * H * d);
+	memset(data, 0, W * H * d);
+	size(W, H);
 	return 0;
 }
-	
-
 
 int
 PreviewOutputImage::set_pixel_internal(int x, int r, int g, int b) {
-	if (!data) {
+	if (!data) 
 		return 1;
-	}
 
 	long index = (line * w() * d + (x * d));
 	*(data+index+0) = (unsigned char) (r / 255);
@@ -57,20 +54,12 @@ PreviewOutputImage::next_line_internal() {
 	return 0;
 }
 
-int
-PreviewOutputImage::done_internal() {
-	return 0;
-}
-
 void
 PreviewOutputImage::draw() {
 	if (!data) {
 		return;
 	}
 	fl_push_clip(x(), y(), w(), h());
-
 	fl_draw_image(data, x(), y(), w(), h(), d);
-
 	fl_pop_clip();
 }
-

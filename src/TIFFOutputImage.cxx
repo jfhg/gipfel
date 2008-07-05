@@ -10,7 +10,7 @@
 
 #include "TIFFOutputImage.H"
 
-TIFFOutputImage::TIFFOutputImage(const char *f, int b) {
+TIFFOutputImage::TIFFOutputImage(const char *f, int b) : OutputImage () {
 	bitspersample = (b==16)?16:8;
 	file = strdup(f);
 	tiff = NULL;

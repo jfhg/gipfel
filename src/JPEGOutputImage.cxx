@@ -13,7 +13,7 @@ extern "C" {
 
 #include "JPEGOutputImage.H"
 
-JPEGOutputImage::JPEGOutputImage(const char *f, int q) {
+JPEGOutputImage::JPEGOutputImage(const char *f, int q) : OutputImage() {
 	file = strdup(f);
 	fp = NULL;
 	row = NULL;
