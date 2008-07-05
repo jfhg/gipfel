@@ -84,13 +84,13 @@ GipfelWidget::load_image(char *file) {
 
 	// try to retrieve gipfel data from JPEG meta data
 	md->load_image(file);
-	set_view_long(md->get_longitude());
-	set_view_lat(md->get_latitude());
-	set_view_height(md->get_height());
-	set_projection((ProjectionLSQ::Projection_t) md->get_projection_type());
+	set_view_long(md->longitude());
+	set_view_lat(md->latitude());
+	set_view_height(md->height());
+	set_projection((ProjectionLSQ::Projection_t) md->projection_type());
 
 	have_gipfel_info = 1;
-	direction = md->get_direction();
+	direction = md->direction();
 	if (isnan(direction)) {
 		set_center_angle(0.0);
 		have_gipfel_info = 0;
@@ -98,7 +98,7 @@ GipfelWidget::load_image(char *file) {
 		set_center_angle(direction);
 	}
 
-	nick = md->get_nick();
+	nick = md->nick();
 	if (isnan(nick)) {
 		set_nick_angle(0.0);
 		have_gipfel_info = 0;
@@ -106,7 +106,7 @@ GipfelWidget::load_image(char *file) {
 		set_nick_angle(nick);
 	}
 
-	tilt = md->get_tilt();
+	tilt = md->tilt();
 	if (isnan(tilt)) {
 		set_tilt_angle(0.0);
 		have_gipfel_info = 0;
@@ -114,7 +114,7 @@ GipfelWidget::load_image(char *file) {
 		set_tilt_angle(tilt);
 	}
 
-	fl = md->get_focal_length_35mm();
+	fl = md->focal_length_35mm();
 	if (isnan(fl) || fl == 0.0) {
 		set_focal_length_35mm(35.0);
 		have_gipfel_info = 0;
@@ -126,7 +126,7 @@ GipfelWidget::load_image(char *file) {
 	// 1. gipfel data in JPEG comment
 	// 2. matching distortion profile
 	// 3. set the to 0.0, 0.0
-	md->get_distortion_params(&pan->parms.k0, &pan->parms.k1, &pan->parms.x0);
+	md->distortion_params(&pan->parms.k0, &pan->parms.k1, &pan->parms.x0);
 	if (isnan(pan->parms.k0)) {
 		char buf[1024];
 		if (get_distortion_profile_name(buf, sizeof(buf)) == 0) {
@@ -164,15 +164,15 @@ GipfelWidget::save_image(char *file) {
 
 	md = new ImageMetaData();
 
-	md->set_longitude(get_view_long());
-	md->set_latitude(get_view_lat());
-	md->set_height(get_view_height());
-	md->set_direction(get_center_angle());
-	md->set_nick(get_nick_angle());
-	md->set_tilt(get_tilt_angle());
-	md->set_focal_length_35mm(get_focal_length_35mm());
-	md->set_projection_type((int) get_projection());
-	md->set_distortion_params(pan->parms.k0, pan->parms.k1, pan->parms.x0);
+	md->longitude(get_view_long());
+	md->latitude(get_view_lat());
+	md->height(get_view_height());
+	md->direction(get_center_angle());
+	md->nick(get_nick_angle());
+	md->tilt(get_tilt_angle());
+	md->focal_length_35mm(get_focal_length_35mm());
+	md->projection_type((int) get_projection());
+	md->distortion_params(pan->parms.k0, pan->parms.k1, pan->parms.x0);
 
 	ret = md->save_image(img_file, file);
 
@@ -870,9 +870,9 @@ int
 GipfelWidget::get_distortion_profile_name(char *buf, int buflen) {
 	int n;
 	
-	if (md && md->get_manufacturer() && md->get_model()) {
+	if (md && md->manufacturer() && md->model()) {
 		n = snprintf(buf, buflen, "%s_%s_%.2f_mm",
-			md->get_manufacturer(), md->get_model(), md->get_focal_length());
+			md->manufacturer(), md->model(), md->focal_length());
 
 		return n > buflen;
 	} else {

@@ -18,35 +18,35 @@
 #include "ImageMetaData.H"
 
 ImageMetaData::ImageMetaData() {
-	manufacturer = NULL;
-    model = NULL;
+	_manufacturer = NULL;
+    _model = NULL;
 	clear();
 }
 
 ImageMetaData::~ImageMetaData() {
-	if (manufacturer) free(manufacturer);
-	if (model) free(model);
+	if (_manufacturer) free(_manufacturer);
+	if (_model) free(_model);
 }
 
 void
 ImageMetaData::clear() {
-	if (manufacturer) free(manufacturer);
-	manufacturer = NULL;
-	if (model) free(model);
-    model = NULL;
-	longitude = NAN;
-	latitude = NAN;
-	height = NAN;
-	direction = NAN;
-	nick = NAN;
-	tilt = NAN;
-	k0 = NAN;
-	k1 = NAN;
-	x0 = NAN;
-	focal_length = NAN;
-	focal_length_35mm = NAN;
-	scale = NAN;
-	projection_type = 0;
+	if (_manufacturer) free(_manufacturer);
+	_manufacturer = NULL;
+	if (_model) free(_model);
+    _model = NULL;
+	_longitude = NAN;
+	_latitude = NAN;
+	_height = NAN;
+	_direction = NAN;
+	_nick = NAN;
+	_tilt = NAN;
+	_k0 = NAN;
+	_k1 = NAN;
+	_x0 = NAN;
+	_focal_length = NAN;
+	_focal_length_35mm = NAN;
+	_scale = NAN;
+	_projection_type = 0;
 }
 
 int
@@ -116,25 +116,25 @@ ImageMetaData::load_image_exif(char *name) {
 
             switch(id) {
                 case EXIF_MANUFACTURER:
-                    if (!manufacturer) manufacturer = strdup(val);
+                    if (!_manufacturer) _manufacturer = strdup(val);
                     break;
                 case EXIF_MODEL:
-                    if (!model) model = strdup(val);
+                    if (!_model) _model = strdup(val);
                     break;
                 case EXIF_FOCAL_LENGTH:
-                    if (isnan(focal_length)) focal_length = atof(val);
+                    if (isnan(_focal_length)) _focal_length = atof(val);
                     break;
                 case EXIF_FOCAL_LENGTH_IN_35MM_FILM:
-                    if (isnan(focal_length_35mm)) focal_length_35mm = atof(val);
+                    if (isnan(_focal_length_35mm)) _focal_length_35mm = atof(val);
                     break;
                 case EXIF_GPS_LONGITUDE:
-                    if (isnan(longitude)) longitude = degminsecstr2double(val);
+                    if (isnan(_longitude)) _longitude = degminsecstr2double(val);
                     break;
                 case EXIF_GPS_LATIITUDE:
-                    if (isnan(latitude)) latitude = degminsecstr2double(val);
+                    if (isnan(_latitude)) _latitude = degminsecstr2double(val);
                     break;
                 case EXIF_GPS_ALTITUDE:
-                    if (isnan(height)) height = atof(val);
+                    if (isnan(_height)) _height = atof(val);
                     break;
             }
         }
@@ -159,7 +159,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
     pid_t pid;
     int status;
     char buf[1024];
-    double lo, la, he, dir, ni, ti, fr, _k0, _k1, _x0 = 0.0;
+    double lo, la, he, dir, ni, ti, fr, k0, k1, x0 = 0.0;
     int pt = 0;
     int n, ret = 1;
 
@@ -172,21 +172,21 @@ ImageMetaData::load_image_jpgcom(char *name) {
     if (p) {
         while (fgets(buf, sizeof(buf), p) != NULL) {
             if ((n = sscanf(buf, GIPFEL_FORMAT_2,
-                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &_k0, &_k1, &_x0)) >= 8) {
+                    &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &k0, &k1, &x0)) >= 8) {
 
-                longitude = lo;
-                latitude  = la;
-                height    = he;
-                direction = dir;
-                nick      = ni;
-                tilt      = ti;
-                focal_length_35mm = fr;
-                projection_type = pt;
+                _longitude = lo;
+                _latitude  = la;
+                _height    = he;
+                _direction = dir;
+                _nick      = ni;
+                _tilt      = ti;
+                _focal_length_35mm = fr;
+                _projection_type = pt;
 
 				if (n >= 10) {
-					k0 = _k0;
-					k1 = _k1;
-					x0 = _x0;
+					_k0 = k0;
+					_k1 = k1;
+					_x0 = x0;
 				}
 
                 ret = 0;
@@ -235,15 +235,15 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
     }
 
     snprintf(buf, sizeof(buf), GIPFEL_FORMAT_2,
-        longitude,
-        latitude,
-        height,
-        direction,
-        nick,
-        tilt,
-        focal_length_35mm,
-        projection_type,
-		k0, k1, x0);
+        _longitude,
+        _latitude,
+        _height,
+        _direction,
+        _nick,
+        _tilt,
+        _focal_length_35mm,
+        _projection_type,
+		_k0, _k1, _x0);
 
     // try to save gipfel data in JPEG comment section
     args[0] = "wrjpgcom";
@@ -276,15 +276,15 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 }
 
 void
-ImageMetaData::get_distortion_params(double *_k0, double *_k1, double *_x0) {
-	*_k0 = k0;	
-	*_k1 = k1;	
-	*_x0 = x0;	
+ImageMetaData::distortion_params(double *k0, double *k1, double *x0) {
+	*k0 = _k0;	
+	*k1 = _k1;	
+	*x0 = _x0;	
 }
 
 void
-ImageMetaData::set_distortion_params(double _k0, double _k1, double _x0) {
-	k0 = _k0;	
-	k1 = _k1;	
-	x0 = _x0;	
+ImageMetaData::distortion_params(double k0, double k1, double x0) {
+	_k0 = k0;	
+	_k1 = k1;	
+	_x0 = x0;	
 }

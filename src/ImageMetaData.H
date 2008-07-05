@@ -9,22 +9,22 @@
 
 class ImageMetaData {
 	private:
-		char *manufacturer;
-		char *model;
-		double longitude;
-		double latitude;
-		double height;
-		double direction;
-		double nick;
-		double tilt;
-		double k0;
-		double k1;
-		double x0;
-		double focal_length;
-		double focal_length_35mm;
-		double scale;
-		int    projection_type;
-		int    have_gipfel_info;
+		char *_manufacturer;
+		char *_model;
+		double _longitude;
+		double _latitude;
+		double _height;
+		double _direction;
+		double _nick;
+		double _tilt;
+		double _k0;
+		double _k1;
+		double _x0;
+		double _focal_length;
+		double _focal_length_35mm;
+		double _scale;
+		int _projection_type;
+		int _have_gipfel_info;
 
 		int load_image_jpgcom(char *name);
 		int save_image_jpgcom(char *in_img, char *out_img);
@@ -38,27 +38,27 @@ class ImageMetaData {
 		int load_image(char *name);
 		int save_image(char *in_img, char *out_img);
 
-		const char *get_manufacturer() {return manufacturer;};
-		const char *get_model() {return model;};
- 		double get_longitude() {return longitude;};
-		double get_latitude() {return latitude;};
-		double get_height() {return height;};
-		double get_direction() {return direction;};
-		double get_nick() {return nick;};
-		double get_tilt() {return tilt;};
-		double get_focal_length() {return focal_length;};
-		double get_focal_length_35mm() {return focal_length_35mm;};
-		int    get_projection_type() {return projection_type;};
-		void get_distortion_params(double *_k0, double *_k1, double *_x0);
+		const char *manufacturer() {return _manufacturer;};
+		const char *model() {return _model;};
+ 		double longitude() {return _longitude;};
+		double latitude() {return _latitude;};
+		double height() {return _height;};
+		double direction() {return _direction;};
+		double nick() {return _nick;};
+		double tilt() {return _tilt;};
+		double focal_length() {return _focal_length;};
+		double focal_length_35mm() {return _focal_length_35mm;};
+		int projection_type() {return _projection_type;};
+		void distortion_params(double *_k0, double *_k1, double *_x0);
 
-		void set_longitude(double v) {longitude = v;};
-		void set_latitude(double v) {latitude = v;};
-		void set_height(double v) {height = v;};
-		void set_direction(double v) {direction = v;};
-		void set_nick(double v) {nick = v;};
-		void set_tilt(double v) {tilt = v;};
-		void set_focal_length_35mm(double v) {focal_length_35mm = v;};
-		void set_projection_type(int v) {projection_type = v;};
-		void set_distortion_params(double _k0, double _k1, double _x0);
+		void longitude(double v) {_longitude = v;};
+		void latitude(double v) {_latitude = v;};
+		void height(double v) {_height = v;};
+		void direction(double v) {_direction = v;};
+		void nick(double v) {_nick = v;};
+		void tilt(double v) {_tilt = v;};
+		void focal_length_35mm(double v) {_focal_length_35mm = v;};
+		void projection_type(int v) {_projection_type = v;};
+		void distortion_params(double k0, double k1, double x0);
 };
 #endif
