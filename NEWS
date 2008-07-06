@@ -1,95 +1,100 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.2.5
+* Improve stitching speed.
+* Fix a bug with tiff file generation in stitching mode.
+* Update README file.
+
 gipfel-0.2.4
- - Fix another issue in the rectilinear projection code
+* Fix another issue in the rectilinear projection code
    that affected non-horizontally shot pictures.
- - Use a more robust forumla for spherical distance computation.
- - Take refraction effect into account.
+* Use a more robust forumla for spherical distance computation.
+* Take refraction effect into account.
 
 gipfel-0.2.3
- - Fix a major shortcoming in the rectilinear projection
+* Fix a major shortcoming in the rectilinear projection
    code. This improves accuracy quite a bit, mostly in
    wideangle images.
 
 gipfel-0.2.2
- - Fix a segfault if exif tool is not installed.
- - Some optimizations.
- - Don't make view window larger than the screen.
- - Add command line oprtions for data export.
- - Add visibility command line option.
- - Reset known hills when loading new image.
- - Cancel "Choose Hill" dialog on Esc.
- - Make code -Wall clean.
+* Fix a segfault if exif tool is not installed.
+* Some optimizations.
+* Don't make view window larger than the screen.
+* Add command line oprtions for data export.
+* Add visibility command line option.
+* Reset known hills when loading new image.
+* Cancel "Choose Hill" dialog on Esc.
+* Make code*Wall clean.
 
 gipfel-0.2.1
- - Fix compilation problem.
- - Replace bilinear with bicubic interpolation in stitching mode (-b option).
- - Improve usability of "Choose Viewpoint" dialog.
+* Fix compilation problem.
+* Replace bilinear with bicubic interpolation in stitching mode (-b option).
+* Improve usability of "Choose Viewpoint" dialog.
    Up/Down/Return now do what one would expect.
- - Improve lens distortion correction.
+* Improve lens distortion correction.
    Horizontal main point offsets are taken into account now.
- - Ask before overwriting existing lens profiles.
- - Update alpinkoordinaten.dat datafile.
+* Ask before overwriting existing lens profiles.
+* Update alpinkoordinaten.dat datafile.
 
 gipfel-0.2.0
- - Change scale factor to "focal length in 35mm" this makes it 
+* Change scale factor to "focal length in 35mm" this makes it 
    independent of the image size. One can now scale an already 
    oriented image without invalidating the orientation information.
- - gipfel now tries to find a reasonable default for the scale value
+* gipfel now tries to find a reasonable default for the scale value
    when opening new images based on the "Focal Length In 35mm" Exif 
    tag, if it exists.
- - GPS Exif tags are used if they exist.
- - gipfel can now correct lens distortion (see README).
- - Switched to use maxima for symbolic computation and code generation.
- - Switched to use th GNU Scientific Library instead of ccmath.
- - Major simplifications of the projection code.
- - Removed the "guess" button.
- - Added bilinear interpolation for image stitching (-b option).
- - Added range option (-r) for image stitching.
- - Known mountains must now be marked with the middle mouse button
+* GPS Exif tags are used if they exist.
+* gipfel can now correct lens distortion (see README).
+* Switched to use maxima for symbolic computation and code generation.
+* Switched to use th GNU Scientific Library instead of ccmath.
+* Major simplifications of the projection code.
+* Removed the "guess" button.
+* Added bilinear interpolation for image stitching (-b option).
+* Added range option (-r) for image stitching.
+* Known mountains must now be marked with the middle mouse button
    and positioned by dragging them with the left button pressed.
 
 gipfel-0.1.3
- - Add stitching mode (gipfel -s). See README  for details.
- - Update datafile from http://www.alpin-koordinaten.de
- - Fix various bugs.
+* Add stitching mode (gipfel*s). See README  for details.
+* Update datafile from http://www.alpin-koordinaten.de
+* Fix various bugs.
 
 gipfel-0.1.2
- - Fix bugs for "Normal Projection" and "Panoramic Projection" mode.
+* Fix bugs for "Normal Projection" and "Panoramic Projection" mode.
    Panorama mode now works with the great view from Mount Everest by
    Roddy Mackenzie (google for mackenzie everest panorama).
- - Add variable width display of GPS tracks (depending on the distance).
- - Add heuristics for hidden object detection.
- - Switch to fltk "plastic" scheme as it looks better.
+* Add variable width display of GPS tracks (depending on the distance).
+* Add heuristics for hidden object detection.
+* Switch to fltk "plastic" scheme as it looks better.
 
 gipfel-0.1.1
- - Don't try to display invisible trackpoints.
- - Fix bug in "Normal Projection" code for wide angle images.
- - Avoid complete redraw when moving mountains to reduce flicker.
+* Don't try to display invisible trackpoints.
+* Fix bug in "Normal Projection" code for wide angle images.
+* Avoid complete redraw when moving mountains to reduce flicker.
 
 gipfel-0.1.0
- - Display of GPS-tracks.
+* Display of GPS-tracks.
    GPS-tracks e.g. those that can be downloaded from www.alpin-koordinaten.de
    ("Fugawi 3 TXT" format) or self-recored ones, can be projected 
    on your digital images!
- - Load/save perspective data from/to JPEG comment section.
+* Load/save perspective data from/to JPEG comment section.
    This means, that you can create and share "gipfel-enabled" images. 
    Whenever you want, you can use these images and e.g. display your 
    GPS-tracks on them, without further fiddling to find the view parameters.
- - Experimental support for panorama images.
+* Experimental support for panorama images.
    gipfel can now handle images with panoramic projection. Check the
    "Options" menu entry.
- - Data file from www.alpin-koordinaten.de
+* Data file from www.alpin-koordinaten.de
    With the kind permission of the guys from www.alpin-koordinaten.de, the
    gipfel tarball now contains a default datafile with more than 6000 entries
    from around the world.
- - Duplicate GPS entry elimation.
- - Show parameter values in control window.
+* Duplicate GPS entry elimation.
+* Show parameter values in control window.
    No need to choose your viewpoint on the commandline. Use the new 
    "peak-choosing" widget to find your viewpoint interactively.
- - Choose viewpoint via GUI.
- - Improved label placement.
+* Choose viewpoint via GUI.
+* Improved label placement.
 
 gipfel-0.0.1
- - Initial version.
+* Initial version.
