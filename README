@@ -3,7 +3,7 @@ gipfel
 
 Description
 -----------
-gipfel helps to find the names of mountains or points of interest
+__gipfel__ helps to find the names of mountains or points of interest
 on a picture.
 It uses a database containing names and GPS data. With the given viewpoint
 (the point from which the picture was taken) and two known mountains
@@ -18,6 +18,9 @@ gipfel also has an image stitching mode, which allows to generate
 panorama images from multiple images that have been referenced with gipfel.
 The nice thing about image stitching is that it reuses the code that
 already exists for referencing images.  
+gipfel uses the non-linear
+[least squares method](http://en.wikipedia.org/wiki/Least_squares) to
+compute the viewing paramteres from the given data points.
 
 Requirements
 ------------
@@ -73,12 +76,12 @@ As stated before, gipfel needs GPS input data. The input data must be
 an ASCII file with one line per mountain / point of interest.
 Each line must contain the following values separated by a comma:
 
-<SHORTNAME>,<NAME>,<DESCRIPTION>,<LATITUDE>,<LONGITUDE>,<HEIGHT>
+	<SHORTNAME>,<NAME>,<DESCRIPTION>,<LATITUDE>,<LONGITUDE>,<HEIGHT>
 
 <SHORTNAME> and <DESCRIPTION> may be left empty.
 
 The following line is a valid example:
-SMTSBG,Simetsberg,,47.56617,11.25358,1836
+	SMTSBG,Simetsberg,,47.56617,11.25358,1836
 
 Fortunately, there is a great website <http://www.alpin-koordinaten.de>,
 where you can download a suitable file containg quite a lot of data mostly 
