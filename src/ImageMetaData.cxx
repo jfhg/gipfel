@@ -50,10 +50,8 @@ ImageMetaData::clear() {
 int
 ImageMetaData::load_image(char *name) {
 	clear();
-
 	load_image_jpgcom(name);
 	load_image_exif(name); // fill missing values from exif data
-
 	return 0;
 }
 
@@ -264,9 +262,8 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
         }
         fclose(p);
         waitpid(pid, &status, 0);
-        if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 126) {
+        if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 126)
             fprintf(stderr, "%s not found\n", args[0]);
-        }
     }
 
     fclose(out);
