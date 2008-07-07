@@ -96,7 +96,7 @@ void quit_cb() {
 
 void open_cb() {
 	char *file = fl_file_chooser("Open File?", "*.jpg", img_file);
-	if(file != NULL) {
+	if (file) {
 		gipf->load_image(file);
 		scroll->position(0, 0);
 		view_win->label(file);
@@ -108,7 +108,7 @@ void open_cb() {
 
 void track_cb() {
 	char *file = fl_file_chooser("Track File?", NULL, NULL);
-	if (gipf->load_track(file) == 0) {
+	if (file && gipf->load_track(file) == 0) {
 		s_track_width->activate();
 	}
 }
