@@ -2,9 +2,9 @@ gipfel ChangeLog
 =================
 
 gipfel-0.2.5
-* Improve stitching speed.
-* Fix a bug with tiff file generation in stitching mode.
-* Update README file.
+* Improved stitching speed.
+* Fixed a bug with tiff file generation in stitching mode.
+* Updated README file.
 
 gipfel-0.2.4
 * Fix another issue in the rectilinear projection code
