@@ -5,7 +5,9 @@
 // of the GNU General Public License, incorporated herein by reference.
 
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
+#include <errno.h>
 #include <math.h>
 #include <string.h>
 #include <sys/types.h>
@@ -204,29 +206,17 @@ ImageMetaData::load_image_jpgcom(char *name) {
 int
 ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
     char * args[32];
-    FILE *p, *out;
+    FILE *p;
     pid_t pid;
-    char buf[1024];
-    int status;
-    size_t n;
-    struct stat in_stat, out_stat;
+    char buf[1024], tmpname[256];
+    int status, err = 0;
+    ssize_t n;
+	int tmp_fd;
 
-    if (stat(in_img, &in_stat) != 0) {
-        perror("stat");
-        return 1;
-    }
-
-    if (stat(out_img, &out_stat) == 0) {
-        if (in_stat.st_ino == out_stat.st_ino) {
-            fprintf(stderr, "Input image %s and output image %s are the same file\n",
-                in_img, out_img);
-            return 1;
-        }
-    }
-
-    out = fopen(out_img, "w");
-    if (out == NULL) {
-        perror("fopen");
+	strncpy(tmpname, "/tmp/gipfelXXXXXX", sizeof(tmpname));
+	tmp_fd = mkstemp(tmpname);
+	if (tmp_fd < 0) {
+		perror("mkstemp");
         return 1;
     }
 
@@ -253,21 +243,32 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 
     if (p) {
         while ((n = fread(buf, 1, sizeof(buf), p)) != 0) {
-            if (fwrite(buf, 1, n, out) != n) {
-                perror("fwrite");
-                fclose(out);
-                fclose(p);
-                waitpid(pid, &status, 0);
+            if (write(tmp_fd, buf, n) != n) {
+                perror("write");
+				err++;
+				break;
             }
         }
         fclose(p);
         waitpid(pid, &status, 0);
+		if (WEXITSTATUS(status) != 0)
+			err++;
         if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 126)
             fprintf(stderr, "%s not found\n", args[0]);
-    }
+    } else {
+		err++;
+	}
 
-    fclose(out);
-    return 0;
+    close(tmp_fd);
+
+	if (!err) {
+		if (rename(tmpname, out_img) != 0) {
+			perror("rename");
+			err++;
+		}
+	}
+
+    return err != 0;
 }
 
 void

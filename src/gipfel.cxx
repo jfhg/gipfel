@@ -40,7 +40,7 @@
 
 #define DEFAULT_DATAFILE DATADIR "/" PACKAGE_NAME "/alpinkoordinaten.dat"
 
-char *img_file;
+char *img_file = NULL;
 char *data_file = DEFAULT_DATAFILE;
 
 GipfelWidget *gipf = NULL;
@@ -103,21 +103,22 @@ void open_cb() {
 		view_win->redraw();
 		control_win->label(file);
 		set_values();
+		if (img_file)
+			free(img_file);
+		img_file = strdup(file);
 	}  
 }
 
 void track_cb() {
 	char *file = fl_file_chooser("Track File?", NULL, NULL);
-	if (file && gipf->load_track(file) == 0) {
+	if (file && gipf->load_track(file) == 0)
 		s_track_width->activate();
-	}
 }
 
 void save_cb() {
-	char *file = fl_file_chooser("Save Image As?", NULL, NULL);
-	if (file) {
+	char *file = fl_file_chooser("Save Image As?", NULL, img_file);
+	if (file)
 		gipf->save_image(file);
-	}
 }
 
 void focal_length_cb(Fl_Slider* o, void*) {
@@ -506,9 +507,8 @@ int main(int argc, char** argv) {
 	my_argc = argc - optind;
 	my_argv = argv + optind;
 
-	if (my_argc >= 1) {
-		img_file = my_argv[0];
-	}
+	if (my_argc >= 1)
+		img_file = strdup(my_argv[0]);
 
 	if (data_file == NULL || err) {
 		usage();
