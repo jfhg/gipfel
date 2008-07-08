@@ -684,21 +684,18 @@ GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
 	double px, py;
 	int ret;
 
-	if (img == NULL) {
+	if (img == NULL)
 		return 1;
-	}
 
-	if (pan->get_coordinates(a_alph, a_nick, &px, &py) != 0) {
+	if (pan->get_coordinates(a_alph, a_nick, &px, &py) != 0)
 		return 1;
-	}
 
-	if (m == GipfelWidget::BICUBIC) {
+	if (m == GipfelWidget::BICUBIC)
 		ret = get_pixel_bicubic(img, px + ((double) img->w()) / 2.0,
 			py + ((double) img->h()) / 2.0, r, g, b);
-	} else {
+	else 
 		ret = get_pixel_nearest(img, px + ((double) img->w()) / 2.0,
 			py + ((double) img->h()) / 2.0, r, g, b);
-	}
 
 	return ret;
 }
@@ -706,11 +703,11 @@ GipfelWidget::get_pixel(GipfelWidget::sample_mode_t m,
 int
 GipfelWidget::get_pixel_nearest(Fl_Image *img, double x, double y,
 	int *r, int *g, int *b) {
-	if (isnan(x) || isnan(y)) {
+
+	if (isnan(x) || isnan(y))
 		return 1;
-	} else {
+	else
 		return get_pixel(img, (int) rint(x), (int) rint(y), r, g, b);
-	}
 }
 
 static inline double
@@ -739,19 +736,17 @@ GipfelWidget::get_pixel_bicubic(Fl_Image *img, double x, double y,
 
 	for (int iy = 0; iy < 4; iy++) {
 		for (int ix = 0; ix < 4; ix++) {
+
 			if (get_pixel(img, (int) fl_x + ix - 1, (int) fl_y + iy - 1,
-					&ic[0], &ic[1], &ic[2]) != 0) {
+					&ic[0], &ic[1], &ic[2]) != 0)
 				return 1;
-			}
 
-			for (int l = 0; l < 3; l++) {
+			for (int l = 0; l < 3; l++)
 				c[l][ix] = (double) ic[l];
-			}
 		}
 
-		for (int l = 0; l < 3; l++) {
+		for (int l = 0; l < 3; l++)
 			c1[l][iy] = interp_cubic(dx, dx2, dx3, c[l]);
-		}
 	}
 
 	*r = (int) rint(interp_cubic(dy, dy2, dy3, c1[0]));

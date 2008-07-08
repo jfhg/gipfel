@@ -125,9 +125,9 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 					g = std::max(std::min(g, MAX_VALUE), 0);
 					b = std::max(std::min(b, MAX_VALUE), 0);
 
-					if (single_images[i]) {
+					if (single_images[i])
 						single_images[i]->set_pixel(x, r, g, b);
-					}
+
 					if (!merged_pixel_set && merged_image) {
 						merged_image->set_pixel(x, r, g, b);
 						merged_pixel_set++;
@@ -135,13 +135,13 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 				}
 			}
 		}
-		if (merged_image) {
+
+		if (merged_image)
 			merged_image->next_line();
-		}
+
 		for (int i=0; i<MAX_PICS; i++) {
-			if (single_images[i]) {
+			if (single_images[i])
 				single_images[i]->next_line();
-			}
 		}
 	}
 
