@@ -151,8 +151,6 @@ GipfelWidget::get_image_filename() {
 
 int
 GipfelWidget::save_image(char *file) {
-	int ret;
-
 	if (img_file == NULL) {
 		fprintf(stderr, "Nothing to save\n");
 		return 1;
@@ -170,9 +168,7 @@ GipfelWidget::save_image(char *file) {
 	md->projection_type((int) projection());
 	md->distortion_params(pan->parms.k0, pan->parms.k1, pan->parms.x0);
 
-	ret = md->save_image(img_file, file);
-
-	return ret;
+	return  md->save_image(img_file, file);
 }
 
 int
