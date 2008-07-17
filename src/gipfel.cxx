@@ -118,7 +118,8 @@ void track_cb() {
 void save_cb() {
 	char *file = fl_file_chooser("Save Image As?", NULL, img_file);
 	if (file)
-		gipf->save_image(file);
+		if (gipf->save_image(file))
+			fl_message("ERROR: Saving image %s failed.", file);	
 }
 
 void focal_length_cb(Fl_Slider* o, void*) {

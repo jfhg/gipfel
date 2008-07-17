@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <math.h>
 #include <string.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
@@ -259,14 +260,33 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 		err++;
 	}
 
-    close(tmp_fd);
-
 	if (!err) {
-		if (rename(tmpname, out_img) != 0) {
-			perror("rename");
+		int out_fd = open(out_img, O_WRONLY|O_TRUNC);
+
+		lseek(tmp_fd, 0, SEEK_SET);
+		
+		if (out_fd == -1) {
+			perror("open");
 			err++;
+		} else {
+			while ((n = read(tmp_fd, buf, sizeof(buf)))) {
+				if (write(out_fd, buf, n) != n) {
+					perror("write");
+					fprintf(stderr, "ERROR: Image %s might be corrupted. "
+						"A copy is still available at %s\n", out_img, tmpname);
+					err++;
+					break;
+				}
+			}
+
+			close(out_fd);
 		}
 	}
+
+    close(tmp_fd);
+
+	if (!err)	
+		unlink(tmpname);
 
     return err != 0;
 }
