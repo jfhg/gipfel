@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <libgen.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <math.h>
 #include <algorithm>
 
@@ -64,6 +66,16 @@ static int stitch(GipfelWidget::sample_mode_t m , int b_16,
 static int export_hills(const char *export_file, double visibility);
 static int export_position();
 
+static int
+confirm_overwrite(const char *f) {
+    struct stat sb;
+
+    if (stat(f, &sb) == 0)
+        return fl_choice("The file exists.\n", "Cancel", "Overwrite", NULL);
+    else
+        return 1;
+}
+
 void set_values() {
 	double k0 = 0.0, k1 = 0.0, x0 = 0.0;
 
@@ -117,7 +129,7 @@ void track_cb() {
 
 void save_cb() {
 	char *file = fl_file_chooser("Save Image As?", NULL, img_file);
-	if (file)
+	if (file && confirm_overwrite(file))
 		if (gipf->save_image(file))
 			fl_message("ERROR: Saving image %s failed.", file);	
 }

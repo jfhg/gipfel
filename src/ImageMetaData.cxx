@@ -257,6 +257,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
         if (WEXITSTATUS(status) == 127 || WEXITSTATUS(status) == 126)
             fprintf(stderr, "%s not found\n", args[0]);
     } else {
+		perror("pexecvp");
 		err++;
 	}
 
