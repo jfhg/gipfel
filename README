@@ -121,7 +121,7 @@ Hidden Object Detection
 -----------------------
 gipfel tries to identify objects in its database, that are hidden by others.
 This is done by assuming that every object/peak has the form of a cone 
-with a fixed steapness. If such imaginary cone would hide the view to a
+with a fixed steepness. If such imaginary cone would hide the view to a
 point in the database, gipfel marks it as hidden. Hidden objects are
 not shown by default, but you can enable the display of hidden objects using
 the Option->Show Hidden menu entry. Hidden objects and hidden GPS way points
