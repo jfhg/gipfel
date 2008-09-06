@@ -262,7 +262,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 	}
 
 	if (!err) {
-		int out_fd = open(out_img, O_WRONLY|O_TRUNC);
+		int out_fd = open(out_img, O_WRONLY|O_TRUNC|O_CREAT, S_IRUSR|S_IWUSR);
 
 		lseek(tmp_fd, 0, SEEK_SET);
 		
