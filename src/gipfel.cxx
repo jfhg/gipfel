@@ -71,7 +71,7 @@ confirm_overwrite(const char *f) {
     struct stat sb;
 
     if (stat(f, &sb) == 0)
-        return fl_choice("The file exists.\n", "Cancel", "Overwrite", NULL);
+        return fl_choice("%s exists.\n", "Cancel", "Overwrite", NULL, f);
     else
         return 1;
 }

@@ -11,6 +11,8 @@
 #include <math.h>
 #include <string.h>
 #include <fcntl.h>
+#include <libgen.h>
+#include <sys/param.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
@@ -209,12 +211,12 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
     char * args[32];
     FILE *p;
     pid_t pid;
-    char buf[1024], tmpname[256];
+    char buf[1024], tmpname[MAXPATHLEN];
     int status, err = 0;
     ssize_t n;
 	int tmp_fd;
 
-	strncpy(tmpname, "/tmp/gipfelXXXXXX", sizeof(tmpname));
+	snprintf(tmpname, sizeof(tmpname), "%s/.gipfelXXXXXX", dirname(out_img));
 	tmp_fd = mkstemp(tmpname);
 	if (tmp_fd < 0) {
 		perror("mkstemp");
@@ -261,33 +263,15 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 		err++;
 	}
 
-	if (!err) {
-		int out_fd = open(out_img, O_WRONLY|O_TRUNC|O_CREAT, S_IRUSR|S_IWUSR);
-
-		lseek(tmp_fd, 0, SEEK_SET);
-		
-		if (out_fd == -1) {
-			perror("open");
-			err++;
-		} else {
-			while ((n = read(tmp_fd, buf, sizeof(buf)))) {
-				if (write(out_fd, buf, n) != n) {
-					perror("write");
-					fprintf(stderr, "ERROR: Image %s might be corrupted. "
-						"A copy is still available at %s\n", out_img, tmpname);
-					err++;
-					break;
-				}
-			}
-
-			close(out_fd);
-		}
-	}
-
     close(tmp_fd);
 
-	if (!err)	
-		unlink(tmpname);
+	if (!err) {
+		if (rename(tmpname, out_img) != 0) {
+			perror("rename");
+			err++;
+			unlink(tmpname);
+		}
+	}
 
     return err != 0;
 }

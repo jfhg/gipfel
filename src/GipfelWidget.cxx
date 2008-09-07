@@ -156,8 +156,6 @@ GipfelWidget::save_image(char *file) {
 		return 1;
 	}
 
-	md = new ImageMetaData();
-
 	md->longitude(get_view_long());
 	md->latitude(get_view_lat());
 	md->height(get_view_height());
