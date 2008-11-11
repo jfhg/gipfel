@@ -1,6 +1,11 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.2.6
+* Improve image saving. It is now possible to overwrite the current
+  image file.
+* Install README file to $PREFIX/share/doc/gipfel/.
+
 gipfel-0.2.5
 * Improved stitching speed.
 * Fixed a bug with tiff file generation in stitching mode.
