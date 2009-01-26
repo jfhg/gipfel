@@ -25,6 +25,8 @@
 #include <FL/Fl_Valuator.H>
 #include <FL/Fl_Value_Slider.H>
 #include <FL/Fl_Value_Input.H>
+#include <FL/Fl_Text_Display.H>
+#include <FL/Fl_Text_Buffer.H>
 
 #include "Fl_Value_Dial.H"
 #include "Fl_Search_Chooser.H"
@@ -248,10 +250,25 @@ void distortion_cb(Fl_Value_Input*, void*) {
 void about_cb() {
 	fl_message("gipfel -- and you know what you see.\n"
 		"Version %s\n\n"
-		"(c) Johannes Hofmann 2006-2008\n\n"
+		"(c) Johannes Hofmann 2006-2009\n\n"
 		"Default datafile by http://www.alpin-koordinaten.de\n",
 		VERSION);
 
+}
+
+void readme_cb() {
+	Fl_Window *win = new Fl_Window(800, 600, "README");
+	Fl_Text_Buffer *textBuf = new Fl_Text_Buffer();
+	Fl_Text_Display *textDisp = new Fl_Text_Display(0, 0, win->w(), win->h());
+	char buf[PATH_MAX];
+
+	textDisp->textfont(FL_COURIER);
+	textDisp->buffer(textBuf);	
+	win->resizable(textDisp);
+	snprintf(buf, PATH_MAX, "%s/README", DOCDIR);
+	textBuf->appendfile(buf);
+	win->end();
+	win->show();
 }
 
 void fill_menubar(Fl_Menu_Bar* mb) {
@@ -272,6 +289,7 @@ void fill_menubar(Fl_Menu_Bar* mb) {
 	mb->add("&Option/Show Hidden", 0, (Fl_Callback *) hidden_cb, 
 		(void *)0, FL_MENU_TOGGLE);
 
+	mb->add("&Help/Readme", 0, (Fl_Callback*)readme_cb);
 	mb->add("&Help/About", 0, (Fl_Callback*)about_cb);
 }
 
