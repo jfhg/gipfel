@@ -11,6 +11,7 @@ gipfel-0.2.6
   for i in *.jpg; do gipfel -s -b -t tiff/$i $i; done
   This simplifies the code and allows to parallelize stitching on
   multicore systems.
+* Add simple README viewer to the Help menu.
 
 gipfel-0.2.5
 * Improved stitching speed.
