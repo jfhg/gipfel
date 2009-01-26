@@ -31,13 +31,11 @@ Stitch::Stitch() {
 }
 
 Stitch::~Stitch() {
-	for (int i=0; i<MAX_PICS; i++) {
-		if (gipf[i]) {
-			delete(gipf[i]);
-		} else {
+	for (int i=0; i<MAX_PICS; i++)
+		if (gipf[i])
+			delete gipf[i];
+		else
 			break;
-		}
-	}
 }
 
 int

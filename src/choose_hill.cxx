@@ -33,7 +33,7 @@ choose_hill(const Hills *hills, const char *l) {
 		Fl::wait();
 
 	ret = (Hill*) sc->data();
-	delete(sc);
+	delete sc;
 
 	return ret;
 }
