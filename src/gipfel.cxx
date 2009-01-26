@@ -293,8 +293,8 @@ void usage() {
 		"   -b              Use bicubic interpolation for stitching.\n"
 		"   -w <width>      Width of result image.\n"
 		"   -h <height>     Height of result image.\n"
-		"   -j <file>       JPEG output file for Stitch mode.\n"
-		"   -t <dir>        Output directory for TIFF images in Stitch mode.\n"
+		"   -j <file>       JPEG output file in Stitch mode.\n"
+		"   -t <file>       TIFF output file in Stitch mode.\n"
 		"   -p              Export position of image to stdout.\n"
 		"   -e <file>       Export positions of hills from <file> on image.\n"
 		"   -E              Export hills from default data file.\n"
@@ -623,20 +623,7 @@ stitch(GipfelWidget::sample_mode_t m, int b_16,
 
 	} else if (type & STITCH_TIFF) {
 
-		for (int i=0; i<argc; i++) {
-			char buf[1024];
-			char *dot;
-
-			snprintf(buf, sizeof(buf), "%s/%s", path, basename(argv[i]));
-			dot = strrchr(buf, '.');
-			if (dot)
-				*dot = '\0';
-
-			strncat(buf, ".tiff", sizeof(buf));
-
-			st->set_output(argv[i], new TIFFOutputImage(buf, b_16?16:8));
-		}
-
+		st->set_output(new TIFFOutputImage(path, 90));
 		st->resample(m, stitch_w, stitch_h, from, to);
 
 	} else {

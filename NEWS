@@ -5,6 +5,12 @@ gipfel-0.2.6
 * Improve image saving. It is now possible to overwrite the current
   image file.
 * Install README file to $PREFIX/share/doc/gipfel/.
+* Change semantics of -t option.
+  -t now requires a file just as -j does.
+  To generate multiple TIFF files as input to enblend, just do
+  for i in *.jpg; do gipfel -s -b -t tiff/$i $i; done
+  This simplifies the code and allows to parallelize stitching on
+  multicore systems.
 
 gipfel-0.2.5
 * Improved stitching speed.

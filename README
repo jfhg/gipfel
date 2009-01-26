@@ -177,12 +177,14 @@ You can then call
 to see the result in a window. Alternatively you can call
         gipfel -s -j <outimg> <img1> <img2> ...
 to save the result as a JPEG image to <outimg> or
-        gipfel -s -t <outdir> <img1> <img2> ...
-to save the result as multiple TIFF images to directory <outdir>.
-Use the multiple TIFF option for blending the result with enblend
-<http://enblend.sourceforge.net/>.
-The width and height of the result images can be adjusted with the
--w and -h options.
+        gipfel -s -t <outimg> <img1> <img2> ...
+to save the result as TIFF image.
+To get multiple TIFF images as input for
+<http://enblend.sourceforge.net/>, call gipfel like this:
+	for i in *.jpg; do gipfel -s -b -t tiff/$i $i; done
+
+The width and height of the result images can be adjusted with
+additional -w and -h options.
 You can use the -b switch to enable bicubic interpolation, which
 gives smoother results but is a bit slower.  
 

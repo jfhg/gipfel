@@ -23,10 +23,8 @@ static double pi_d = asin(1.0) * 2.0;
 static double deg2rad = pi_d / 180.0;
 
 Stitch::Stitch() {
-	for (int i=0; i<MAX_PICS; i++) {
+	for (int i=0; i<MAX_PICS; i++)
 		gipf[i] = NULL;
-		single_images[i] = NULL;
-	}
 
 	merged_image = NULL;
 	num_pics = 0;
@@ -67,24 +65,6 @@ Stitch::set_output(OutputImage *img) {
 	return ret;
 }
 
-OutputImage*
-Stitch::set_output(const char *file, OutputImage *img) {
-	OutputImage *ret = NULL;
-
-	for (int i=0; i<MAX_PICS; i++) {
-		if (gipf[i] != NULL) {
-			const char *img_file = gipf[i]->get_image_filename();
-			if (img_file && strcmp(file, img_file) == 0) {
-				ret = single_images[i];
-				single_images[i] = img;
-				break;
-			}
-		}
-	}
-
-	return ret;
-}
-
 int
 Stitch::resample(GipfelWidget::sample_mode_t m,
 	int w, int h, double view_start, double view_end) {
@@ -102,11 +82,6 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 		if (merged_image->init(w, h) != 0)
 			merged_image = NULL;
 
-	for (int i=0; i<MAX_PICS; i++)
-		if (single_images[i]) 
-			if (single_images[i]->init(w, h) != 0)
-				single_images[i] = NULL;
-
 	for (int y = 0; y < h; y++) {
 		double a_nick = atan((double)(y_off - y)/radius);
 
@@ -115,7 +90,7 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 			a_view = view_start + x * step_view;
 			merged_pixel_set = 0;
 			for (int i = 0; i < num_pics; i++) {
-				if (merged_pixel_set && !single_images[i])
+				if (merged_pixel_set)
 					continue;
 
 				if (gipf[i]->get_pixel(m, a_view, a_nick,
@@ -124,9 +99,6 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 					r = std::max(std::min(r, MAX_VALUE), 0);
 					g = std::max(std::min(g, MAX_VALUE), 0);
 					b = std::max(std::min(b, MAX_VALUE), 0);
-
-					if (single_images[i])
-						single_images[i]->set_pixel(x, r, g, b);
 
 					if (!merged_pixel_set && merged_image) {
 						merged_image->set_pixel(x, r, g, b);
@@ -138,19 +110,10 @@ Stitch::resample(GipfelWidget::sample_mode_t m,
 
 		if (merged_image)
 			merged_image->next_line();
-
-		for (int i=0; i<MAX_PICS; i++) {
-			if (single_images[i])
-				single_images[i]->next_line();
-		}
 	}
 
 	if (merged_image)
 		merged_image->done();
-
-	for (int i=0; i<MAX_PICS; i++)
-		if (single_images[i])
-			single_images[i]->done();
 
 	return 0;
 }
