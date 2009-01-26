@@ -4,7 +4,7 @@ gipfel ChangeLog
 gipfel-0.2.6
 * Improve image saving. It is now possible to overwrite the current
   image file.
-* Install README file to $PREFIX/share/doc/gipfel/.
+* Install README and NEWS file to $PREFIX/share/doc/gipfel/.
 * Change semantics of -t option.
   -t now requires a file just as -j does.
   To generate multiple TIFF files as input to enblend, just do
