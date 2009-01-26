@@ -1,4 +1,8 @@
 /*
+ * Copyright 2006-2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
+ */
+
+/*
  * rectilinear (pinhole) projection model with distortion correction
  */
 

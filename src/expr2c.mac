@@ -1,3 +1,7 @@
+/*
+ * Copyright 2006-2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
+ */
+
 load("stringproc")$
 
 varsubst(v) := ssubst("_", "%", string(v))$
