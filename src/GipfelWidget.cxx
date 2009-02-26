@@ -56,19 +56,16 @@ GipfelWidget::load_image(char *file) {
 
 	new_img = new Fl_JPEG_Image(file);
 
-	if (new_img == NULL) {
+	if (new_img == NULL)
 		return 1;
-	}
 
-	if (img) {
+	if (img)
 		delete img;
-	} 
 
 	img = new_img;
 
-	if (img_file) {
+	if (img_file)
 		free(img_file);
-	}
 
 	img_file = strdup(file);
 
@@ -129,9 +126,8 @@ GipfelWidget::load_image(char *file) {
 	md->distortion_params(&pan->parms.k0, &pan->parms.k1, &pan->parms.x0);
 	if (isnan(pan->parms.k0)) {
 		char buf[1024];
-		if (get_distortion_profile_name(buf, sizeof(buf)) == 0) {
+		if (get_distortion_profile_name(buf, sizeof(buf)) == 0)
 			load_distortion_params(buf);
-		}
 
 		if (isnan(pan->parms.k0))
 			pan->parms.k0 = 0.0;
@@ -299,11 +295,10 @@ GipfelWidget::draw() {
 				continue;
 			}
 
-			if (track_points->get(i)->flags & Hill::HIDDEN) {
+			if (track_points->get(i)->flags & Hill::HIDDEN)
 				fl_color(FL_BLUE);
-			} else {
+			else
 				fl_color(FL_RED);
-			}
 
 			fl_line_style(FL_SOLID|FL_CAP_ROUND|FL_JOIN_ROUND,
 				get_rel_track_width(track_points->get(i)));
@@ -412,11 +407,10 @@ GipfelWidget::toggle_known_mountain(int m_x, int m_y) {
 			m_y - center_y >= m->y - 2 && m_y - center_y < m->y + 2) {
 
 
-			if (known_hills->contains(m)) {
+			if (known_hills->contains(m))
 				known_hills->remove(m);
-			} else {
+			else
 				known_hills->add(m);
-			}
 
 			redraw();
 			return 0;
@@ -501,11 +495,10 @@ GipfelWidget::set_distortion_params(double k0, double k1, double x0) {
 
 double
 GipfelWidget::get_focal_length_35mm() {
-	if (img == NULL) {
+	if (img == NULL)
 		return NAN;
-	} else {
+	else
 		return pan->get_scale() * 35.0 / (double) img->w();
-	}
 }
 
 void 
@@ -516,9 +509,8 @@ GipfelWidget::center_cb(Fl_Widget *o, void *f) {
 	if (m) {
 		g->set_center_angle(m->alph / deg2rad);
 			
-		if (!g->known_hills->contains(m)) {
+		if (!g->known_hills->contains(m))
 			g->known_hills->add(m);
-		}
 	}
 }
 
@@ -526,7 +518,6 @@ void
 GipfelWidget::set_height_dist_ratio(double r) {
 	pan->set_height_dist_ratio(r);
 	set_labels(pan->get_visible_mountains());
-
 	redraw();
 }
 
@@ -534,7 +525,6 @@ void
 GipfelWidget::set_hide_value(double h) {
 	pan->set_hide_value(h);
 	set_labels(pan->get_visible_mountains());
-
 	redraw();
 }
 
@@ -542,7 +532,6 @@ void
 GipfelWidget::set_show_hidden(int h) {
 	show_hidden = h;
 	set_labels(pan->get_visible_mountains());
-
 	redraw();
 }
 
@@ -638,13 +627,11 @@ GipfelWidget::export_hills(const char *file, FILE *fp) {
 	}
 
 	if (file) {
-		if (export_hills.load(file) != 0) {
+		if (export_hills.load(file) != 0)
 			return 1;
-		}
 
-		for (int i=0; i<export_hills.get_num(); i++) {
+		for (int i=0; i<export_hills.get_num(); i++)
 			export_hills.get(i)->flags |= Hill::EXPORT;
-		}
 
 		pan->add_hills(&export_hills);  
 	}
@@ -662,9 +649,8 @@ GipfelWidget::export_hills(const char *file, FILE *fp) {
 			continue;
 		}
 
-		if (_x < 0 || _x > w() || _y < 0 || _y > h()) {
+		if (_x < 0 || _x > w() || _y < 0 || _y > h())
 			continue;
-		}
 
 		fprintf(fp, "%s\t%d\t%d\t%d\t%d\n",
 			m->name, (int) rint(m->height), _x, _y,
@@ -828,9 +814,8 @@ int
 GipfelWidget::save_distortion_params(const char *prof_name, int force) {
 	Fl_Preferences prof(dist_prefs, prof_name);
 
-	if (!force && prof.entryExists("k0")) {
+	if (!force && prof.entryExists("k0"))
 		return 1;
-	}
 
 	prof.set("k0", pan->parms.k0);
 	prof.set("k1", pan->parms.k1);
