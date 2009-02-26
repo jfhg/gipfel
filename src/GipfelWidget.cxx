@@ -284,7 +284,7 @@ GipfelWidget::draw() {
 		int m_x = w() / 2 + x() + (int) rint(m->x);
 		int m_y = h() / 2 + y() + (int) rint(m->y);
 
-		snprintf(buf, sizeof(buf), "%s (%dm), distance %.2fkm",
+		snprintf(buf, sizeof(buf) - 1, "%s (%dm), distance %.2fkm",
                 m->name, (int) m->height, pan->get_real_distance(m) / 1000.0);
 
 		fl_color(FL_YELLOW);
@@ -593,6 +593,10 @@ GipfelWidget::handle(int event) {
 					cur_mountain = m;
 			} else if (Fl::event_button() == 2) {
 				toggle_known_mountain(mark_x, mark_y);
+				if (focused_mountain) {
+					focused_mountain = NULL;
+					redraw();
+				}
 			}
 
 			Fl::focus(this);
@@ -609,7 +613,7 @@ GipfelWidget::handle(int event) {
 			return 1;
 		case FL_MOVE:
 			m = find_mountain(pan->get_visible_mountains(), Fl::event_x()-x(), Fl::event_y()-y());
-			if (m  && m != focused_mountain) {
+			if (m != focused_mountain && (!m || !known_hills->contains(m))) {
 				focused_mountain = m;
 				redraw();
 			}
