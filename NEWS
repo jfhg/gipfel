@@ -1,6 +1,12 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.2.7
+* Import data from http://www.viewfinderpanoramas.org/ with the
+  kind permission of Jonathan de Ferranti. Thanks a lot!
+  This brings the number of peaks in the default data file to
+  more than 21000!
+
 gipfel-0.2.6
 * Improve image saving. It is now possible to overwrite the current
   image file.

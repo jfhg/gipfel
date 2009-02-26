@@ -42,7 +42,7 @@
 #define DATADIR "/usr/local/share"
 #endif
 
-#define DEFAULT_DATAFILE DATADIR "/" PACKAGE_NAME "/alpinkoordinaten.dat"
+#define DEFAULT_DATAFILE DATADIR "/" PACKAGE_NAME "/gipfel.dat"
 
 char *img_file = NULL;
 char *data_file = DEFAULT_DATAFILE;
@@ -251,7 +251,8 @@ void about_cb() {
 	fl_message("gipfel -- and you know what you see.\n"
 		"Version %s\n\n"
 		"(c) Johannes Hofmann 2006-2009\n\n"
-		"Default datafile by http://www.alpin-koordinaten.de\n",
+		"Default datafile from http://www.viewfinderpanoramas.org/ and\n"
+        "http://www.alpin-koordinaten.de\n",
 		VERSION);
 
 }
