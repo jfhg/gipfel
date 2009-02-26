@@ -362,7 +362,7 @@ GipfelWidget::set_labels(Hills *v) {
 				 overlap(m->y + m->label_y - height,
 					 m->y + m->label_y, n->y - 2, n->y + 2))) {
 
-				m->label_y = (int) rint(n->y + n->label_y - m->y - height - 1);
+				m->label_y = (int) rint(n->y + n->label_y - m->y - height - 2);
 			}
 		}
 	}
