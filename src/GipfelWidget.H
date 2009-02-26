@@ -7,15 +7,15 @@
 #ifndef GipfelWidget_H
 #define GipfelWidget_H
 
-#include <FL/Fl_Widget.H>
+#include <FL/Fl_Group.H>
 #include <FL/Fl_Menu_Button.H>
 #include "Panorama.H"
 #include "ImageMetaData.H"
 
-class GipfelWidget : public Fl_Widget {
+class GipfelWidget : public Fl_Group {
 	private:
 		Fl_Image *img;
-		Hill *cur_mountain;
+		Hill *cur_mountain, *focused_mountain;
 		Hills *track_points;
 		Hills *known_hills;
 		Panorama *pan;
@@ -24,12 +24,11 @@ class GipfelWidget : public Fl_Widget {
 		double track_width;
 		int have_gipfel_info;
 		ImageMetaData *md;
-
 		int show_hidden;
 
 		int handle(int event);
 
-		int set_cur_mountain(int m_x, int m_y);
+		Hill * find_mountain(Hills *mnts, int m_x, int m_y);
 
 		int toggle_known_mountain(int m_x, int m_y);
 
