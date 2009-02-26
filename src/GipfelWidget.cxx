@@ -222,7 +222,7 @@ static void
 draw_flag(int x, int y) {
 	fl_polygon(x, y - 10, x, y - 20, x + 10, y - 15);
 	fl_yxline(x, y, y - 10);
-	fl_circle(x , y, 2);
+	fl_circle(x , y, 3);
 }
 
 void 
@@ -238,7 +238,7 @@ GipfelWidget::draw() {
 	img->draw(x(),y(),w(),h(),0,0);
 
 	/* hills */
-	fl_font(FL_HELVETICA, 10);
+	fl_font(FL_HELVETICA, 8);
 	mnts = pan->get_visible_mountains();
 
 	fl_color(FL_YELLOW);
@@ -329,7 +329,7 @@ GipfelWidget::set_labels(Hills *v) {
 	int i, j, width, height;
 	Hill *m, *n;
 
-	fl_font(FL_HELVETICA, 10);
+	fl_font(FL_HELVETICA, 8);
 	height = fl_height();
 
 	for (i=0; i<v->get_num(); i++) {
