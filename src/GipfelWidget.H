@@ -23,6 +23,7 @@ class GipfelWidget : public Fl_Group {
 		int have_gipfel_info;
 		ImageMetaData *md;
 		int show_hidden;
+		char focused_mountain_label[128];
 
 		int handle(int event);
 
