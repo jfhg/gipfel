@@ -6,6 +6,10 @@ gipfel-0.2.7
   kind permission of Jonathan de Ferranti. Thanks a lot!
   This brings the number of peaks in the default data file to
   more than 21000!
+* Change display style a bit and reduce font size to make room
+  for all the new peaks from the updated data file.
+* Show height and distance of the peak which is currently under
+  the mouse.
 
 gipfel-0.2.6
 * Improve image saving. It is now possible to overwrite the current
