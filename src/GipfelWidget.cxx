@@ -223,24 +223,17 @@ GipfelWidget::set_viewpoint(const Hill *m) {
 }
 
 static void
-draw_flag(int x, int y, char *s) {
-	Fl_Color c = fl_color();
-
+draw_flag(int x, int y) {
 	fl_polygon(x, y - 10, x, y - 20, x + 10, y - 15);
 	fl_yxline(x, y, y - 10);
-
-	if (s) {
-		fl_color(FL_WHITE);
-		fl_draw(s, x , y - 12);
-		fl_color(c);
-	}	
+	fl_circle(x , y, 2);
 }
 
 void 
 GipfelWidget::draw() {
 	Hills *mnts;
 	Hill *m;
-	int i;
+	int i, height;
 
 	if (img == NULL)
 		return;
@@ -251,36 +244,47 @@ GipfelWidget::draw() {
 	/* hills */
 	fl_font(FL_HELVETICA, 10);
 	mnts = pan->get_visible_mountains();
+
+	fl_color(FL_YELLOW);
+	height = fl_height();
 	for (i=0; i<mnts->get_num(); i++) {
 		m = mnts->get(i);
 		int m_x = w() / 2 + x() + (int) rint(m->x);
 		int m_y = h() / 2 + y() + (int) rint(m->y);
 
-		if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT)) {
+		if ((m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT)) ||
+			(!show_hidden && (m->flags & Hill::HIDDEN)) || known_hills->contains(m))
 			continue;
-		}
 
-		if (!show_hidden && (m->flags & Hill::HIDDEN)) {
+		fl_xyline(m_x - CROSS_SIZE, m_y, m_x + CROSS_SIZE);
+		fl_yxline(m_x, m_y + m->label_y - height, m_y + CROSS_SIZE);
+		fl_xyline(m_x, m_y + m->label_y - height, m_x + m->label_x);
+	}
+
+	for (i=0; i<mnts->get_num(); i++) {
+		m = mnts->get(i);
+		int m_x = w() / 2 + x() + (int) rint(m->x);
+		int m_y = h() / 2 + y() + (int) rint(m->y);
+
+		if ((m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT)) ||
+			(!show_hidden && (m->flags & Hill::HIDDEN)))
 			continue;
-		}
 
 		if (known_hills->contains(m)) {
-			if (known_hills->get_num() > 3) {
+			if (known_hills->get_num() > 3)
 				fl_color(FL_GREEN);
-			} else {
+			else
 				fl_color(FL_RED);
-			}
-			draw_flag(m_x, m_y, "");
+
+			draw_flag(m_x, m_y);
+			fl_color(FL_BLACK);
 		} else if (m->flags & Hill::HIDDEN) {
 			fl_color(FL_BLUE);
 		} else {
 			fl_color(FL_BLACK);
 		}
 
-		fl_xyline(m_x- CROSS_SIZE, m_y, m_x + CROSS_SIZE);
-		fl_yxline(m_x, m_y + m->label_y - CROSS_SIZE, m_y + CROSS_SIZE);
-
-		fl_draw(m->name, m_x , m_y + m->label_y);
+		fl_draw(m->name, m_x + 2, m_y + m->label_y);
 	}
 
 	/* track */
@@ -443,12 +447,12 @@ GipfelWidget::set_mountain(int m_x, int m_y) {
 
 	damage(4, center_x + x() + old_x - 2*CROSS_SIZE - 1,
 		center_y + y() + old_y + old_label_y - 2*CROSS_SIZE - 20,
-		std::max(20, cur_mountain->label_x) + 2*CROSS_SIZE + 2,
+		std::max(20, cur_mountain->label_x) + 2*CROSS_SIZE + 4,
 		std::max(20, old_label_y) + 22 ); 
 	damage(4,
 		(int) rint(center_x + x() + cur_mountain->x - 2*CROSS_SIZE - 1),
 		(int) rint(center_y + y() + cur_mountain->y + cur_mountain->label_y - 2*CROSS_SIZE - 20),
-		std::max(20, cur_mountain->label_x) + 2*CROSS_SIZE + 2,
+		std::max(20, cur_mountain->label_x) + 2*CROSS_SIZE + 4,
 		std::max(20, cur_mountain->label_y) + 22 ); 
 
 	return 0;
