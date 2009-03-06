@@ -215,8 +215,11 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
     int status, err = 0;
     ssize_t n;
 	int tmp_fd;
+	char *dirbuf;
 
-	snprintf(tmpname, sizeof(tmpname), "%s/.gipfelXXXXXX", dirname(out_img));
+	dirbuf = strdup(out_img);
+	snprintf(tmpname, sizeof(tmpname), "%s/.gipfelXXXXXX", dirname(dirbuf));
+	free(dirbuf);
 	tmp_fd = mkstemp(tmpname);
 	if (tmp_fd < 0) {
 		perror("mkstemp");
