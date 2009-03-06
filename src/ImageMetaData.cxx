@@ -93,7 +93,7 @@ degminsecstr2double(char *val) {
 
 int
 ImageMetaData::load_image_exif(char *name) {
-    char * args[32];
+    const char * args[32];
     FILE *p;
     pid_t pid;
     int status;
@@ -107,7 +107,7 @@ ImageMetaData::load_image_exif(char *name) {
     args[3] = name;
     args[4] = NULL;
   
-    p = pexecvp(args[0], args, &pid, "r");
+    p = pexecvp(args[0], const_cast<char * const *>(args), &pid, "r");
 
     if (p) {
         while (fgets(buf, sizeof(buf), p) != NULL) {
@@ -155,7 +155,7 @@ ImageMetaData::load_image_exif(char *name) {
 
 int
 ImageMetaData::load_image_jpgcom(char *name) {
-    char * args[32];
+    const char * args[32];
     FILE *p;
     pid_t pid;
     int status;
@@ -168,7 +168,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
     args[1] = name;
     args[2] = NULL;
 
-    p = pexecvp(args[0], args, &pid, "r");
+    p = pexecvp(args[0], const_cast<char * const *>(args), &pid, "r");
 
     if (p) {
         while (fgets(buf, sizeof(buf), p) != NULL) {
@@ -208,7 +208,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
 
 int
 ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
-    char * args[32];
+    const char * args[32];
     FILE *p;
     pid_t pid;
     char buf[1024], tmpname[MAXPATHLEN];
@@ -242,7 +242,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
     args[4] = in_img;
     args[5] = NULL;
 
-    p = pexecvp(args[0], args, &pid, "r");
+    p = pexecvp(args[0], const_cast<char * const *>(args), &pid, "r");
 
     if (p) {
         while ((n = fread(buf, 1, sizeof(buf), p)) != 0) {
