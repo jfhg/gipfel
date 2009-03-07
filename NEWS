@@ -1,6 +1,10 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.2.8
+* Fix issue with image saving on some platforms (reported by David Mitchell).
+* Fix crash in stitching mode.
+
 gipfel-0.2.7
 * Import data from http://www.viewfinderpanoramas.org/ with the
   kind permission of Jonathan de Ferranti. Thanks a lot!
