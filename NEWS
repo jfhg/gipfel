@@ -4,6 +4,9 @@ gipfel ChangeLog
 gipfel-0.2.8
 * Fix issue with image saving on some platforms (reported by David Mitchell).
 * Fix crash in stitching mode.
+* Add a note to the README about generating a data file for the USA from
+  [USGS](http://geonames.usgs.gov/domestic/download_data.htm) data
+  (pointed out by David Mitchell).
 
 gipfel-0.2.7
 * Import data from http://www.viewfinderpanoramas.org/ with the
