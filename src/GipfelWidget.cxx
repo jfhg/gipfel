@@ -32,6 +32,7 @@
 static double pi_d, deg2rad;
 
 GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Group(X, Y, W, H) {
+	end();
 	pi_d = asin(1.0) * 2.0;
 	deg2rad = pi_d / 180.0;
 	img = NULL;
