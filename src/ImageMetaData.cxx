@@ -266,7 +266,8 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 		err++;
 	}
 
-    close(tmp_fd);
+	fsync(tmp_fd); /* make sure data is on disk before replacing orig file */
+	close(tmp_fd);
 
 	if (!err) {
 		if (rename(tmpname, out_img) != 0) {
