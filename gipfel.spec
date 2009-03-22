@@ -8,7 +8,11 @@ Source0: %{name}-%{version}.tar.gz
 License: GPL
 Group: Productivity/Scientific/Other
 
-BuildRequires: binutils gcc gcc-c++ libstdc++-devel gsl-devel fltk-devel libjpeg-devel libtiff-devel libpng-devel xorg-x11-libXext-devel
+BuildRequires: binutils gcc gcc-c++ libstdc++-devel gsl-devel fltk-devel libjpeg-devel libtiff-devel libpng-devel
+
+%if 0%{?suse_version}
+BuildRequires: xorg-x11-libXext-devel
+%endif
 
 Requires: jpeg exif
 
@@ -27,6 +31,7 @@ gipfel can also be used to play around with the parameters manually.
 make
 %install
 make DESTDIR=$RPM_BUILD_ROOT install-strip
+rm -rf $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}
 %files
 %defattr(-, root, root)
 %doc NEWS README
