@@ -18,6 +18,7 @@
 #include <algorithm>
 
 #include <FL/Fl.H>
+#include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Shared_Image.H>
 #include <FL/Fl_JPEG_Image.H>
 #include <FL/Fl_Preferences.H>
@@ -39,6 +40,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Group(X, Y, W, H) {
 	pan = new Panorama();
 	cur_mountain = NULL;
 	focused_mountain = NULL;
+	mb = NULL;
 	known_hills = new Hills();
 	img_file = NULL;
 	track_width = 200.0;
@@ -73,6 +75,11 @@ GipfelWidget::load_image(char *file) {
 
 	h(img->h());  
 	w(img->w());  
+
+	mb = new Fl_Menu_Button(x(),y(),w()+x(),h()+y(),"&popup");
+	mb->type(Fl_Menu_Button::POPUP3);
+	mb->box(FL_NO_BOX);
+	mb->add("Center Peak", 0, (Fl_Callback*) center_cb, this);
 
 	// try to retrieve gipfel data from JPEG meta data
 	md->load_image(file);
@@ -506,6 +513,19 @@ GipfelWidget::get_focal_length_35mm() {
 		return NAN;
 	else
 		return pan->get_scale() * 35.0 / (double) img->w();
+}
+
+void 
+GipfelWidget::center_cb(Fl_Widget *o, void *f) {
+	GipfelWidget *g = (GipfelWidget*) f;
+
+	Hill *m = choose_hill(g->pan->get_close_mountains(), "Center Peak");
+	if (m) {
+		g->set_center_angle(m->alph / deg2rad);
+			
+		if (!g->known_hills->contains(m))
+			g->known_hills->add(m);
+	}
 }
 
 void
