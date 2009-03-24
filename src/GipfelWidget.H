@@ -8,6 +8,7 @@
 #define GipfelWidget_H
 
 #include <FL/Fl_Group.H>
+#include <FL/Fl_Menu_Button.H>
 #include "Panorama.H"
 #include "ImageMetaData.H"
 
@@ -18,6 +19,7 @@ class GipfelWidget : public Fl_Group {
 		Hills *track_points;
 		Hills *known_hills;
 		Panorama *pan;
+		Fl_Menu_Button *mb;
 		char *img_file;
 		double track_width;
 		int have_gipfel_info;
@@ -44,6 +46,8 @@ class GipfelWidget : public Fl_Group {
 
 		static int get_pixel(Fl_Image *img, int x, int y,
 			int *r, int *g, int *b);
+
+		static void center_cb(Fl_Widget *o, void *f);
 
 	public:
 		typedef enum {
