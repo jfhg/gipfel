@@ -23,7 +23,7 @@ static double pi_d = asin(1.0) * 2.0;
 static double deg2rad = pi_d / 180.0;
 
 Stitch::Stitch() {
-	for (int i=0; i<MAX_PICS; i++)
+	for (int i = 0; i < MAX_PICS; i++)
 		gipf[i] = NULL;
 
 	merged_image = NULL;
@@ -31,7 +31,7 @@ Stitch::Stitch() {
 }
 
 Stitch::~Stitch() {
-	for (int i=0; i<MAX_PICS; i++)
+	for (int i = 0; i < MAX_PICS; i++)
 		if (gipf[i])
 			delete gipf[i];
 		else
@@ -40,7 +40,7 @@ Stitch::~Stitch() {
 
 int
 Stitch::load_image(char *file) {
-	for (int i=0; i<MAX_PICS; i++) {
+	for (int i = 0; i < MAX_PICS; i++) {
 		if (gipf[i] == NULL) {
 			gipf[i] = new GipfelWidget(0, 0, 800, 600);
 			if (gipf[i]->load_image(file) != 0) {

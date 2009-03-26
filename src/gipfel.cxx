@@ -208,15 +208,13 @@ void save_distortion_cb(Fl_Widget *, void *) {
 	prof_name = fl_input("Save Distortion Profile (k0=%f, k1=%f, x0=%f)",
 		buf, k0, k1, x0);
 
-	if (prof_name == NULL) {
+	if (prof_name == NULL)
 		return;
-	}
 
 	if (gipf->save_distortion_params(prof_name, 0) != 0) {
 		if (fl_choice("A profile with this name exists.\n",
-				"Cancel", "Overwrite", NULL) == 1) {
+				"Cancel", "Overwrite", NULL) == 1)
 			gipf->save_distortion_params(prof_name, 1);
-		}
 	}
 	set_values();
 }
@@ -229,15 +227,13 @@ void load_distortion_cb(Fl_Widget *, void *) {
 	gipf->get_distortion_profile_name(buf, sizeof(buf));
 	prof_name = fl_input("Load Distortion Profile", buf);
 
-	if (prof_name == NULL) {
+	if (prof_name == NULL)
 		return;
-	}
 
-	if (gipf->load_distortion_params(prof_name) != 0) {
+	if (gipf->load_distortion_params(prof_name) != 0)
 		fl_alert("Could not load profile %s.", prof_name);
-	} else {
+	else
 		set_values();
-	}
 }
 
 void distortion_cb(Fl_Value_Input*, void*) {
@@ -494,9 +490,8 @@ int main(int argc, char** argv) {
 				stitch_flag++;
 				if (optarg && strcmp(optarg, ":")) {
 					stitch_from = atof(optarg);
-					if (strchr(optarg, ',')) {
+					if (strchr(optarg, ','))
 						stitch_to = atof(strchr(optarg, ',') + 1);
-					}
 				}
 				break;
 			case 'u':
@@ -508,9 +503,8 @@ int main(int argc, char** argv) {
 					if (c) {
 						dist_k1 = atof(strchr(optarg, ',') + 1);
 						c = strchr(c + 1, ',');
-						if (c) {
+						if (c)
 							dist_x0 = atof(strchr(optarg, ',') + 1);
-						}
 					}
 				}
 				break;
@@ -591,9 +585,8 @@ int main(int argc, char** argv) {
 		control_win->label(img_file);
 	}
 
-	if (distortion_flag) {
+	if (distortion_flag)
 		gipf->set_distortion_params(dist_k0, dist_k1, dist_x0);
-	}
 
 	Fl::screen_xywh(sx, sy, sw, sh);
 	view_win->size(std::min(gipf->w(), sw), std::min(gipf->h(), sh));
@@ -612,12 +605,11 @@ int main(int argc, char** argv) {
 	view_win->show(1, argv); 
 	control_win->show(1, argv); 
 
-	if (view_point) {
+	if (view_point)
 		gipf->set_viewpoint(view_point);
-	} else if (img_file && 
-		(isnan(gipf->get_view_lat()) || isnan(gipf->get_view_long()))) {
+	else if (img_file && 
+		(isnan(gipf->get_view_lat()) || isnan(gipf->get_view_long())))
 		viewpoint_cb(NULL, NULL);
-	}
 
 	return Fl::run();
 }
@@ -631,9 +623,8 @@ stitch(GipfelWidget::sample_mode_t m, int b_16,
 	Fl_Scroll *scroll;
 	Stitch *st = new Stitch();
 
-	for (int i=0; i<argc; i++) {
+	for (int i = 0; i < argc; i++)
 		st->load_image(argv[i]);
-	}
 
 	if (type & STITCH_JPEG) {
 

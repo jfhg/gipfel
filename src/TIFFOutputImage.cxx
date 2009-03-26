@@ -95,4 +95,3 @@ TIFFOutputImage::done_internal() {
 
 	return 0;
 }	
-

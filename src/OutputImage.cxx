@@ -1,5 +1,5 @@
 //
-// Copyright 2006 Johannes Hofmann <Johannes.Hofmann@gmx.de>
+// Copyright 2006-2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
@@ -27,28 +27,25 @@ OutputImage::init(int w1, int h1) {
 
 int
 OutputImage::set_pixel(int x, int r, int g, int b) {
-	if (!initialized || x < 0 || x >= W) {
+	if (!initialized || x < 0 || x >= W)
 		return 1;
-	} else {
+	else
 		return set_pixel_internal(x, r, g, b);
-	}
 }
 
 int
 OutputImage::next_line() {
-	if (!initialized || line++ >= H) {
+	if (!initialized || line++ >= H)
 		return 1;
-	} else {
+	else
 		return next_line_internal();
-	}
 }
 
 int
 OutputImage::done() {
-	if (!initialized) {
+	if (!initialized)
 		return 1;
-	} else {
+	else
 		next_line();
 		return done_internal();
-	}
 }

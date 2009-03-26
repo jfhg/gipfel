@@ -7,12 +7,9 @@
 #ifndef HILL_H
 #define HILL_H
 
-
 class Hill;
 
 class Hill {
-	private:
-
 	public:
 		typedef enum {
 			DUPLICATE   = 0x01,
@@ -38,7 +35,6 @@ class Hill {
 		~Hill();  
 };
 
-
 class Hills {
 	private:
 		int num, cap;
@@ -63,4 +59,5 @@ class Hills {
 		int get_num() const;
 		Hill *get(int n) const;
 };
+
 #endif

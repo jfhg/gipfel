@@ -61,4 +61,5 @@ class ImageMetaData {
 		void projection_type(int v) {_projection_type = v;};
 		void distortion_params(double k0, double k1, double x0);
 };
+
 #endif

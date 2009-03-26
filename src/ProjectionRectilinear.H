@@ -34,4 +34,5 @@ class ProjectionRectilinear : public ProjectionLSQ {
 #undef ARGS
 
 };
+
 #endif

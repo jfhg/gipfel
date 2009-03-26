@@ -28,4 +28,5 @@ class ProjectionCylindrical : public ProjectionLSQ {
 #undef ARGS
 
 };
+
 #endif
