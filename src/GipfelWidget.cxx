@@ -620,7 +620,9 @@ GipfelWidget::handle(int event) {
 					{"Find Peak", 0, find_peak_cb,  this},
 					{0}
 				};
-				const Fl_Menu_Item *mi = rclick_menu->popup(Fl::event_x(), Fl::event_y(), 0, 0, 0);
+				const Fl_Menu_Item *mi =
+					rclick_menu->popup(Fl::event_x(), Fl::event_y(), 0, 0, 0);
+
 				if (mi)
 					mi->do_callback(0, mi->user_data());
 			}
