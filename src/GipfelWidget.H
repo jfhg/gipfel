@@ -7,8 +7,11 @@
 #ifndef GipfelWidget_H
 #define GipfelWidget_H
 
+#include <stdio.h>
+
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Menu_Button.H>
+
 #include "Panorama.H"
 #include "ImageMetaData.H"
 

@@ -17,7 +17,8 @@ gipfel_SOURCES = \
 	JPEGOutputImage.cxx \
 	TIFFOutputImage.cxx \
 	PreviewOutputImage.cxx \
-	ImageMetaData.cxx
+	ImageMetaData.cxx \
+	ScreenDump.cxx
 
 noinst_HEADERS = \
 	GipfelWidget.H \
@@ -38,4 +39,5 @@ noinst_HEADERS = \
 	TIFFOutputImage.H \
 	PreviewOutputImage.H \
 	ImageMetaData.H \
+	ScreenDump.H \
 	util.h

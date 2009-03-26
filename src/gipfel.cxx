@@ -35,6 +35,7 @@
 #include "TIFFOutputImage.H"
 #include "PreviewOutputImage.H"
 #include "Stitch.H"
+#include "ScreenDump.H"
 #include "choose_hill.H"
 #include "../config.h"
 
@@ -91,11 +92,11 @@ void set_values() {
 	i_view_height->value(gipf->get_view_height());
 	b_viewpoint->label(gipf->get_viewpoint());
 	if (gipf->projection() == ProjectionLSQ::RECTILINEAR) {
-		mb->mode(8, FL_MENU_RADIO|FL_MENU_VALUE);
-		mb->mode(9, FL_MENU_RADIO);
-	} else {
 		mb->mode(9, FL_MENU_RADIO|FL_MENU_VALUE);
-		mb->mode(8, FL_MENU_RADIO);
+		mb->mode(10, FL_MENU_RADIO);
+	} else {
+		mb->mode(10, FL_MENU_RADIO|FL_MENU_VALUE);
+		mb->mode(9, FL_MENU_RADIO);
 	}
 
 	gipf->get_distortion_params(&k0, &k1, &x0);
@@ -134,6 +135,12 @@ void save_cb() {
 	if (file && confirm_overwrite(file))
 		if (gipf->save_image(file))
 			fl_message("ERROR: Saving image %s failed.", file);	
+}
+
+void dump_cb(Fl_Widget * o, void*) {
+	ScreenDump dmp(gipf);
+
+	dmp.save("/tmp/dmp.jpg");
 }
 
 void focal_length_cb(Fl_Slider* o, void*) {
@@ -273,6 +280,7 @@ void fill_menubar(Fl_Menu_Bar* mb) {
 	mb->add("&File/&Save Image", FL_CTRL+'s', (Fl_Callback*)save_cb);
 	mb->add("&File/Choose &Viewpoint", FL_CTRL+'v', (Fl_Callback*)viewpoint_cb);
 	mb->add("&File/Load &Track", FL_CTRL+'t', (Fl_Callback*)track_cb);
+	mb->add("&File/Screen &Dump", FL_CTRL+'d', (Fl_Callback*)dump_cb);
 	mb->add("&File/&Quit", FL_CTRL+'q', (Fl_Callback*)quit_cb);
 
 	mb->add("&Projection/Normal Projection", 0, (Fl_Callback *)proj_cb, 
