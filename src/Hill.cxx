@@ -212,11 +212,17 @@ static int
 comp_mountains_name(const void *n1, const void *n2) {
 	Hill *m1 = *(Hill **)n1;
 	Hill *m2 = *(Hill **)n2;
+	int r;
 
-	if (m1 && m2)
-		return strcasecmp(m1->name, m2->name);
-	else
+	if (m1 && m2) {
+		r = strcasecmp(m1->name, m2->name);
+		if (r == 0)
+			return (int) (m1->height - m2->height);
+		else
+			return r;
+	} else {
 		return 0;
+	}
 }
 
 void
