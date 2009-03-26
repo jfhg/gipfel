@@ -41,8 +41,8 @@ Panorama::Panorama() {
 Panorama::~Panorama() {
 	visible_mountains->clear();
 	mountains->clobber();
-	delete(visible_mountains);
-	delete(mountains);
+	delete visible_mountains;
+	delete mountains;
 }
 
 int
@@ -71,11 +71,10 @@ Panorama::remove_hills(int flags) {
 	Hills *h_new = new Hills();
 	Hill *m;
 
-	for(int i=0; i<mountains->get_num(); i++) {
+	for (int i = 0; i < mountains->get_num(); i++) {
 		m = mountains->get(i);
-		if (! (m->flags & flags)) {
+		if (! (m->flags & flags))
 			h_new->add(m);
-		}
 	}
 
 	delete mountains;
@@ -96,17 +95,15 @@ Panorama::set_viewpoint(const char *name) {
 
 void
 Panorama::set_viewpoint(const Hill *m) {
-	if (m == NULL) {
+	if (m == NULL)
 		return;
-	}
 
 	view_phi = m->phi;
 	view_lam = m->lam;
 	view_height = m->height;
 
-	if (view_name) {
+	if (view_name)
 		free(view_name);
-	}
 
 	view_name = strdup(m->name);
 
@@ -273,10 +270,9 @@ Panorama::get_projection() {
 
 Hill *
 Panorama::get_pos(const char *name) {
-	int i;
 	Hill *m, *ret = NULL;
 
-	for (i=0; i<mountains->get_num(); i++) {
+	for (int i = 0; i < mountains->get_num(); i++) {
 		m = mountains->get(i);
 
 		if (strcmp(m->name, name) == 0) {
@@ -291,19 +287,13 @@ Panorama::get_pos(const char *name) {
 
 void 
 Panorama::update_angles() {
-	int i;
-	Hill *m;
-
-	for (i=0; i<mountains->get_num(); i++) {
-		m = mountains->get(i);
+	for (int i = 0; i < mountains->get_num(); i++) {
+		Hill *m = mountains->get(i);
 
 		m->dist = distance(m->phi, m->lam);
-		if (m->phi != view_phi || m->lam != view_lam) {
-
+		if (m->phi != view_phi || m->lam != view_lam)
 			m->alph = alpha(m);
-		}
 	}
-
 
 	mountains->sort();
 
@@ -318,20 +308,18 @@ Panorama::set_hide_value(double h) {
 
 void
 Panorama::mark_hidden(Hills *hills) {
-	int i, j;
-	Hill *m, *n;
 	double h;
 
-	for (i=0; i<hills->get_num(); i++) {
-		m = hills->get(i);
+	for (int i = 0; i < hills->get_num(); i++) {
+		Hill *m = hills->get(i);
 
 		m->flags &= ~Hill::HIDDEN;
 
 		if (m->flags & Hill::DUPLICATE)
 			continue;
 
-		for (j=0; j<hills->get_num(); j++) {
-			n = hills->get(j);
+		for (int j = 0; j < hills->get_num(); j++) {
+			Hill *n = hills->get(j);
 
 			if (n->flags & Hill::DUPLICATE || n->flags & Hill::TRACK_POINT)
 				continue;
@@ -343,22 +331,18 @@ Panorama::mark_hidden(Hills *hills) {
 				continue;
 
 			h = (n->a_nick - m->a_nick) / fabs(m->alph - n->alph);
-			if (isinf(h) || h > hide_value) {
+			if (isinf(h) || h > hide_value)
 				m->flags |= Hill::HIDDEN;
-			}
 		}
 	}
 }
 
 void 
 Panorama::update_close_mountains() {
-	int i;
-	Hill *m;
-
 	close_mountains->clear();
 
-	for (i=0; i<mountains->get_num(); i++) {
-		m = mountains->get(i);
+	for (int i = 0; i < mountains->get_num(); i++) {
+		Hill *m = mountains->get(i);
 
 		if (m->flags & Hill::TRACK_POINT ||
 			((m->phi != view_phi || m->lam != view_lam) &&
@@ -376,13 +360,10 @@ Panorama::update_close_mountains() {
 
 void 
 Panorama::update_visible_mountains() {
-	int i;
-	Hill *m;
-
 	visible_mountains->clear();
 
-	for (i=0; i<close_mountains->get_num(); i++) {
-		m = close_mountains->get(i);
+	for (int i = 0; i < close_mountains->get_num(); i++) {
+		Hill *m = close_mountains->get(i);
 
 		if (is_visible(m->alph)) {
 			visible_mountains->add(m);
@@ -397,10 +378,8 @@ Panorama::update_visible_mountains() {
 
 void
 Panorama::update_coordinates() {
-	Hill *m;
-
-	for (int i=0; i<visible_mountains->get_num(); i++) {
-		m = visible_mountains->get(i);
+	for (int i = 0; i < visible_mountains->get_num(); i++) {
+		Hill *m = visible_mountains->get(i);
 		proj->get_coordinates(m->alph, m->a_nick, &parms, &m->x, &m->y);
 	}
 }
