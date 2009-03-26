@@ -40,7 +40,6 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Group(X, Y, W, H) {
 	pan = new Panorama();
 	cur_mountain = NULL;
 	focused_mountain = NULL;
-	mb = NULL;
 	known_hills = new Hills();
 	img_file = NULL;
 	track_width = 200.0;
@@ -49,6 +48,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Group(X, Y, W, H) {
 	md = new ImageMetaData();
 	track_points = NULL;
 	fl_register_images();
+	mouse_x = mouse_y = 0;
 }
 
 int
@@ -75,11 +75,6 @@ GipfelWidget::load_image(char *file) {
 
 	h(img->h());  
 	w(img->w());  
-
-	mb = new Fl_Menu_Button(x(),y(),w()+x(),h()+y(),"&popup");
-	mb->type(Fl_Menu_Button::POPUP3);
-	mb->box(FL_NO_BOX);
-	mb->add("Center Peak", 0, (Fl_Callback*) center_cb, this);
 
 	// try to retrieve gipfel data from JPEG meta data
 	md->load_image(file);
@@ -516,15 +511,21 @@ GipfelWidget::get_focal_length_35mm() {
 }
 
 void 
-GipfelWidget::center_cb(Fl_Widget *o, void *f) {
+GipfelWidget::find_peak_cb(Fl_Widget *, void *f) {
 	GipfelWidget *g = (GipfelWidget*) f;
 
-	Hill *m = choose_hill(g->pan->get_close_mountains(), "Center Peak");
+	Hill *m = choose_hill(g->pan->get_close_mountains(), "Find Peak");
 	if (m) {
-		g->set_center_angle(m->alph / deg2rad);
-			
 		if (!g->known_hills->contains(m))
 			g->known_hills->add(m);
+
+		m->flags |= Hill::VISIBLE;
+		if (! g->pan->get_visible_mountains()->contains(m))
+			g->pan->get_visible_mountains()->add(m);
+		g->set_labels(g->pan->get_visible_mountains());
+
+		g->cur_mountain = m;
+		g->set_mountain(g->mouse_x, g->mouse_y);
 	}
 }
 
@@ -598,23 +599,30 @@ GipfelWidget::set_track_width(double w) {
 
 int
 GipfelWidget::handle(int event) {
-	int mark_x, mark_y;
 	Hill *m;
 
 	switch(event) {
 		case FL_PUSH:    
-			mark_x = Fl::event_x()-x();
-			mark_y = Fl::event_y()-y();
-			if (Fl::event_button() == 1) {
-				m = find_mountain(known_hills, mark_x, mark_y);
+			mouse_x = Fl::event_x()-x();
+			mouse_y = Fl::event_y()-y();
+			if (Fl::event_button() == FL_LEFT_MOUSE) {
+				m = find_mountain(known_hills, mouse_x, mouse_y);
 				if (m)
 					cur_mountain = m;
-			} else if (Fl::event_button() == 2) {
-				toggle_known_mountain(mark_x, mark_y);
+			} else if (Fl::event_button() == FL_MIDDLE_MOUSE) {
+				toggle_known_mountain(mouse_x, mouse_y);
 				if (focused_mountain) {
 					focused_mountain = NULL;
 					redraw();
 				}
+			} else if (Fl::event_button() == FL_RIGHT_MOUSE) {
+				Fl_Menu_Item rclick_menu[] = {
+					{"Find Peak", 0, find_peak_cb,  this},
+					{0}
+				};
+				const Fl_Menu_Item *mi = rclick_menu->popup(Fl::event_x(), Fl::event_y(), 0, 0, 0);
+				if (mi)
+					mi->do_callback(0, mi->user_data());
 			}
 
 			Fl::focus(this);

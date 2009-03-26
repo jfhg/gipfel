@@ -19,12 +19,12 @@ class GipfelWidget : public Fl_Group {
 		Hills *track_points;
 		Hills *known_hills;
 		Panorama *pan;
-		Fl_Menu_Button *mb;
 		char *img_file;
 		double track_width;
 		int have_gipfel_info;
 		ImageMetaData *md;
 		int show_hidden;
+		int mouse_x, mouse_y;
 		char focused_mountain_label[128];
 
 		int handle(int event);
@@ -48,7 +48,7 @@ class GipfelWidget : public Fl_Group {
 		static int get_pixel(Fl_Image *img, int x, int y,
 			int *r, int *g, int *b);
 
-		static void center_cb(Fl_Widget *o, void *f);
+		static void find_peak_cb(Fl_Widget *o, void *f);
 
 	public:
 		typedef enum {
