@@ -8,7 +8,6 @@
 #define SCREENDUMP_H
 
 #include "GipfelWidget.H"
-#include "OutputImage.H"
 
 class ScreenDump {
 	private:
