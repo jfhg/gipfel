@@ -37,6 +37,7 @@ ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 	const Hill *m1, *m2;
 	double scale_tmp;
 	int distortion_correct = 0;
+	ViewParams new_parms;
 
 	if (h->get_num() < 2) {
 		fprintf(stderr, "Please position at least 2 hills\n");
@@ -60,16 +61,25 @@ ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 		return 1;
 	}
 
-	parms->a_center = m1->alph;
-	parms->scale    = scale_tmp;
-	parms->a_nick   = 0.0;
-	parms->a_tilt   = 0.0;
+	new_parms.a_center = m1->alph;
+	new_parms.scale    = scale_tmp;
+	new_parms.a_nick   = 0.0;
+	new_parms.a_tilt   = 0.0;
+	new_parms.k0 = parms->k0;
+	new_parms.k1 = parms->k1;
+	new_parms.x0 = parms->x0;
 
-	lsq(h, parms, 0);
+	lsq(h, &new_parms, 0);
 
-	if (distortion_correct) {
-		lsq(h, parms, 1);
+	if (distortion_correct)
+		lsq(h, &new_parms, 1);
+
+	if (isnan(new_parms.scale) || new_parms.scale < 50.0) {
+		fprintf(stderr, "Could not determine reasonable view parameters\n");
+		return 1;
 	}
+
+	*parms = new_parms;
 
 	return 0;
 }

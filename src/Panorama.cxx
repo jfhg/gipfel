@@ -130,7 +130,9 @@ Panorama::comp_params(Hills *h) {
 	int ret;
 
 	ret = proj->comp_params(h, &parms);
-	update_visible_mountains();
+	if (ret == 0)
+		update_visible_mountains();
+
 	return ret;
 }
 
