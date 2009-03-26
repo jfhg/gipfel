@@ -14,6 +14,7 @@ ScreenDump::ScreenDump(GipfelWidget *gipf) {
 	Fl::flush();
 	offscreen = fl_create_offscreen(w, h);
 	fl_begin_offscreen(offscreen);
+	gipf->redraw();
 	gipf->draw();
 	rgb = fl_read_image(NULL, 0, 0, w, h);
 	fl_end_offscreen();
