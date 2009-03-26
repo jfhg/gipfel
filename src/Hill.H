@@ -33,11 +33,8 @@ class Hill {
 		int flags;
 
 		Hill(const char *n, double p, double l, double h);
-
 		Hill(const Hill& h);
-
 		Hill(double x_tmp, double y_tmp);
-
 		~Hill();  
 };
 
@@ -49,35 +46,21 @@ class Hills {
 
 	public:
 		Hills();
-
 		Hills(const Hills *h);
-
 		~Hills();
 
 		int load(const char *file);
-
 		void mark_duplicates(double dist);
-
 		void add(Hill *m);
-
 		void remove(const Hill *m);
-
 		void add(Hills *h);
-
 		void sort_phi();
-
 		void sort_name();
-
 		void sort();
-
 		void clear();
-
 		void clobber();
-	
 		int contains(const Hill *m) const;
-
 		int get_num() const;
-
 		Hill *get(int n) const;
 };
 #endif

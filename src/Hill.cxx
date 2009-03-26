@@ -49,9 +49,8 @@ Hill::Hill(double x_tmp, double y_tmp) {
 }
 
 Hill::~Hill() {
-	if (name) {
+	if (name)
 		free(name);
-	}
 }
 
 Hills::Hills() {
@@ -95,9 +94,8 @@ Hills::load(const char *file) {
 		n = 0;
 		for (ap = vals; (*ap = strsep(&bp, ",")) != NULL;) {
 			n++;
-			if (++ap >= &vals[10]) {
+			if (++ap >= &vals[10])
 				break;
-			}
 		}
 
 		// standard format including name and description
@@ -135,9 +133,8 @@ void Hills::mark_duplicates(double dist) {
 	for(i=0; i<get_num();i++) {
 		m = get(i);
 
-		if (m->flags & Hill::TRACK_POINT) {
+		if (m->flags & Hill::TRACK_POINT)
 			continue;
-		}
 
 		if (m) {
 			j = i + 1;
@@ -157,15 +154,14 @@ void Hills::mark_duplicates(double dist) {
 }
 
 Hills::~Hills() {
-	if (m) {
+	if (m)
 		free(m);
-	}
 }
 
 void
 Hills::add(Hill *m1) {
 	if (num >= cap) {
-		cap = cap?cap * 2:100;
+		cap = cap ? cap * 2 : 100;
 		m = (Hill **) realloc(m, cap * sizeof(Hill *));
 	}
 
@@ -174,9 +170,8 @@ Hills::add(Hill *m1) {
 
 void
 Hills::add(Hills *h) {
-	for(int i=0; i<h->get_num(); i++) {
+	for (int i=0; i<h->get_num(); i++)
 		add(h->get(i));
-	}
 }
 
 static int
@@ -185,13 +180,12 @@ comp_mountains(const void *n1, const void *n2) {
 	Hill *m2 = *(Hill **)n2;
 
 	if (m1 && m2) {
-		if (m1->alph < m2->alph) {
+		if (m1->alph < m2->alph)
 			return 1;
-		} else if (m1->alph > m2->alph) {
+		else if (m1->alph > m2->alph)
 			return -1;
-		} else {
+		else
 			return 0;
-		}
 	} else {
 		return 0;
 	}  
@@ -203,13 +197,12 @@ comp_mountains_phi(const void *n1, const void *n2) {
 	Hill *m2 = *(Hill **)n2;
 
 	if (m1 && m2) {
-		if (m1->phi < m2->phi) {
+		if (m1->phi < m2->phi)
 			return 1;
-		} else if (m1->phi > m2->phi) {
+		else if (m1->phi > m2->phi)
 			return -1;
-		} else {
+		else
 			return 0;
-		}
 	} else {
 		return 0;
 	}  
@@ -220,36 +213,32 @@ comp_mountains_name(const void *n1, const void *n2) {
 	Hill *m1 = *(Hill **)n1;
 	Hill *m2 = *(Hill **)n2;
 
-	if (m1 && m2) {
+	if (m1 && m2)
 		return strcasecmp(m1->name, m2->name);
-	} else {
+	else
 		return 0;
-	}  
 }
 
 void
 Hills::sort() {
-	if (!m) {
+	if (!m)
 		return;
-	}
 
 	qsort(m, num, sizeof(Hill *), comp_mountains);
 }
 
 void
 Hills::sort_phi() {
-	if (!m) {
+	if (!m)
 		return;
-	}
 
 	qsort(m, num, sizeof(Hill *), comp_mountains_phi);
 }
 
 void
 Hills::sort_name() {
-	if (!m) {
+	if (!m)
 		return;
-	}
 
 	qsort(m, num, sizeof(Hill *), comp_mountains_name);
 }
@@ -266,18 +255,16 @@ Hills::clear() {
 
 int
 Hills::contains(const Hill *m) const {
-	for(int i=0; i<get_num();i++) {
-		if (get(i) == m) {
+	for  (int i = 0; i < get_num(); i++)
+		if (get(i) == m)
 			return 1;
-		}
-	}
 
 	return 0;
 }
 
 void
 Hills::remove(const Hill *h) {
-	for(int i=0; i<get_num();i++) {
+	for (int i = 0; i < get_num(); i++) {
 		if (get(i) == h) {
 			memmove(&m[i], &m[i+1], (get_num() - i - 1) * sizeof(Hill*));
 			num--;
@@ -289,11 +276,9 @@ void
 Hills::clobber() {
 	int i;
 
-	for(i=0; i<get_num();i++) {
-		if (get(i)) {
+	for (i = 0; i < get_num(); i++)
+		if (get(i))
 			delete(get(i));
-		}
-	}
 
 	clear();
 }
@@ -305,9 +290,8 @@ Hills::get_num() const {
 
 Hill *
 Hills::get(int n) const {
-	if (n < 0 || n >= num) {
+	if (n < 0 || n >= num)
 		return NULL;
-	} else {
+	else
 		return m[n];
-	}
 }
