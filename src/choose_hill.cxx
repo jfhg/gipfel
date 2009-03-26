@@ -18,11 +18,15 @@ choose_hill(const Hills *hills, const char *l) {
 	h_sort->sort_name();
 
 	for (int i=0; i<h_sort->get_num(); i++) {
+		char buf[256];
+
 		Hill *m = h_sort->get(i);
 		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
 			continue;
 
-		sc->add(m->name, m);
+		snprintf(buf, sizeof(buf) - 1, "%s (%dm)", m->name, (int) m->height);
+		buf[sizeof(buf) - 1] = '\0';
+		sc->add(buf, m);
 	} 
 
 	delete h_sort;
