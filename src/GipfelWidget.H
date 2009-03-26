@@ -21,9 +21,9 @@ class GipfelWidget : public Fl_Group {
 		Panorama *pan;
 		char *img_file;
 		double track_width;
-		int have_gipfel_info;
+		bool have_gipfel_info;
+		bool show_hidden;
 		ImageMetaData *md;
-		int show_hidden;
 		int mouse_x, mouse_y;
 		char focused_mountain_label[128];
 
