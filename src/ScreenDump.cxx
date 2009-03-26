@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 #include <FL/Fl.H>
 #include <FL/x.H>
 #include <FL/fl_draw.H>
@@ -23,7 +21,8 @@ ScreenDump::ScreenDump(GipfelWidget *gipf) {
 }
 
 ScreenDump::~ScreenDump() {
-	free(rgb);
+	if (rgb)
+		delete[] rgb;
 }
 
 int
