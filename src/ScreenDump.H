@@ -12,7 +12,7 @@
 
 class ScreenDump {
 	private:
-		GipfelWidget *gipf;
+		int w, h;
 		unsigned char * rgb;
 
 	public:
