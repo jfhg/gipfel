@@ -4,6 +4,8 @@ gipfel ChangeLog
 gipfel-0.2.9
 * Add rpm spec file.
 * fsync() temporary file before rename().
+* Add "Find Peak" dialog (right click on image).
+* Show height in search dialog to distinguish peaks with equal names.
 
 gipfel-0.2.8
 * Fix issue with image saving on some platforms (reported by David Mitchell).
