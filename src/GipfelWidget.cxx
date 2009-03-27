@@ -337,16 +337,16 @@ overlap(double m1, double n1, double m2, double n2) {
 
 void 
 GipfelWidget::set_labels(Hills *v) {
-	int i, j, width, height;
+	int width, height;
 	Hill *m, *n;
 
 	fl_font(FL_HELVETICA, 8);
 	height = fl_height();
 
-	for (i=0; i<v->get_num(); i++) {
+	for (int i = 0; i < v->get_num(); i++) {
 		m = v->get(i);
 
-		if (m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT))
+		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
 			continue;
 
 		if (!show_hidden && (m->flags & Hill::HIDDEN))
@@ -355,7 +355,7 @@ GipfelWidget::set_labels(Hills *v) {
 		width = (int) ceilf(fl_width(m->name));
 		m->label_x = width;
 		m->label_y = 0;
-		for (j=0; j < i; j++) {
+		for (int j = 0; j < i; j++) {
 			n = v->get(j);
 
 			if (n->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
@@ -399,12 +399,11 @@ GipfelWidget::find_mountain(Hills *mnts, int m_x, int m_y) {
 int
 GipfelWidget::toggle_known_mountain(int m_x, int m_y) {
 	Hills *mnts = pan->get_visible_mountains();
-	Hill *m;
 	int center_x = w() / 2;
 	int center_y = h() / 2;
 
 	for (int i = 0; i < mnts->get_num(); i++) {
-		m = mnts->get(i); 
+		Hill *m = mnts->get(i); 
 
 		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
 			continue;
