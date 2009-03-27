@@ -138,10 +138,13 @@ void save_cb() {
 }
 
 void dump_cb(Fl_Widget * o, void*) {
-	ScreenDump dmp(gipf);
-	JPEGOutputImage out("/tmp/dmp.jpg");
-
-	dmp.save(&out);
+	ScreenDump dmp(gipf); // needs to be done before fl_file_chooser()
+	char *file = fl_file_chooser("Save Screen Dump As?", "*.jpg", NULL);
+	if (file && confirm_overwrite(file)) {
+		JPEGOutputImage out(file, 95);
+		if (dmp.save(&out))
+			fl_message("ERROR: Saving image %s failed.", file);	
+	}
 }
 
 void focal_length_cb(Fl_Slider* o, void*) {
