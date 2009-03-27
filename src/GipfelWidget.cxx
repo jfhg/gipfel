@@ -338,13 +338,12 @@ overlap(double m1, double n1, double m2, double n2) {
 void 
 GipfelWidget::set_labels(Hills *v) {
 	int width, height;
-	Hill *m, *n;
 
 	fl_font(FL_HELVETICA, 8);
 	height = fl_height();
 
 	for (int i = 0; i < v->get_num(); i++) {
-		m = v->get(i);
+		Hill *m = v->get(i);
 
 		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
 			continue;
@@ -356,7 +355,7 @@ GipfelWidget::set_labels(Hills *v) {
 		m->label_x = width;
 		m->label_y = 0;
 		for (int j = 0; j < i; j++) {
-			n = v->get(j);
+			Hill *n = v->get(j);
 
 			if (n->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
 				continue;
