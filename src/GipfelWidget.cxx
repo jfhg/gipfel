@@ -188,9 +188,8 @@ GipfelWidget::load_track(const char *file) {
 		return 1;
 	}
 
-	for (int i=0; i<track_points->get_num(); i++) {
+	for (int i = 0; i < track_points->get_num(); i++)
 		track_points->get(i)->flags |= Hill::TRACK_POINT;
-	}
 
 	pan->add_hills(track_points);  
 	redraw();
@@ -385,9 +384,8 @@ GipfelWidget::find_mountain(Hills *mnts, int m_x, int m_y) {
     Hill *m;
     int center_x = w() / 2;
     int center_y = h() / 2;
-    int i;
 
-    for (i=0; i<mnts->get_num(); i++) {
+    for (int i = 0; i < mnts->get_num(); i++) {
         m = mnts->get(i);
 
         if (m_x - center_x >= m->x - 2 && m_x - center_x < m->x + 2 &&
@@ -404,9 +402,8 @@ GipfelWidget::toggle_known_mountain(int m_x, int m_y) {
 	Hill *m;
 	int center_x = w() / 2;
 	int center_y = h() / 2;
-	int i;
 
-	for (i=0; i<mnts->get_num(); i++) {
+	for (int i = 0; i < mnts->get_num(); i++) {
 		m = mnts->get(i); 
 
 		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
@@ -673,7 +670,7 @@ GipfelWidget::export_hills(const char *file, FILE *fp) {
 		if (export_hills.load(file) != 0)
 			return 1;
 
-		for (int i=0; i<export_hills.get_num(); i++)
+		for (int i = 0; i < export_hills.get_num(); i++)
 			export_hills.get(i)->flags |= Hill::EXPORT;
 
 		pan->add_hills(&export_hills);  
@@ -682,7 +679,7 @@ GipfelWidget::export_hills(const char *file, FILE *fp) {
 	fprintf(fp, "#\n# name\theight\tx\ty\tdistance\tflags\n#\n");
 
 	mnts = pan->get_visible_mountains();
-	for (int i=0; i<mnts->get_num(); i++) {
+	for (int i = 0; i < mnts->get_num(); i++) {
 		Hill *m = mnts->get(i);
 		int _x = (int) rint(m->x) + w() / 2;
 		int _y = (int) rint(m->y) + h() / 2;
