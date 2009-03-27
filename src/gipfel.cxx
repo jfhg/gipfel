@@ -139,8 +139,9 @@ void save_cb() {
 
 void dump_cb(Fl_Widget * o, void*) {
 	ScreenDump dmp(gipf);
+	JPEGOutputImage out("/tmp/dmp.jpg");
 
-	dmp.save("/tmp/dmp.jpg");
+	dmp.save(&out);
 }
 
 void focal_length_cb(Fl_Slider* o, void*) {

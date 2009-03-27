@@ -8,6 +8,7 @@
 #define SCREENDUMP_H
 
 #include "GipfelWidget.H"
+#include "OutputImage.H"
 
 class ScreenDump {
 	private:
@@ -15,10 +16,10 @@ class ScreenDump {
 		unsigned char * rgb;
 
 	public:
-		ScreenDump(GipfelWidget *g);
+		ScreenDump(GipfelWidget *gipf);
 		~ScreenDump();
 
-		int save(const char *file);
+		int save(OutputImage *out);
 };
 
 #endif
