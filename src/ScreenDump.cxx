@@ -4,17 +4,17 @@
 
 #include "ScreenDump.H"
 
-ScreenDump::ScreenDump(GipfelWidget *gipf) {
+ScreenDump::ScreenDump(Fl_Widget *widget) {
 	Fl_Offscreen offscreen;
 
-	w = gipf->w();
-	h = gipf->h();
+	w = widget->w();
+	h = widget->h();
 
 	Fl::flush();
 	offscreen = fl_create_offscreen(w, h);
 	fl_begin_offscreen(offscreen);
-	gipf->redraw();
-	gipf->draw();
+	widget->redraw();
+	widget->draw();
 	rgb = fl_read_image(NULL, 0, 0, w, h);
 	fl_end_offscreen();
 	fl_delete_offscreen(offscreen);
@@ -27,7 +27,6 @@ ScreenDump::~ScreenDump() {
 
 int
 ScreenDump::save(OutputImage *out) {
-
 	out->init(w, h);
 
 	for (int y = 0; y < h; y++) {
