@@ -348,8 +348,7 @@ Panorama::update_close_mountains() {
 
 		if (m->flags & Hill::TRACK_POINT ||
 			((m->phi != view_phi || m->lam != view_lam) &&
-			 (m->height / (m->dist * EARTH_RADIUS) 
-			  > height_dist_ratio))) {
+			 (m->height / (m->dist * EARTH_RADIUS) > height_dist_ratio))) {
 
 			m->a_nick = nick(m);
 			close_mountains->add(m);
