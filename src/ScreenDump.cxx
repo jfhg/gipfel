@@ -1,3 +1,9 @@
+//
+// Copyright 2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
+//
+// This software may be used and distributed according to the terms
+// of the GNU General Public License, incorporated herein by reference.
+
 #include <FL/Fl.H>
 #include <FL/x.H>
 #include <FL/fl_draw.H>
@@ -6,15 +12,20 @@
 
 ScreenDump::ScreenDump(Fl_Widget *widget) {
 	Fl_Offscreen offscreen;
+	int x, y;
 
+	x = widget->x();
+	y = widget->y();
 	w = widget->w();
 	h = widget->h();
 
 	Fl::flush();
 	offscreen = fl_create_offscreen(w, h);
 	fl_begin_offscreen(offscreen);
+	widget->resize(0, 0, w, h);
 	widget->redraw();
 	widget->draw();
+	widget->resize(x, y, w, h);
 	rgb = fl_read_image(NULL, 0, 0, w, h);
 	fl_end_offscreen();
 	fl_delete_offscreen(offscreen);
