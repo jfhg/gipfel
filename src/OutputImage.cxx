@@ -17,12 +17,18 @@ OutputImage::OutputImage() {
 
 int
 OutputImage::init(int w1, int h1) {
+	int ret;
+
 	W = w1;
 	H = h1;
 	line = 0;
-	initialized = 1;
 
-	return init_internal();
+	ret = init_internal();
+
+	if (ret == 0)
+		initialized = 1;
+		
+	return ret;
 }
 
 int
