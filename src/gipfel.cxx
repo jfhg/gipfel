@@ -199,7 +199,7 @@ void proj_cb(Fl_Value_Input* o, void*d) {
 }
 
 void hidden_cb(Fl_Menu_* o, void*d) {
-	gipf->set_show_hidden(o->mvalue()->value()); 
+	gipf->set_show_hidden(o->mvalue()->value() != 0); 
 }
 
 void comp_cb(Fl_Widget *, void *) {

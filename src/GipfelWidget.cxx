@@ -43,8 +43,8 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Group(X, Y, W, H) {
 	known_hills = new Hills();
 	img_file = NULL;
 	track_width = 200.0;
-	show_hidden = 0;
-	have_gipfel_info = 0;
+	show_hidden = false;
+	have_gipfel_info = false;
 	md = new ImageMetaData();
 	track_points = NULL;
 	fl_register_images();
@@ -83,11 +83,11 @@ GipfelWidget::load_image(char *file) {
 	set_view_height(md->height());
 	projection((ProjectionLSQ::Projection_t) md->projection_type());
 
-	have_gipfel_info = 1;
+	have_gipfel_info = true;
 	direction = md->direction();
 	if (isnan(direction)) {
 		set_center_angle(0.0);
-		have_gipfel_info = 0;
+		have_gipfel_info = false;
 	} else {
 		set_center_angle(direction);
 	}
@@ -95,7 +95,7 @@ GipfelWidget::load_image(char *file) {
 	nick = md->nick();
 	if (isnan(nick)) {
 		set_nick_angle(0.0);
-		have_gipfel_info = 0;
+		have_gipfel_info = false;
 	} else {
 		set_nick_angle(nick);
 	}
@@ -103,7 +103,7 @@ GipfelWidget::load_image(char *file) {
 	tilt = md->tilt();
 	if (isnan(tilt)) {
 		set_tilt_angle(0.0);
-		have_gipfel_info = 0;
+		have_gipfel_info = false;
 	} else {
 		set_tilt_angle(tilt);
 	}
@@ -111,7 +111,7 @@ GipfelWidget::load_image(char *file) {
 	fl = md->focal_length_35mm();
 	if (isnan(fl) || fl == 0.0) {
 		set_focal_length_35mm(35.0);
-		have_gipfel_info = 0;
+		have_gipfel_info = false;
 	} else {
 		set_focal_length_35mm(fl);
 	}
@@ -544,7 +544,7 @@ GipfelWidget::set_hide_value(double h) {
 }
 
 void
-GipfelWidget::set_show_hidden(int h) {
+GipfelWidget::set_show_hidden(bool h) {
 	show_hidden = h;
 	set_labels(pan->get_visible_mountains());
 	redraw();

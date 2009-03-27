@@ -67,7 +67,7 @@ class GipfelWidget : public Fl_Group {
 		void set_focal_length_35mm(double s);
 		void set_height_dist_ratio(double r);
 		void set_hide_value(double h);
-		void set_show_hidden(int h);
+		void set_show_hidden(bool h);
 		void set_view_lat(double v);
 		void set_view_long(double v);
 		void set_view_height(double v);
