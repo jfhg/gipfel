@@ -41,6 +41,12 @@ class Hills {
 		Hill **m;
 
 	public:
+		typedef enum {
+			SORT_PHI,
+			SORT_NAME,
+			SORT_LABEL_Y
+		} SortType;
+	
 		Hills();
 		Hills(const Hills *h);
 		~Hills();
@@ -52,6 +58,7 @@ class Hills {
 		void add(Hills *h);
 		void sort_phi();
 		void sort_name();
+		void sort_label_y();
 		void sort();
 		void clear();
 		void clobber();

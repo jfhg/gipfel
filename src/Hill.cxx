@@ -225,6 +225,17 @@ comp_mountains_name(const void *n1, const void *n2) {
 	}
 }
 
+static int
+comp_mountains_label_y(const void *n1, const void *n2) {
+	Hill *m1 = *(Hill **)n1;
+	Hill *m2 = *(Hill **)n2;
+
+	if (m1 && m2)
+		return (m2->y + m2->label_y) - (m1->y + m1->label_y);
+	else
+		return 0;
+}
+
 void
 Hills::sort() {
 	if (!m)
@@ -247,6 +258,14 @@ Hills::sort_name() {
 		return;
 
 	qsort(m, num, sizeof(Hill *), comp_mountains_name);
+}
+
+void
+Hills::sort_label_y() {
+	if (!m)
+		return;
+
+	qsort(m, num, sizeof(Hill *), comp_mountains_label_y);
 }
 
 void
