@@ -289,11 +289,6 @@ Hills::clobber() {
 	clear();
 }
 
-int
-Hills::get_num() const {
-	return num;
-}
-
 Hill *
 Hills::get(int n) const {
 	if (n < 0 || n >= num)

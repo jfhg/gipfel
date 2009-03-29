@@ -56,7 +56,7 @@ class Hills {
 		void clear();
 		void clobber();
 		int contains(const Hill *m) const;
-		int get_num() const;
+		inline int get_num() const { return num; };
 		Hill *get(int n) const;
 };
 
