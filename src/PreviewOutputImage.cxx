@@ -56,9 +56,9 @@ PreviewOutputImage::next_line_internal() {
 
 void
 PreviewOutputImage::draw() {
-	if (!data) {
+	if (!data)
 		return;
-	}
+
 	fl_push_clip(x(), y(), w(), h());
 	fl_draw_image(data, x(), y(), w(), h(), d);
 	fl_pop_clip();
