@@ -331,8 +331,8 @@ GipfelWidget::draw() {
 }
 
 static int 
-overlap(double m1, double n1, double m2, double n2) {
-	return m1 <= n2 && n1 >= m2; 
+overlap(double x1, double l1, double x2, double l2) {
+	return x1 <= x2 + l2 && x1 + l1 >= x2;
 }
 
 void 
@@ -365,12 +365,11 @@ GipfelWidget::set_labels(Hills *v) {
 
 			// Check for overlapping labels and
 			// overlaps between labels and peak markers
-			if ((overlap(m->x, m->x + m->label_x, n->x, n->x + n->label_x) &&
-					overlap(m->y + m->label_y - height, m->y + m->label_y,
-						n->y + n->label_y - height, n->y + n->label_y)) ||
-				(overlap(m->x, m->x + m->label_x, n->x - 2, n->x + 2) &&
-				 overlap(m->y + m->label_y - height,
-					 m->y + m->label_y, n->y - 2, n->y + 2))) {
+			if ((overlap(m->x, m->label_x, n->x, n->label_x) &&
+					overlap(m->y + m->label_y - height, height,
+						n->y + n->label_y - height, height)) ||
+				(overlap(m->x, m->label_x, n->x - 2, 4) &&
+				 overlap(m->y + m->label_y - height, height, n->y - 2, 4))) {
 
 				m->label_y = (int) rint(n->y + n->label_y - m->y - height - 2);
 			}
