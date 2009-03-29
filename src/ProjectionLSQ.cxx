@@ -245,11 +245,10 @@ ProjectionLSQ::get_coordinates(double alph, double a_nick,
 	const ViewParams *parms, double *x, double *y) {
 
 	// Normalize alph - parms->a_center to [-pi/2, pi/2]
-	if (alph - parms->a_center > pi) {
+	if (alph - parms->a_center > pi)
 		alph -= 2.0 * pi;
-	} else if (alph - parms->a_center < -pi) {
+	else if (alph - parms->a_center < -pi)
 		alph += 2.0 * pi;
-	}
 
 	*x = mac_x(parms->a_center, parms->a_nick, parms->a_tilt, parms->scale,
 		parms->k0, parms->k1, parms->x0, alph, a_nick); 
