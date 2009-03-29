@@ -255,7 +255,7 @@ void distortion_cb(Fl_Value_Input*, void*) {
 }
 
 void about_cb() {
-	fl_message("gipfel -- and you know what you see.\n"
+	fl_message("gipfel -- Photogrammetry for Mountain Images.\n"
 		"Version %s\n\n"
 		"(c) Johannes Hofmann 2006-2009\n\n"
 		"Default datafile from http://www.viewfinderpanoramas.org/ and\n"
