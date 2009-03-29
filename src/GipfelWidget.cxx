@@ -369,7 +369,7 @@ GipfelWidget::set_labels(Hills *v) {
 				colliding.add(n);
 		}
 
-		colliding.sort_label_y();
+		colliding.sort(Hills::SORT_LABEL_Y);
 
 		for (int j = 0; j < colliding.get_num(); j++) {
 			Hill *n = colliding.get(j);

@@ -128,7 +128,7 @@ void Hills::mark_duplicates(double dist) {
 	Hill *m, *n;
 	int i, j;
 
-	sort_phi();
+	sort(SORT_PHI);
 
 	for(i=0; i<get_num();i++) {
 		m = get(i);
@@ -175,7 +175,7 @@ Hills::add(Hills *h) {
 }
 
 static int
-comp_mountains(const void *n1, const void *n2) {
+comp_mountains_alpha(const void *n1, const void *n2) {
 	Hill *m1 = *(Hill **)n1;
 	Hill *m2 = *(Hill **)n2;
 
@@ -230,42 +230,44 @@ comp_mountains_label_y(const void *n1, const void *n2) {
 	Hill *m1 = *(Hill **)n1;
 	Hill *m2 = *(Hill **)n2;
 
-	if (m1 && m2)
-		return (m2->y + m2->label_y) - (m1->y + m1->label_y);
-	else
+	if (m1 && m2) {
+		if ((m2->y + m2->label_y) > (m1->y + m1->label_y))
+			return 1;
+		else if ((m2->y + m2->label_y) < (m1->y + m1->label_y))
+			return -1;
+		else
+			return 0;
+	} else {
 		return 0;
+	}
 }
 
 void
-Hills::sort() {
+Hills::sort(SortType t) {
+	int (*cmp)(const void *, const void *);
+	
 	if (!m)
 		return;
 
-	qsort(m, num, sizeof(Hill *), comp_mountains);
-}
+	switch (t) {
+		case SORT_ALPHA:
+			cmp = comp_mountains_alpha;
+			break;
+		case SORT_PHI:
+			cmp = comp_mountains_phi;
+			break;
+		case SORT_NAME:
+			cmp = comp_mountains_name;
+			break;
+		case SORT_LABEL_Y:
+			cmp = comp_mountains_label_y;
+			break;
+		default:
+			fprintf(stderr, "ERROR: Unknown sort type %d\n", t);
+			return;
+	}
 
-void
-Hills::sort_phi() {
-	if (!m)
-		return;
-
-	qsort(m, num, sizeof(Hill *), comp_mountains_phi);
-}
-
-void
-Hills::sort_name() {
-	if (!m)
-		return;
-
-	qsort(m, num, sizeof(Hill *), comp_mountains_name);
-}
-
-void
-Hills::sort_label_y() {
-	if (!m)
-		return;
-
-	qsort(m, num, sizeof(Hill *), comp_mountains_label_y);
+	qsort(m, num, sizeof(Hill *), cmp);
 }
 
 void

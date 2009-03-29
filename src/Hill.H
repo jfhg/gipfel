@@ -42,6 +42,7 @@ class Hills {
 
 	public:
 		typedef enum {
+			SORT_ALPHA,
 			SORT_PHI,
 			SORT_NAME,
 			SORT_LABEL_Y
@@ -56,10 +57,7 @@ class Hills {
 		void add(Hill *m);
 		void remove(const Hill *m);
 		void add(Hills *h);
-		void sort_phi();
-		void sort_name();
-		void sort_label_y();
-		void sort();
+		void sort(SortType t);
 		void clear();
 		void clobber();
 		int contains(const Hill *m) const;

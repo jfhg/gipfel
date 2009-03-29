@@ -297,7 +297,7 @@ Panorama::update_angles() {
 			m->alph = alpha(m);
 	}
 
-	mountains->sort();
+	mountains->sort(Hills::SORT_ALPHA);
 
 	update_close_mountains();
 }

@@ -15,7 +15,7 @@ choose_hill(const Hills *hills, const char *l) {
 	Hills *h_sort = new Hills(hills);
 	Hill *ret;
 
-	h_sort->sort_name();
+	h_sort->sort(Hills::SORT_NAME);
 
 	for (int i=0; i<h_sort->get_num(); i++) {
 		char buf[256];
