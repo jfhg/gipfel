@@ -246,7 +246,7 @@ void
 Hills::sort(SortType t) {
 	int (*cmp)(const void *, const void *);
 	
-	if (!m)
+	if (!m || num < 2)
 		return;
 
 	switch (t) {
