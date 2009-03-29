@@ -355,7 +355,7 @@ GipfelWidget::set_labels(Hills *v) {
 		m->label_x = (int) fl_width(m->name) + 1;
 		m->label_y = 0;
 
-		for (int j = i; j > 0; j--) {
+		for (int j = i - 1; j >= 0; j--) {
 			Hill *n = v->get(j);
 
 			if (n->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
