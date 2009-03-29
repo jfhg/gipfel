@@ -26,7 +26,7 @@ class ProjectionLSQ {
 			CYLINDRICAL = 1
 		} Projection_t;
 
-		ProjectionLSQ();
+		ProjectionLSQ() {};
 		virtual ~ProjectionLSQ() {};
 
 		void get_coordinates(double a_view, double a_nick,

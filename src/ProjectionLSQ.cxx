@@ -19,9 +19,6 @@
 
 double ProjectionLSQ::pi = asin(1.0) * 2.0;
 
-ProjectionLSQ::ProjectionLSQ() {
-}
-
 double
 ProjectionLSQ::sec(double a) {
 	return 1.0 / cos(a);
