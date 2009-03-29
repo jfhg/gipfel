@@ -355,7 +355,7 @@ GipfelWidget::set_labels(Hills *v) {
 		m->label_x = (int) fl_width(m->name) + 1;
 		m->label_y = 0;
 
-		for (int j = 0; j < i; j++) {
+		for (int j = i; j > 0; j--) {
 			Hill *n = v->get(j);
 
 			if (n->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
@@ -364,9 +364,10 @@ GipfelWidget::set_labels(Hills *v) {
 			if (!show_hidden && (n->flags & Hill::HIDDEN))
 				continue;
 
-			if (overlap(m->x, m->label_x,
-					n->x - CROSS_SIZE, n->label_x + CROSS_SIZE))
+			if (overlap(m->x, m->label_x, n->x - CROSS_SIZE, n->label_x))
 				colliding.add(n);
+			else
+				break;
 		}
 
 		colliding.sort(Hills::SORT_LABEL_Y);
