@@ -20,15 +20,19 @@ ScreenDump::ScreenDump(Fl_Widget *widget) {
 	h = widget->h();
 
 	Fl::flush();
+	widget->resize(0, 0, w, h);
+
 	offscreen = fl_create_offscreen(w, h);
 	fl_begin_offscreen(offscreen);
-	widget->resize(0, 0, w, h);
 	widget->redraw();
 	widget->draw();
-	widget->resize(x, y, w, h);
+	fl_color(FL_YELLOW);
+	fl_draw("created with gipfel", w - 80, h - 10);
 	rgb = fl_read_image(NULL, 0, 0, w, h);
 	fl_end_offscreen();
 	fl_delete_offscreen(offscreen);
+
+	widget->resize(x, y, w, h);
 }
 
 ScreenDump::~ScreenDump() {
