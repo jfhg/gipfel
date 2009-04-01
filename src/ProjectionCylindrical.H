@@ -13,6 +13,7 @@ class ProjectionCylindrical : public ProjectionLSQ {
 	public:
 
 		virtual double get_view_angle() {return 6.2831853;}; /* 360 deg */
+		virtual int comp_params(const Hills *h, ViewParams *parms);
 
 #define ARGS double c_view, double c_nick, double c_tilt, double scale, double k0, double k1, double x0, double m_view, double m_nick
 		virtual double mac_x(ARGS);

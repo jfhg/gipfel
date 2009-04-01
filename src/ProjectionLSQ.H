@@ -32,7 +32,7 @@ class ProjectionLSQ {
 		void get_coordinates(double a_view, double a_nick,
 			const ViewParams *parms, double *x, double *y);
 
-		int comp_params(const Hills *h, ViewParams *parms);
+		virtual int comp_params(const Hills *h, ViewParams *parms);
 
 		virtual double get_view_angle();
 

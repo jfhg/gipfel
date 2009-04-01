@@ -45,7 +45,8 @@ class Hills {
 			SORT_ALPHA,
 			SORT_PHI,
 			SORT_NAME,
-			SORT_LABEL_Y
+			SORT_LABEL_Y,
+			SORT_X
 		} SortType;
 	
 		Hills();

@@ -242,6 +242,23 @@ comp_mountains_label_y(const void *n1, const void *n2) {
 	}
 }
 
+static int
+comp_mountains_x(const void *n1, const void *n2) {
+    Hill *m1 = *(Hill **)n1;
+    Hill *m2 = *(Hill **)n2;
+
+    if (m1 && m2) {
+		if (m2->x < m1->x)
+			return 1;
+		else if (m2->x > m1->x)
+			return -1;
+		else
+			return 0;
+    } else {
+        return 0;
+    }
+}
+
 void
 Hills::sort(SortType t) {
 	int (*cmp)(const void *, const void *);
@@ -261,6 +278,9 @@ Hills::sort(SortType t) {
 			break;
 		case SORT_LABEL_Y:
 			cmp = comp_mountains_label_y;
+			break;
+		case SORT_X:
+			cmp = comp_mountains_x;
 			break;
 		default:
 			fprintf(stderr, "ERROR: Unknown sort type %d\n", t);
