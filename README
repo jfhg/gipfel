@@ -139,8 +139,8 @@ Refraction
 Refraction caused by temperature and density gardients in the atmosphere is
 taken into account according to the approximation described by
 [Tom Chester](http://tchester.org/sgm/analysis/peaks/refraction_calculation.html).
-under the assumption of a temperature change of 6.5°C per 1000m and a
-temperature T0 at view point level of 10°C.
+under the assumption of a temperature change of 6.5C per 1000m and a
+temperature T0 at view point level of 10C.
 
 Exif Data
 ---------
