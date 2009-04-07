@@ -134,16 +134,16 @@ ImageMetaData::load_image_exif(char *name) {
 		exifSetValue(&_focal_length, &exifData, "Exif.Photo.FocalLength");
 
     if (isnan(_focal_length_35mm))
-		exifSetValue(&_focal_length, &exifData, "Exif.Photo.FocalLengthIn35mmFilm");
+		exifSetValue(&_focal_length_35mm, &exifData, "Exif.Photo.FocalLengthIn35mmFilm");
 
     if (isnan(_longitude))
 		exifSetCoordinate(&_longitude, &exifData, "Exif.GPSInfo.GPSLongitude");
 
     if (isnan(_latitude))
-		exifSetCoordinate(&_longitude, &exifData, "Exif.GPSInfo.GPSLatitude");
+		exifSetCoordinate(&_latitude, &exifData, "Exif.GPSInfo.GPSLatitude");
 
     if (isnan(_height))
-		exifSetValue(&_focal_length, &exifData, "Exif.GPSInfo.GPSAltitude");
+		exifSetValue(&_height, &exifData, "Exif.GPSInfo.GPSAltitude");
 
     return 0;
 }
