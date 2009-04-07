@@ -73,7 +73,16 @@ ImageMetaData::save_image(char *in_img, char *out_img) {
 }
 
 static void
-gpsSetCoordinate(double *destVal, Exiv2::ExifData *exifData, const char *name) {
+exifSetValue(double *destVal, Exiv2::ExifData *exifData, const char *name) {
+	Exiv2::ExifKey key(name);
+	Exiv2::ExifData::iterator pos = exifData->findKey(key);
+	pos = exifData->findKey(key);
+	if (pos != exifData->end() && pos->toFloat() >= 0)
+		*destVal = pos->toFloat();
+}
+
+static void
+exifSetCoordinate(double *destVal, Exiv2::ExifData *exifData, const char *name) {
 	Exiv2::ExifKey key(name);
 	Exiv2::ExifData::iterator pos = exifData->findKey(key);
 
@@ -121,32 +130,20 @@ ImageMetaData::load_image_exif(char *name) {
 			_model = strdup(pos->toString().c_str());
 	}
 
-    if (isnan(_focal_length)) {
-		Exiv2::ExifKey key("Exif.Photo.FocalLength");
-        pos = exifData.findKey(key);
-        if (pos != exifData.end() && pos->toFloat() >= 0)
-            _focal_length = pos->toFloat();
-	}
+    if (isnan(_focal_length))
+		exifSetValue(&_focal_length, &exifData, "Exif.Photo.FocalLength");
 
-    if (isnan(_focal_length_35mm)) {
-        Exiv2::ExifKey key("Exif.Photo.FocalLengthIn35mmFilm");
-        pos = exifData.findKey(key);
-        if (pos != exifData.end() && pos->toFloat() >= 0)
-            _focal_length_35mm = pos->toFloat();
-	}
+    if (isnan(_focal_length_35mm))
+		exifSetValue(&_focal_length, &exifData, "Exif.Photo.FocalLengthIn35mmFilm");
 
     if (isnan(_longitude))
-		gpsSetCoordinate(&_longitude, &exifData, "Exif.GPSInfo.GPSLongitude");
+		exifSetCoordinate(&_longitude, &exifData, "Exif.GPSInfo.GPSLongitude");
 
     if (isnan(_latitude))
-		gpsSetCoordinate(&_longitude, &exifData, "Exif.GPSInfo.GPSLatitude");
+		exifSetCoordinate(&_longitude, &exifData, "Exif.GPSInfo.GPSLatitude");
 
-    if (isnan(_height)) {
-        Exiv2::ExifKey key("Exif.GPSInfo.GPSAltitude");
-        pos = exifData.findKey(key);
-        if (pos != exifData.end() && pos->toFloat() >= 0)
-            _height = pos->toFloat();
-	}
+    if (isnan(_height))
+		exifSetValue(&_focal_length, &exifData, "Exif.GPSInfo.GPSAltitude");
 
     return 0;
 }
