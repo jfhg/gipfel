@@ -21,7 +21,7 @@ choose_hill(const Hills *hills, const char *l) {
 		char buf[256];
 
 		Hill *m = h_sort->get(i);
-		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
+		if (m->flags & (Hill::DUPLIC | Hill::TRACK_POINT))
 			continue;
 
 		snprintf(buf, sizeof(buf) - 1, "%s (%dm)", m->name, (int) m->height);

@@ -317,13 +317,13 @@ Panorama::mark_hidden(Hills *hills) {
 
 		m->flags &= ~Hill::HIDDEN;
 
-		if (m->flags & Hill::DUPLICATE)
+		if (m->flags & Hill::DUPLIC)
 			continue;
 
 		for (int j = 0; j < hills->get_num(); j++) {
 			Hill *n = hills->get(j);
 
-			if (n->flags & Hill::DUPLICATE || n->flags & Hill::TRACK_POINT)
+			if (n->flags & Hill::DUPLIC || n->flags & Hill::TRACK_POINT)
 				continue;
 
 			if (m == n || fabs(m->alph - n->alph > pi_d / 2.0))

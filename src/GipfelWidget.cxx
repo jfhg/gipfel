@@ -244,7 +244,7 @@ GipfelWidget::draw() {
 		int m_x = w() / 2 + x() + (int) rint(m->x);
 		int m_y = h() / 2 + y() + (int) rint(m->y);
 
-		if ((m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT)) ||
+		if ((m->flags & (Hill::DUPLIC|Hill::TRACK_POINT)) ||
 			(!show_hidden && (m->flags & Hill::HIDDEN)) ||
 			known_hills->contains(m) || m == focused_mountain)
 			continue;
@@ -259,7 +259,7 @@ GipfelWidget::draw() {
 		int m_x = w() / 2 + x() + (int) rint(m->x);
 		int m_y = h() / 2 + y() + (int) rint(m->y);
 
-		if ((m->flags & (Hill::DUPLICATE|Hill::TRACK_POINT)) ||
+		if ((m->flags & (Hill::DUPLIC|Hill::TRACK_POINT)) ||
 			(!show_hidden && (m->flags & Hill::HIDDEN)) || m == focused_mountain)
 			continue;
 
@@ -346,7 +346,7 @@ GipfelWidget::set_labels(Hills *v) {
 		Hill *m = v->get(i);
 		Hills colliding;
 
-		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
+		if (m->flags & (Hill::DUPLIC | Hill::TRACK_POINT))
 			continue;
 
 		if (!show_hidden && (m->flags & Hill::HIDDEN))
@@ -358,7 +358,7 @@ GipfelWidget::set_labels(Hills *v) {
 		for (int j = i - 1; j >= 0; j--) {
 			Hill *n = v->get(j);
 
-			if (n->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
+			if (n->flags & (Hill::DUPLIC | Hill::TRACK_POINT))
 				continue;
 
 			if (!show_hidden && (n->flags & Hill::HIDDEN))
@@ -414,7 +414,7 @@ GipfelWidget::toggle_known_mountain(int m_x, int m_y) {
 	for (int i = 0; i < mnts->get_num(); i++) {
 		Hill *m = mnts->get(i); 
 
-		if (m->flags & (Hill::DUPLICATE | Hill::TRACK_POINT))
+		if (m->flags & (Hill::DUPLIC | Hill::TRACK_POINT))
 			continue;
 
 		if (m_x - center_x >= m->x - 2 && m_x - center_x < m->x + 2 &&
@@ -692,7 +692,7 @@ GipfelWidget::export_hills(const char *file, FILE *fp) {
 		int _x = (int) rint(m->x) + w() / 2;
 		int _y = (int) rint(m->y) + h() / 2;
 
-		if (m->flags & Hill::DUPLICATE || m->flags & Hill::HIDDEN ||
+		if (m->flags & Hill::DUPLIC || m->flags & Hill::HIDDEN ||
 			file && !(m->flags & Hill::EXPORT)) {
 			continue;
 		}

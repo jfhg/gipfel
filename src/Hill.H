@@ -12,7 +12,7 @@ class Hill;
 class Hill {
 	public:
 		typedef enum {
-			DUPLICATE   = 0x01,
+			DUPLIC      = 0x01,
 			TRACK_POINT = 0x02,
 			VISIBLE     = 0x04,
 			HIDDEN      = 0x08,
