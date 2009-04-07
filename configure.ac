@@ -7,7 +7,7 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/Panorama.H])
 AC_CONFIG_HEADER(config.h)
 
-CPPFLAGS="-Wall -g -I/usr/local/include -DDATADIR=\\\"$datadir\\\" -DDOCDIR=\\\"$docdir\\\" $CPPFLAGS"
+CPPFLAGS="-Wall -g -I/usr/local/include -DGIPFEL_DATADIR=\\\"$datadir\\\" -DDOCDIR=\\\"$docdir\\\" $CPPFLAGS"
 LDFLAGS="-g $LDFLAGS"
 
 # Checks for programs.

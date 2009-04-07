@@ -39,11 +39,11 @@
 #include "choose_hill.H"
 #include "../config.h"
 
-#ifndef DATADIR
-#define DATADIR "/usr/local/share"
+#ifndef GIPFEL_DATADIR
+#define GIPFEL_DATADIR "/usr/local/share"
 #endif
 
-#define DEFAULT_DATAFILE DATADIR "/" PACKAGE_NAME "/gipfel.dat"
+#define DEFAULT_DATAFILE GIPFEL_DATADIR "/" PACKAGE_NAME "/gipfel.dat"
 
 char *img_file = NULL;
 char *data_file = DEFAULT_DATAFILE;
