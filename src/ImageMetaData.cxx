@@ -258,7 +258,10 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 		err++;
 	}
 
+#ifdef HAVE_FSYNC
 	fsync(tmp_fd); // make sure data is on disk before replacing orig file
+#endif
+
 	close(tmp_fd);
 
 	if (err == 0) { // only overwrite existing image if everything was ok
