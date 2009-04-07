@@ -8,8 +8,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-
+extern "C" {
 #include "strsep.h"
+}
 #include "Hill.H"
 
 static double pi_d, deg2rad;
