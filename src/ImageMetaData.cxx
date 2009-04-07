@@ -29,15 +29,19 @@ ImageMetaData::ImageMetaData() {
 }
 
 ImageMetaData::~ImageMetaData() {
-	if (_manufacturer) free(_manufacturer);
-	if (_model) free(_model);
+	if (_manufacturer)
+		free(_manufacturer);
+	if (_model)
+		free(_model);
 }
 
 void
 ImageMetaData::clear() {
-	if (_manufacturer) free(_manufacturer);
+	if (_manufacturer)
+		free(_manufacturer);
 	_manufacturer = NULL;
-	if (_model) free(_model);
+	if (_model)
+		free(_model);
     _model = NULL;
 	_longitude = NAN;
 	_latitude = NAN;
@@ -70,86 +74,76 @@ ImageMetaData::save_image(char *in_img, char *out_img) {
 int
 ImageMetaData::load_image_exif(char *name) {
     Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(name);
-    assert(image.get() != 0);
+    assert(image.get());
     image->readMetadata();
     Exiv2::ExifData &exifData = image->exifData();
-    if (exifData.empty())
-        {
-        fprintf(stderr, "%s: No Exif data found in the file", name);
-        return 0;
-        }
+    if (exifData.empty()) {
+		fprintf(stderr, "%s: No Exif data found in the file", name);
+		return 0;
+	}
 
     Exiv2::ExifData::iterator pos = exifData.end();
 
-    if (!_manufacturer )
-        {
-        Exiv2::ExifKey key("Exif.Image.Make"); // tag auch wirklich vorhanden?
-        pos = exifData.findKey(key);
-        if (pos != exifData.end() && pos->size() )
-            _manufacturer = strdup(pos->toString().c_str());
-        }
+    if (!_manufacturer ) {
+		Exiv2::ExifKey key("Exif.Image.Make"); // tag auch wirklich vorhanden?
+		pos = exifData.findKey(key);
+		if (pos != exifData.end() && pos->size())
+			_manufacturer = strdup(pos->toString().c_str());
+	}
 
-    if(!_model)
-        {
-        Exiv2::ExifKey key("Exif.Image.Model");
-        pos = exifData.findKey(key);
-        if (pos != exifData.end() && pos->size() )
-            _model = strdup(pos->toString().c_str());
-        }
+    if (!_model) {
+		Exiv2::ExifKey key("Exif.Image.Model");
+		pos = exifData.findKey(key);
+		if (pos != exifData.end() && pos->size() )
+			_model = strdup(pos->toString().c_str());
+	}
 
-    if (isnan(_focal_length))
-        {
-        Exiv2::ExifKey key("Exif.Photo.FocalLength");
+    if (isnan(_focal_length)) {
+		Exiv2::ExifKey key("Exif.Photo.FocalLength");
         pos = exifData.findKey(key);
         if (pos != exifData.end() && pos->toFloat() >= 0)
             _focal_length = pos->toFloat();
-        }
+	}
 
-    if (isnan(_focal_length_35mm))
-        {
+    if (isnan(_focal_length_35mm)) {
         Exiv2::ExifKey key("Exif.Photo.FocalLengthIn35mmFilm");
         pos = exifData.findKey(key);
         if (pos != exifData.end() && pos->toFloat() >= 0)
             _focal_length_35mm = pos->toFloat();
-        }
+	}
 
-    if (isnan(_longitude))
-        {
+    if (isnan(_longitude)) {
         Exiv2::ExifKey key("Exif.GPSInfo.GPSLongitude");
         pos = exifData.findKey(key);
-        if (pos != exifData.end())
-            {
+        if (pos != exifData.end()) {
             if ( pos->toFloat() >= 0)
                 _longitude = pos->toFloat();
             if ( pos->toFloat(1) >= 0)
-                _longitude += pos->toFloat(1)/60;
+                _longitude += pos->toFloat(1) / 60;
             if ( pos->toFloat(2) >= 0)
-                _longitude += pos->toFloat(2)/3600;
-            }
-        }
+                _longitude += pos->toFloat(2) / 3600;
+		}
+	}
 
-    if (isnan(_latitude))
-        {
+    if (isnan(_latitude)) {
         Exiv2::ExifKey key("Exif.GPSInfo.GPSLatitude");
         pos = exifData.findKey(key);
-        if (pos != exifData.end())
-            {
+        if (pos != exifData.end()) {
             if ( pos->toFloat() >= 0)
                 _latitude = pos->toFloat();
             if ( pos->toFloat(1) >= 0)
-                _latitude += pos->toFloat(1)/60;
+                _latitude += pos->toFloat(1) / 60;
             if ( pos->toFloat(2) >= 0)
-                _latitude += pos->toFloat(2)/3600;
-            }
-        }
+                _latitude += pos->toFloat(2) / 3600;
+		}
+	}
 
-    if (isnan(_height))
-        {
+    if (isnan(_height)) {
         Exiv2::ExifKey key("Exif.GPSInfo.GPSAltitude");
         pos = exifData.findKey(key);
         if (pos != exifData.end() && pos->toFloat() >= 0)
             _height = pos->toFloat();
-        }
+	}
 
     return 0;
 }
@@ -169,8 +163,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
     const char *com = image->comment().c_str();
 
     if ((n = sscanf(com, GIPFEL_FORMAT_2,
-            &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &k0, &k1, &x0)) >= 8)
-        {
+            &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &k0, &k1, &x0)) >= 8) {
         _longitude = lo;
         _latitude  = la;
         _height    = he;
@@ -180,14 +173,14 @@ ImageMetaData::load_image_jpgcom(char *name) {
         _focal_length_35mm = fr;
         _projection_type = pt;
 
-        if (n >= 10)
-            {
+        if (n >= 10) {
             _k0 = k0;
             _k1 = k1;
             _x0 = x0;
-            }
-        ret = 0;
-        }
+		}
+		ret = 0;
+	}
+
     return ret;
 }
 
@@ -247,14 +240,13 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 	close(out_fd);
 
     struct stat stFileInfo;
-    if (! stat(out_img,&stFileInfo) )
+    if (! stat(out_img, &stFileInfo) )
         unlink(out_img);
-    if (rename(tmpname, out_img) != 0)
-        {
+    if (rename(tmpname, out_img) != 0) {
         perror("rename");
         err++;
         unlink(tmpname);
-        }
+	}
 
     return (err != 0);
 }
