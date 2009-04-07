@@ -87,7 +87,7 @@ ImageMetaData::load_image_exif(char *name) {
     Exiv2::ExifData &exifData = image->exifData();
     if (exifData.empty()) {
 		fprintf(stderr, "%s: No Exif data found in the file", name);
-		return 0;
+		return 1;
 	}
 
     Exiv2::ExifData::iterator pos = exifData.end();
@@ -217,7 +217,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 	free(dirbuf);
 
 	if (tmp_fd == -1) {
-		perror("open");
+		perror("mkstemp");
 		return 1;
 	}
 
@@ -257,7 +257,6 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
         _projection_type,
         _k0, _k1, _x0);
 
-
     image->setComment(buf);
 
 	try {
@@ -274,7 +273,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 #ifdef WIN32
 		// Workaround as Windows does not seem to replace files on rename()
 		struct stat stFileInfo;
-		if (! stat(out_img, &stFileInfo) )
+		if (stat(out_img, &stFileInfo) == 0)
 			unlink(out_img);
 #endif
 
