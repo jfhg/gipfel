@@ -60,5 +60,9 @@ LIBS="`$GSLCONFIG --libs` $LIBS"
 AC_CHECK_HEADERS([tiffio.h], [], [echo "Error: tiffio.h not found."; exit 1;])
 AC_CHECK_LIB([tiff], [TIFFOpen], [], [echo "Error: libtiff.so not found."; exit 1;])
 
+# Check for exiv2
+AC_CHECK_HEADERS([exiv2/exif.hpp], [], [echo "Error: exiv2/exif.hpp not found."; exit 1;])
+LIBS="$LIBS -lexiv2"
+
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
