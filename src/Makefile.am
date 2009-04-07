@@ -3,6 +3,7 @@ bin_PROGRAMS = gipfel
 gipfel_SOURCES = \
 	gipfel.cxx \
 	util.c \
+	strsep.c \
 	GipfelWidget.cxx \
 	Panorama.cxx \
 	ProjectionLSQ.cxx \
@@ -40,4 +41,5 @@ noinst_HEADERS = \
 	PreviewOutputImage.H \
 	ImageMetaData.H \
 	ScreenDump.H \
-	util.h
+	util.h \
+	strsep.h

@@ -9,6 +9,7 @@
 #include <string.h>
 #include <math.h>
 
+#include "strsep.h"
 #include "Hill.H"
 
 static double pi_d, deg2rad;
