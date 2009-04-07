@@ -21,7 +21,7 @@
 #include <exiv2/exif.hpp>
 
 #include "ImageMetaData.H"
-
+#define WIN32 1
 ImageMetaData::ImageMetaData() {
 	_manufacturer = NULL;
     _model = NULL;
@@ -73,9 +73,15 @@ ImageMetaData::save_image(char *in_img, char *out_img) {
 
 int
 ImageMetaData::load_image_exif(char *name) {
-    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(name);
-    assert(image.get());
-    image->readMetadata();
+	Exiv2::Image::AutoPtr image;
+	try {
+		image = Exiv2::ImageFactory::open(name);
+		image->readMetadata();
+	} catch (Exiv2::Error error) {
+		fprintf(stderr, "Error reading metadata (%s)\n", error.what());
+		return 1;
+	}
+
     Exiv2::ExifData &exifData = image->exifData();
     if (exifData.empty()) {
 		fprintf(stderr, "%s: No Exif data found in the file", name);
@@ -156,10 +162,16 @@ ImageMetaData::load_image_jpgcom(char *name) {
     double lo, la, he, dir, ni, ti, fr, k0, k1, x0 = 0.0;
     int pt = 0;
     int n, ret = 1;
+	Exiv2::Image::AutoPtr image;
 
-    Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(name);
-    assert (image.get() != 0);
-    image->readMetadata();
+	try {
+		image = Exiv2::ImageFactory::open(name);
+		image->readMetadata();
+	} catch (Exiv2::Error error) {
+		fprintf(stderr, "Error reading metadata (%s)\n", error.what());
+		return 1;
+	}
+
     const char *com = image->comment().c_str();
 
     if ((n = sscanf(com, GIPFEL_FORMAT_2,
@@ -178,6 +190,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
             _k1 = k1;
             _x0 = x0;
 		}
+
 		ret = 0;
 	}
 
@@ -187,27 +200,31 @@ ImageMetaData::load_image_jpgcom(char *name) {
 int
 ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
     char buf[1024], tmpname[MAXPATHLEN];
-    int n, err = 0;
+    int n, in_fd, tmp_fd, err = 0;
 
     char* dirbuf = strdup(out_img);
     snprintf(tmpname, sizeof(tmpname), "%s/.gipfelXXXXXX", dirname(dirbuf));
     free(dirbuf);
 
-	int in_fd = open(in_img, O_RDONLY);
+	in_fd = open(in_img, O_RDONLY);
 	if (in_fd == -1) {
 		perror("open");
 		return 1;
 	}
 
-	int out_fd = open(tmpname, O_WRONLY | O_TRUNC | O_CREAT);
-	if (out_fd == -1) {
+#ifdef WIN32
+	tmp_fd = open(tmpname, O_WRONLY|O_TRUNC|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP);
+#else
+	tmp_fd = mkstemp(tmpname);
+#endif
+	if (tmp_fd == -1) {
 		perror("open");
 		close(in_fd);
 		return 1;
 	}
 
-	while ((n = read(in_fd, buf, sizeof(buf))) != 0) {
-		if (write(out_fd, buf, n) != n) {
+	while ((n = read(in_fd, buf, sizeof(buf))) > 0) {
+		if (n < 0 || write(tmp_fd, buf, n) != n) {
 			perror("write");
 			err++;
 			break;
@@ -217,7 +234,9 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 	close(in_fd);
 
     Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open(tmpname);
-    assert (image.get() != 0);
+    if (!image.get())
+		err++;
+
     image->readMetadata();
     image->clearComment();
 
@@ -234,18 +253,30 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 
 
     image->setComment(buf);
-    image->writeMetadata();
 
-	fsync(out_fd); /* make sure data is on disk before replacing orig file */
-	close(out_fd);
+	try {
+		image->writeMetadata();
+	} catch (Exiv2::Error error) {
+		fprintf(stderr, "Error writing metadata (%s)\n", error.what());
+		err++;
+	}
 
-    struct stat stFileInfo;
-    if (! stat(out_img, &stFileInfo) )
-        unlink(out_img);
-    if (rename(tmpname, out_img) != 0) {
-        perror("rename");
-        err++;
-        unlink(tmpname);
+	fsync(tmp_fd); // make sure data is on disk before replacing orig file
+	close(tmp_fd);
+
+	if (err == 0) { // only overwrite existing image if everything was ok
+#ifdef WIN32
+		// Workaround as Windows does not seem to replace files on rename()
+		struct stat stFileInfo;
+		if (! stat(out_img, &stFileInfo) )
+			unlink(out_img);
+#endif
+
+		if (rename(tmpname, out_img) != 0) {
+			perror("rename");
+			err++;
+			unlink(tmpname);
+		}
 	}
 
     return (err != 0);
