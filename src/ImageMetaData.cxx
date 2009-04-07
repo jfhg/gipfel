@@ -72,6 +72,21 @@ ImageMetaData::save_image(char *in_img, char *out_img) {
 	return save_image_jpgcom(in_img, out_img);
 }
 
+static void
+gpsSetCoordinate(double *destVal, Exiv2::ExifData *exifData, const char *name) {
+	Exiv2::ExifKey key(name);
+	Exiv2::ExifData::iterator pos = exifData->findKey(key);
+
+	if (pos != exifData->end()) {
+		if (pos->toFloat() >= 0)
+			*destVal = pos->toFloat();
+		if (pos->toFloat(1) >= 0)
+			*destVal += pos->toFloat(1) / 60;
+		if (pos->toFloat(2) >= 0)
+			*destVal += pos->toFloat(2) / 3600;
+	}
+}
+
 int
 ImageMetaData::load_image_exif(char *name) {
 	Exiv2::Image::AutoPtr image;
@@ -120,31 +135,11 @@ ImageMetaData::load_image_exif(char *name) {
             _focal_length_35mm = pos->toFloat();
 	}
 
-    if (isnan(_longitude)) {
-        Exiv2::ExifKey key("Exif.GPSInfo.GPSLongitude");
-        pos = exifData.findKey(key);
-        if (pos != exifData.end()) {
-            if ( pos->toFloat() >= 0)
-                _longitude = pos->toFloat();
-            if ( pos->toFloat(1) >= 0)
-                _longitude += pos->toFloat(1) / 60;
-            if ( pos->toFloat(2) >= 0)
-                _longitude += pos->toFloat(2) / 3600;
-		}
-	}
+    if (isnan(_longitude))
+		gpsSetCoordinate(&_longitude, &exifData, "Exif.GPSInfo.GPSLongitude");
 
-    if (isnan(_latitude)) {
-        Exiv2::ExifKey key("Exif.GPSInfo.GPSLatitude");
-        pos = exifData.findKey(key);
-        if (pos != exifData.end()) {
-            if ( pos->toFloat() >= 0)
-                _latitude = pos->toFloat();
-            if ( pos->toFloat(1) >= 0)
-                _latitude += pos->toFloat(1) / 60;
-            if ( pos->toFloat(2) >= 0)
-                _latitude += pos->toFloat(2) / 3600;
-		}
-	}
+    if (isnan(_latitude))
+		gpsSetCoordinate(&_longitude, &exifData, "Exif.GPSInfo.GPSLatitude");
 
     if (isnan(_height)) {
         Exiv2::ExifKey key("Exif.GPSInfo.GPSAltitude");

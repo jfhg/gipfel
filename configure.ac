@@ -62,7 +62,7 @@ AC_CHECK_LIB([tiff], [TIFFOpen], [], [echo "Error: libtiff.so not found."; exit 
 
 # Check for exiv2
 AC_CHECK_HEADERS([exiv2/exif.hpp], [], [echo "Error: exiv2/exif.hpp not found."; exit 1;])
-LIBS="$LIBS -lexiv2"
+LIBS="-lexiv2 $LIBS"
 
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
