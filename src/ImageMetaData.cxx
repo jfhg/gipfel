@@ -20,6 +20,7 @@
 #include <exiv2/image.hpp>
 #include <exiv2/exif.hpp>
 
+#include "../config.h"
 #include "ImageMetaData.H"
 
 ImageMetaData::ImageMetaData() {
@@ -200,27 +201,31 @@ ImageMetaData::load_image_jpgcom(char *name) {
 
 int
 ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
-    char buf[1024], tmpname[MAXPATHLEN];
+    char buf[1024], *tmpname;
     int n, in_fd, tmp_fd, err = 0;
 
     char* dirbuf = strdup(out_img);
-    snprintf(tmpname, sizeof(tmpname), "%s/.gipfelXXXXXX", dirname(dirbuf));
-    free(dirbuf);
+#if ! HAVE_MKSTEMP
+	tmpname = tempnam(dirname(dirbuf), ".gipfel");
+	tmp_fd = open(tmpname, O_WRONLY|O_TRUNC|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP);
+#else
+	char tmpbuf[MAXPATHLEN];
+	snprintf(tmpbuf, sizeof(tmpbuf), "%s/.gipfelXXXXXX", dirname(dirbuf));
+	tmp_fd = mkstemp(tmpbuf);
+	tmpname = tmpbuf;
+#endif
+	free(dirbuf);
 
-	in_fd = open(in_img, O_RDONLY);
-	if (in_fd == -1) {
+	if (tmp_fd == -1) {
 		perror("open");
 		return 1;
 	}
 
-#ifdef WIN32
-	tmp_fd = open(tmpname, O_WRONLY|O_TRUNC|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP);
-#else
-	tmp_fd = mkstemp(tmpname);
-#endif
-	if (tmp_fd == -1) {
+	in_fd = open(in_img, O_RDONLY);
+	if (in_fd == -1) {
 		perror("open");
-		close(in_fd);
+		unlink(tmpname);
+		close(tmp_fd);
 		return 1;
 	}
 

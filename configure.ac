@@ -34,7 +34,7 @@ AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_TYPE_SIGNAL
-AC_CHECK_FUNCS([strchr strdup strrchr strstr])
+AC_CHECK_FUNCS([strchr strdup strrchr strstr mkstemp])
 
 # Check for fltk
 AC_PATH_PROG(FLTKCONFIG,fltk-config)
