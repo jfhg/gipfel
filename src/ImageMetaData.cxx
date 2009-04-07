@@ -21,7 +21,7 @@
 #include <exiv2/exif.hpp>
 
 #include "ImageMetaData.H"
-#define WIN32 1
+
 ImageMetaData::ImageMetaData() {
 	_manufacturer = NULL;
     _model = NULL;
@@ -74,6 +74,7 @@ ImageMetaData::save_image(char *in_img, char *out_img) {
 int
 ImageMetaData::load_image_exif(char *name) {
 	Exiv2::Image::AutoPtr image;
+
 	try {
 		image = Exiv2::ImageFactory::open(name);
 		image->readMetadata();
