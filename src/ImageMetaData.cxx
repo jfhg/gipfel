@@ -199,7 +199,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
     char* dirbuf = strdup(out_img);
 #if ! HAVE_MKSTEMP
 	tmpname = tempnam(dirname(dirbuf), ".gipfel");
-	tmp_fd = open(tmpname, O_WRONLY|O_TRUNC|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP);
+	tmp_fd = open(tmpname, O_WRONLY|O_TRUNC|O_CREAT, S_IRUSR|S_IWUSR);
 #else
 	char tmpbuf[MAXPATHLEN];
 	snprintf(tmpbuf, sizeof(tmpbuf), "%s/.gipfelXXXXXX", dirname(dirbuf));
