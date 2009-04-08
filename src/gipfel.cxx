@@ -46,7 +46,7 @@
 #define DEFAULT_DATAFILE GIPFEL_DATADIR "/" PACKAGE_NAME "/gipfel.dat"
 
 char *img_file = NULL;
-char *data_file = DEFAULT_DATAFILE;
+char *data_file = NULL;
 
 GipfelWidget *gipf = NULL;
 Fl_Scroll *scroll;
@@ -547,6 +547,25 @@ int main(int argc, char** argv) {
 
 	if (my_argc >= 1)
 		img_file = strdup(my_argv[0]);
+
+	if (data_file == NULL) {
+		struct stat sb;
+
+		if (stat(DEFAULT_DATAFILE, &sb) == 0) {
+			data_file = DEFAULT_DATAFILE;
+		} else {
+			// check for gipfel.dat in local tarball
+			char *exec_file = strdup(argv[0]);
+			data_file = (char *) malloc (strlen (exec_file) + 64);
+			snprintf(data_file, strlen (exec_file) + 64, "%s/../gipfel.dat",
+				dirname(exec_file));
+			free(exec_file);
+			if (stat(data_file, &sb) != 0) {
+				free(data_file);
+				data_file = NULL;
+			}
+		}
+	}
 
 	if (data_file == NULL || err) {
 		usage();
