@@ -12,6 +12,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <math.h>
+#include <assert.h>
 #include <algorithm>
 
 #include <FL/Fl.H>
@@ -43,8 +44,10 @@
 #define GIPFEL_DATADIR "/usr/local/share"
 #endif
 
-#define DEFAULT_DATAFILE GIPFEL_DATADIR "/" PACKAGE_NAME "/gipfel.dat"
+#define DATAFILE "gipfel.dat"
+#define DEFAULT_DATADIR GIPFEL_DATADIR "/" PACKAGE_NAME
 
+char *run_dir = NULL;
 char *img_file = NULL;
 char *data_file = NULL;
 
@@ -77,6 +80,26 @@ confirm_overwrite(const char *f) {
         return fl_choice("%s exists.\n", "Cancel", "Overwrite", NULL, f);
     else
         return 1;
+}
+
+static char *
+file_installed_or_local(const char *inst_dir, const char *name) {
+	assert(run_dir);
+
+	struct stat sb;
+	int buflen = strlen(inst_dir) + strlen(run_dir) + strlen(name) + 1;
+	char *buf = (char *) malloc (buflen);
+
+	snprintf(buf, buflen, "%s/%s", inst_dir, name);
+	if (stat(buf, &sb) == 0)
+		return buf;
+
+	snprintf(buf, buflen, "%s/../%s", run_dir, name);
+	if (stat(buf, &sb) == 0)
+		return buf;
+
+	free(buf);
+	return NULL;
 }
 
 void set_values() {
@@ -265,16 +288,20 @@ void about_cb() {
 }
 
 void readme_cb() {
+	char *readme = file_installed_or_local(DOCDIR, "README");
+	if (!readme) {
+		fprintf(stderr, "README file not found\n");
+		return;
+	}
 	Fl_Window *win = new Fl_Window(800, 600, "README");
 	Fl_Text_Buffer *textBuf = new Fl_Text_Buffer();
 	Fl_Text_Display *textDisp = new Fl_Text_Display(0, 0, win->w(), win->h());
-	char buf[PATH_MAX];
 
 	textDisp->textfont(FL_COURIER);
 	textDisp->buffer(textBuf);	
 	win->resizable(textDisp);
-	snprintf(buf, PATH_MAX, "%s/README", DOCDIR);
-	textBuf->appendfile(buf);
+	textBuf->appendfile(readme);
+	free(readme);
 	win->end();
 	win->show();
 }
@@ -545,27 +572,15 @@ int main(int argc, char** argv) {
 	my_argc = argc - optind;
 	my_argv = argv + optind;
 
+	char *exec_file = strdup(argv[0]);
+	run_dir = strdup(dirname(exec_file));
+	free(exec_file);
+
 	if (my_argc >= 1)
 		img_file = strdup(my_argv[0]);
 
-	if (data_file == NULL) {
-		struct stat sb;
-
-		if (stat(DEFAULT_DATAFILE, &sb) == 0) {
-			data_file = DEFAULT_DATAFILE;
-		} else {
-			// check for gipfel.dat in local tarball
-			char *exec_file = strdup(argv[0]);
-			data_file = (char *) malloc (strlen (exec_file) + 64);
-			snprintf(data_file, strlen (exec_file) + 64, "%s/../gipfel.dat",
-				dirname(exec_file));
-			free(exec_file);
-			if (stat(data_file, &sb) != 0) {
-				free(data_file);
-				data_file = NULL;
-			}
-		}
-	}
+	if (data_file == NULL)
+		data_file = file_installed_or_local(DEFAULT_DATADIR, "gipfel.dat");
 
 	if (data_file == NULL || err) {
 		usage();
