@@ -27,7 +27,7 @@ Requirements
 * [fltk-1.1.x](http://www.fltk.org)
 * [libtiff](http://www.remotesensing.org/libtiff/)
 * [libjpeg](http://www.ijg.org/)
-* [exif utility](http://libexif.sourceforge.net/)
+* [exiv2](http://www.exiv2.org/)
 * [GSL - GNU Scientific Library](http://www.gnu.org/software/gsl/)
 * gipfel works on UNIX-like systems (e.g. Linux, *BSD and probably others)
 

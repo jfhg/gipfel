@@ -1,6 +1,10 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.3.0
+* Use exiv2 library for image metadata reading and writing.
+  (initial patch by Konrad Golling).
+
 gipfel-0.2.9
 * Add rpm spec file.
 * fsync() temporary file before rename().

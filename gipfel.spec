@@ -8,13 +8,11 @@ Source0: %{name}-%{version}.tar.gz
 License: GPL
 Group: Productivity/Scientific/Other
 
-BuildRequires: binutils gcc gcc-c++ libstdc++-devel gsl-devel fltk-devel libjpeg-devel libtiff-devel libpng-devel
+BuildRequires: binutils gcc gcc-c++ libstdc++-devel gsl-devel fltk-devel libjpeg-devel libtiff-devel libpng-devel exiv2-devel
 
 %if 0%{?suse_version}
 BuildRequires: xorg-x11-libXext-devel
 %endif
-
-Requires: jpeg exif
 
 %description
 gipfel helps to find the names of mountains or points of interest
