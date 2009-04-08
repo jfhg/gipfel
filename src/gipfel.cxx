@@ -47,19 +47,19 @@
 #define DATAFILE "gipfel.dat"
 #define DEFAULT_DATADIR GIPFEL_DATADIR "/" PACKAGE_NAME
 
-char *run_dir = NULL;
-char *img_file = NULL;
-char *data_file = NULL;
+static char *run_dir = NULL;
+static char *img_file = NULL;
+static char *data_file = NULL;
 
-GipfelWidget *gipf = NULL;
-Fl_Scroll *scroll;
-Fl_Window *control_win, *view_win;
-Fl_Dial *s_center = NULL;
-Fl_Slider *s_nick, *s_focal_length, *s_tilt, *s_height_dist, *s_track_width;
-Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
-Fl_Value_Input *i_distortion_k0, *i_distortion_k1, *i_distortion_x0;
-Fl_Box *b_viewpoint;
-Fl_Menu_Bar *mb;
+static GipfelWidget *gipf = NULL;
+static Fl_Scroll *scroll;
+static Fl_Window *control_win, *view_win;
+static Fl_Dial *s_center = NULL;
+static Fl_Slider *s_nick, *s_focal_length, *s_tilt, *s_height_dist, *s_track_width;
+static Fl_Value_Input *i_view_lat, *i_view_long, *i_view_height;
+static Fl_Value_Input *i_distortion_k0, *i_distortion_k1, *i_distortion_x0;
+static Fl_Box *b_viewpoint;
+static Fl_Menu_Bar *mb;
 
 #define STITCH_PREVIEW           1
 #define STITCH_JPEG              2
