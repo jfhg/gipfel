@@ -23,6 +23,10 @@
 #include "../config.h"
 #include "ImageMetaData.H"
 
+#if !defined(O_BINARY)
+#define O_BINARY 0
+#endif
+
 ImageMetaData::ImageMetaData() {
 	_manufacturer = NULL;
     _model = NULL;
@@ -204,7 +208,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 	tmpname = tmpbuf;
 #else
 	tmpname = tempnam(dirname(dirbuf), ".gipfel");
-	tmp_fd = open(tmpname, O_WRONLY|O_TRUNC|O_CREAT, S_IRUSR|S_IWUSR);
+	tmp_fd = open(tmpname, O_WRONLY|O_TRUNC|O_CREAT|O_BINARY, S_IRUSR|S_IWUSR);
 #endif
 	free(dirbuf);
 
@@ -213,7 +217,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 		return 1;
 	}
 
-	in_fd = open(in_img, O_RDONLY);
+	in_fd = open(in_img, O_RDONLY|O_BINARY);
 	if (in_fd == -1) {
 		perror("open");
 		unlink(tmpname);
