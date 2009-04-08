@@ -161,7 +161,9 @@ void save_cb() {
 }
 
 void dump_cb(Fl_Widget * o, void*) {
+	fl_cursor(FL_CURSOR_WAIT);
 	ScreenDump dmp(gipf); // needs to be done before fl_file_chooser()
+	fl_cursor(FL_CURSOR_DEFAULT);
 	char *file = fl_file_chooser("Save Screen Dump As?", "*.jpg", NULL);
 	if (file && confirm_overwrite(file)) {
 		JPEGOutputImage out(file, 95);
