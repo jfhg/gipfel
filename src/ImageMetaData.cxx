@@ -153,11 +153,11 @@ ImageMetaData::load_image_exif(char *name) {
 }
 
 
-#define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focal_length_35mm %lf, projection type %d, k0 %lf, k1 %lf, x0 %lf"
+#define GIPFEL_FORMAT_2 "gipfel: longitude %f, latitude %f, height %f, direction %f, nick %f, tilt %f, focal_length_35mm %f, projection type %d, k0 %f, k1 %f, x0 %f"
 
 int
 ImageMetaData::load_image_jpgcom(char *name) {
-    double lo, la, he, dir, ni, ti, fr, k0, k1, x0 = 0.0;
+    float lo, la, he, dir, ni, ti, fr, k0, k1, x0 = 0.0;
     int pt = 0;
     int n, ret = 1;
 	Exiv2::Image::AutoPtr image;
