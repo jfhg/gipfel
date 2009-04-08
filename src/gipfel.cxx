@@ -285,6 +285,7 @@ void about_cb() {
 	fl_message("gipfel -- Photogrammetry for Mountain Images.\n"
 		"Version %s\n\n"
 		"(c) Johannes Hofmann 2006-2009\n\n"
+		"Homepage: http://www.ecademix.com/JohannesHofmann\n\n"
 		"Default datafile from http://www.viewfinderpanoramas.org/ and\n"
         "http://www.alpin-koordinaten.de\n",
 		VERSION);
