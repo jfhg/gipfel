@@ -5,6 +5,9 @@ gipfel-0.3.0
 * Use exiv2 library for image metadata reading and writing.
   (initial patch by Konrad Golling).
 * Make gipfel compile on [MinGW](http://www.mingw.org/)
+* Check for files in local tarball to make gipfel work without
+  installing it.
+* Don't exit on Escape.
 
 gipfel-0.2.9
 * Add rpm spec file.

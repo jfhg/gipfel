@@ -132,6 +132,9 @@ void quit_cb() {
 	exit(0);
 }
 
+void dummy_cb() {
+}
+
 void open_cb() {
 	char *file = fl_file_chooser("Open File?", "*.jpg", img_file);
 	if (file) {
@@ -611,22 +614,23 @@ int main(int argc, char** argv) {
 	}
 
 	Fl::get_system_colors();
-	if (getenv("FLTK_SCHEME")) {
+	if (getenv("FLTK_SCHEME"))
 		Fl::scheme(NULL);
-	} else {
+	else
 		Fl::scheme("plastic");
-	}
 
 	control_win = create_control_window();
+	control_win->callback((Fl_Callback*) dummy_cb);
 
 	view_win = new Fl_Window(800, 600);
+	view_win->callback((Fl_Callback*) dummy_cb);
 
 	// The Fl_Group is used to avoid FL_DAMAGE_ALL in Fl_Scroll::position 
 	Fl_Group *g = new Fl_Group(0, 0, view_win->w(), view_win->h()); 
 	view_win->resizable(g);
 	scroll = new Fl_Scroll(0, 0, view_win->w(), view_win->h());
 
-	gipf = new GipfelWidget(0,0,800,600);
+	gipf = new GipfelWidget(0, 0, 800, 600);
 	if (img_file) {
 		gipf->load_image(img_file);
 		view_win->label(img_file);
