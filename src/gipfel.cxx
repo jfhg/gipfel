@@ -129,10 +129,9 @@ void set_values() {
 }
 
 void quit_cb() {
+	if (Fl::event() == FL_SHORTCUT && Fl::event_key() == FL_Escape) 
+		return; // ignore Escape
 	exit(0);
-}
-
-void dummy_cb() {
 }
 
 void open_cb() {
@@ -620,10 +619,10 @@ int main(int argc, char** argv) {
 		Fl::scheme("plastic");
 
 	control_win = create_control_window();
-	control_win->callback((Fl_Callback*) dummy_cb);
+	control_win->callback((Fl_Callback*) quit_cb);
 
 	view_win = new Fl_Window(800, 600);
-	view_win->callback((Fl_Callback*) dummy_cb);
+	view_win->callback((Fl_Callback*) quit_cb);
 
 	// The Fl_Group is used to avoid FL_DAMAGE_ALL in Fl_Scroll::position 
 	Fl_Group *g = new Fl_Group(0, 0, view_win->w(), view_win->h()); 
