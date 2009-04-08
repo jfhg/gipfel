@@ -40,12 +40,12 @@
 #include "choose_hill.H"
 #include "../config.h"
 
-#ifndef GIPFEL_DATADIR
-#define GIPFEL_DATADIR "/usr/local/share"
+#ifndef STD_DATADIR
+#define STD_DATADIR "/usr/local/share"
 #endif
 
+#define GIPFEL_DATADIR STD_DATADIR "/" PACKAGE_NAME
 #define DATAFILE "gipfel.dat"
-#define DEFAULT_DATADIR GIPFEL_DATADIR "/" PACKAGE_NAME
 
 static char *run_dir = NULL;
 static char *img_file = NULL;
@@ -580,7 +580,7 @@ int main(int argc, char** argv) {
 		img_file = strdup(my_argv[0]);
 
 	if (data_file == NULL)
-		data_file = file_installed_or_local(DEFAULT_DATADIR, "gipfel.dat");
+		data_file = file_installed_or_local(GIPFEL_DATADIR, "gipfel.dat");
 
 	if (data_file == NULL || err) {
 		usage();
