@@ -108,7 +108,7 @@ ImageMetaData::load_image_exif(char *name) {
 		image = Exiv2::ImageFactory::open(name);
 		image->readMetadata();
 	} catch (Exiv2::Error error) {
-		fprintf(stderr, "Error reading metadata (%s)\n", error.what());
+		fprintf(stderr, "Error reading metadata\n");
 		return 1;
 	}
 
@@ -166,7 +166,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
 		image = Exiv2::ImageFactory::open(name);
 		image->readMetadata();
 	} catch (Exiv2::Error error) {
-		fprintf(stderr, "Error reading metadata (%s)\n", error.what());
+		fprintf(stderr, "Error reading metadata\n");
 		return 1;
 	}
 
@@ -258,7 +258,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 	try {
 		image->writeMetadata();
 	} catch (Exiv2::Error error) {
-		fprintf(stderr, "Error writing metadata (%s)\n", error.what());
+		fprintf(stderr, "Error writing metadata\n");
 		err++;
 	}
 
