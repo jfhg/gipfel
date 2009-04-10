@@ -1,6 +1,9 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.3.1
+* Fix compile error and warnings on Linux.
+
 gipfel-0.3.0
 * Use exiv2 library for image metadata reading and writing.
   (initial patch by Konrad Golling).
