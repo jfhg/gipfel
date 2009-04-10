@@ -8,7 +8,13 @@ Source0: %{name}-%{version}.tar.gz
 License: GPL
 Group: Productivity/Scientific/Other
 
-BuildRequires: binutils gcc gcc-c++ libstdc++-devel gsl-devel fltk-devel libjpeg-devel libtiff-devel libpng-devel libexiv2-devel
+BuildRequires: binutils gcc gcc-c++ libstdc++-devel gsl-devel fltk-devel libjpeg-devel libtiff-devel libpng-devel
+
+%if 0%{?fedora_version}
+BuildRequires: exiv2-devel
+%else
+BuildRequires: libexiv2-devel
+%endif
 
 %if 0%{?suse_version}
 BuildRequires: xorg-x11-libXext-devel
@@ -39,7 +45,7 @@ rm -rf $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}
 
 %changelog
 * Tue Apr 7 2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
-- update to gipfel-0.3.0
+- update to gipfel-0.3.1
 * Thu Mar 26 2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
 - update to gipfel-0.2.9
 * Sun Mar 22 2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
