@@ -1,6 +1,6 @@
 Name: gipfel
 Summary: gipfel - Photogrammetry For Mountain Images
-Version: 0.3.0
+Version: 0.3.1
 Release: 3.1
 URL: http://www.ecademix.com/JohannesHofmann/gipfel.html
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -8,7 +8,7 @@ Source0: %{name}-%{version}.tar.gz
 License: GPL
 Group: Productivity/Scientific/Other
 
-BuildRequires: binutils gcc gcc-c++ libstdc++-devel gsl-devel fltk-devel libjpeg-devel libtiff-devel libpng-devel exiv2-devel
+BuildRequires: binutils gcc gcc-c++ libstdc++-devel gsl-devel fltk-devel libjpeg-devel libtiff-devel libpng-devel libexiv2-devel
 
 %if 0%{?suse_version}
 BuildRequires: xorg-x11-libXext-devel
