@@ -55,7 +55,7 @@ Additionally a "Choose Viewpoint" window should pop up, where you can search
 for the viewpoint from which the picture was taken. Select a viewpoint and 
 click "Ok".
 Alternatively, you can enter the GPS coordinate of the viewpoint directly in
-the control window.  
+the control window (hit <Enter> for every data field).  
 You can now use the controls in the control window to modify the view
 parameters. These are:
 * View direction
