@@ -685,7 +685,7 @@ stitch(GipfelWidget::sample_mode_t m, int b_16,
 
 	} else if (type & STITCH_TIFF) {
 
-		st->set_output(new TIFFOutputImage(path, 90));
+		st->set_output(new TIFFOutputImage(path, b_16 ? 16 : 8));
 		st->resample(m, stitch_w, stitch_h, from, to);
 
 	} else {

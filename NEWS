@@ -1,6 +1,9 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.3.2
+* Fix 16bit tiff output in stitching mode.
+
 gipfel-0.3.1
 * Fix compile error and warnings on Linux.
 
