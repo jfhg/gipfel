@@ -298,16 +298,16 @@ GipfelWidget::draw() {
 			m = track_points->get(i);
 			int m_x = w() / 2 + x() + (int) rint(m->x);
 			int m_y = h() / 2 + y() + (int) rint(m->y);
-			if (!(track_points->get(i)->flags & Hill::VISIBLE)) {
+
+			if (!(track_points->get(i)->flags & Hill::VISIBLE))
 				continue;
-			}
 
 			if (track_points->get(i)->flags & Hill::HIDDEN)
 				fl_color(FL_BLUE);
 			else
 				fl_color(FL_RED);
 
-			fl_line_style(FL_SOLID|FL_CAP_ROUND|FL_JOIN_ROUND,
+			fl_line_style(FL_SOLID | FL_CAP_ROUND | FL_JOIN_ROUND,
 				get_rel_track_width(track_points->get(i)));
 			if (last_initialized) {
 				fl_begin_line();
