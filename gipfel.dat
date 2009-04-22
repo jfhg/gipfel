@@ -2,6 +2,10 @@
 # http://www.viewfinderpanoramas.org/ (Alps)  and
 # http://www.alpin-koordinaten.de/    (Nepal)
 #
+# local additions
+#
+loc_1,PARSEIERSPITZE,,47.174257,10.478691,3036
+#
 # Thu Feb 26 12:00:46 CET 2009
 # and is included in the gipfel tarball with the kind permission of
 # Jonathan de Ferranti and www.alpin-koordinaten.de
