@@ -245,6 +245,9 @@ GipfelWidget::draw() {
 			known_hills->contains(m) || m == focused_mountain)
 			continue;
 
+		if (fabs(m->x) > img->w() / 2 || fabs(m->y) > img->h() / 2)
+			continue;
+
 		fl_xyline(m_x - CROSS_SIZE, m_y, m_x + CROSS_SIZE);
 		fl_yxline(m_x, m_y + m->label_y - height, m_y + CROSS_SIZE);
 		fl_xyline(m_x, m_y + m->label_y - height, m_x + m->label_x);
@@ -257,6 +260,9 @@ GipfelWidget::draw() {
 
 		if ((m->flags & (Hill::DUPLIC|Hill::TRACK_POINT)) ||
 			(!show_hidden && (m->flags & Hill::HIDDEN)) || m == focused_mountain)
+			continue;
+
+		if (fabs(m->x) > img->w() / 2 || fabs(m->y) > img->h() / 2)
 			continue;
 
 		if (known_hills->contains(m)) {
@@ -348,6 +354,9 @@ GipfelWidget::set_labels(Hills *v) {
 		if (!show_hidden && (m->flags & Hill::HIDDEN))
 			continue;
 
+		if (fabs(m->x) > img->w() / 2 || fabs(m->y) > img->h() / 2)
+			continue;
+
 		m->label_x = (int) fl_width(m->name) + 1;
 		m->label_y = 0;
 
@@ -358,6 +367,9 @@ GipfelWidget::set_labels(Hills *v) {
 				continue;
 
 			if (!show_hidden && (n->flags & Hill::HIDDEN))
+				continue;
+
+			if (fabs(m->x) > img->w() / 2 || fabs(m->y) > img->h() / 2)
 				continue;
 
 			if (overlap(m->x, m->label_x, n->x - CROSS_SIZE, n->label_x))
