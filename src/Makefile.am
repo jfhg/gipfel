@@ -18,6 +18,7 @@ gipfel_SOURCES = \
 	PreviewOutputImage.cxx \
 	ImageMetaData.cxx \
 	ScreenDump.cxx \
+	ScanImage.cxx \
 	strsep.c
 
 noinst_HEADERS = \
@@ -40,4 +41,5 @@ noinst_HEADERS = \
 	PreviewOutputImage.H \
 	ImageMetaData.H \
 	ScreenDump.H \
+	ScanImage.H \
 	strsep.h

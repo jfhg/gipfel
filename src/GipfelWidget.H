@@ -14,6 +14,7 @@
 
 #include "Panorama.H"
 #include "ImageMetaData.H"
+#include "ScanImage.H"
 
 class GipfelWidget : public Fl_Group {
 	private:
@@ -37,12 +38,6 @@ class GipfelWidget : public Fl_Group {
 		void set_labels(Hills *v);
 		int get_rel_track_width(Hill *m);
 
-		static int get_pixel_nearest(Fl_Image *img, double x, double y,
-			int *r, int *g, int *b);
-		static int get_pixel_bicubic(Fl_Image *img, double x, double y,
-			int *r, int *g, int *b);
-		static int get_pixel(Fl_Image *img, int x, int y,
-			int *r, int *g, int *b);
 		static void find_peak_cb(Fl_Widget *o, void *f);
 
 	public:
@@ -91,7 +86,7 @@ class GipfelWidget : public Fl_Group {
 		void set_distortion_params(double k0, double k1, double x0);
 		Hills *get_mountains() { return pan->get_mountains(); };
 		int comp_params();
-		int get_pixel(GipfelWidget::sample_mode_t,
+		int get_pixel(ScanImage::mode_t m,
 			double a_alph, double a_nick, int *r, int *g, int *b);
 		int get_distortion_profile_name(char *buf, int buflen);
 		int save_distortion_params(const char *prof_name, int force);

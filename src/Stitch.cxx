@@ -64,7 +64,7 @@ Stitch::set_output(OutputImage *img) {
 }
 
 int
-Stitch::resample(GipfelWidget::sample_mode_t m,
+Stitch::resample(ScanImage::mode_t m,
 	int w, int h, double view_start, double view_end) {
 
 	view_start = view_start * deg2rad;

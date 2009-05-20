@@ -9,6 +9,7 @@
 
 #include "GipfelWidget.H"
 #include "OutputImage.H"
+#include "ScanImage.H"
 
 #define MAX_PICS 256
 
@@ -24,7 +25,7 @@ class Stitch {
 
 		int load_image(char *file);
 		OutputImage * set_output(OutputImage *img);
-		int resample(GipfelWidget::sample_mode_t m,
+		int resample(ScanImage::mode_t m,
 			int w, int h, double view_start, double view_end);
 };
 

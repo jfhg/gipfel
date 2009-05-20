@@ -65,7 +65,7 @@ static Fl_Menu_Bar *mb;
 #define STITCH_JPEG              2
 #define STITCH_TIFF              4
 
-static int stitch(GipfelWidget::sample_mode_t m , int b_16,
+static int stitch(ScanImage::mode_t m , int b_16,
 	int stitch_w, int stitch_h,
 	double from, double to, int type, const char *path, int argc, char **argv);
 
@@ -602,7 +602,7 @@ int main(int argc, char** argv) {
 			type = STITCH_PREVIEW;
 		}
 
-		return stitch(bicubic_flag?GipfelWidget::BICUBIC:GipfelWidget::NEAREST,
+		return stitch(bicubic_flag ? ScanImage::BICUBIC : ScanImage::NEAREST,
 			b_16_flag,
 			stitch_w, stitch_h, stitch_from, stitch_to,
 			type, outpath, my_argc, my_argv);
@@ -667,7 +667,7 @@ int main(int argc, char** argv) {
 }
 
 static int
-stitch(GipfelWidget::sample_mode_t m, int b_16,
+stitch(ScanImage::mode_t m, int b_16,
 	int stitch_w, int stitch_h, double from, double to,
 	int type, const char *path, int argc, char **argv) {
 
