@@ -5,6 +5,7 @@ gipfel-0.3.2
 * Fix 16bit tiff output in stitching mode.
 * Don't draw labels of mountains that are slightly off the image.
 * Factored out ScanImage class.
+* Fixed a nasty issue with float <-> double conversion introduced in 0.3.0.
 
 gipfel-0.3.1
 * Fix compile error and warnings on Linux.
