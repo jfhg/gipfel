@@ -132,13 +132,13 @@ void Hills::mark_duplicates(double dist) {
 
 	sort(SORT_PHI);
 
-	for(i=0; i<get_num();i++) {
+	for(i = 0; i < get_num(); i++) {
 		m = get(i);
 
-		if (m->flags & Hill::TRACK_POINT)
-			continue;
-
 		if (m) {
+			if (m->flags & Hill::TRACK_POINT)
+				continue;
+
 			j = i + 1;
 			n = get(j);
 			while (n && fabs(n->phi - m->phi) <= dist) {
