@@ -153,7 +153,17 @@ ImageMetaData::load_image_exif(char *name) {
 }
 
 
-#define GIPFEL_FORMAT_2 "gipfel: longitude %lf, latitude %lf, height %lf, direction %lf, nick %lf, tilt %lf, focal_length_35mm %lf, projection type %d, k0 %lf, k1 %lf, x0 %lf"
+#define GIPFEL_FORMAT "gipfel: longitude " FMT_DOUBLE ", latitude " FMT_DOUBLE ", height " FMT_DOUBLE ", direction " FMT_DOUBLE ", nick " FMT_DOUBLE ", tilt " FMT_DOUBLE ", focal_length_35mm " FMT_DOUBLE ", projection type %d, k0 " FMT_DOUBLE ", k1 " FMT_DOUBLE ", x0 " FMT_DOUBLE ""
+
+#define FMT_DOUBLE "%lf"
+static const char *gipfel_format_scan = GIPFEL_FORMAT;
+
+#undef FMT_DOUBLE
+#define FMT_DOUBLE "%f"
+static const char *gipfel_format_prnt = GIPFEL_FORMAT;
+
+#undef FMT_DOUBLE
+#undef GIPFEL_FORMAT
 
 int
 ImageMetaData::load_image_jpgcom(char *name) {
@@ -172,7 +182,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
 
     const char *com = image->comment().c_str();
 
-    if ((n = sscanf(com, GIPFEL_FORMAT_2,
+    if ((n = sscanf(com, gipfel_format_scan,
             &lo, &la, &he, &dir, &ni, &ti, &fr, &pt, &k0, &k1, &x0)) >= 8) {
         _longitude = lo;
         _latitude  = la;
@@ -242,7 +252,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
     image->readMetadata();
     image->clearComment();
 
-    snprintf(buf, sizeof(buf), GIPFEL_FORMAT_2,
+    snprintf(buf, sizeof(buf), gipfel_format_prnt,
         _longitude,
         _latitude,
         _height,
