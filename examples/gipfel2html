@@ -100,12 +100,22 @@ cat << EOF
 </td></tr>
 </table>
 <br/>
-Move the mouse over the image to see other images of which the 
-viewpoint is visible.
-Move the mouse over the rectangle to see a thumbnail.
+<b>Created with <a href="http://www.ecademix.com/JohannesHofmann/gipfel.html">gipfel</a></b>
 <br/>
 <br/>
+EOF
 
+if [ "$MODE" = "images" ]; then
+	echo Move the mouse over the image to see other images.
+else
+	echo Move the mouse over the image to see known mountains.
+fi
+
+cat << EOF
+<br/>
+Move the mouse over the rectangle to see details.
+<br/>
+<br/>
 This image is visible on these images:<br/>
 EOF
 

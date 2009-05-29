@@ -26,11 +26,11 @@ dirs:
 	mkdir -p gipfelweb/gipfel
 
 gipfelweb/slides/%.jpg: %.jpg
-	anytopnm $< | pamscale -xyfit 10000 500 | pnmtojpeg -quality 94 > $@
+	anytopnm $< | pamscale -f lanczos -xyfit 20000 500 | pnmtojpeg -quality 94 > $@
 	jhead -te $< $@
 
 gipfelweb/thumbs/%.jpg: %.jpg
-	anytopnm $< | pamscale -xyfit 400 50 | pnmtojpeg -quality 80 > $@
+	anytopnm $< | pamscale -f point -xyfit 400 50 | pnmtojpeg -quality 80 > $@
 
 gipfelweb/gipfel/%.pos: %.jpg
 	gipfel -p $< > $@
@@ -41,12 +41,14 @@ gipfelweb/gipfel/%.imgs: gipfelweb/slides/%.jpg %.opts gipfelweb/gipfel/index.gi
 gipfelweb/gipfel/%.imgs: gipfelweb/slides/%.jpg gipfelweb/gipfel/index.gipfel
 	gipfel -V 0.05 -e gipfelweb/gipfel/index.gipfel $< > $@
 
+gipfelweb/gipfel/%.hills: gipfelweb/slides/%.jpg %.opts
+	gipfel `cat $*.opts` -E $< > $@
+
 gipfelweb/gipfel/%.hills: gipfelweb/slides/%.jpg
 	gipfel -V 0.05 -E $< > $@
 
 gipfelweb/gipfel/index.gipfel: $(positions)
 	cat $(positions) > gipfelweb/gipfel/index.gipfel
-
 
 gipfelweb/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.imgs %.title $(thumbs)
 	gipfel2html images "`cat $*.title`" $* > $@
