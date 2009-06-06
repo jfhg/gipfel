@@ -543,6 +543,20 @@ GipfelWidget::find_peak_cb(Fl_Widget *, void *f) {
 	}
 }
 
+void 
+GipfelWidget::toggle_hidden_cb(Fl_Widget *, void *f) {
+	GipfelWidget *g = (GipfelWidget*) f;
+
+	Hill *m = g->find_mountain(g->pan->get_visible_mountains(), g->mouse_x, g->mouse_y);
+	if (!m)
+		return;
+
+	if (m->flags & Hill::HIDDEN)
+		m->flags &= ~Hill::HIDDEN;
+	else
+		m->flags |= Hill::HIDDEN;
+}
+
 void
 GipfelWidget::set_height_dist_ratio(double r) {
 	pan->set_height_dist_ratio(r);
@@ -630,15 +644,23 @@ GipfelWidget::handle(int event) {
 					redraw();
 				}
 			} else if (Fl::event_button() == FL_RIGHT_MOUSE) {
-				Fl_Menu_Item rclick_menu[] = {
-					{"Find Peak", 0, find_peak_cb,  this},
-					{0}
-				};
-				const Fl_Menu_Item *mi =
-					rclick_menu->popup(Fl::event_x(), Fl::event_y(), 0, 0, 0);
+				Fl_Menu_Button rclick_menu(Fl::event_x_root(),
+					Fl::event_y_root(), 80, 1);
+				Hill *m = find_mountain(pan->get_visible_mountains(),
+					mouse_x, mouse_y);
+				char buf[1024];
 
-				if (mi)
-					mi->do_callback(0, mi->user_data());
+				rclick_menu.add("Find Peak", 0, find_peak_cb, this);
+				if (m) {
+					if (m->flags & Hill::HIDDEN)
+						snprintf(buf, sizeof(buf), "Unhide %s", m->name);
+					else
+						snprintf(buf, sizeof(buf), "Hide %s", m->name);
+
+					rclick_menu.add(buf, 0, toggle_hidden_cb, this);
+				}
+
+				rclick_menu.popup();
 			}
 
 			Fl::focus(this);

@@ -39,6 +39,7 @@ class GipfelWidget : public Fl_Group {
 		int get_rel_track_width(Hill *m);
 
 		static void find_peak_cb(Fl_Widget *o, void *f);
+		static void toggle_hidden_cb(Fl_Widget *o, void *f);
 
 	public:
 		typedef enum {
