@@ -6,6 +6,7 @@ gipfel-0.3.2
 * Don't draw labels of mountains that are slightly off the image.
 * Factored out ScanImage class.
 * Fixed a nasty issue with float <-> double conversion introduced in 0.3.0.
+* Add manual hiding / unhiding from right click popup menu.
 
 gipfel-0.3.1
 * Fix compile error and warnings on Linux.
