@@ -555,6 +555,9 @@ GipfelWidget::toggle_hidden_cb(Fl_Widget *, void *f) {
 		m->flags &= ~Hill::HIDDEN;
 	else
 		m->flags |= Hill::HIDDEN;
+
+	g->set_labels(g->pan->get_visible_mountains());
+	g->redraw();
 }
 
 void
