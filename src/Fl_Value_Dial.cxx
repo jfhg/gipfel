@@ -21,6 +21,7 @@ Fl_Value_Dial::Fl_Value_Dial(int X, int Y, int W, int H, const char*l)
 void Fl_Value_Dial::draw() {
 	int sxx = x(), syy = y(), sww = w(), shh = h();
 	int bxx = x(), byy = y(), bww = w(), bhh = h();
+	char buf[128];
 
 	if (damage()&FL_DAMAGE_ALL) draw_box(box(),sxx,syy,sww,shh,color());
 	Fl_Dial::draw(sxx+Fl::box_dx(box()),
@@ -28,8 +29,7 @@ void Fl_Value_Dial::draw() {
 		sww-Fl::box_dw(box()),
 		shh-Fl::box_dh(box()));
 
-	char buf[128];
-	format(buf);
+	format(buf); // prints at most 20 chars
 	fl_font(textfont(), textsize());
 
 	fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
