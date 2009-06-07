@@ -42,11 +42,6 @@ class GipfelWidget : public Fl_Group {
 		static void toggle_hidden_cb(Fl_Widget *o, void *f);
 
 	public:
-		typedef enum {
-			NEAREST  = 0,
-			BICUBIC  = 1
-		} sample_mode_t;
-	
 		GipfelWidget(int X,int Y,int W, int H);
 
 		int load_image(char *file);
