@@ -647,6 +647,8 @@ GipfelWidget::handle(int event) {
 					redraw();
 				}
 			} else if (Fl::event_button() == FL_RIGHT_MOUSE) {
+				focused_mountain = NULL;
+
 				Fl_Menu_Button rclick_menu(Fl::event_x_root(),
 					Fl::event_y_root(), 80, 1);
 				Hill *m = find_mountain(pan->get_visible_mountains(),
