@@ -1,6 +1,6 @@
 Name: gipfel
 Summary: gipfel - Photogrammetry For Mountain Images
-Version: 0.3.1
+Version: 0.3.2
 Release: 3.1
 URL: http://www.ecademix.com/JohannesHofmann/gipfel.html
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -44,6 +44,8 @@ rm -rf $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}
 %{_datadir}/%{name}/gipfel.dat
 
 %changelog
+* Thu Jul 2 2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
+- update to gipfel-0.3.2
 * Tue Apr 7 2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
 - update to gipfel-0.3.1
 * Thu Mar 26 2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
