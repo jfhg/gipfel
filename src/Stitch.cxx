@@ -12,7 +12,7 @@
 
 #include <gsl/gsl_multifit.h>
 
-#include <Fl/Fl.H>
+#include <FL/Fl.H>
 
 #include "OutputImage.H"
 #include "Stitch.H"

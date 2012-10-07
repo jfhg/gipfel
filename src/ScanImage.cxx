@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include <Fl/Fl_Image.H>
+#include <FL/Fl_Image.H>
 #include "ScanImage.H"
 
 int

@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <Fl/Fl.H>
-#include <Fl/fl_draw.H>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
 
 #include "PreviewOutputImage.H"
 
