@@ -495,8 +495,8 @@ int main(int argc, char** argv) {
 	double stitch_from = 0.0, stitch_to = 380.0;
 	double dist_k0 = 0.0, dist_k1 = 0.0, dist_x0 = 0.0;
 	double visibility = 0.07;
-	char *outpath = "/tmp";
-	char *export_file = NULL;
+	const char *outpath = "/tmp";
+	const char *export_file = NULL;
 
 	err = 0;
 	while ((c = getopt(argc, argv, ":?d:v:sw:h:j:t:u:br:4e:V:pE")) != EOF) {
