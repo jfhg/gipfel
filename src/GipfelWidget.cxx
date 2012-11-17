@@ -729,7 +729,7 @@ GipfelWidget::export_hills(const char *file, FILE *fp) {
 		int _y = (int) rint(m->y) + h() / 2;
 
 		if (m->flags & Hill::DUPLIC || m->flags & Hill::HIDDEN ||
-			file && !(m->flags & Hill::EXPORT)) {
+			(file && !(m->flags & Hill::EXPORT))) {
 			continue;
 		}
 
