@@ -26,7 +26,7 @@ compute the viewing paramteres from the given data points.
 
 Requirements
 ------------
-* [fltk-1.1.x](http://www.fltk.org)
+* [fltk-1.x.x](http://www.fltk.org)
 * [libtiff](http://www.remotesensing.org/libtiff/)
 * [libjpeg](http://www.ijg.org/)
 * [exiv2](http://www.exiv2.org/)
@@ -36,11 +36,6 @@ Requirements
 Installation
 ------------
 Unpack the tar file and run `./configure; make; make install`
-
-Donations
----------
-If you like gipfel you can make a donation at my
-[homepage](http://www.ecademix.com/JohannesHofmann).
 
 Running
 -------
