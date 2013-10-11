@@ -229,11 +229,6 @@ void hidden_cb(Fl_Menu_* o, void*d) {
 	gipf->set_show_hidden(o->mvalue()->value() != 0); 
 }
 
-void comp_cb(Fl_Widget *, void *) {
-	gipf->comp_params();
-	set_values();
-}
-
 void save_distortion_cb(Fl_Widget *, void *) {
 	char buf[1024];
 	const char * prof_name;
@@ -473,12 +468,6 @@ create_control_window() {
 	i_distortion_x0->align(FL_ALIGN_LEFT);
 	i_distortion_x0->when(FL_WHEN_ENTER_KEY);
 	i_distortion_x0->callback((Fl_Callback*)distortion_cb);
-
-	// Buttons
-	Fl_Button *b = new Fl_Button(280, 280, 100, 20, "comp");
-	b->color(FL_RED);
-	b->tooltip("compute view parameter from given mountains");
-	b->callback(comp_cb);
 
 	win->end();
 	return win;
