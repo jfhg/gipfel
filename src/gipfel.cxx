@@ -630,7 +630,7 @@ int main(int argc, char** argv) {
 	view_win->resizable(g);
 	scroll = new Fl_Scroll(0, 0, view_win->w(), view_win->h());
 
-	gipf = new GipfelWidget(0, 0, 800, 600);
+	gipf = new GipfelWidget(0, 0, 800, 600, set_values);
 	if (img_file) {
 		gipf->load_image(img_file);
 		view_win->label(img_file);
@@ -716,7 +716,7 @@ export_hills(const char *export_file, double visibility) {
 		return 1;
 	}
 
-	gipf = new GipfelWidget(0,0,800,600);
+	gipf = new GipfelWidget(0,0,800,600, NULL);
 	gipf->load_image(img_file);
 	gipf->load_data(data_file);
 	gipf->set_height_dist_ratio(visibility);

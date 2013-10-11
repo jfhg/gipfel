@@ -29,7 +29,7 @@
 
 static double pi_d, deg2rad;
 
-GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Group(X, Y, W, H) {
+GipfelWidget::GipfelWidget(int X,int Y,int W, int H, void (*changed_cb)()): Fl_Group(X, Y, W, H) {
 	end();
 	pi_d = asin(1.0) * 2.0;
 	deg2rad = pi_d / 180.0;
@@ -46,6 +46,7 @@ GipfelWidget::GipfelWidget(int X,int Y,int W, int H): Fl_Group(X, Y, W, H) {
 	track_points = NULL;
 	fl_register_images();
 	mouse_x = mouse_y = 0;
+	params_changed_cb = changed_cb;
 }
 
 int
@@ -611,6 +612,8 @@ GipfelWidget::comp_params() {
 	set_labels(pan->get_visible_mountains());
 	redraw();
 	fl_cursor(FL_CURSOR_DEFAULT);
+	if (params_changed_cb)
+		params_changed_cb();
 
 	return ret;
 }
@@ -675,6 +678,8 @@ GipfelWidget::handle(int event) {
 			return 1;
 		case FL_RELEASE:
 			cur_mountain = NULL;
+			if (known_hills->get_num() > 1)
+				comp_params();
 			return 1;
 		case FL_ENTER:
 			return 1;

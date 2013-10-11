@@ -30,6 +30,7 @@ class GipfelWidget : public Fl_Group {
 		ImageMetaData *md;
 		int mouse_x, mouse_y;
 		char focused_mountain_label[128];
+		void (*params_changed_cb)();
 
 		int handle(int event);
 		Hill * find_mountain(Hills *mnts, int m_x, int m_y);
@@ -42,7 +43,7 @@ class GipfelWidget : public Fl_Group {
 		static void toggle_hidden_cb(Fl_Widget *o, void *f);
 
 	public:
-		GipfelWidget(int X,int Y,int W, int H);
+		GipfelWidget(int X,int Y,int W, int H, void (*changed_cb)());
 
 		int load_image(char *file);
 		int save_image(char *file);

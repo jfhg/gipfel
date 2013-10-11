@@ -42,7 +42,7 @@ int
 Stitch::load_image(char *file) {
 	for (int i = 0; i < MAX_PICS; i++) {
 		if (gipf[i] == NULL) {
-			gipf[i] = new GipfelWidget(0, 0, 800, 600);
+			gipf[i] = new GipfelWidget(0, 0, 800, 600, NULL);
 			if (gipf[i]->load_image(file) != 0) {
 				delete gipf[i];
 				gipf[i] = NULL;
