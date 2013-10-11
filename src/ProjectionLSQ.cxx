@@ -126,21 +126,21 @@ lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
 static int
 lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 	struct data *dat = (struct data *) data;
-    double c_view, c_nick, c_tilt, scale, k0, k1, x0;
+	double c_view, c_nick, c_tilt, scale, k0, k1, x0;
 
-    c_view = gsl_vector_get (x, 0);
-    c_nick = gsl_vector_get (x, 1);
-    c_tilt = gsl_vector_get (x, 2);
-    scale = gsl_vector_get (x, 3);
-    if (dat->distortion_correct) {
-        k0  = gsl_vector_get (x, 4);
-        k1 = gsl_vector_get (x, 5);
-        x0 = gsl_vector_get (x, 6);
-    } else {
-        k0 = dat->old_params->k0;
-        k1 = dat->old_params->k1;
-        x0 = dat->old_params->x0;
-    }            
+	c_view = gsl_vector_get (x, 0);
+	c_nick = gsl_vector_get (x, 1);
+	c_tilt = gsl_vector_get (x, 2);
+	scale = gsl_vector_get (x, 3);
+	if (dat->distortion_correct) {
+		k0  = gsl_vector_get (x, 4);
+		k1 = gsl_vector_get (x, 5);
+		x0 = gsl_vector_get (x, 6);
+	} else {
+		k0 = dat->old_params->k0;
+		k1 = dat->old_params->k1;
+		x0 = dat->old_params->x0;
+	}            
 
 	for (int i=0; i<dat->h->get_num(); i++) {
 		Hill *m = dat->h->get(i);
@@ -173,7 +173,7 @@ static int
 lsq_fdf (const gsl_vector * x, void *data, gsl_vector * f, gsl_matrix * J) {
 	lsq_f (x, data, f);
 	lsq_df (x, data, J);
-     
+	 
 	return GSL_SUCCESS;
 }
 
@@ -205,19 +205,18 @@ ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
 
 	x = gsl_vector_view_array (x_init, num_params);
 
-   f.f = &lsq_f;
-   f.df = &lsq_df;
-   f.fdf = &lsq_fdf;
-   f.n = h->get_num() * 2;
-   f.p = num_params;
-   f.params = &dat;
+	f.f = &lsq_f;
+	f.df = &lsq_df;
+	f.fdf = &lsq_fdf;
+	f.n = h->get_num() * 2;
+	f.p = num_params;
+	f.params = &dat;
 
 	T = gsl_multifit_fdfsolver_lmsder;
 	s = gsl_multifit_fdfsolver_alloc (T, h->get_num() * 2, num_params);
 	gsl_multifit_fdfsolver_set (s, &f, &x.vector);
 
-    for (int i=0; i<100; i++) {
-
+	for (int i=0; i<100; i++) {
 		status = gsl_multifit_fdfsolver_iterate (s);
 		if (status) {
 			break;
