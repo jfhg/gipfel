@@ -131,7 +131,7 @@ Panorama::comp_params(Hills *h) {
 
 	ret = proj->comp_params(h, &parms);
 	if (ret == 0)
-		update_visible_mountains();
+		update_visible_mountains(h);
 
 	return ret;
 }
@@ -360,7 +360,7 @@ Panorama::update_close_mountains() {
 }
 
 void 
-Panorama::update_visible_mountains() {
+Panorama::update_visible_mountains(Hills *excluded_hills) {
 	visible_mountains->clear();
 
 	for (int i = 0; i < close_mountains->get_num(); i++) {
@@ -374,14 +374,15 @@ Panorama::update_visible_mountains() {
 		}
 	}
 
-	update_coordinates();
+	update_coordinates(excluded_hills);
 }
 
 void
-Panorama::update_coordinates() {
+Panorama::update_coordinates(Hills *excluded_hills) {
 	for (int i = 0; i < visible_mountains->get_num(); i++) {
 		Hill *m = visible_mountains->get(i);
-		proj->get_coordinates(m->alph, m->a_nick, &parms, &m->x, &m->y);
+		if (!excluded_hills || !excluded_hills->contains(m))
+			proj->get_coordinates(m->alph, m->a_nick, &parms, &m->x, &m->y);
 	}
 }
 

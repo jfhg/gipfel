@@ -26,9 +26,9 @@ class Panorama {
 
 		Hill * get_pos(const char *name);
 		void update_angles();
-		void update_coordinates();
+		void update_coordinates(Hills *excluded_hills = NULL);
 		void update_close_mountains();
-		void update_visible_mountains();
+		void update_visible_mountains(Hills *excluded_hills = NULL);
 		void mark_hidden(Hills *hills);
 		double distance(double phi, double lam);
 		double alpha(const Hill *m);
