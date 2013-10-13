@@ -499,7 +499,8 @@ GipfelWidget::set_tilt_angle(double a) {
 
 void
 GipfelWidget::set_focal_length_35mm(double s) {
-	pan->set_scale(s * (double) img->w() / 35.0);
+	int w = std::max(img->w(), img->h()); // assume sensor is wider than high
+	pan->set_scale(s * (double) w / 35.0);
 	set_labels(pan->get_visible_mountains());
 	redraw();
 }
@@ -519,10 +520,13 @@ GipfelWidget::set_distortion_params(double k0, double k1, double x0) {
 
 double
 GipfelWidget::get_focal_length_35mm() {
+	int w;
+
 	if (img == NULL)
 		return NAN;
-	else
-		return pan->get_scale() * 35.0 / (double) img->w();
+	
+	w = std::max(img->w(), img->h()); // assume sensor is wider than high
+	return pan->get_scale() * 35.0 / (double) w;
 }
 
 void 
