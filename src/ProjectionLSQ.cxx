@@ -133,7 +133,7 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 	c_tilt = gsl_vector_get (x, 2);
 	scale = gsl_vector_get (x, 3);
 	if (dat->distortion_correct) {
-		k0  = gsl_vector_get (x, 4);
+		k0 = gsl_vector_get (x, 4);
 		k1 = gsl_vector_get (x, 5);
 		x0 = gsl_vector_get (x, 6);
 	} else {
