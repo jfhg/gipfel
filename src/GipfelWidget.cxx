@@ -682,7 +682,7 @@ GipfelWidget::handle(int event) {
 			return 1;
 		case FL_RELEASE:
 			cur_mountain = NULL;
-			if (known_hills->get_num() > 1)
+			if (known_hills->get_num() > 0)
 				comp_params();
 			return 1;
 		case FL_ENTER:

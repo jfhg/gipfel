@@ -33,43 +33,48 @@ int
 ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 	const Hill *m1, *m2;
 	double scale_tmp;
-	int distortion_correct = 0;
-	ViewParams new_parms;
+	int known_hills = h->get_num();
+	ViewParams new_parms = *parms;
 
-	if (h->get_num() < 2) {
-		fprintf(stderr, "Please position at least 2 hills\n");
+	if (known_hills < 1) {
+		fprintf(stderr, "Please position at least 1 hill\n");
 		return 1;
-	} else if (h->get_num() > 3) {
-		fprintf(stderr, "Performing calibration\n");
-		distortion_correct = 1;
-		parms->k0 = 0.0;
-		parms->k1 = 0.0;
-		parms->x0 = 0.0;
 	}
 
 	m1 = h->get(0);
-	m2 = h->get(1);
+	new_parms.a_center = m1->alph;
+	new_parms.a_nick   = 0.0;
 
-	scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
+	if (known_hills > 1) {
+		m2 = h->get(1);
 
-	if (isnan(scale_tmp) || scale_tmp < 50.0) {
-		fprintf(stderr, "Could not determine initial scale value (%f)\n",
-			scale_tmp);
-		return 1;
+		scale_tmp = comp_scale(m1->alph, m2->alph, m1->x, m2->x);
+
+		if (isnan(scale_tmp) || scale_tmp < 50.0) {
+			fprintf(stderr, "Could not determine initial scale value (%f)\n",
+				scale_tmp);
+			return 1;
+		}
+
+		new_parms.scale    = scale_tmp;
+		new_parms.a_tilt   = 0.0;
 	}
 
-	new_parms.a_center = m1->alph;
-	new_parms.scale    = scale_tmp;
-	new_parms.a_nick   = 0.0;
-	new_parms.a_tilt   = 0.0;
-	new_parms.k0 = parms->k0;
-	new_parms.k1 = parms->k1;
-	new_parms.x0 = parms->x0;
+	if (known_hills > 3) {
+		fprintf(stderr, "Performing calibration\n");
+		new_parms.k0 = 0.0;
+		new_parms.k1 = 0.0;
+		new_parms.x0 = 0.0;
+	}
 
-	lsq(h, &new_parms, 0);
-
-	if (distortion_correct)
+	if (known_hills == 1) {
+		lsq(h, &new_parms, 0);
+	} else if (known_hills < 4) {
 		lsq(h, &new_parms, 1);
+	} else {
+		lsq(h, &new_parms, 1);
+		lsq(h, &new_parms, 2);
+	}
 
 	if (isnan(new_parms.scale) || new_parms.scale < 50.0) {
 		fprintf(stderr, "Could not determine reasonable view parameters\n");
@@ -83,30 +88,28 @@ ProjectionLSQ::comp_params(const Hills *h, ViewParams *parms) {
 
 struct data {
 	ProjectionLSQ *p;
-	int distortion_correct;
+	int level;
 	const Hills *h;
 	const ViewParams *old_params;
 };
 
-#define CALL(A) dat->p->A(c_view, c_nick, c_tilt, scale, k0, k1, x0, m->alph, m->a_nick) 
+#define CALL(A) dat->p->A(parms.a_center, parms.a_nick, parms.a_tilt, parms.scale, parms.k0, parms.k1, parms.x0, m->alph, m->a_nick) 
 
 static int
 lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
 	struct data *dat = (struct data *) data;
-	double c_view, c_nick, c_tilt, scale, k0, k1, x0;
+	ViewParams parms = *dat->old_params;
 
-	c_view = gsl_vector_get (x, 0);
-	c_nick = gsl_vector_get (x, 1);
-	c_tilt = gsl_vector_get (x, 2);
-	scale = gsl_vector_get (x, 3);
-	if (dat->distortion_correct) {
-		k0  = gsl_vector_get (x, 4);
-		k1 = gsl_vector_get (x, 5);
-		x0 = gsl_vector_get (x, 6);
-	} else {
-		k0 = dat->old_params->k0;
-		k1 = dat->old_params->k1;
-		x0 = dat->old_params->x0;
+	parms.a_center = gsl_vector_get (x, 0);
+	parms.a_nick = gsl_vector_get (x, 1);
+	if (dat->level > 0) {
+		parms.a_tilt = gsl_vector_get (x, 2);
+		parms.scale = gsl_vector_get (x, 3);
+	}
+	if (dat->level > 1) {
+		parms.k0  = gsl_vector_get (x, 4);
+		parms.k1 = gsl_vector_get (x, 5);
+		parms.x0 = gsl_vector_get (x, 6);
 	}
 
 	for (int i=0; i<dat->h->get_num(); i++) {
@@ -126,30 +129,30 @@ lsq_f (const gsl_vector * x, void *data, gsl_vector * f) {
 static int
 lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 	struct data *dat = (struct data *) data;
-	double c_view, c_nick, c_tilt, scale, k0, k1, x0;
+	ViewParams parms = *dat->old_params;
 
-	c_view = gsl_vector_get (x, 0);
-	c_nick = gsl_vector_get (x, 1);
-	c_tilt = gsl_vector_get (x, 2);
-	scale = gsl_vector_get (x, 3);
-	if (dat->distortion_correct) {
-		k0 = gsl_vector_get (x, 4);
-		k1 = gsl_vector_get (x, 5);
-		x0 = gsl_vector_get (x, 6);
-	} else {
-		k0 = dat->old_params->k0;
-		k1 = dat->old_params->k1;
-		x0 = dat->old_params->x0;
-	}            
+	parms.a_center = gsl_vector_get (x, 0);
+	parms.a_nick = gsl_vector_get (x, 1);
+	if (dat->level > 0) {
+		parms.a_tilt = gsl_vector_get (x, 2);
+		parms.scale = gsl_vector_get (x, 3);
+	}
+	if (dat->level > 1) {
+		parms.k0 = gsl_vector_get (x, 4);
+		parms.k1 = gsl_vector_get (x, 5);
+		parms.x0 = gsl_vector_get (x, 6);
+	}
 
 	for (int i=0; i<dat->h->get_num(); i++) {
 		Hill *m = dat->h->get(i);
 
 		gsl_matrix_set (J, 2*i, 0, CALL(mac_x_dc_view));
 		gsl_matrix_set (J, 2*i, 1, CALL(mac_x_dc_nick));
-		gsl_matrix_set (J, 2*i, 2, CALL(mac_x_dc_tilt));
-		gsl_matrix_set (J, 2*i, 3, CALL(mac_x_dscale));
-		if (dat->distortion_correct) {
+		if (dat->level > 0) {
+			gsl_matrix_set (J, 2*i, 2, CALL(mac_x_dc_tilt));
+			gsl_matrix_set (J, 2*i, 3, CALL(mac_x_dscale));
+		}
+		if (dat->level > 1) {
 			gsl_matrix_set (J, 2*i, 4, CALL(mac_x_dk0));
 			gsl_matrix_set (J, 2*i, 5, CALL(mac_x_dk1));
 			gsl_matrix_set (J, 2*i, 6, CALL(mac_x_dx0));
@@ -157,9 +160,11 @@ lsq_df (const gsl_vector * x, void *data, gsl_matrix * J) {
 
 		gsl_matrix_set (J, 2*i+1, 0, CALL(mac_y_dc_view));
 		gsl_matrix_set (J, 2*i+1, 1, CALL(mac_y_dc_nick));
-		gsl_matrix_set (J, 2*i+1, 2, CALL(mac_y_dc_tilt));
-		gsl_matrix_set (J, 2*i+1, 3, CALL(mac_y_dscale));
-		if (dat->distortion_correct) {
+		if (dat->level > 0) {
+			gsl_matrix_set (J, 2*i+1, 2, CALL(mac_y_dc_tilt));
+			gsl_matrix_set (J, 2*i+1, 3, CALL(mac_y_dscale));
+		}
+		if (dat->level > 1) {
 			gsl_matrix_set (J, 2*i+1, 4, CALL(mac_y_dk0));
 			gsl_matrix_set (J, 2*i+1, 5, CALL(mac_y_dk1));
 			gsl_matrix_set (J, 2*i+1, 6, CALL(mac_y_dx0));
@@ -179,7 +184,7 @@ lsq_fdf (const gsl_vector * x, void *data, gsl_vector * f, gsl_matrix * J) {
 
 int
 ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
-	int distortion_correct) {
+	int level) {
 
 	const gsl_multifit_fdfsolver_type *T;
 	gsl_multifit_fdfsolver *s;
@@ -188,10 +193,17 @@ ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
 	double x_init[8];
 	gsl_vector_view x;
 	int status;
-	int num_params = distortion_correct?7:4;
+	int num_params;
+
+	if (level == 0)
+		num_params = 2;
+	else if (level == 1)
+		num_params = 4;
+	else
+		num_params = 7;
 
 	dat.p = this;
-	dat.distortion_correct = distortion_correct;
+	dat.level = level;
 	dat.h = h;
 	dat.old_params = parms;
 
@@ -225,10 +237,12 @@ ProjectionLSQ::lsq(const Hills *h, ViewParams *parms,
 
 	parms->a_center = gsl_vector_get(s->x, 0);
 	parms->a_nick = gsl_vector_get(s->x, 1);
-	parms->a_tilt = gsl_vector_get(s->x, 2);
-	parms->scale = gsl_vector_get(s->x, 3);
 
-	if (distortion_correct) {
+	if (level > 0) {
+		parms->a_tilt = gsl_vector_get(s->x, 2);
+		parms->scale = gsl_vector_get(s->x, 3);
+	}
+	if (level > 1) {
 		parms->k0 = gsl_vector_get(s->x, 4);
 		parms->k1 = gsl_vector_get(s->x, 5);
 		parms->x0 = gsl_vector_get(s->x, 6);
