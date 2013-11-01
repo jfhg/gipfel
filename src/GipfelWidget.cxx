@@ -545,6 +545,7 @@ GipfelWidget::find_peak_cb(Fl_Widget *, void *f) {
 
 		g->cur_mountain = m;
 		g->set_mountain(g->mouse_x, g->mouse_y);
+		g->comp_params();
 	}
 }
 
