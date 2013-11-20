@@ -64,7 +64,21 @@ Fl_Search_Chooser::cancel_cb(Fl_Input* in, void*c) {
 	Fl_Search_Chooser *sc = (Fl_Search_Chooser *) c;
 	sc->sb->deselect();
 	sc->close();
-}    
+}
+
+class Fl_Search_Input : public Fl_Input {
+	public:
+		Fl_Search_Input(int x, int y, int w, int h, const char *title) :
+			Fl_Input(x, y, w, h, title) {}
+		int handle(int event) {
+			if (event == FL_KEYBOARD &&
+			    (Fl::event_key() == FL_Up || Fl::event_key() == FL_Down)) {
+				return 0;
+			} else {
+				return Fl_Input::handle(event);
+			}
+	}
+};
 
 Fl_Search_Chooser::Fl_Search_Chooser(const char *title) : Fl_Window(320, 320, title?title:"Choose") {
 	callback((Fl_Callback*) cancel_cb, this);
@@ -73,7 +87,7 @@ Fl_Search_Chooser::Fl_Search_Chooser(const char *title) : Fl_Window(320, 320, ti
 	Fl_Group *g = new Fl_Group(10, 10, w() - 10, h() - 10);
 	sb = new Fl_Search_Browser(g->x(), g->y(), g->w() , g->h() - 100, NULL);
 	sb->type(FL_HOLD_BROWSER);
-	Fl_Input *in = new Fl_Input(g->x()+50, g->h()-80, g->w()-80, 20, "Search");
+	Fl_Input *in = new Fl_Search_Input(g->x()+50, g->h()-80, g->w()-80, 20, "Search");
 	in->callback((Fl_Callback*) input_cb, this);
 	in->when(FL_WHEN_CHANGED);
 	Fl_Button *cancel_b = new Fl_Button(g->w()-200, g->h()-30, 80, 25, "Cancel");
