@@ -11,8 +11,8 @@ It uses a database containing names and GPS data. With the given viewpoint
 (the point from which the picture was taken) and two known mountains
 on the picture, gipfel can compute all parameters needed to compute the
 positions of other mountains on the picture.
-gipfel can also be used to play around with the parameters manually. But be
-warned: It is pretty difficult to find the right parameters for a given
+gipfel can also be used to play around with the parameters manually.
+But it's pretty difficult to find the right parameters for a given
 picture manually.  
 You can think of gipfel as a georeferencing software for arbitrary images
 (not only satelite images or maps).  
@@ -64,11 +64,11 @@ mountains, which you already recognize on the picture.
 Now middle-click on the small cross at the left of the name to mark it.
 It should turn red. Now you can drag it with the left mouse button pressed
 to the position of the mountain on the picture.
-If you have positioned at least two mountains, you can click on
-the "comp" button in the control window to compute the
-parameters of the picture.
+If you have positioned at least two mountains all other mountains should
+move to their correct positions in the picture.
+You can try to set more than two mountains to ge a more accurate result.
 
-You may also want to have a look at the
+You may also want to have a look at the (outdated)
 (screen video)[http://www.flpsed.org/images/gipfel.avi]
 for an example session.
 
