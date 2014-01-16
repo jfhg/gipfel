@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(gipfel, 0.3.2, Johannes.Hofmann@gmx.de)
+AC_INIT(gipfel, 0.4.0, Johannes.Hofmann@gmx.de)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/Panorama.H])
 AC_CONFIG_HEADER(config.h)
