@@ -343,6 +343,10 @@ void
 GipfelWidget::set_labels(Hills *v) {
 	int height;
 
+	if (!img)
+		return;
+
+
 	fl_font(FL_HELVETICA, 8);
 	height = fl_height();
 
