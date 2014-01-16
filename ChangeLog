@@ -1,6 +1,15 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.4.0
+* Fix compilation with fltk-1.3.x.
+* Use proper distance for distortion correction.
+* Don't update coordinates of marked hills.
+* Remove compute button.
+  Positions are now updated automatically when marked hills are moved.
+* Fix focal length for images in portrait format.
+* Fix up/down keys in viewpoint chooser.
+
 gipfel-0.3.2
 * Fix 16bit tiff output in stitching mode.
 * Don't draw labels of mountains that are slightly off the image.
