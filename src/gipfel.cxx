@@ -1,5 +1,5 @@
 //
-// Copyright 2007-2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
+// Copyright 2007-2014 Johannes Hofmann <Johannes.Hofmann@gmx.de>
 //
 // This software may be used and distributed according to the terms
 // of the GNU General Public License, incorporated herein by reference.
@@ -279,8 +279,8 @@ void distortion_cb(Fl_Value_Input*, void*) {
 void about_cb() {
 	fl_message("gipfel -- Photogrammetry for Mountain Images.\n"
 		"Version %s\n\n"
-		"(c) Johannes Hofmann 2006-2009\n\n"
-		"Homepage: http://www.ecademix.com/JohannesHofmann\n\n"
+		"(c) Johannes Hofmann 2006-2014\n\n"
+		"Homepage: http://flpsed.org/gipfel.html\n\n"
 		"Default datafile from http://www.viewfinderpanoramas.org/ and\n"
         "http://www.alpin-koordinaten.de\n",
 		VERSION);
