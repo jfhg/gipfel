@@ -42,6 +42,9 @@ ScreenDump::~ScreenDump() {
 
 int
 ScreenDump::save(OutputImage *out) {
+	if (!rgb)
+		return 1;
+
 	out->init(w, h);
 
 	for (int y = 0; y < h; y++) {
