@@ -17,8 +17,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <exiv2/image.hpp>
-#include <exiv2/exif.hpp>
+#include <exiv2/exiv2.hpp>
 
 #include "../config.h"
 #include "ImageMetaData.H"
@@ -107,7 +106,7 @@ ImageMetaData::load_image_exif(char *name) {
 	try {
 		image = Exiv2::ImageFactory::open(name);
 		image->readMetadata();
-	} catch (Exiv2::Error error) {
+	} catch (const Exiv2::Error &error) {
 		fprintf(stderr, "Error reading metadata\n");
 		return 1;
 	}
@@ -175,7 +174,7 @@ ImageMetaData::load_image_jpgcom(char *name) {
 	try {
 		image = Exiv2::ImageFactory::open(name);
 		image->readMetadata();
-	} catch (Exiv2::Error error) {
+	} catch (const Exiv2::Error &error) {
 		fprintf(stderr, "Error reading metadata\n");
 		return 1;
 	}
@@ -267,7 +266,7 @@ ImageMetaData::save_image_jpgcom(char *in_img, char *out_img) {
 
 	try {
 		image->writeMetadata();
-	} catch (Exiv2::Error error) {
+	} catch (const Exiv2::Error &error) {
 		fprintf(stderr, "Error writing metadata\n");
 		err++;
 	}

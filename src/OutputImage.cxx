@@ -49,9 +49,10 @@ OutputImage::next_line() {
 
 int
 OutputImage::done() {
-	if (!initialized)
+	if (!initialized) {
 		return 1;
-	else
+	} else {
 		next_line();
 		return done_internal();
+	}
 }
