@@ -1,6 +1,10 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.4.1
+* fix compilation with newer Exiv2 library
+* fix compilation on NetBSD - by Thomas Klausner
+
 gipfel-0.4.0
 * Fix compilation with fltk-1.3.x.
 * Use proper distance for distortion correction.
