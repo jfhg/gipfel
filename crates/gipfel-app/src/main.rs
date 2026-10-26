@@ -1526,9 +1526,9 @@ impl Gipfel {
     fn view_about<'a>(&self) -> Element<'a, Message> {
         widget::dialog()
             .title("About gipfel")
-            .body("gipfel 0.5.0 (COSMIC preview)")
+            .body("gipfel 0.5.4")
             .control(widget::text("Annotate mountain panoramas."))
-            .control(widget::text("Port of gipfel by Johannes Hofmann - mathematical models unchanged."))            .primary_action(widget::button::suggested("Close").on_press(Message::About(false)))
+            .control(widget::text("by Johannes Hofmann"))            .primary_action(widget::button::suggested("Close").on_press(Message::About(false)))
             .is_overlay(false)
             .into()
     }

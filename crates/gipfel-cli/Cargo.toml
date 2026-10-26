@@ -1,6 +1,6 @@
 [package]
 name = "gipfel-cli"
-version = "0.5.3"
+version = "0.5.4"
 edition = "2021"
 description = "gipfel command line tools (export-position, export-hills)"
 license = "GPL-2.0-or-later"

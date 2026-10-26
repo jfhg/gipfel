@@ -1,7 +1,7 @@
 gipfel ChangeLog
 =================
 
-gipfel-0.5.3
+gipfel-0.5.4
 * rust based rewrite of gipfel using libcosmic with the help of local AI (qwen3.8-flash-next)
 * zooming of images
 * replacement of the direction dial with a compass ruler under the image
