@@ -1,8 +1,8 @@
 [package]
 name = "gipfel-app"
-version = "0.1.0"
-edition = "2021"
-description = "gipfel port to Cosmic DE"
+version = "0.5.2"
+edition = "2026"
+description = "gipfel - photogrammetry for mountain images"
 license = "GPL-2.0-or-later"
 
 [[bin]]
