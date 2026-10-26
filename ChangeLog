@@ -1,6 +1,14 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.5.0
+* rust based rewrite of gipfel using libcosmic with the help of local AI (qwen3.8-flash-next)
+* zooming of images
+* replacement of the direction dial with a compass ruler under the image
+* replacement of the GSL dependency with a own LSQ implementation
+* support for GPS tracks in GPX format 
+* new gipfel-cli binary for stitching operations
+
 gipfel-0.4.1
 * fix compilation with newer Exiv2 library
 * fix compilation on NetBSD - by Thomas Klausner
