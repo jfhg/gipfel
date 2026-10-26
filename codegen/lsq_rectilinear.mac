@@ -1,0 +1,60 @@
+/*
+ * Copyright 2006-2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
+ */
+
+/*
+ * rectilinear (pinhole) projection model with distortion correction
+ */
+
+/* switch to cartesian coordinates */
+c_x : cos(m_elev) * cos(m_view - c_view)$
+c_y : cos(m_elev) * sin(m_view - c_view)$
+c_z : sin(m_elev)$
+
+/* pitch rotation */
+c_x_rot : cos(c_pitch) * c_x + sin(c_pitch) * c_z$
+c_y_rot : c_y$
+c_z_rot : -sin(c_pitch) * c_x + cos(c_pitch) * c_z$
+
+/* pinhole projection */
+x : c_y_rot / c_x_rot$
+y : -c_z_rot / c_x_rot$ 
+
+/* rotation around view axis */
+x_rot : y * sin(c_roll) + x * cos(c_roll) + x0$
+y_rot : y * cos(c_roll) - x * sin(c_roll)$
+
+/* distortion correction */
+d : sqrt(x_rot ^ 2 + y_rot ^ 2)$
+dist_fact : d ^ 2 * k1 + d * k0$
+x_dist : x_rot * (1 + dist_fact) * scale$
+y_dist : y_rot * (1 + dist_fact) * scale$
+
+/*
+ * Some mangling for C code generation
+ */
+
+load("expr2rust.mac")$
+
+x_expand : trigexpand(x_dist)$
+y_expand : trigexpand(y_dist)$
+
+args: "c_view: f64, c_pitch: f64, c_roll: f64, scale: f64, k0: f64, k1: f64, x0: f64, m_view: f64, m_elev: f64"$
+
+expr2rust("mac_x", args, x_expand)$
+expr2rust("mac_y", args, y_expand)$
+
+expr2rust("mac_x_dc_view", args, diff(x_expand, c_view))$
+expr2rust("mac_x_dc_pitch", args, diff(x_expand, c_pitch))$
+expr2rust("mac_x_dc_roll", args, diff(x_expand, c_roll))$
+expr2rust("mac_x_dscale", args, diff(x_expand, scale))$
+expr2rust("mac_x_dk0", args, diff(x_expand, k0))$
+expr2rust("mac_x_dk1", args, diff(x_expand, k1))$
+expr2rust("mac_x_dx0", args, diff(x_expand, x0))$
+expr2rust("mac_y_dc_view", args, diff(y_expand, c_view))$
+expr2rust("mac_y_dc_pitch", args, diff(y_expand, c_pitch))$
+expr2rust("mac_y_dc_roll", args, diff(y_expand, c_roll))$
+expr2rust("mac_y_dscale", args, diff(y_expand, scale))$
+expr2rust("mac_y_dk0", args, diff(y_expand, k0))$
+expr2rust("mac_y_dk1", args, diff(y_expand, k1))$
+expr2rust("mac_y_dx0", args, diff(y_expand, x0))$

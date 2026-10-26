@@ -1,0 +1,19 @@
+[package]
+name = "gipfel-app"
+version = "0.1.0"
+edition = "2021"
+description = "gipfel port to Cosmic DE"
+license = "GPL-2.0-or-later"
+
+[[bin]]
+name = "gipfel"
+path = "src/main.rs"
+
+[dependencies]
+gipfel-core = { path = "../gipfel-core" }
+libcosmic = { git = "https://github.com/pop-os/libcosmic.git", rev = "430f3d48a97d8779f9c1985473912e594ccca1ae", default-features = false, features = ["winit", "wgpu", "tokio", "a11y", "xdg-portal"] }
+image.workspace = true
+fontdue = "0.9"
+cosmic-text = "0.19"
+fontdb = "0.23"
+tokio = { version = "1", features = ["time"] }

@@ -1,0 +1,13 @@
+[package]
+name = "gipfel-core"
+version = "0.1.0"
+edition = "2021"
+description = "Port of gipfel's computational core (hills, panorama, projections, least-squares fit, metadata)"
+license = "GPL-2.0-or-later"
+
+[dependencies]
+kamadak-exif.workspace = true
+quick-xml.workspace = true
+image.workspace = true
+tiff.workspace = true
+dirs.workspace = true

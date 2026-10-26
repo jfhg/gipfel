@@ -1,0 +1,38 @@
+/*
+ * Copyright 2006-2009 Johannes Hofmann <Johannes.Hofmann@gmx.de>
+ */
+
+/*
+ * cylindrical projection model
+ */
+
+x : m_view - c_view$
+y : tan(c_pitch - m_elev)$ 
+x_rot : y * sin(c_roll) + x * cos(c_roll)$
+y_rot : y * cos(c_roll) - x * sin(c_roll)$
+x_scale : x_rot * scale$
+y_scale : y_rot * scale$
+
+/*
+ * Some mangling for C code generation
+ */
+
+load("expr2rust.mac")$
+
+x_expand : trigexpand(x_scale)$
+y_expand : trigexpand(y_scale)$
+
+args: "c_view: f64, c_pitch: f64, c_roll: f64, scale: f64, k0: f64, k1: f64, x0: f64, m_view: f64, m_elev: f64"$
+
+expr2rust("mac_x", args, x_expand)$
+expr2rust("mac_y", args, y_expand)$
+
+expr2rust("mac_x_dc_view", args, diff(x_expand, c_view))$
+expr2rust("mac_x_dc_pitch", args, diff(x_expand, c_pitch))$
+expr2rust("mac_x_dc_roll", args, diff(x_expand, c_roll))$
+expr2rust("mac_x_dscale", args, diff(x_expand, scale))$
+expr2rust("mac_y_dc_view", args, diff(y_expand, c_view))$
+expr2rust("mac_y_dc_pitch", args, diff(y_expand, c_pitch))$
+expr2rust("mac_y_dc_roll", args, diff(y_expand, c_roll))$
+expr2rust("mac_y_dscale", args, diff(y_expand, scale))$
+

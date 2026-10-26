@@ -1,0 +1,31 @@
+/*
+ * Rust code generation for gipfel-rs.
+ *
+ * Port of gipfel's expr2c.mac (Copyright 2006-2009 Johannes Hofmann).
+ * Emits one Rust function per line (grep "^pub fn"); integer literals are
+ * converted to float literals by fixup.py afterwards.
+ */
+
+load("stringproc")$
+
+varsubst(v) := ssubst("_", "%", string(v))$
+
+printdecl(vars) := (
+	sprint("let mut", varsubst(first(vars)), ": f64 = 0.0;"),
+	for v in rest(vars) do sprint("let mut", varsubst(v), ": f64 = 0.0;"))$
+
+printdef(expr) := sprint(varsubst(first(expr)), "=", varsubst(second(expr)), ";")$
+
+block2rust(expr) :=
+	if ?equal(op(expr), block) then (
+		printdecl(first(expr)),
+		for d in reverse(rest(reverse(rest(expr)))) do printdef(d),
+		sprint("return", varsubst(last(expr)), ";"))
+	else
+		sprint("return", varsubst(expr), ";")$
+
+expr2rust(funcname, argstr, expr) := (
+	sprint("pub fn", funcname, "(", argstr, ") -> f64 {"),
+	block2rust(subst(pow, "^", optimize(expr))),
+	sprint("}", "
+"))$

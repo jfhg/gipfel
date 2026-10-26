@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=gipfel
+GenericName=Panorama annotator
+Comment=Annotate mountain panoramas
+Exec=gipfel %U
+TryExec=gipfel
+Icon=org.gipfel.App
+Terminal=false
+Categories=Graphics;Photography;
+Keywords=mountain;panorama;photo;annotation;
+MimeType=image/jpeg;image/png;
+StartupNotify=true
