@@ -1819,6 +1819,7 @@ dependencies = [
 name = "gipfel-web"
 version = "0.5.5"
 dependencies = [
+ "flate2",
  "gipfel-core",
  "js-sys",
  "wasm-bindgen",

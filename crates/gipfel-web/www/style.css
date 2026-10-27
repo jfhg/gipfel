@@ -55,6 +55,18 @@ body {
   font-size: 12px;
   color: #8a8a94;
 }
+.row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  cursor: pointer;
+}
+.fitinfo {
+  font-size: 12px;
+  color: #9fd09f;
+  font-variant-numeric: tabular-nums;
+}
 .dim {
   opacity: 0.6;
 }

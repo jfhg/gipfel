@@ -36,6 +36,23 @@ pub async fn read_blob(blob: &Blob) -> Result<Vec<u8>, String> {
     Ok(Uint8Array::new(&buf).to_vec())
 }
 
+/// Fetch a URL (same-origin) into memory.
+pub async fn fetch_bytes(url: &str) -> Result<Vec<u8>, String> {
+    let resp = JsFuture::from(window().fetch_with_str(url))
+        .await
+        .map_err(|e| format!("fetch {url}: {e:?}"))?;
+    let resp: web_sys::Response = resp
+        .dyn_into()
+        .map_err(|_| "bad response".to_string())?;
+    if !resp.ok() {
+        return Err(format!("{url}: HTTP {}", resp.status()));
+    }
+    let buf = JsFuture::from(resp.array_buffer().map_err(|_| "array_buffer".to_string())?)
+        .await
+        .map_err(|e| format!("body: {e:?}"))?;
+    Ok(Uint8Array::new(&buf).to_vec())
+}
+
 pub fn ctx2d(canvas: &HtmlCanvasElement) -> Option<CanvasRenderingContext2d> {
     canvas
         .get_context("2d")
