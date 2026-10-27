@@ -51,8 +51,9 @@ pub struct Props {
     /// bumped on window resize to force a redraw
     pub tick: u32,
     pub markers: Vec<MarkerView>,
-    /// projected positions of all visible hills (small guide dots)
-    pub candidates: Vec<(f64, f64)>,
+    /// projected positions of all visible hills (guide dots) with their
+    /// hidden-by-occlusion flag
+    pub candidates: Vec<(f64, f64, bool)>,
     /// marker label font size, screen px
     pub label_font: f32,
 }
@@ -131,10 +132,11 @@ pub fn canvas_view(props: &Props) -> Html {
                 let sy = |y: f64| (y + hh) * view.scale + view.oy;
 
                 // guide dots for all visible peaks: dark outline ring +
-                // bright core so they stay visible on any photo content
+                // bright core so they stay visible on any photo content;
+                // peaks hidden by nearer terrain are drawn grey
                 #[allow(deprecated)]
                 ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("rgba(0, 0, 0, 0.85)"));
-                for (cx, cy) in candidates {
+                for (cx, cy, _hidden) in candidates {
                     let (px, py) = (sx(*cx), sy(*cy));
                     if px < -6.0 || py < -6.0 || px > cw + 6.0 || py > ch + 6.0 {
                         continue;
@@ -143,13 +145,14 @@ pub fn canvas_view(props: &Props) -> Html {
                     let _ = ctx.arc(px, py, 4.5, 0.0, std::f64::consts::TAU);
                     ctx.fill();
                 }
-                #[allow(deprecated)]
-                ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("rgb(110, 231, 183)"));
-                for (cx, cy) in candidates {
+                for (cx, cy, hidden) in candidates {
                     let (px, py) = (sx(*cx), sy(*cy));
                     if px < -6.0 || py < -6.0 || px > cw + 6.0 || py > ch + 6.0 {
                         continue;
                     }
+                    let color = if *hidden { "rgb(150, 150, 150)" } else { "rgb(110, 231, 183)" };
+                    #[allow(deprecated)]
+                    ctx.set_fill_style(&wasm_bindgen::JsValue::from_str(color));
                     ctx.begin_path();
                     let _ = ctx.arc(px, py, 2.5, 0.0, std::f64::consts::TAU);
                     ctx.fill();

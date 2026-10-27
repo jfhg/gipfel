@@ -5,7 +5,7 @@ use std::io::Read;
 use std::rc::Rc;
 
 use flate2::read::GzDecoder;
-use gipfel_core::hill::{FLAG_DUPLIC, FLAG_TRACK_POINT};
+use gipfel_core::hill::{FLAG_DUPLIC, FLAG_HIDDEN, FLAG_TRACK_POINT};
 use gipfel_core::metadata::{apply_image_metadata, ImageMetaData};
 use gipfel_core::panorama::Panorama;
 use wasm_bindgen::closure::Closure;
@@ -161,6 +161,7 @@ pub fn app() -> Html {
     let vp = use_state(UiParams::default);
     let img_size = use_state(|| (0u32, 0u32));
     let find_peak = use_state(|| Option::<FindPeak>::None);
+    let show_hidden = use_state(|| false);
 
     // force a redraw when the window is resized so the canvas backing
     // store tracks its CSS size (listener lives as long as the app)
@@ -441,6 +442,13 @@ pub fn app() -> Html {
             vp.set(u);
         })
     };
+    let on_show_hidden = {
+        let show_hidden = show_hidden.clone();
+        Callback::from(move |e: Event| {
+            let input: HtmlInputElement = e.target_unchecked_into();
+            show_hidden.set(input.checked());
+        })
+    };
 
     // compass strip: shares the image transform, drag changes azimuth
     let compass_data = {
@@ -555,13 +563,14 @@ pub fn app() -> Html {
             let mark = mark_peak.clone();
             let find_peak = find_peak.clone();
             let img_size = img_size.clone();
+            let show_hidden = show_hidden.clone();
             Callback::from(move |(ix, iy): (f64, f64)| {
                 let scale = view.scale;
                 // unambiguous click right on a peak: mark directly
                 // (borrow must be released before mark -> do_refit!)
                 let near = {
                     let p = pan.borrow();
-                    markers::nearest_hill(&p, ix, iy, 10.0 / scale)
+                    markers::nearest_hill(&p, ix, iy, 10.0 / scale, *show_hidden)
                 };
                 if let Some(idx) = near {
                     find_peak.set(None);
@@ -620,12 +629,14 @@ pub fn app() -> Html {
             let pan = pan.clone();
             let view = view.clone();
             let hover = hover.clone();
+            let show_hidden = show_hidden.clone();
             Callback::from(move |(ix, iy): (f64, f64)| {
                 let p = pan.borrow();
-                let name = markers::nearest_hill(&p, ix, iy, 20.0 / view.scale).map(|i| {
-                    let h = &p.hills[i];
-                    format!("{} · {:.0} m", h.name, h.height)
-                });
+                let name = markers::nearest_hill(&p, ix, iy, 20.0 / view.scale, *show_hidden)
+                    .map(|i| {
+                        let h = &p.hills[i];
+                        format!("{} · {:.0} m", h.name, h.height)
+                    });
                 hover.set(name);
             })
         },
@@ -647,9 +658,19 @@ pub fn app() -> Html {
             })
             .collect()
     };
-    let candidates: Vec<(f64, f64)> = {
+    let candidates: Vec<(f64, f64, bool)> = {
         let p = pan.borrow();
-        p.visible.iter().map(|&i| (p.hills[i].x, p.hills[i].y)).collect()
+        p.visible
+            .iter()
+            .filter(|&&i| *show_hidden || p.hills[i].flags & FLAG_HIDDEN == 0)
+            .map(|&i| {
+                (
+                    p.hills[i].x,
+                    p.hills[i].y,
+                    p.hills[i].flags & FLAG_HIDDEN != 0,
+                )
+            })
+            .collect()
     };
 
     let zoom_pct = (view.scale * 100.0).round();
@@ -695,6 +716,10 @@ pub fn app() -> Html {
                             { "Fit distortion (needs ≥ 4 markers)" }
                         </label>
                         <div class="section">{ "Display" }</div>
+                        <label class="row">
+                            <input type="checkbox" checked={*show_hidden} onchange={on_show_hidden} />
+                            { "Show hidden peaks" }
+                        </label>
                         <SliderItem label="Visibility" display={format!("{:.0} %", (vp.vis - 0.01) / 0.09 * 100.0)}
                             value={vp.vis} min={0.01} max={0.1} step={0.001} onchange={on_vis} />
                         <SliderItem label="Label size" display={format!("{:.0} px", vp.label_font)}

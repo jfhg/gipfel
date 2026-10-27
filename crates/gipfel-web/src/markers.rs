@@ -34,11 +34,21 @@ pub fn refit(pan: &mut Panorama, markers: &[Marker], fit_distortion: bool) -> Re
 }
 
 /// Nearest visible hill to image position `(x, y)`, within `max_dist`
-/// image pixels. Used to resolve marker clicks.
-pub fn nearest_hill(pan: &Panorama, x: f64, y: f64, max_dist: f64) -> Option<usize> {
+/// image pixels. Used to resolve marker clicks. Hills hidden by the
+/// occlusion heuristic are skipped unless `show_hidden`.
+pub fn nearest_hill(
+    pan: &Panorama,
+    x: f64,
+    y: f64,
+    max_dist: f64,
+    show_hidden: bool,
+) -> Option<usize> {
     let mut best = None;
     let mut best_d = max_dist;
     for &i in &pan.visible {
+        if !show_hidden && pan.hills[i].flags & gipfel_core::hill::FLAG_HIDDEN != 0 {
+            continue;
+        }
         let h = &pan.hills[i];
         let d = (h.x - x).hypot(h.y - y);
         if d < best_d {
