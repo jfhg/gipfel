@@ -216,6 +216,9 @@ canvas.compass {
   border: 1px solid #34343e;
   border-radius: 4px;
 }
+.numrow input[type="text"] {
+  width: 150px;
+}
 .fpbackdrop {
   position: absolute;
   inset: 0;

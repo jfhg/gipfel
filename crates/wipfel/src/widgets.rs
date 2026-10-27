@@ -46,6 +46,35 @@ pub fn slider_item(p: &SliderProps) -> Html {
     }
 }
 
+/// single-line text row (e.g. paste a GPS string)
+#[derive(Properties, PartialEq)]
+pub struct TextProps {
+    pub label: AttrValue,
+    pub placeholder: AttrValue,
+    pub onchange: Callback<String>,
+}
+
+#[function_component(TextItem)]
+pub fn text_item(p: &TextProps) -> Html {
+    let onchange = {
+        let onchange = p.onchange.clone();
+        Callback::from(move |e: Event| {
+            let input: HtmlInputElement = e.target_unchecked_into();
+            onchange.emit(input.value());
+        })
+    };
+    html! {
+        <label class="numrow">
+            <span>{ p.label.as_ref().to_string() }</span>
+            <input
+                type="text"
+                placeholder={p.placeholder.as_ref().to_string()}
+                {onchange}
+            />
+        </label>
+    }
+}
+
 #[derive(Properties, PartialEq)]
 pub struct NumProps {
     pub label: AttrValue,

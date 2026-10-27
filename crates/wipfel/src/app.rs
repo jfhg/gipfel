@@ -19,7 +19,7 @@ use crate::bridge;
 use crate::canvas_view::{CanvasView, DotView, MarkerView, TrackView, ViewCallbacks, ViewState};
 use crate::compass::{alph_at_img_x, Compass, CompassData};
 use crate::markers::{self, Marker};
-use crate::widgets::{NumItem, SliderItem};
+use crate::widgets::{NumItem, SliderItem, TextItem};
 
 /// sidebar-editable view parameters (degrees / meters / mm)
 #[derive(Clone, Copy, PartialEq)]
@@ -548,6 +548,33 @@ pub fn app() -> Html {
     let on_lat = param_cb!(lat, |p: &mut Panorama, v| p.set_view_lat(v));
     let on_lon = param_cb!(lon, |p, v| p.set_view_long(v));
     let on_height = param_cb!(height, |p, v| p.set_view_height(v));
+    // GPS paste field: "47.676,13.32042" — the format gallery apps show
+    // for coordinates; height stays a separate field
+    let on_gps = {
+        let vp = vp.clone();
+        let pan = pan.clone();
+        let status = status.clone();
+        Callback::from(move |text: String| {
+            let parts: Vec<f64> = text
+                .replace([';', ' '], ",")
+                .split(',')
+                .filter(|p| !p.trim().is_empty())
+                .filter_map(|p| p.trim().parse::<f64>().ok())
+                .collect();
+            if parts.len() < 2 || parts[0].abs() > 90.0 || parts[1].abs() > 180.0 {
+                status.set("GPS: expected \"lat,lon\" like 47.676,13.32042".to_string());
+                return;
+            }
+            let mut u = *vp;
+            u.lat = parts[0];
+            u.lon = parts[1];
+            let mut p = pan.borrow_mut();
+            p.set_view_lat(parts[0]);
+            p.set_view_long(parts[1]);
+            vp.set(u);
+            status.set(format!("Viewpoint: {:.5}, {:.5}", parts[0], parts[1]));
+        })
+    };
     let on_az = param_cb!(az, |p, v| p.set_center_angle(v));
     let on_pitch = param_cb!(pitch, |p, v| p.set_pitch_angle(v));
     let on_roll = param_cb!(roll, |p, v| p.set_roll_angle(v));
@@ -929,6 +956,8 @@ pub fn app() -> Html {
                             onchange={on_lon} />
                         <NumItem label="Height (m)" value={vp.height} step={1.0} decimals={0}
                             onchange={on_height} />
+                        <TextItem label="GPS paste" placeholder="47.676,13.32042"
+                            onchange={on_gps} />
                         <div class="section">{ "Orientation" }</div>
                         <SliderItem label="Azimuth" display={format!("{:.1}°", vp.az)}
                             value={vp.az} min={0.0} max={360.0} step={0.01} onchange={on_az} />
