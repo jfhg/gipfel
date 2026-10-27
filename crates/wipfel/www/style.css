@@ -68,6 +68,10 @@ body {
   bottom: 6px;
   left: 8px;
   right: 8px;
+  /* do NOT let long status text widen the flex container (that
+     stretched the canvas and re-anchored the fit on every update) */
+  width: min-content;
+  max-width: calc(100% - 16px);
   font-size: 11px;
   color: #e8e8ea;
   background: rgba(16, 16, 20, 0.7);
