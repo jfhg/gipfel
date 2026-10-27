@@ -1744,7 +1744,7 @@ dependencies = [
 
 [[package]]
 name = "gipfel-app"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "cosmic-text",
  "fontdb",
@@ -1757,14 +1757,14 @@ dependencies = [
 
 [[package]]
 name = "gipfel-cli"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "gipfel-core",
 ]
 
 [[package]]
 name = "gipfel-core"
-version = "0.5.4"
+version = "0.5.5"
 dependencies = [
  "dirs",
  "image",
