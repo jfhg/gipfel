@@ -61,6 +61,10 @@ function __wbg_get_imports() {
             const ret = arg0.buffer;
             return ret;
         },
+        __wbg_buttons_de1e6c7f6de70736: function(arg0) {
+            const ret = arg0.buttons;
+            return ret;
+        },
         __wbg_cache_key_21c521bc3dd66e9b: function(arg0) {
             const ret = arg0.__yew_subtree_cache_key;
             return isLikeNone(ret) ? Number.MAX_SAFE_INTEGER : (ret) >>> 0;
@@ -402,6 +406,13 @@ function __wbg_get_imports() {
         __wbg_pointerId_1b91f6b6c8f92501: function(arg0) {
             const ret = arg0.pointerId;
             return ret;
+        },
+        __wbg_pointerType_2e8b8270da489520: function(arg0, arg1) {
+            const ret = arg1.pointerType;
+            const ptr1 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len1 = WASM_VECTOR_LEN;
+            getDataViewMemory0().setInt32(arg0 + 4 * 1, len1, true);
+            getDataViewMemory0().setInt32(arg0 + 4 * 0, ptr1, true);
         },
         __wbg_preventDefault_af59afb0f0a02e20: function(arg0) {
             arg0.preventDefault();

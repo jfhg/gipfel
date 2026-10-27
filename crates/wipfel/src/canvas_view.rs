@@ -432,8 +432,16 @@ pub fn canvas_view(props: &Props) -> Html {
             // update the pointer table and handle two-finger pinch
             let pinch_ev = {
                 let mut d = drag.borrow_mut();
-                if let Some(p) = d.pts.iter_mut().find(|(id, _)| *id == e.pointer_id()) {
-                    p.1 = (e.client_x() as f64, e.client_y() as f64);
+                let pos = (e.client_x() as f64, e.client_y() as f64);
+                match d.pts.iter_mut().find(|(id, _)| *id == e.pointer_id()) {
+                    Some(p) => p.1 = pos,
+                    // a touch pointermove for a pointer we never saw go
+                    // down (lost pointerdown, e.g. swallowed by the
+                    // browser) — join it so pinch still works
+                    None if e.pointer_type() == "touch" && e.buttons() != 0 => {
+                        d.pts.push((e.pointer_id(), pos));
+                    }
+                    None => {}
                 }
                 if d.pts.len() >= 2 {
                     let (x1, y1) = d.pts[0].1;
