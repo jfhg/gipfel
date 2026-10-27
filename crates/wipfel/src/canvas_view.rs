@@ -63,6 +63,8 @@ pub struct ViewCallbacks {
     pub hover: Callback<(f64, f64)>,
     /// pointer left the canvas
     pub hover_end: Callback<()>,
+    /// diagnostic text for the status line (pinch debugging on mobile)
+    pub debug: Callback<String>,
 }
 
 #[derive(Properties, PartialEq)]
@@ -375,11 +377,9 @@ pub fn canvas_view(props: &Props) -> Html {
         let markers = props.markers.clone();
         let view = props.view.clone();
         let bitmap = props.bitmap.clone();
+        let debug = props.callbacks.debug.clone();
         Callback::from(move |e: PointerEvent| {
             e.prevent_default();
-            if let Some(c) = canvas_ref.cast::<HtmlCanvasElement>() {
-                let _ = c.set_pointer_capture(e.pointer_id());
-            }
             let rect = canvas_ref
                 .cast::<HtmlCanvasElement>()
                 .map(|c| c.get_bounding_client_rect());
@@ -402,20 +402,33 @@ pub fn canvas_view(props: &Props) -> Html {
                 }
             }
             let pos = (e.client_x() as f64, e.client_y() as f64);
-            let mut d = drag.borrow_mut();
-            d.pts.push((e.pointer_id(), pos));
-            if d.pts.len() >= 2 {
-                // second finger: switch to pinch, cancel any pan/marker
-                // drag so the view does not jump
-                d.mode = None;
-                d.pinch = None;
-                d.moved = true;
-            } else {
-                d.mode = Some(mode);
-                d.last = pos;
-                d.start = pos;
-                d.moved = false;
+            let n = {
+                let mut d = drag.borrow_mut();
+                d.pts.retain(|(id, _)| *id != e.pointer_id());
+                d.pts.push((e.pointer_id(), pos));
+                let n = d.pts.len();
+                if n >= 2 {
+                    // second finger: switch to pinch, cancel any pan/marker
+                    // drag so the view does not jump
+                    d.mode = None;
+                    d.pinch = None;
+                    d.moved = true;
+                } else {
+                    d.mode = Some(mode);
+                    d.last = pos;
+                    d.start = pos;
+                    d.moved = false;
+                }
+                n
+            };
+            // capture only the primary pointer; capturing every finger
+            // confuses some mobile browsers
+            if n == 1 {
+                if let Some(c) = canvas_ref.cast::<HtmlCanvasElement>() {
+                    let _ = c.set_pointer_capture(e.pointer_id());
+                }
             }
+            debug.emit(format!("pointerdown id={} pts={n}", e.pointer_id()));
         })
     };
 
@@ -427,6 +440,7 @@ pub fn canvas_view(props: &Props) -> Html {
         let hover = props.callbacks.hover.clone();
         let to_img = to_img.clone();
         let canvas_ref = props.canvas_ref.clone();
+        let debug = props.callbacks.debug.clone();
         let scale = props.view.scale;
         Callback::from(move |e: PointerEvent| {
             // update the pointer table and handle two-finger pinch
@@ -464,13 +478,15 @@ pub fn canvas_view(props: &Props) -> Html {
                     };
                     d.pinch = Some((dist, cx, cy));
                     d.moved = true;
-                    Some(ev)
+                    let dbg = format!("pinch pts=2 d={dist:.0}");
+                    (ev, dbg)
                 } else {
-                    None
+                    (None, String::new())
                 }
             };
-            if let Some(ev) = pinch_ev {
-                if let Some((factor, cx, cy, dx, dy)) = ev {
+            if !pinch_ev.1.is_empty() {
+                debug.emit(pinch_ev.1);
+                if let Some((factor, cx, cy, dx, dy)) = pinch_ev.0 {
                     zoom_cb.emit((cx, cy, factor));
                     pan_cb.emit((dx, dy));
                 }
@@ -548,11 +564,20 @@ pub fn canvas_view(props: &Props) -> Html {
 
     let on_pointercancel = {
         let drag = drag.clone();
-        Callback::from(move |_: PointerEvent| {
+        let debug = props.callbacks.debug.clone();
+        Callback::from(move |e: PointerEvent| {
             let mut d = drag.borrow_mut();
-            d.mode = None;
-            d.pts.clear();
-            d.pinch = None;
+            // do NOT clear the whole table: when a mobile browser
+            // "cancels" the first finger as the second arrives, a
+            // blanket clear would make a pinch impossible to form
+            d.pts.retain(|(id, _)| *id != e.pointer_id());
+            if d.pts.len() < 2 {
+                d.pinch = None;
+            }
+            if d.pts.is_empty() {
+                d.mode = None;
+            }
+            debug.emit(format!("pointercancel id={} pts={}", e.pointer_id(), d.pts.len()));
         })
     };
 

@@ -769,6 +769,10 @@ pub fn app() -> Html {
             let hover = hover.clone();
             Callback::from(move |_: ()| hover.set(None))
         },
+        debug: {
+            let status = status.clone();
+            Callback::from(move |s: String| status.set(s))
+        },
     };
 
     // Lens FOV visibility limit, port of the desktop bump(): the angle at
