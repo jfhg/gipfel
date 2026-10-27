@@ -899,12 +899,6 @@ pub fn app() -> Html {
                             { "Fit distortion (needs ≥ 4 markers)" }
                         </label>
                         <div class="section">{ "Display" }</div>
-                        <button onclick={open_track_picker}>{ "Load GPX Track…" }</button>
-                        if !track.is_empty() {
-                            <SliderItem label="Track width" display={format!("{:.0} m", *track_width)}
-                                value={*track_width} min={50.0} max={1000.0} step={10.0}
-                                onchange={on_track_width} />
-                        }
                         <label class="row">
                             <input type="checkbox" checked={*show_hidden} onchange={on_show_hidden} />
                             { "Show hidden peaks" }
@@ -932,6 +926,13 @@ pub fn app() -> Html {
                 <p class="hint dim">
                     { "The view is fitted as soon as markers are placed; more markers improve the fit." }
                 </p>
+                <div class="section track-section">{ "Track" }</div>
+                <button onclick={open_track_picker}>{ "Load GPX Track…" }</button>
+                if !track.is_empty() {
+                    <SliderItem label="Track width" display={format!("{:.0} m", *track_width)}
+                        value={*track_width} min={50.0} max={1000.0} step={10.0}
+                        onchange={on_track_width} />
+                }
             </aside>
             <main class="main">
                 <div class="canvaswrap">

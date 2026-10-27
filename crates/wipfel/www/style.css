@@ -114,6 +114,10 @@ body {
 .hidden-file {
   display: none;
 }
+/* pin the optional track section to the bottom of the control pane */
+.track-section {
+  margin-top: auto;
+}
 .main {
   flex: 1;
   min-width: 0;
