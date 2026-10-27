@@ -1,4 +1,4 @@
-# gipfel-web — plan for a real browser (WASM) version
+# wipfel — plan for a real browser (WASM) version
 
 Status: **planning**. Feasibility spike done and verified on this branch
 (`crates/gipfel-wasm`): the full computational core — hill DB, JPEG
@@ -116,11 +116,11 @@ the primary product; the web version is a second front end on the same
 
 ## 3. Crate / module layout
 
-New crate `crates/gipfel-web` (on this branch; `gipfel-wasm` folds into
+New crate `crates/wipfel` (on this branch; `gipfel-wasm` folds into
 it or becomes its `demo/`):
 
 ```
-crates/gipfel-web/
+crates/wipfel/
   src/lib.rs            Yew root component, routing between views
   src/state.rs          app state + reducer (port of GipfelApp fields/Message)
   src/canvas_view.rs    viewport canvas: bitmap layer + overlay layer,
@@ -208,7 +208,7 @@ spike already retired the two scariest risks (core-in-wasm, fit speed).
 |---|---|---|
 | Canvas label metrics differ from iced → label layout drift | cosmetic | layout code is width-driven; tune line-height constant on real browser |
 | Memory on mobile (4080×3072 RGBA ≈ 50 MB + wasm heap) | OOM on low-end phones | downscale preview bitmap for display (keep full-res only in dump path); measure iOS Safari early (W1) |
-| `image`/`exif`/`flate2` wasm compile surprises | days | all pure Rust; verify in W1 scaffold (`cargo check --target wasm32-unknown-unknown -p gipfel-web`) |
+| `image`/`exif`/`flate2` wasm compile surprises | days | all pure Rust; verify in W1 scaffold (`cargo check --target wasm32-unknown-unknown -p wipfel`) |
 | Service worker caching stale DB/app | confusing updates | versioned cache keys, skipWaiting flow with "update available" toast |
 | Scope creep toward desktop parity | never ships | non-goals table is binding for v1; stitch/GPX explicitly deferred |
 | Two front ends drift apart (desktop fixes not applied to web) | long-term maintenance | shared core + shared golden tests; web-specific tests only for glue |
@@ -218,6 +218,6 @@ spike already retired the two scariest risks (core-in-wasm, fit speed).
 ## 6. Open questions (decide before W1)
 1. **Where does it live?** subdomain (web.gipfel.flpsed.org?) + which static host.
 2. **Bundle the full 21k hill DB** (~1 MB gz ≈ 300 KB) or offer regional subsets? Default: full, it fits the budget.
-3. Name: same "gipfel" brand for web, or distinct (e.g. "gipfel web")?
+3. Name: same "gipfel" brand for web, or distinct (e.g. "wipfel")?
 4. Does the web version need its own About/privacy page text (all-local processing statement)?
 5. Framework confirmation: Yew per A1, or do you want to evaluate Leptos first? (One-day spike would settle it; Yew default stands.)

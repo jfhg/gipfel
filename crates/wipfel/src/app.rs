@@ -679,8 +679,8 @@ pub fn app() -> Html {
     html! {
         <div class="app" ondrop={on_drop} ondragover={on_dragover}>
             <aside class="sidebar">
-                <h1>{ "gipfel" }</h1>
-                <p class="tag">{ "web · W2 markers" }</p>
+                <h1>{ "wipfel" }</h1>
+                <p class="tag">{ "web gipfel photogrammetry" }</p>
                 <button onclick={open_picker}>{ "Open image…" }</button>
                 <button onclick={fit} disabled={bitmap.is_none()}>{ "Fit to window" }</button>
                 <input

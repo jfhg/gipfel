@@ -1,4 +1,4 @@
-# gipfel-web
+# wipfel
 
 Browser front end for gipfel (WASM, Yew + canvas 2D). See
 [`/wasm-plan.md`](../../wasm-plan.md) for the overall plan and milestones.
@@ -18,7 +18,7 @@ cargo install --locked trunk
 Serve with hot reload:
 
 ```sh
-cd crates/gipfel-web
+cd crates/wipfel
 trunk serve --port 8090     # then open http://localhost:8090
 ```
 
@@ -43,5 +43,5 @@ trunk build --release
 
 - The base image is decoded by the browser (`createImageBitmap`), not
   by the `image` crate — faster decode and GPU-backed blitting.
-- The crate compiles natively (`cargo check -p gipfel-web`) so it can
+- The crate compiles natively (`cargo check -p wipfel`) so it can
   be checked in CI without a wasm toolchain; runtime is wasm-only.

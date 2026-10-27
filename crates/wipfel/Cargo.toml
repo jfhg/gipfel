@@ -1,9 +1,9 @@
 [package]
-name = "gipfel-web"
+name = "wipfel"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
-description = "gipfel web — browser front end (WASM)"
+description = "wipfel — web based gipfel photogrammetry for mountain images"
 
 [dependencies]
 gipfel-core = { path = "../gipfel-core" }
