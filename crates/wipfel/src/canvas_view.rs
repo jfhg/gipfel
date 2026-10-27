@@ -479,7 +479,7 @@ pub fn canvas_view(props: &Props) -> Html {
                     d.pinch = Some((dist, cx, cy));
                     d.moved = true;
                     let dbg = match ev {
-                        Some((f, ..)) => format!("pinch d={dist:.0} f={f:.3}"),
+                        Some((f, ..)) => format!("pinch d={dist:.0} f={f:.3} s={:.4}", scale),
                         None => format!("pinch d={dist:.0} seed"),
                     };
                     (ev, dbg)
