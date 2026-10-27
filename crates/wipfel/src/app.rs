@@ -163,7 +163,7 @@ pub fn app() -> Html {
     let img_size = use_state(|| (0u32, 0u32));
     let find_peak = use_state(|| Option::<FindPeak>::None);
     let show_hidden = use_state(|| false);
-    let peak_labels = use_state(|| false);
+    let peak_labels = use_state(|| true);
     // collapsible control panel (desktop nav bar behaviour): start
     // collapsed on narrow screens
     let nav_open = use_state(|| {
