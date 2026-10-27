@@ -1,4 +1,4 @@
 /target
-harness/build
+tests/harness/build/
 *.tmp
 gipfel-app-bin.tar.gz
