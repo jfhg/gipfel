@@ -36,7 +36,8 @@ trunk build --release
 | `src/app.rs` | root component: sidebar, file loading, state |
 | `src/canvas_view.rs` | viewport canvas: bitmap blit, pan/zoom |
 | `src/bridge.rs` | JS glue: image decode, blob read, canvas ctx |
-| `www/` | index.html, style.css (trunk assets) |
+| `index.html` | trunk entry point (canonical trunk layout) |
+| `www/style.css` | stylesheet (trunk asset) |
 
 ## Notes
 
