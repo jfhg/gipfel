@@ -498,8 +498,8 @@ pub fn canvas_view(props: &Props) -> Html {
                                 (c.0, c.1, c.2)
                             };
                             format!(
-                                "pinch d={dist:.0} f={f:.3} pd={pd} mv={mv} sd={sd} s={:.4}",
-                                scale
+                                "pinch d={dist:.0} f={f:.3} pd={pd} mv={mv} sd={sd} p1=({:.0},{:.0}) p2=({:.0},{:.0})",
+                                x1, y1, x2, y2
                             )
                         }
                         None => {
@@ -508,7 +508,10 @@ pub fn canvas_view(props: &Props) -> Html {
                                 c.2 += 1;
                                 c.2
                             };
-                            format!("pinch d={dist:.0} seed#{sd}")
+                            format!(
+                                "pinch d={dist:.0} seed#{sd} p1=({:.0},{:.0}) p2=({:.0},{:.0})",
+                                x1, y1, x2, y2
+                            )
                         }
                     };
                     (ev, dbg)

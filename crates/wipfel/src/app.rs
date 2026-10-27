@@ -149,7 +149,7 @@ fn find_peak_panel(p: &FpProps) -> Html {
 pub fn app() -> Html {
     let bitmap = use_state(|| None::<web_sys::ImageBitmap>);
     let view = use_state(ViewState::default);
-    let status = use_state(|| "No image loaded · build 27j".to_string());
+    let status = use_state(|| "No image loaded · build 27k".to_string());
     let db_status = use_state(|| "Loading hill database…".to_string());
     let fit_info = use_state(String::new);
     let tick = use_state(|| 0u32);
