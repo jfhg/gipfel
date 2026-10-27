@@ -220,8 +220,12 @@ pub fn app() -> Html {
         use_effect_with((), move |_| {
             spawn_local(async move {
                 let result = async {
-                    let gz = bridge::fetch_bytes("gipfel.dat.gz").await?;
-                    let raw = gunzip(&gz)?;
+                    // aapt gunzips .gz assets, so an APK ships the plain
+                    // gipfel.dat while the web dist ships gipfel.dat.gz
+                    let raw = match bridge::fetch_bytes("gipfel.dat.gz").await {
+                        Ok(gz) => gunzip(&gz)?,
+                        Err(_) => bridge::fetch_bytes("gipfel.dat").await?,
+                    };
                     pan.borrow_mut()
                         .load_data_from_bytes(&raw)
                         .map_err(|e| format!("load: {e}"))

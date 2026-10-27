@@ -81,7 +81,7 @@ class MainActivity : Activity() {
             val uris: Array<Uri>? = if (resultCode == RESULT_OK && data != null) {
                 val clip = data.clipData
                 when {
-                    clip != null -> Array(clip.itemCount) { clip.getItem(it).uri }
+                    clip != null -> Array(clip.itemCount) { clip.getItemAt(it).uri }
                     data.data != null -> arrayOf(data.data!!)
                     else -> null
                 }
