@@ -149,7 +149,7 @@ fn find_peak_panel(p: &FpProps) -> Html {
 pub fn app() -> Html {
     let bitmap = use_state(|| None::<web_sys::ImageBitmap>);
     let view = use_state(ViewState::default);
-    let status = use_state(|| "No image loaded.".to_string());
+    let status = use_state(|| "No image loaded · build 27c".to_string());
     let db_status = use_state(|| "Loading hill database…".to_string());
     let fit_info = use_state(String::new);
     let tick = use_state(|| 0u32);
@@ -951,8 +951,8 @@ pub fn app() -> Html {
                     if !*nav_open {
                         <button class="nav-toggle" title="Show controls"
                             onclick={expand_cb}>{ "☰" }</button>
-                        <div class="canvasstatus">{ (*status).clone() }</div>
                     }
+                    <div class="canvasstatus">{ (*status).clone() }</div>
                     <CanvasView
                         bitmap={bitmap.as_ref().cloned()}
                         view={(*view).clone()}
