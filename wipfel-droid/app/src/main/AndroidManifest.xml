@@ -6,6 +6,9 @@
          they read. We declare and request it and get the original bytes. -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+    <!-- required merely to create the loopback ServerSocket; the app
+         never talks to any other host -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:label="wipfel"
