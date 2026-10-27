@@ -246,14 +246,18 @@ pub fn app() -> Html {
 
     // Keep the fit correct even when layout was not ready at load time:
     // a ResizeObserver fires once with the element's initial size right
-    // after it starts observing, then on every later resize. Auto-fit
-    // whenever the user has not panned or zoomed by hand since the last
-    // image load — this is what makes the very first image appear.
+    // after it starts observing, then on every later resize (window
+    // resize, sidebar collapse, ...). Always bump the redraw tick so the
+    // canvas backing store tracks its CSS size — otherwise the browser
+    // stretches the stale bitmap — and additionally re-fit whenever the
+    // user has not panned or zoomed by hand since the last image load
+    // (this is also what makes the very first image appear).
     {
         let canvas_ref = canvas_ref.clone();
         let fit = fit.clone();
         let bitmap = bitmap.clone();
         let user_moved = user_moved.clone();
+        let tick = tick.clone();
         use_effect_with((*bitmap).is_some(), move |has_image| {
             let observer = if *has_image {
                 canvas_ref
@@ -261,8 +265,10 @@ pub fn app() -> Html {
                     .and_then(|c| {
                         let fit2 = fit.clone();
                         let um = user_moved.clone();
+                        let tick2 = tick.clone();
                         let closure = wasm_bindgen::closure::Closure::wrap(Box::new(
                             move |_entries: js_sys::Array, _obs: web_sys::ResizeObserver| {
+                                tick2.set(*tick2 + 1);
                                 if !*um.borrow() {
                                     fit2.emit(MouseEvent::new("fit").unwrap());
                                 }
