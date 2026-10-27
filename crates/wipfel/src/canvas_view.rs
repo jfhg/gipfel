@@ -96,6 +96,10 @@ struct DragState {
     last: (f64, f64),
     start: (f64, f64),
     moved: bool,
+    /// all active pointers (id, client position); >1 while pinching
+    pts: Vec<(i32, (f64, f64))>,
+    /// pinch geometry: (distance, center x, center y), canvas-relative
+    pinch: Option<(f64, f64, f64)>,
 }
 
 #[function_component(CanvasView)]
@@ -105,6 +109,8 @@ pub fn canvas_view(props: &Props) -> Html {
         last: (0.0, 0.0),
         start: (0.0, 0.0),
         moved: false,
+        pts: Vec::new(),
+        pinch: None,
     });
 
     // redraw on every view/bitmap/marker change and on resize ticks
@@ -397,21 +403,71 @@ pub fn canvas_view(props: &Props) -> Html {
             }
             let pos = (e.client_x() as f64, e.client_y() as f64);
             let mut d = drag.borrow_mut();
-            d.mode = Some(mode);
-            d.last = pos;
-            d.start = pos;
-            d.moved = false;
+            d.pts.push((e.pointer_id(), pos));
+            if d.pts.len() >= 2 {
+                // second finger: switch to pinch, cancel any pan/marker
+                // drag so the view does not jump
+                d.mode = None;
+                d.pinch = None;
+                d.moved = true;
+            } else {
+                d.mode = Some(mode);
+                d.last = pos;
+                d.start = pos;
+                d.moved = false;
+            }
         })
     };
 
     let on_pointermove = {
         let drag = drag.clone();
         let pan_cb = props.callbacks.pan.clone();
+        let zoom_cb = props.callbacks.zoom.clone();
         let marker_drag = props.callbacks.marker_drag.clone();
         let hover = props.callbacks.hover.clone();
         let to_img = to_img.clone();
+        let canvas_ref = props.canvas_ref.clone();
         let scale = props.view.scale;
         Callback::from(move |e: PointerEvent| {
+            // update the pointer table and handle two-finger pinch
+            let pinch_ev = {
+                let mut d = drag.borrow_mut();
+                if let Some(p) = d.pts.iter_mut().find(|(id, _)| *id == e.pointer_id()) {
+                    p.1 = (e.client_x() as f64, e.client_y() as f64);
+                }
+                if d.pts.len() >= 2 {
+                    let (x1, y1) = d.pts[0].1;
+                    let (x2, y2) = d.pts[1].1;
+                    let rect = canvas_ref
+                        .cast::<HtmlCanvasElement>()
+                        .map(|c| c.get_bounding_client_rect());
+                    let (rl, rt) = match rect {
+                        Some(r) => (r.left(), r.top()),
+                        None => (0.0, 0.0),
+                    };
+                    let dist = ((x2 - x1).powi(2) + (y2 - y1).powi(2)).sqrt();
+                    let cx = (x1 + x2) / 2.0 - rl;
+                    let cy = (y1 + y2) / 2.0 - rt;
+                    let ev = match d.pinch {
+                        Some((od, ocx, ocy)) if od > 1.0 && dist > 1.0 => {
+                            Some((dist / od, cx, cy, cx - ocx, cy - ocy))
+                        }
+                        _ => None,
+                    };
+                    d.pinch = Some((dist, cx, cy));
+                    d.moved = true;
+                    Some(ev)
+                } else {
+                    None
+                }
+            };
+            if let Some(ev) = pinch_ev {
+                if let Some((factor, cx, cy, dx, dy)) = ev {
+                    zoom_cb.emit((cx, cy, factor));
+                    pan_cb.emit((dx, dy));
+                }
+                return;
+            }
             let mut d = drag.borrow_mut();
             let mode = match &d.mode {
                 Some(m) => m.clone(),
@@ -451,11 +507,26 @@ pub fn canvas_view(props: &Props) -> Html {
         let drag_end = props.callbacks.drag_end.clone();
         let to_img = to_img.clone();
         Callback::from(move |e: PointerEvent| {
-            let mode = drag.borrow_mut().mode.take();
+            let (mode, moved) = {
+                let mut d = drag.borrow_mut();
+                d.pts.retain(|(id, _)| *id != e.pointer_id());
+                if d.pts.len() < 2 {
+                    d.pinch = None;
+                }
+                let mode = d.mode.take();
+                let moved = d.moved;
+                if d.pts.len() == 1 {
+                    // one finger left after pinch: resume panning from
+                    // there, never treat it as a click
+                    d.mode = Some(DragMode::Pan);
+                    d.last = d.pts[0].1;
+                    d.moved = true;
+                }
+                (mode, moved)
+            };
             if let Some(c) = canvas_ref.cast::<HtmlCanvasElement>() {
                 let _ = c.release_pointer_capture(e.pointer_id());
             }
-            let moved = drag.borrow().moved;
             match mode {
                 Some(DragMode::Pan) if !moved => {
                     let (ix, iy) = to_img(e.client_x() as f64, e.client_y() as f64);
@@ -470,7 +541,10 @@ pub fn canvas_view(props: &Props) -> Html {
     let on_pointercancel = {
         let drag = drag.clone();
         Callback::from(move |_: PointerEvent| {
-            drag.borrow_mut().mode = None;
+            let mut d = drag.borrow_mut();
+            d.mode = None;
+            d.pts.clear();
+            d.pinch = None;
         })
     };
 

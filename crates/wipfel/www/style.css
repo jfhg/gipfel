@@ -10,6 +10,10 @@ body {
 .app {
   display: flex;
   height: 100vh;
+  /* dynamic viewport height: on mobile browsers 100vh includes the
+     area behind the collapsing URL bar, pushing the compass below the
+     fold; dvh tracks the actually visible area */
+  height: 100dvh;
   background: #101014;
   color: #e8e8ea;
 }
