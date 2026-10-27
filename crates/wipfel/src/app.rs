@@ -11,7 +11,6 @@ use gipfel_core::metadata::{apply_image_metadata, ImageMetaData};
 use gipfel_core::panorama::Panorama;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
-use wasm_bindgen::JsValue;
 use wasm_bindgen_futures::spawn_local;
 use web_sys::{DragEvent, Event, HtmlCanvasElement, HtmlInputElement, InputEvent, MouseEvent};
 use yew::prelude::*;
@@ -450,37 +449,6 @@ pub fn app() -> Html {
             }
         })
     };
-
-    // Web Share Target handoff: the service worker stashes the shared
-    // file at `__shared` and redirects here with ?shared=1
-    {
-        let load_bytes = load_bytes.clone();
-        let status = status.clone();
-        use_effect_with((), move |_| {
-            let shared = web_sys::window()
-                .map(|w| {
-                    w.location()
-                        .search()
-                        .map(|s| s.contains("shared=1"))
-                        .unwrap_or(false)
-                })
-                .unwrap_or(false);
-            if shared {
-                spawn_local(async move {
-                    match bridge::fetch_bytes("__shared").await {
-                        Ok(bytes) => load_bytes.emit((bytes, "shared image".into())),
-                        Err(e) => status.set(format!("shared image missing: {e}")),
-                    }
-                });
-                if let Some(w) = web_sys::window() {
-                    let _ = w
-                        .history()
-                        .and_then(|h| h.replace_state_with_url(&JsValue::NULL, "", Some("./")));
-                }
-            }
-            || ()
-        });
-    }
 
     let on_drop = {
         let read_file = read_file.clone();
