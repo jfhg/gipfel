@@ -558,7 +558,12 @@ pub fn app() -> Html {
             Callback::from(move |(ix, iy): (f64, f64)| {
                 let scale = view.scale;
                 // unambiguous click right on a peak: mark directly
-                if let Some(idx) = markers::nearest_hill(&pan.borrow(), ix, iy, 10.0 / scale) {
+                // (borrow must be released before mark -> do_refit!)
+                let near = {
+                    let p = pan.borrow();
+                    markers::nearest_hill(&p, ix, iy, 10.0 / scale)
+                };
+                if let Some(idx) = near {
                     find_peak.set(None);
                     mark.emit((idx, ix, iy));
                     return;
