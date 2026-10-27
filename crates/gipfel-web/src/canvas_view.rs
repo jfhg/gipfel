@@ -36,6 +36,10 @@ pub struct ViewCallbacks {
     pub drag_end: Callback<()>,
     /// right-click: (x, y) center-relative image coords
     pub context: Callback<(f64, f64)>,
+    /// pointer moved over the image (not dragging): (x, y) center-relative
+    pub hover: Callback<(f64, f64)>,
+    /// pointer left the canvas
+    pub hover_end: Callback<()>,
 }
 
 #[derive(Properties, PartialEq)]
@@ -123,15 +127,29 @@ pub fn canvas_view(props: &Props) -> Html {
                 let sx = |x: f64| (x + hw) * view.scale + view.ox;
                 let sy = |y: f64| (y + hh) * view.scale + view.oy;
 
-                // guide dots for all visible peaks
+                // guide dots for all visible peaks: dark outline ring +
+                // bright core so they stay visible on any photo content
                 #[allow(deprecated)]
-                ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("rgba(120, 220, 160, 0.8)"));
+                ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("rgba(0, 0, 0, 0.85)"));
                 for (cx, cy) in candidates {
                     let (px, py) = (sx(*cx), sy(*cy));
-                    if px < -4.0 || py < -4.0 || px > cw + 4.0 || py > ch + 4.0 {
+                    if px < -6.0 || py < -6.0 || px > cw + 6.0 || py > ch + 6.0 {
                         continue;
                     }
-                    ctx.fill_rect(px - 1.5, py - 1.5, 3.0, 3.0);
+                    ctx.begin_path();
+                    ctx.arc(px, py, 4.5, 0.0, std::f64::consts::TAU);
+                    ctx.fill();
+                }
+                #[allow(deprecated)]
+                ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("rgb(110, 231, 183)"));
+                for (cx, cy) in candidates {
+                    let (px, py) = (sx(*cx), sy(*cy));
+                    if px < -6.0 || py < -6.0 || px > cw + 6.0 || py > ch + 6.0 {
+                        continue;
+                    }
+                    ctx.begin_path();
+                    ctx.arc(px, py, 2.5, 0.0, std::f64::consts::TAU);
+                    ctx.fill();
                 }
 
                 // markers: red cross + name
@@ -226,14 +244,21 @@ pub fn canvas_view(props: &Props) -> Html {
 
     let on_pointermove = {
         let drag = drag.clone();
-        let pan = props.callbacks.pan.clone();
+        let pan_cb = props.callbacks.pan.clone();
         let marker_drag = props.callbacks.marker_drag.clone();
+        let hover = props.callbacks.hover.clone();
+        let to_img = to_img.clone();
         let scale = props.view.scale;
         Callback::from(move |e: PointerEvent| {
             let mut d = drag.borrow_mut();
             let mode = match &d.mode {
                 Some(m) => m.clone(),
-                None => return,
+                None => {
+                    // free hover: report position for peak identification
+                    let (ix, iy) = to_img(e.client_x() as f64, e.client_y() as f64);
+                    hover.emit((ix, iy));
+                    return;
+                }
             };
             let pos = (e.client_x() as f64, e.client_y() as f64);
             let dx = pos.0 - d.last.0;
@@ -246,10 +271,15 @@ pub fn canvas_view(props: &Props) -> Html {
                 return;
             }
             match mode {
-                DragMode::Pan => pan.emit((dx, dy)),
+                DragMode::Pan => pan_cb.emit((dx, dy)),
                 DragMode::Marker(i) => marker_drag.emit((i, dx / scale, dy / scale)),
             }
         })
+    };
+
+    let on_pointerleave = {
+        let hover_end = props.callbacks.hover_end.clone();
+        Callback::from(move |_: PointerEvent| hover_end.emit(()))
     };
 
     let on_pointerup = {
@@ -320,6 +350,7 @@ pub fn canvas_view(props: &Props) -> Html {
             onpointermove={on_pointermove}
             onpointerup={on_pointerup}
             onpointercancel={on_pointercancel}
+            onpointerleave={on_pointerleave}
             oncontextmenu={on_contextmenu}
             onwheel={on_wheel}
         />

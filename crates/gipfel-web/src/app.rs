@@ -38,6 +38,7 @@ pub fn app() -> Html {
     let pan = use_mut_ref(Panorama::new);
     let markers = use_state(Vec::<Marker>::new);
     let fit_distortion = use_state(|| false);
+    let hover = use_state(|| Option::<String>::None);
 
     // force a redraw when the window is resized so the canvas backing
     // store tracks its CSS size (listener lives as long as the app)
@@ -309,6 +310,23 @@ pub fn app() -> Html {
                 }
             })
         },
+        hover: {
+            let pan = pan.clone();
+            let view = view.clone();
+            let hover = hover.clone();
+            Callback::from(move |(ix, iy): (f64, f64)| {
+                let p = pan.borrow();
+                let name = markers::nearest_hill(&p, ix, iy, 20.0 / view.scale).map(|i| {
+                    let h = &p.hills[i];
+                    format!("{} · {:.0} m", h.name, h.height)
+                });
+                hover.set(name);
+            })
+        },
+        hover_end: {
+            let hover = hover.clone();
+            Callback::from(move |_: ()| hover.set(None))
+        },
     };
 
     // overlay data for the canvas
@@ -356,9 +374,12 @@ pub fn app() -> Html {
                     if !fit_info.is_empty() {
                         <p class="fitinfo">{ (*fit_info).clone() }</p>
                     }
+                    if let Some(h) = hover.as_ref() {
+                        <p class="hover">{ h.clone() }</p>
+                    }
                 }
                 <p class="hint">
-                    { "Click a green dot to mark that peak · drag markers to adjust · right-click a marker to remove." }
+                    { "Hover a green dot to see the peak · click to mark it · drag to adjust · right-click to remove." }
                 </p>
                 <p class="hint dim">
                     { "The view is fitted automatically once 4+ markers are placed." }
