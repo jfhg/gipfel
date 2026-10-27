@@ -24,7 +24,7 @@ gipfel uses the non-linear
 [least squares method](http://en.wikipedia.org/wiki/Least_squares) to
 compute the viewing parameters from the given data points.
 
-![gipfel screenshot(file://gipfel_screenshot.png)
+![gipfel screenshot](gipfel_screenshot.png)
 
 Requirements
 ------------
@@ -42,7 +42,7 @@ You should now see a window with controls on the left and the actual picture.
 Depending on whether gipfel could find localization data in the image metadata,
 you need to set the viewpoint from which the picture was taken. 
 Alternatively, you can enter the GPS coordinate of the viewpoint directly in
-the control window (hit <Enter> for every data field).  
+the control window (hit `<Enter>` for every data field).  
 You can now use the controls in the control window to modify the view
 parameters.
 
@@ -56,7 +56,7 @@ move to their correct positions in the picture.
 You can try to set more than two mountains to ge a more accurate result.
 
 You may also want to have a look at the (outdated)
-(screen video)[http://www.flpsed.org/images/gipfel.avi]
+[screen video](http://www.flpsed.org/images/gipfel.avi)
 for an example session.
 
 Data File
