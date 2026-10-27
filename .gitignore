@@ -1,6 +1,7 @@
 /target
 tests/harness/build/
 crates/gipfel-wasm/pkg/
+dist/
 crates/gipfel-web/dist/
 *.tmp
 gipfel-app-bin.tar.gz
