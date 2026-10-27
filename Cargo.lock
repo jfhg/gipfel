@@ -1774,6 +1774,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "gipfel-wasm"
+version = "0.5.5"
+dependencies = [
+ "gipfel-core",
+ "image",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "gl_generator"
 version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

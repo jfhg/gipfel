@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>gipfel WASM spike</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 3em auto; line-height: 1.5; }
+    pre { background: #f4f4f4; padding: 1em; overflow-x: auto; }
+    label { display: block; margin: 0.6em 0; }
+    button { margin-top: 1em; padding: 0.5em 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>gipfel WASM spike</h1>
+  <p>core version: <code id="ver">loading…</code></p>
+  <p>Pick a hill database and a JPEG (ideally one saved by gipfel, or with EXIF GPS data):</p>
+  <label>gipfel.dat: <input type="file" id="db" /></label>
+  <label>image.jpg: <input type="file" id="jpg" /></label>
+  <button id="go" disabled>Run fit pipeline</button>
+  <pre id="out">pick both files, then run</pre>
+
+  <script type="module">
+    import init, { fit_demo, version } from '../pkg/gipfel_wasm.js';
+    const $ = (id) => document.getElementById(id);
+    await init();
+    $('ver').textContent = version();
+    $('go').disabled = false;
+    $('go').onclick = async () => {
+      const f = (id) => $(id).files[0];
+      if (!f('db') || !f('jpg')) { $('out').textContent = 'pick both files first'; return; }
+      const db  = new Uint8Array(await f('db').arrayBuffer());
+      const jpg = new Uint8Array(await f('jpg').arrayBuffer());
+      const t0 = performance.now();
+      const res = fit_demo(db, jpg);
+      $('out').textContent = res + `\n\n(wall time: ${(performance.now() - t0).toFixed(1)} ms)`;
+    };
+  </script>
+</body>
+</html>
