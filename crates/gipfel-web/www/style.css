@@ -1,0 +1,77 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, sans-serif;
+}
+.app {
+  display: flex;
+  height: 100vh;
+  background: #101014;
+  color: #e8e8ea;
+}
+.sidebar {
+  width: 300px;
+  padding: 16px;
+  background: #1a1a20;
+  border-right: 1px solid #2c2c34;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+.sidebar h1 {
+  margin: 0;
+  font-size: 22px;
+}
+.tag {
+  margin: 0 0 12px;
+  color: #8a8a94;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.sidebar button {
+  padding: 8px 12px;
+  background: #3b6fd4;
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.sidebar button:hover {
+  background: #4a7ee4;
+}
+.status {
+  font-size: 13px;
+  color: #c8c8d0;
+  word-break: break-word;
+}
+.hint {
+  font-size: 12px;
+  color: #8a8a94;
+}
+.dim {
+  opacity: 0.6;
+}
+.hidden-file {
+  display: none;
+}
+.main {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+}
+canvas.viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  cursor: grab;
+}
