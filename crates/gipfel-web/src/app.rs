@@ -15,7 +15,40 @@ use yew::prelude::*;
 
 use crate::bridge;
 use crate::canvas_view::{CanvasView, MarkerView, ViewCallbacks, ViewState};
+use crate::compass::{Compass, CompassData};
 use crate::markers::{self, Marker};
+use crate::widgets::{NumItem, SliderItem};
+
+/// sidebar-editable view parameters (degrees / meters / mm)
+#[derive(Clone, Copy, PartialEq)]
+struct UiParams {
+    lat: f64,
+    lon: f64,
+    height: f64,
+    az: f64,
+    focal: f64,
+    pitch: f64,
+    roll: f64,
+    /// visibility UI value: 0.11 - height_dist_ratio (right = more visible)
+    vis: f64,
+    label_font: f32,
+}
+
+impl Default for UiParams {
+    fn default() -> Self {
+        UiParams {
+            lat: 0.0,
+            lon: 0.0,
+            height: 0.0,
+            az: 0.0,
+            focal: 50.0,
+            pitch: 0.0,
+            roll: 0.0,
+            vis: 0.04,
+            label_font: 12.0,
+        }
+    }
+}
 
 fn gunzip(gz: &[u8]) -> Result<Vec<u8>, String> {
     let mut raw = Vec::new();
@@ -39,6 +72,8 @@ pub fn app() -> Html {
     let markers = use_state(Vec::<Marker>::new);
     let fit_distortion = use_state(|| false);
     let hover = use_state(|| Option::<String>::None);
+    let vp = use_state(UiParams::default);
+    let img_size = use_state(|| (0u32, 0u32));
 
     // force a redraw when the window is resized so the canvas backing
     // store tracks its CSS size (listener lives as long as the app)
@@ -134,9 +169,13 @@ pub fn app() -> Html {
         let pan = pan.clone();
         let markers = markers.clone();
         let fit_info = fit_info.clone();
+        let vp = vp.clone();
+        let img_size = img_size.clone();
         Callback::from(move |(bytes, name): (Vec<u8>, String)| {
             let (bitmap, status, fit, pan, markers, fit_info) =
                 (bitmap.clone(), status.clone(), fit.clone(), pan.clone(), markers.clone(), fit_info.clone());
+            let vp = vp.clone();
+            let img_size = img_size.clone();
             spawn_local(async move {
                 match bridge::decode_bitmap(&bytes).await {
                     Ok(bmp) => {
@@ -145,6 +184,22 @@ pub fn app() -> Html {
                         md.load_image_from_bytes(&bytes);
                         let have = apply_image_metadata(&mut pan.borrow_mut(), &md, w, h);
                         let vis = pan.borrow().visible.len();
+                        let u = {
+                            let p = pan.borrow();
+                            UiParams {
+                                lat: p.get_view_lat(),
+                                lon: p.get_view_long(),
+                                height: p.get_view_height(),
+                                az: p.get_center_angle().rem_euclid(360.0),
+                                focal: (p.get_scale() * 35.0 / w as f64).clamp(1.0, 300.0),
+                                pitch: p.get_pitch_angle(),
+                                roll: p.get_roll_angle(),
+                                vis: (0.11 - p.height_dist_ratio).clamp(0.01, 0.1),
+                                label_font: vp.label_font,
+                            }
+                        };
+                        vp.set(u);
+                        img_size.set((w, h));
                         let vp = if have {
                             format!("viewpoint from image · {vis} peaks visible")
                         } else {
@@ -221,6 +276,73 @@ pub fn app() -> Html {
             let input: HtmlInputElement = e.target_unchecked_into();
             fit_distortion.set(input.checked());
             do_refit(&markers);
+        })
+    };
+
+    // sidebar parameter editing: update UI state and apply to the panorama
+    macro_rules! param_cb {
+        ($field:ident, $apply:expr) => {{
+            let vp = vp.clone();
+            let pan = pan.clone();
+            Callback::from(move |v: f64| {
+                let mut u = *vp;
+                u.$field = v;
+                vp.set(u);
+                let f: &dyn Fn(&mut Panorama, f64) = &$apply;
+                f(&mut pan.borrow_mut(), v);
+            })
+        }};
+    }
+    let on_lat = param_cb!(lat, |p: &mut Panorama, v| p.set_view_lat(v));
+    let on_lon = param_cb!(lon, |p, v| p.set_view_long(v));
+    let on_height = param_cb!(height, |p, v| p.set_view_height(v));
+    let on_az = param_cb!(az, |p, v| p.set_center_angle(v));
+    let on_pitch = param_cb!(pitch, |p, v| p.set_pitch_angle(v));
+    let on_roll = param_cb!(roll, |p, v| p.set_roll_angle(v));
+    let on_vis = param_cb!(vis, |p, v| p.set_height_dist_ratio(0.11 - v));
+    let on_focal = {
+        let vp = vp.clone();
+        let pan = pan.clone();
+        let img_size = img_size.clone();
+        Callback::from(move |v: f64| {
+            let mut u = *vp;
+            u.focal = v;
+            vp.set(u);
+            let w = img_size.0 as f64;
+            if w > 0.0 {
+                pan.borrow_mut().set_scale(v * w / 35.0);
+            }
+        })
+    };
+    let on_font = {
+        let vp = vp.clone();
+        Callback::from(move |v: f64| {
+            let mut u = *vp;
+            u.label_font = v as f32;
+            vp.set(u);
+        })
+    };
+
+    // compass strip: shares the image transform, drag changes azimuth
+    let compass_data = {
+        let p = pan.borrow();
+        CompassData {
+            ptype: p.projection_type,
+            parms: p.parms,
+            center_deg: p.get_center_angle(),
+            zoom: view.scale,
+            cx: view.ox + img_size.0 as f64 * view.scale / 2.0,
+            max_view_angle: p.max_view_angle,
+        }
+    };
+    let compass_change = {
+        let pan = pan.clone();
+        let vp = vp.clone();
+        Callback::from(move |deg: f64| {
+            pan.borrow_mut().set_center_angle(deg);
+            let mut u = *vp;
+            u.az = deg.rem_euclid(360.0);
+            vp.set(u);
         })
     };
 
@@ -366,17 +488,41 @@ pub fn app() -> Html {
                 <p class="status">{ (*status).clone() }</p>
                 <p class="hint">{ (*db_status).clone() }</p>
                 if bitmap.is_some() {
-                    <label class="row">
-                        <input type="checkbox" checked={*fit_distortion} onchange={on_distortion_toggle} />
-                        { "Fit distortion (needs ≥ 4 markers)" }
-                    </label>
-                    <p class="hint">{ format!("{n_markers} markers · zoom {zoom_pct:.0} %") }</p>
-                    if !fit_info.is_empty() {
-                        <p class="fitinfo">{ (*fit_info).clone() }</p>
-                    }
-                    if let Some(h) = hover.as_ref() {
-                        <p class="hover">{ h.clone() }</p>
-                    }
+                    <>
+                        <div class="section">{ "Viewpoint" }</div>
+                        <NumItem label="Latitude" value={vp.lat} step={0.00001} decimals={5}
+                            onchange={on_lat} />
+                        <NumItem label="Longitude" value={vp.lon} step={0.00001} decimals={5}
+                            onchange={on_lon} />
+                        <NumItem label="Height (m)" value={vp.height} step={1.0} decimals={0}
+                            onchange={on_height} />
+                        <div class="section">{ "Orientation" }</div>
+                        <SliderItem label="Azimuth" display={format!("{:.1}°", vp.az)}
+                            value={vp.az} min={0.0} max={360.0} step={0.01} onchange={on_az} />
+                        <SliderItem label="Focal (35mm)" display={format!("{:.1} mm", vp.focal)}
+                            value={vp.focal} min={1.0} max={300.0} step={0.01} onchange={on_focal} />
+                        <SliderItem label="Pitch" display={format!("{:.1}°", vp.pitch)}
+                            value={vp.pitch} min={-40.0} max={20.0} step={0.01} onchange={on_pitch} />
+                        <SliderItem label="Roll" display={format!("{:.1}°", vp.roll)}
+                            value={vp.roll} min={-10.0} max={10.0} step={0.01} onchange={on_roll} />
+                        <div class="section">{ "Projection" }</div>
+                        <label class="row">
+                            <input type="checkbox" checked={*fit_distortion} onchange={on_distortion_toggle} />
+                            { "Fit distortion (needs ≥ 4 markers)" }
+                        </label>
+                        <div class="section">{ "Display" }</div>
+                        <SliderItem label="Visibility" display={format!("{:.0} %", (vp.vis - 0.01) / 0.09 * 100.0)}
+                            value={vp.vis} min={0.01} max={0.1} step={0.001} onchange={on_vis} />
+                        <SliderItem label="Label size" display={format!("{:.0} px", vp.label_font)}
+                            value={vp.label_font as f64} min={8.0} max={28.0} step={1.0} onchange={on_font} />
+                        <p class="hint">{ format!("{n_markers} markers · zoom {zoom_pct:.0} %") }</p>
+                        if !fit_info.is_empty() {
+                            <p class="fitinfo">{ (*fit_info).clone() }</p>
+                        }
+                        if let Some(h) = hover.as_ref() {
+                            <p class="hover">{ h.clone() }</p>
+                        }
+                    </>
                 }
                 <p class="hint">
                     { "Hover a green dot to see the peak · click to mark it · drag to adjust · right-click to remove." }
@@ -386,15 +532,21 @@ pub fn app() -> Html {
                 </p>
             </aside>
             <main class="main">
-                <CanvasView
-                    bitmap={bitmap.as_ref().cloned()}
-                    view={(*view).clone()}
-                    {callbacks}
-                    canvas_ref={canvas_ref.clone()}
-                    tick={*tick}
-                    markers={marker_views}
-                    candidates={candidates}
-                />
+                <div class="canvaswrap">
+                    <CanvasView
+                        bitmap={bitmap.as_ref().cloned()}
+                        view={(*view).clone()}
+                        {callbacks}
+                        canvas_ref={canvas_ref.clone()}
+                        tick={*tick}
+                        markers={marker_views}
+                        candidates={candidates}
+                        label_font={vp.label_font}
+                    />
+                </div>
+                if bitmap.is_some() {
+                    <Compass data={compass_data} tick={*tick} on_change={compass_change} />
+                }
             </main>
         </div>
     }

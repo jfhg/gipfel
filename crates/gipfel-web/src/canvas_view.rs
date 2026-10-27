@@ -53,6 +53,8 @@ pub struct Props {
     pub markers: Vec<MarkerView>,
     /// projected positions of all visible hills (small guide dots)
     pub candidates: Vec<(f64, f64)>,
+    /// marker label font size, screen px
+    pub label_font: f32,
 }
 
 #[derive(Clone, PartialEq)]
@@ -85,9 +87,10 @@ pub fn canvas_view(props: &Props) -> Html {
         let canvas_ref = props.canvas_ref.clone();
         let markers = props.markers.clone();
         let candidates = props.candidates.clone();
+        let label_font = props.label_font;
         use_effect_with(
-            (bitmap, view, props.tick, markers.clone(), candidates.clone()),
-            move |(bitmap, view, _tick, markers, candidates)| {
+            (bitmap, view, props.tick, markers.clone(), candidates.clone(), label_font),
+            move |(bitmap, view, _tick, markers, candidates, label_font)| {
                 let Some(canvas) = canvas_ref.cast::<HtmlCanvasElement>() else {
                     return;
                 };
@@ -137,7 +140,7 @@ pub fn canvas_view(props: &Props) -> Html {
                         continue;
                     }
                     ctx.begin_path();
-                    ctx.arc(px, py, 4.5, 0.0, std::f64::consts::TAU);
+                    let _ = ctx.arc(px, py, 4.5, 0.0, std::f64::consts::TAU);
                     ctx.fill();
                 }
                 #[allow(deprecated)]
@@ -148,31 +151,83 @@ pub fn canvas_view(props: &Props) -> Html {
                         continue;
                     }
                     ctx.begin_path();
-                    ctx.arc(px, py, 2.5, 0.0, std::f64::consts::TAU);
+                    let _ = ctx.arc(px, py, 2.5, 0.0, std::f64::consts::TAU);
                     ctx.fill();
                 }
 
-                // markers: red cross + name
-                ctx.set_font("12px system-ui, sans-serif");
-                for m in markers {
-                    let (px, py) = (sx(m.x), sy(m.y));
+                // markers: yellow leader lines, red crosses, collision-free
+                // labels (port of the desktop viewport drawing)
+                if !markers.is_empty() {
+                    let label_font = *label_font;
+                    let line_h = label_font * 1.3 + 2.0;
+                    ctx.set_font(&format!("{label_font:.0}px system-ui, sans-serif"));
+                    // layout runs in screen space, sorted by x
+                    let mut order: Vec<usize> = (0..markers.len())
+                        .filter(|&i| {
+                            markers[i].x.abs() * 2.0 <= bitmap.width() as f64
+                                && markers[i].y.abs() * 2.0 <= bitmap.height() as f64
+                        })
+                        .collect();
+                    order.sort_by(|&a, &b| sx(markers[a].x).total_cmp(&sx(markers[b].x)));
+                    let xs: Vec<f32> = order.iter().map(|&i| sx(markers[i].x) as f32).collect();
+                    let ys: Vec<f32> = order.iter().map(|&i| sy(markers[i].y) as f32).collect();
+                    let widths: Vec<f32> = order
+                        .iter()
+                        .map(|&i| {
+                            ctx.measure_text(&markers[i].name)
+                                .map(|m| m.width() as f32)
+                                .unwrap_or_else(|_| markers[i].name.len() as f32 * 7.0)
+                        })
+                        .collect();
+                    let in_img = vec![true; order.len()];
+                    let entries = layout_label_y(&xs, &ys, &widths, &in_img, line_h);
+
+                    // leaders (yellow): cross, vertical, horizontal
+                    #[allow(deprecated)]
+                    ctx.set_stroke_style(&wasm_bindgen::JsValue::from_str("rgb(255, 230, 51)"));
+                    ctx.set_line_width(1.0);
+                    for (k, &i) in order.iter().enumerate() {
+                        let (px, py) = (sx(markers[i].x), sy(markers[i].y));
+                        let (lx, ly) = entries[k];
+                        let label_line = py + ly as f64 - line_h as f64;
+                        ctx.begin_path();
+                        ctx.move_to(px - 4.0, py);
+                        ctx.line_to(px + 4.0, py);
+                        ctx.move_to(px, py);
+                        ctx.line_to(px, label_line);
+                        ctx.move_to(px, label_line);
+                        ctx.line_to(px + lx as f64, label_line);
+                        ctx.stroke();
+                    }
+                    // marker crosses (always red)
                     #[allow(deprecated)]
                     ctx.set_stroke_style(&wasm_bindgen::JsValue::from_str("rgb(255, 64, 64)"));
                     ctx.set_line_width(1.5);
-                    ctx.begin_path();
-                    ctx.move_to(px - 5.0, py);
-                    ctx.line_to(px + 5.0, py);
-                    ctx.move_to(px, py - 5.0);
-                    ctx.line_to(px, py + 5.0);
-                    ctx.stroke();
-                    if !m.name.is_empty() {
-                        // dark shadow + white text stays readable on any photo
+                    for &i in &order {
+                        let (px, py) = (sx(markers[i].x), sy(markers[i].y));
+                        ctx.begin_path();
+                        ctx.move_to(px - 5.0, py);
+                        ctx.line_to(px + 5.0, py);
+                        ctx.move_to(px, py - 5.0);
+                        ctx.line_to(px, py + 5.0);
+                        ctx.stroke();
+                    }
+                    // labels: white on dark shadow, right-aligned at leader end
+                    for (k, &i) in order.iter().enumerate() {
+                        if markers[i].name.is_empty() {
+                            continue;
+                        }
+                        let (px, py) = (sx(markers[i].x), sy(markers[i].y));
+                        let (lx, ly) = entries[k];
+                        let label_line = py + ly as f64 - line_h as f64;
+                        let tx = px + lx as f64 - widths[k] as f64;
+                        let ty = label_line - 3.0;
                         #[allow(deprecated)]
-                        ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("rgba(0, 0, 0, 0.8)"));
-                        ctx.fill_text(&m.name, px + 7.0, py - 5.0).ok();
+                        ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("rgba(0, 0, 0, 0.85)"));
+                        ctx.fill_text(&markers[i].name, tx + 1.0, ty + 1.0).ok();
                         #[allow(deprecated)]
                         ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("white"));
-                        ctx.fill_text(&m.name, px + 6.0, py - 6.0).ok();
+                        ctx.fill_text(&markers[i].name, tx, ty).ok();
                     }
                 }
             },
@@ -355,4 +410,69 @@ pub fn canvas_view(props: &Props) -> Html {
             onwheel={on_wheel}
         />
     }
+}
+
+/// Port of the desktop `viewport::layout_label_y`: place labels right of
+/// their crosses, pushing colliding ones up; iterate to a fixed point
+/// (the C single pass can leave overlaps). Inputs must be sorted by x.
+fn layout_label_y(
+    xs: &[f32],
+    ys: &[f32],
+    widths: &[f32],
+    in_img: &[bool],
+    line_h: f32,
+) -> Vec<(f32, f32)> {
+    let n = xs.len();
+    let mut label_x = vec![0.0f32; n];
+    let mut label_y = vec![0.0f32; n];
+    let cross = 4.0f32;
+    let overlap = |a1: f32, l1: f32, a2: f32, l2: f32| a1 <= a2 + l2 && a1 + l1 >= a2;
+
+    for i in 0..n {
+        if !in_img[i] {
+            continue;
+        }
+        label_x[i] = widths[i] + 1.0;
+        label_y[i] = 0.0;
+
+        let mut colliding: Vec<usize> = Vec::new();
+        for j in (0..i).rev() {
+            if !in_img[j] {
+                continue;
+            }
+            if overlap(xs[i], label_x[i], xs[j] - cross, label_x[j]) {
+                colliding.push(j);
+            } else {
+                break;
+            }
+        }
+        colliding.sort_by(|&a, &b| {
+            let ya = ys[a] + label_y[a];
+            let yb = ys[b] + label_y[b];
+            yb.total_cmp(&ya)
+        });
+        for _round in 0..64 {
+            let mut pushed = false;
+            for &j in &colliding {
+                if overlap(
+                    ys[i] + label_y[i] - line_h,
+                    line_h,
+                    ys[j] + label_y[j] - line_h,
+                    line_h,
+                ) || overlap(ys[i] + label_y[i] - line_h, line_h, ys[j] - cross, 2.0 * cross)
+                {
+                    let ny = (ys[j] + label_y[j] - ys[i] - line_h - 2.0).round();
+                    if ny < label_y[i] {
+                        label_y[i] = ny;
+                        pushed = true;
+                    }
+                }
+            }
+            if !pushed {
+                break;
+            }
+        }
+    }
+
+    (0..n).map(|i| (label_x[i], label_y[i])).collect()
 }
