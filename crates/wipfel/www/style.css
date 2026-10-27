@@ -70,6 +70,15 @@ body {
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+.moreinfo {
+  color: #7fa5e8;
+  font-size: 12px;
+  text-decoration: none;
+  margin-top: -6px;
+}
+.moreinfo:hover {
+  text-decoration: underline;
+}
 .sidebar button {
   padding: 8px 12px;
   background: #3b6fd4;

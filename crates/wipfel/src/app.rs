@@ -857,6 +857,8 @@ pub fn app() -> Html {
                     onclick={collapse_cb}>{ "◀" }</button>
                 <h1>{ "wipfel" }</h1>
                 <p class="tag">{ "web gipfel photogrammetry" }</p>
+                <a class="moreinfo" href="https://flpsed.org/gipfel.html" target="_blank"
+                    rel="noopener noreferrer">{ "More information…" }</a>
                 <button onclick={open_picker}>{ "Open image…" }</button>
                 <button onclick={fit} disabled={bitmap.is_none()}>{ "Fit to window" }</button>
                 <input
