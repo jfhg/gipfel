@@ -114,8 +114,8 @@ pub fn canvas_view(props: &Props) -> Html {
         pts: Vec::new(),
         pinch: None,
     });
-    // event counters for pinch diagnostics (pointerdown / pointermove)
-    let evcount = use_mut_ref(|| (0u32, 0u32));
+    // event counters for pinch diagnostics: (pointerdown, pinch-f, seeds)
+    let evcount = use_mut_ref(|| (0u32, 0u32, 0u32));
 
     // redraw on every view/bitmap/marker change and on resize ticks
     {
@@ -492,14 +492,24 @@ pub fn canvas_view(props: &Props) -> Html {
                     d.moved = true;
                     let dbg = match ev {
                         Some((f, ..)) => {
-                            let (pd, mv) = {
+                            let (pd, mv, sd) = {
                                 let mut c = evcount.borrow_mut();
                                 c.1 += 1;
-                                (c.0, c.1)
+                                (c.0, c.1, c.2)
                             };
-                            format!("pinch d={dist:.0} f={f:.3} pd={pd} mv={mv} s={:.4}", scale)
+                            format!(
+                                "pinch d={dist:.0} f={f:.3} pd={pd} mv={mv} sd={sd} s={:.4}",
+                                scale
+                            )
                         }
-                        None => format!("pinch d={dist:.0} seed"),
+                        None => {
+                            let sd = {
+                                let mut c = evcount.borrow_mut();
+                                c.2 += 1;
+                                c.2
+                            };
+                            format!("pinch d={dist:.0} seed#{sd}")
+                        }
                     };
                     (ev, dbg)
                 } else {
