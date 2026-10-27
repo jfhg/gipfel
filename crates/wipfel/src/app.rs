@@ -15,7 +15,7 @@ use web_sys::{DragEvent, Event, HtmlCanvasElement, HtmlInputElement, InputEvent,
 use yew::prelude::*;
 
 use crate::bridge;
-use crate::canvas_view::{CanvasView, MarkerView, ViewCallbacks, ViewState};
+use crate::canvas_view::{CanvasView, DotView, MarkerView, ViewCallbacks, ViewState};
 use crate::compass::{Compass, CompassData};
 use crate::markers::{self, Marker};
 use crate::widgets::{NumItem, SliderItem};
@@ -162,6 +162,7 @@ pub fn app() -> Html {
     let img_size = use_state(|| (0u32, 0u32));
     let find_peak = use_state(|| Option::<FindPeak>::None);
     let show_hidden = use_state(|| false);
+    let peak_labels = use_state(|| false);
     // set once the user pans or zooms by hand; auto-fit is then suppressed
     // until the next image load
     let user_moved = use_mut_ref(|| false);
@@ -493,6 +494,13 @@ pub fn app() -> Html {
             show_hidden.set(input.checked());
         })
     };
+    let on_peak_labels = {
+        let peak_labels = peak_labels.clone();
+        Callback::from(move |e: Event| {
+            let input: HtmlInputElement = e.target_unchecked_into();
+            peak_labels.set(input.checked());
+        })
+    };
 
     // compass strip: shares the image transform, drag changes azimuth
     let compass_data = {
@@ -700,23 +708,25 @@ pub fn app() -> Html {
         markers
             .iter()
             .map(|m| MarkerView {
+                hill: m.hill,
                 x: m.x,
                 y: m.y,
                 name: p.hills[m.hill].name.clone(),
             })
             .collect()
     };
-    let candidates: Vec<(f64, f64, bool)> = {
+    let candidates: Vec<DotView> = {
         let p = pan.borrow();
+        let marked: Vec<usize> = markers.iter().map(|m| m.hill).collect();
         p.visible
             .iter()
             .filter(|&&i| *show_hidden || p.hills[i].flags & FLAG_HIDDEN == 0)
-            .map(|&i| {
-                (
-                    p.hills[i].x,
-                    p.hills[i].y,
-                    p.hills[i].flags & FLAG_HIDDEN != 0,
-                )
+            .map(|&i| DotView {
+                x: p.hills[i].x,
+                y: p.hills[i].y,
+                hidden: p.hills[i].flags & FLAG_HIDDEN != 0,
+                marked: marked.contains(&i),
+                name: p.hills[i].name.clone(),
             })
             .collect()
     };
@@ -768,6 +778,10 @@ pub fn app() -> Html {
                             <input type="checkbox" checked={*show_hidden} onchange={on_show_hidden} />
                             { "Show hidden peaks" }
                         </label>
+                        <label class="row">
+                            <input type="checkbox" checked={*peak_labels} onchange={on_peak_labels} />
+                            { "Show peak labels" }
+                        </label>
                         <SliderItem label="Visibility" display={format!("{:.0} %", (vp.vis - 0.01) / 0.09 * 100.0)}
                             value={vp.vis} min={0.01} max={0.1} step={0.001} onchange={on_vis} />
                         <SliderItem label="Label size" display={format!("{:.0} px", vp.label_font)}
@@ -798,6 +812,7 @@ pub fn app() -> Html {
                         tick={*tick}
                         markers={marker_views}
                         candidates={candidates}
+                        peak_labels={*peak_labels}
                         label_font={vp.label_font}
                     />
                     { findpeak_popup.clone() }

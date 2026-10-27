@@ -18,8 +18,21 @@ pub struct ViewState {
 /// A marker in center-relative image coordinates.
 #[derive(Clone, Debug, PartialEq)]
 pub struct MarkerView {
+    pub hill: usize,
     pub x: f64,
     pub y: f64,
+    pub name: String,
+}
+
+/// A visible (unmarked or marked) peak drawn as a guide dot.
+#[derive(Clone, Debug, PartialEq)]
+pub struct DotView {
+    pub x: f64,
+    pub y: f64,
+    /// hidden by nearer terrain (drawn grey)
+    pub hidden: bool,
+    /// already carries a user marker (no duplicate label)
+    pub marked: bool,
     pub name: String,
 }
 
@@ -51,9 +64,10 @@ pub struct Props {
     /// bumped on window resize to force a redraw
     pub tick: u32,
     pub markers: Vec<MarkerView>,
-    /// projected positions of all visible hills (guide dots) with their
-    /// hidden-by-occlusion flag
-    pub candidates: Vec<(f64, f64, bool)>,
+    /// guide dots for all visible hills
+    pub candidates: Vec<DotView>,
+    /// draw name labels for unmarked visible peaks too
+    pub peak_labels: bool,
     /// marker label font size, screen px
     pub label_font: f32,
 }
@@ -89,9 +103,18 @@ pub fn canvas_view(props: &Props) -> Html {
         let markers = props.markers.clone();
         let candidates = props.candidates.clone();
         let label_font = props.label_font;
+        let peak_labels = props.peak_labels;
         use_effect_with(
-            (bitmap, view, props.tick, markers.clone(), candidates.clone(), label_font),
-            move |(bitmap, view, _tick, markers, candidates, label_font)| {
+            (
+                bitmap,
+                view,
+                props.tick,
+                markers.clone(),
+                candidates.clone(),
+                label_font,
+                peak_labels,
+            ),
+            move |(bitmap, view, _tick, markers, candidates, label_font, peak_labels)| {
                 let Some(canvas) = canvas_ref.cast::<HtmlCanvasElement>() else {
                     return;
                 };
@@ -136,8 +159,8 @@ pub fn canvas_view(props: &Props) -> Html {
                 // peaks hidden by nearer terrain are drawn grey
                 #[allow(deprecated)]
                 ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("rgba(0, 0, 0, 0.85)"));
-                for (cx, cy, _hidden) in candidates {
-                    let (px, py) = (sx(*cx), sy(*cy));
+                for d in candidates.iter() {
+                    let (px, py) = (sx(d.x), sy(d.y));
                     if px < -6.0 || py < -6.0 || px > cw + 6.0 || py > ch + 6.0 {
                         continue;
                     }
@@ -145,12 +168,12 @@ pub fn canvas_view(props: &Props) -> Html {
                     let _ = ctx.arc(px, py, 4.5, 0.0, std::f64::consts::TAU);
                     ctx.fill();
                 }
-                for (cx, cy, hidden) in candidates {
-                    let (px, py) = (sx(*cx), sy(*cy));
+                for d in candidates.iter() {
+                    let (px, py) = (sx(d.x), sy(d.y));
                     if px < -6.0 || py < -6.0 || px > cw + 6.0 || py > ch + 6.0 {
                         continue;
                     }
-                    let color = if *hidden { "rgb(150, 150, 150)" } else { "rgb(110, 231, 183)" };
+                    let color = if d.hidden { "rgb(150, 150, 150)" } else { "rgb(110, 231, 183)" };
                     #[allow(deprecated)]
                     ctx.set_fill_style(&wasm_bindgen::JsValue::from_str(color));
                     ctx.begin_path();
@@ -158,39 +181,75 @@ pub fn canvas_view(props: &Props) -> Html {
                     ctx.fill();
                 }
 
-                // markers: yellow leader lines, red crosses, collision-free
-                // labels (port of the desktop viewport drawing)
-                if !markers.is_empty() {
+                // labels: markers always; unmarked visible peaks when
+                // peak_labels is on. One combined collision-avoiding
+                // layout pass sorted by screen x (port of the desktop
+                // viewport drawing).
+                if !markers.is_empty() || *peak_labels {
                     let label_font = *label_font;
                     let line_h = label_font * 1.3 + 2.0;
                     ctx.set_font(&format!("{label_font:.0}px system-ui, sans-serif"));
-                    // layout runs in screen space, sorted by x
-                    let mut order: Vec<usize> = (0..markers.len())
-                        .filter(|&i| {
-                            markers[i].x.abs() * 2.0 <= bitmap.width() as f64
-                                && markers[i].y.abs() * 2.0 <= bitmap.height() as f64
+
+                    struct Item {
+                        x: f64,
+                        y: f64,
+                        name: String,
+                        marker: bool,
+                    }
+                    let mut items: Vec<Item> = markers
+                        .iter()
+                        .map(|m| Item {
+                            x: m.x,
+                            y: m.y,
+                            name: m.name.clone(),
+                            marker: true,
                         })
                         .collect();
-                    order.sort_by(|&a, &b| sx(markers[a].x).total_cmp(&sx(markers[b].x)));
-                    let xs: Vec<f32> = order.iter().map(|&i| sx(markers[i].x) as f32).collect();
-                    let ys: Vec<f32> = order.iter().map(|&i| sy(markers[i].y) as f32).collect();
+                    if *peak_labels {
+                        for d in candidates.iter() {
+                            if d.hidden || d.marked || d.name.is_empty() {
+                                continue;
+                            }
+                            items.push(Item {
+                                x: d.x,
+                                y: d.y,
+                                name: d.name.clone(),
+                                marker: false,
+                            });
+                        }
+                    }
+
+                    // layout runs in screen space, sorted by x
+                    let mut order: Vec<usize> = (0..items.len())
+                        .filter(|&i| {
+                            items[i].x.abs() * 2.0 <= bitmap.width() as f64
+                                && items[i].y.abs() * 2.0 <= bitmap.height() as f64
+                        })
+                        .collect();
+                    order.sort_by(|&a, &b| sx(items[a].x).total_cmp(&sx(items[b].x)));
+                    let xs: Vec<f32> = order.iter().map(|&i| sx(items[i].x) as f32).collect();
+                    let ys: Vec<f32> = order.iter().map(|&i| sy(items[i].y) as f32).collect();
                     let widths: Vec<f32> = order
                         .iter()
                         .map(|&i| {
-                            ctx.measure_text(&markers[i].name)
+                            ctx.measure_text(&items[i].name)
                                 .map(|m| m.width() as f32)
-                                .unwrap_or_else(|_| markers[i].name.len() as f32 * 7.0)
+                                .unwrap_or_else(|_| items[i].name.len() as f32 * 7.0)
                         })
                         .collect();
                     let in_img = vec![true; order.len()];
                     let entries = layout_label_y(&xs, &ys, &widths, &in_img, line_h);
 
-                    // leaders (yellow): cross, vertical, horizontal
+                    // leaders (yellow): cross, vertical, horizontal —
+                    // drawn for markers only
                     #[allow(deprecated)]
                     ctx.set_stroke_style(&wasm_bindgen::JsValue::from_str("rgb(255, 230, 51)"));
                     ctx.set_line_width(1.0);
                     for (k, &i) in order.iter().enumerate() {
-                        let (px, py) = (sx(markers[i].x), sy(markers[i].y));
+                        if !items[i].marker {
+                            continue;
+                        }
+                        let (px, py) = (sx(items[i].x), sy(items[i].y));
                         let (lx, ly) = entries[k];
                         let label_line = py + ly as f64 - line_h as f64;
                         ctx.begin_path();
@@ -207,7 +266,10 @@ pub fn canvas_view(props: &Props) -> Html {
                     ctx.set_stroke_style(&wasm_bindgen::JsValue::from_str("rgb(255, 64, 64)"));
                     ctx.set_line_width(1.5);
                     for &i in &order {
-                        let (px, py) = (sx(markers[i].x), sy(markers[i].y));
+                        if !items[i].marker {
+                            continue;
+                        }
+                        let (px, py) = (sx(items[i].x), sy(items[i].y));
                         ctx.begin_path();
                         ctx.move_to(px - 5.0, py);
                         ctx.line_to(px + 5.0, py);
@@ -215,22 +277,24 @@ pub fn canvas_view(props: &Props) -> Html {
                         ctx.line_to(px, py + 5.0);
                         ctx.stroke();
                     }
-                    // labels: white on dark shadow, right-aligned at leader end
+                    // labels: white on dark shadow, right-aligned at the
+                    // leader end (markers) or just right of the dot
                     for (k, &i) in order.iter().enumerate() {
-                        if markers[i].name.is_empty() {
+                        if items[i].name.is_empty() {
                             continue;
                         }
-                        let (px, py) = (sx(markers[i].x), sy(markers[i].y));
+                        let (px, py) = (sx(items[i].x), sy(items[i].y));
                         let (lx, ly) = entries[k];
                         let label_line = py + ly as f64 - line_h as f64;
                         let tx = px + lx as f64 - widths[k] as f64;
                         let ty = label_line - 3.0;
                         #[allow(deprecated)]
                         ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("rgba(0, 0, 0, 0.85)"));
-                        ctx.fill_text(&markers[i].name, tx + 1.0, ty + 1.0).ok();
+                        ctx.fill_text(&items[i].name, tx + 1.0, ty + 1.0).ok();
+                        let color = if items[i].marker { "white" } else { "rgb(196, 240, 214)" };
                         #[allow(deprecated)]
-                        ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("white"));
-                        ctx.fill_text(&markers[i].name, tx, ty).ok();
+                        ctx.set_fill_style(&wasm_bindgen::JsValue::from_str(color));
+                        ctx.fill_text(&items[i].name, tx, ty).ok();
                     }
                 }
             },
