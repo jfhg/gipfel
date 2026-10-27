@@ -5,12 +5,13 @@ use std::io::Read;
 use std::rc::Rc;
 
 use flate2::read::GzDecoder;
+use gipfel_core::hill::{FLAG_DUPLIC, FLAG_TRACK_POINT};
 use gipfel_core::metadata::{apply_image_metadata, ImageMetaData};
 use gipfel_core::panorama::Panorama;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::spawn_local;
-use web_sys::{DragEvent, Event, HtmlCanvasElement, HtmlInputElement, MouseEvent};
+use web_sys::{DragEvent, Event, HtmlCanvasElement, HtmlInputElement, InputEvent, MouseEvent};
 use yew::prelude::*;
 
 use crate::bridge;
@@ -50,21 +51,14 @@ impl Default for UiParams {
     }
 }
 
-/// one entry of the Find Peak candidate list
-#[derive(Clone, PartialEq)]
-struct FpItem {
-    hill: usize,
-    label: String,
-}
-
-/// open Find Peak popup: anchor (screen + image coords) and candidates
+/// open Find Peak popup: anchor (screen + image coords) and search query
 #[derive(Clone, PartialEq)]
 struct FindPeak {
     sx: f64,
     sy: f64,
     ix: f64,
     iy: f64,
-    items: Vec<FpItem>,
+    query: String,
 }
 
 fn gunzip(gz: &[u8]) -> Result<Vec<u8>, String> {
@@ -73,6 +67,81 @@ fn gunzip(gz: &[u8]) -> Result<Vec<u8>, String> {
         .read_to_end(&mut raw)
         .map(|_| raw)
         .map_err(|e| format!("gunzip: {e}"))
+}
+
+#[derive(Properties, PartialEq)]
+struct FpProps {
+    fp: FindPeak,
+    items: Vec<(String, usize)>,
+    on_pick: Callback<usize>,
+    on_query: Callback<String>,
+    on_close: Callback<()>,
+}
+
+/// searchable Find Peak dialog: type to filter, click to select
+#[function_component(FindPeakPanel)]
+fn find_peak_panel(p: &FpProps) -> Html {
+    let input_ref = use_node_ref();
+    // focus the search box when the dialog opens
+    {
+        let input_ref = input_ref.clone();
+        use_effect_with((), move |_| {
+            if let Some(i) = input_ref.cast::<HtmlInputElement>() {
+                let _ = i.focus();
+            }
+        });
+    }
+    let on_query = {
+        let on_query = p.on_query.clone();
+        Callback::from(move |e: InputEvent| {
+            let input: HtmlInputElement = e.target_unchecked_into();
+            on_query.emit(input.value());
+        })
+    };
+    let on_close = {
+        let on_close = p.on_close.clone();
+        Callback::from(move |_: MouseEvent| on_close.emit(()))
+    };
+    html! {
+        <>
+            <div class="fpbackdrop" onclick={on_close.clone()} />
+            <div
+                class="findpeak"
+                style={format!("left: {}px; top: {}px", p.fp.sx + 10.0, p.fp.sy + 10.0)}
+            >
+                <div class="fphead">{ "Find Peak" }</div>
+                <div class="fpsearch">
+                    <input
+                        type="text"
+                        ref={input_ref}
+                        placeholder="search…"
+                        value={p.fp.query.clone()}
+                        oninput={on_query}
+                    />
+                </div>
+                <div class="fplist">
+                    {
+                        for p.items.iter().map(|(label, idx)| {
+                            let onclick = {
+                                let on_pick = p.on_pick.clone();
+                                let i = *idx;
+                                Callback::from(move |_: MouseEvent| on_pick.emit(i))
+                            };
+                            html! {
+                                <button class="fpitem" {onclick}>{ label.clone() }</button>
+                            }
+                        })
+                    }
+                    if p.items.is_empty() {
+                        <p class="fpempty">{ "no matches" }</p>
+                    }
+                </div>
+                <div class="fpfoot">
+                    <button class="fpcancel" onclick={on_close}>{ "Cancel" }</button>
+                </div>
+            </div>
+        </>
+    }
 }
 
 #[function_component(App)]
@@ -398,41 +467,60 @@ pub fn app() -> Html {
 
     let fp_close = {
         let find_peak = find_peak.clone();
-        Callback::from(move |_: MouseEvent| find_peak.set(None))
+        Callback::from(move |_: ()| find_peak.set(None))
     };
 
-    // Find Peak popup (built outside the main html! for macro simplicity)
+    // Find Peak picker: searchable list over the geographically close hills
+    // (same candidate set and filtering as the desktop dialog)
     let findpeak_popup = if let Some(fp) = &*find_peak {
-        let fp2 = fp.clone();
-        let items: Html = fp2
-            .items
-            .iter()
-            .map(|it| {
-                let onclick = {
-                    let mark = mark_peak.clone();
-                    let find_peak = find_peak.clone();
-                    let (hill, ix, iy) = (it.hill, fp2.ix, fp2.iy);
-                    Callback::from(move |_: MouseEvent| {
-                        mark.emit((hill, ix, iy));
-                        find_peak.set(None);
-                    })
-                };
-                html! {
-                    <button class="fpitem" {onclick}>{ it.label.clone() }</button>
+        let items: Vec<(String, usize)> = {
+            let p = pan.borrow();
+            let q = fp.query.to_uppercase();
+            let mut entries: Vec<(String, usize)> = p
+                .close
+                .iter()
+                .filter(|&&i| {
+                    let h = &p.hills[i];
+                    h.flags & (FLAG_DUPLIC | FLAG_TRACK_POINT) == 0
+                        && (q.is_empty() || h.name.to_uppercase().contains(&q))
+                })
+                .map(|&i| {
+                    (
+                        format!("{} ({} m)", p.hills[i].name, p.hills[i].height as i64),
+                        i,
+                    )
+                })
+                .collect();
+            entries.sort_by(|a, b| a.0.cmp(&b.0));
+            entries.truncate(300);
+            entries
+        };
+        let on_pick = {
+            let mark = mark_peak.clone();
+            let find_peak = find_peak.clone();
+            let (ix, iy) = (fp.ix, fp.iy);
+            Callback::from(move |hill: usize| {
+                mark.emit((hill, ix, iy));
+                find_peak.set(None);
+            })
+        };
+        let on_query = {
+            let find_peak = find_peak.clone();
+            Callback::from(move |q: String| {
+                if let Some(mut fp) = (*find_peak).clone() {
+                    fp.query = q;
+                    find_peak.set(Some(fp));
                 }
             })
-            .collect();
+        };
         html! {
-            <>
-                <div class="fpbackdrop" onclick={fp_close.clone()} />
-                <div
-                    class="findpeak"
-                    style={format!("left: {}px; top: {}px", fp.sx + 10.0, fp.sy + 10.0)}
-                >
-                    <div class="fphead">{ "Find Peak" }</div>
-                    { items }
-                </div>
-            </>
+            <FindPeakPanel
+                fp={(*fp).clone()}
+                {items}
+                {on_pick}
+                {on_query}
+                on_close={fp_close.clone()}
+            />
         }
     } else {
         Html::default()
@@ -464,55 +552,27 @@ pub fn app() -> Html {
         click: {
             let pan = pan.clone();
             let view = view.clone();
-            let status = status.clone();
             let mark = mark_peak.clone();
             let find_peak = find_peak.clone();
             let img_size = img_size.clone();
             Callback::from(move |(ix, iy): (f64, f64)| {
                 let scale = view.scale;
-                let p = pan.borrow();
                 // unambiguous click right on a peak: mark directly
-                if let Some(idx) = markers::nearest_hill(&p, ix, iy, 10.0 / scale) {
-                    drop(p);
+                if let Some(idx) = markers::nearest_hill(&pan.borrow(), ix, iy, 10.0 / scale) {
                     find_peak.set(None);
                     mark.emit((idx, ix, iy));
                     return;
                 }
-                // otherwise offer a Find Peak list, like the desktop dialog
-                let r = 60.0 / scale;
-                let mut cands: Vec<(f64, usize)> = p
-                    .visible
-                    .iter()
-                    .map(|&i| ((p.hills[i].x - ix).hypot(p.hills[i].y - iy), i))
-                    .filter(|(d, _)| *d <= r)
-                    .collect();
-                if cands.is_empty() {
-                    drop(p);
-                    status.set("No peaks near click — zoom in or adjust the view.".to_string());
-                    find_peak.set(None);
-                    return;
-                }
-                cands.sort_by(|a, b| a.0.total_cmp(&b.0));
-                cands.truncate(15);
-                let items: Vec<FpItem> = cands
-                    .iter()
-                    .map(|(d, i)| FpItem {
-                        hill: *i,
-                        label: format!(
-                            "{} · {:.0} m · {:.0} px",
-                            p.hills[*i].name,
-                            p.hills[*i].height,
-                            d * scale
-                        ),
-                    })
-                    .collect();
+                // otherwise open the Find Peak picker (searchable, like the
+                // desktop dialog): the correct peak may project far away
+                // while the viewpoint is still rough
                 let (w, h) = (img_size.0 as f64, img_size.1 as f64);
                 find_peak.set(Some(FindPeak {
                     sx: (ix + w / 2.0) * scale + view.ox,
                     sy: (iy + h / 2.0) * scale + view.oy,
                     ix,
                     iy,
-                    items,
+                    query: String::new(),
                 }));
             })
         },

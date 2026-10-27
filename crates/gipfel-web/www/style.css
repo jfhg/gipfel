@@ -152,13 +152,50 @@ canvas.compass {
 .findpeak {
   position: absolute;
   z-index: 10;
+  width: 280px;
   background: #1e1e26;
   border: 1px solid #3a3a46;
   border-radius: 6px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+.fpsearch {
+  padding: 8px;
+  border-bottom: 1px solid #2c2c34;
+}
+.fpsearch input {
+  width: 100%;
+  padding: 5px 8px;
+  background: #24242c;
+  border: 1px solid #3a3a46;
+  border-radius: 4px;
+  color: #e8e8ea;
+  font-size: 13px;
+}
+.fplist {
   max-height: 320px;
   overflow-y: auto;
-  min-width: 220px;
+}
+.fpempty {
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #8a8a94;
+  margin: 0;
+}
+.fpfoot {
+  padding: 6px 8px;
+  border-top: 1px solid #2c2c34;
+  text-align: right;
+}
+.fpcancel {
+  padding: 4px 12px;
+  background: #34343e;
+  color: #e8e8ea;
+  border: 0;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
 }
 .fphead {
   padding: 6px 10px;
