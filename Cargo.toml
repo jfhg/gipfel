@@ -2,6 +2,15 @@
 resolver = "2"
 members = ["crates/gipfel-core", "crates/gipfel-cli", "crates/gipfel-app"]
 
+# Single source of truth for metadata inherited by every crate via
+# `version.workspace = true` etc. Bump `version` here on release; the
+# About dialog and all crates follow. A test enforces the ChangeLog top
+# entry matches this version.
+[workspace.package]
+version = "0.5.4"
+edition = "2021"
+license = "GPL-2.0-or-later"
+
 [workspace.dependencies]
 kamadak-exif = "0.6"
 quick-xml = { version = "0.41", default-features = false }

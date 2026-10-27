@@ -1,9 +1,9 @@
 [package]
 name = "gipfel-app"
-version = "0.5.4"
-edition = "2021"
+version.workspace = true
+edition.workspace = true
 description = "gipfel - photogrammetry for mountain images"
-license = "GPL-2.0-or-later"
+license.workspace = true
 
 [[bin]]
 name = "gipfel"

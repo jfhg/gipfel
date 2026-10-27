@@ -1526,7 +1526,7 @@ impl Gipfel {
     fn view_about<'a>(&self) -> Element<'a, Message> {
         widget::dialog()
             .title("About gipfel")
-            .body("gipfel 0.5.4")
+            .body(format!("gipfel {}", env!("CARGO_PKG_VERSION")))
             .control(widget::text("Annotate mountain panoramas."))
             .control(widget::text("by Johannes Hofmann"))            .primary_action(widget::button::suggested("Close").on_press(Message::About(false)))
             .is_overlay(false)
@@ -1801,5 +1801,27 @@ mod tests {
         assert!(top > p && bot < p, "top={top} p={p} bot={bot}");
         let (_, y_back) = pan.project_point(0.0, top).unwrap();
         assert!((y_back + 100.0).abs() < 0.01);
+    }
+
+    /// Release drift guard: the top `gipfel-X.Y.Z` entry in the ChangeLog must
+    /// match the crate version (inherited from `[workspace.package]`). This
+    /// catches a bump of one but not the other. The About dialog reads the same
+    /// `CARGO_PKG_VERSION`, so all three stay in lockstep.
+    #[test]
+    fn changelog_top_matches_version() {
+        let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../ChangeLog");
+        let text = std::fs::read_to_string(path)
+            .expect("ChangeLog not found at the workspace root");
+        let top = text
+            .lines()
+            .map(str::trim)
+            .find_map(|l| l.strip_prefix("gipfel-"))
+            .expect("ChangeLog has no `gipfel-X.Y.Z` entry");
+        assert_eq!(
+            top,
+            env!("CARGO_PKG_VERSION"),
+            "ChangeLog top entry is `gipfel-{top}` but crate version is {}",
+            env!("CARGO_PKG_VERSION")
+        );
     }
 }

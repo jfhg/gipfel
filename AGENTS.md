@@ -123,6 +123,35 @@ models. If you regenerate, re-run the golden tests immediately.
   `dirs` + exe-relative) and font fallback, then get libcosmic itself to compile
   for `x86_64-pc-windows-gnu` (upstream does not test Windows).
 
+## Releasing a new version
+
+The version has a **single source of truth**: `[workspace.package] version` in
+the root `Cargo.toml`. All three crates inherit it (`version.workspace = true`),
+and the app's **About dialog** reads it at compile time via
+`env!("CARGO_PKG_VERSION")`. Do **not** hardcode a version anywhere else.
+
+To cut a release `X.Y.Z`:
+
+1. Bump `version` in `[workspace.package]` (root `Cargo.toml`). That updates all
+   three crates and the About dialog at once.
+2. Add a new entry at the **top** of `ChangeLog`:
+   ```
+   gipfel-X.Y.Z
+   * one line per user-visible change
+   ```
+   The test `gipfel-app: changelog_top_matches_version` fails if the top
+   `gipfel-X.Y.Z` line does not equal the crate version, so the manifest and the
+   ChangeLog cannot drift apart.
+3. `cargo test --lib --test golden` (with `GIPFEL_DATA` set) — must be green.
+4. Commit, then tag: `git tag vX.Y.Z`.
+5. Build the **source** tarball (tracked files only, no build artifacts):
+   ```sh
+   git archive --format=tar.gz --prefix=gipfel-X.Y.Z/ \
+       -o ~/gipfel-X.Y.Z.tar.gz vX.Y.Z
+   ```
+   Recipients build with `cargo build --release`. For a fully offline tarball,
+   run `cargo vendor --versioned-dirs vendor/` and commit `vendor/` first.
+
 ## Do / Don't
 
 - ✅ Run `cargo test --lib --test golden` (with `GIPFEL_DATA` set) after any

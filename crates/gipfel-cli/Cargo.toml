@@ -1,9 +1,9 @@
 [package]
 name = "gipfel-cli"
-version = "0.5.4"
-edition = "2021"
+version.workspace = true
+edition.workspace = true
 description = "gipfel command line tools (export-position, export-hills)"
-license = "GPL-2.0-or-later"
+license.workspace = true
 
 [[bin]]
 name = "gipfel-cli"
