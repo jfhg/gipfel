@@ -162,6 +162,9 @@ pub fn app() -> Html {
     let img_size = use_state(|| (0u32, 0u32));
     let find_peak = use_state(|| Option::<FindPeak>::None);
     let show_hidden = use_state(|| false);
+    // set once the user pans or zooms by hand; auto-fit is then suppressed
+    // until the next image load
+    let user_moved = use_mut_ref(|| false);
 
     // force a redraw when the window is resized so the canvas backing
     // store tracks its CSS size (listener lives as long as the app)
@@ -225,6 +228,44 @@ pub fn app() -> Html {
         })
     };
 
+    // Keep the fit correct even when layout was not ready at load time:
+    // a ResizeObserver fires once with the element's initial size right
+    // after it starts observing, then on every later resize. Auto-fit
+    // whenever the user has not panned or zoomed by hand since the last
+    // image load — this is what makes the very first image appear.
+    {
+        let canvas_ref = canvas_ref.clone();
+        let fit = fit.clone();
+        let bitmap = bitmap.clone();
+        let user_moved = user_moved.clone();
+        use_effect_with((*bitmap).is_some(), move |has_image| {
+            let observer = if *has_image {
+                canvas_ref
+                    .cast::<HtmlCanvasElement>()
+                    .and_then(|c| {
+                        let fit2 = fit.clone();
+                        let um = user_moved.clone();
+                        let closure = wasm_bindgen::closure::Closure::wrap(Box::new(
+                            move |_entries: js_sys::Array, _obs: web_sys::ResizeObserver| {
+                                if !*um.borrow() {
+                                    fit2.emit(MouseEvent::new("fit").unwrap());
+                                }
+                            },
+                        ) as Box<dyn Fn(js_sys::Array, web_sys::ResizeObserver)>);
+                        let ro =
+                            web_sys::ResizeObserver::new(closure.as_ref().unchecked_ref()).ok()?;
+                        let _ = ro.observe(&c);
+                        // the observer does not own the closure; keep both
+                        // alive until this effect is torn down
+                        Some((ro, closure))
+                    })
+            } else {
+                None
+            };
+            move || drop(observer)
+        });
+    }
+
     // refit the projection to the given markers and update the status line
     let do_refit = {
         let pan = pan.clone();
@@ -276,12 +317,14 @@ pub fn app() -> Html {
         let vp = vp.clone();
         let img_size = img_size.clone();
         let find_peak = find_peak.clone();
+        let user_moved = user_moved.clone();
         Callback::from(move |(bytes, name): (Vec<u8>, String)| {
             let (bitmap, status, fit, pan, markers, fit_info) =
                 (bitmap.clone(), status.clone(), fit.clone(), pan.clone(), markers.clone(), fit_info.clone());
             let vp = vp.clone();
             let img_size = img_size.clone();
             let find_peak = find_peak.clone();
+            let user_moved = user_moved.clone();
             spawn_local(async move {
                 match bridge::decode_bitmap(&bytes).await {
                     Ok(bmp) => {
@@ -315,6 +358,7 @@ pub fn app() -> Html {
                         markers.set(Vec::new());
                         fit_info.set(String::new());
                         find_peak.set(None);
+                        *user_moved.borrow_mut() = false;
                         bitmap.set(Some(bmp));
                         fit.emit(MouseEvent::new("fit").unwrap());
                         // same nudge as the desktop app: re-fit shortly
@@ -537,7 +581,9 @@ pub fn app() -> Html {
     let callbacks = ViewCallbacks {
         pan: {
             let view = view.clone();
+            let user_moved = user_moved.clone();
             Callback::from(move |(dx, dy): (f64, f64)| {
+                *user_moved.borrow_mut() = true;
                 let mut v = (*view).clone();
                 v.ox += dx;
                 v.oy += dy;
@@ -546,7 +592,9 @@ pub fn app() -> Html {
         },
         zoom: {
             let view = view.clone();
+            let user_moved = user_moved.clone();
             Callback::from(move |(cx, cy, factor): (f64, f64, f64)| {
+                *user_moved.borrow_mut() = true;
                 let v = &*view;
                 let ns = (v.scale * factor).clamp(0.02, 64.0);
                 let k = ns / v.scale;

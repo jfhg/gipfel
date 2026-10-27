@@ -36,6 +36,7 @@ features = [
     "PointerEvent",
     "Request",
     "Response",
+    "ResizeObserver",
     "TextMetrics",
     "Window",
     "WheelEvent",
