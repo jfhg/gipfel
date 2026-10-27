@@ -55,8 +55,8 @@ If you have positioned at least two mountains all other mountains should
 move to their correct positions in the picture.
 You can try to set more than two mountains to ge a more accurate result.
 
-You may also want to have a look at the (outdated)
-[screen video](http://www.flpsed.org/images/gipfel.avi)
+You may also want to have a look at a
+[screen video](http://www.flpsed.org/images/gipfel.mp4)
 for an example session.
 
 Data File
