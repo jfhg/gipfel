@@ -63,6 +63,21 @@ body {
 .nav-toggle:hover {
   background: rgba(59, 111, 212, 0.9);
 }
+.canvasstatus {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  right: 8px;
+  font-size: 11px;
+  color: #e8e8ea;
+  background: rgba(16, 16, 20, 0.7);
+  padding: 3px 8px;
+  border-radius: 5px;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .sidebar h1 {
   margin: 0;
   font-size: 22px;

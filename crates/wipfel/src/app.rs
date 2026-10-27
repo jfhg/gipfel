@@ -951,6 +951,7 @@ pub fn app() -> Html {
                     if !*nav_open {
                         <button class="nav-toggle" title="Show controls"
                             onclick={expand_cb}>{ "☰" }</button>
+                        <div class="canvasstatus">{ (*status).clone() }</div>
                     }
                     <CanvasView
                         bitmap={bitmap.as_ref().cloned()}
