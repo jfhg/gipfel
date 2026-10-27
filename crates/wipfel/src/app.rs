@@ -149,7 +149,25 @@ fn find_peak_panel(p: &FpProps) -> Html {
 pub fn app() -> Html {
     let bitmap = use_state(|| None::<web_sys::ImageBitmap>);
     let view = use_state(ViewState::default);
-    let status = use_state(|| "No image loaded · build 27k".to_string());
+    // Live view state for the event callbacks. A UseStateHandle cloned
+    // into a callback derefs to its render-time snapshot (documented
+    // Yew behaviour), so consecutive read-modify-writes within one
+    // frame clobber each other — this silently killed pinch zoom, where
+    // the pan emit reverted the zoom emit of the same event. The
+    // mirror is the live source of truth; every write goes through
+    // apply_view, which also pushes to the use_state for rendering.
+    let view_live = use_mut_ref(ViewState::default);
+    let apply_view: Rc<dyn Fn(&dyn Fn(&mut ViewState))> = {
+        let view = view.clone();
+        let view_live = view_live.clone();
+        Rc::new(move |f: &dyn Fn(&mut ViewState)| {
+            let mut v = (*view_live.borrow()).clone();
+            f(&mut v);
+            *view_live.borrow_mut() = v.clone();
+            view.set(v);
+        })
+    };
+    let status = use_state(|| "No image loaded".to_string());
     let db_status = use_state(|| "Loading hill database…".to_string());
     let fit_info = use_state(String::new);
     let tick = use_state(|| 0u32);
@@ -223,11 +241,9 @@ pub fn app() -> Html {
     // Fit the current bitmap into the canvas, centered.
     let fit = {
         let bitmap = bitmap.clone();
-        let view = view.clone();
         let canvas_ref = canvas_ref.clone();
-        let status = status.clone();
+        let apply = apply_view.clone();
         Callback::from(move |_: MouseEvent| {
-            status.set("FIT ran".to_string());
             let Some(bmp) = bitmap.as_ref() else { return };
             let (cw, ch) = canvas_ref
                 .cast::<HtmlCanvasElement>()
@@ -238,10 +254,10 @@ pub fn app() -> Html {
                 return;
             }
             let scale = (cw / iw).min(ch / ih);
-            view.set(ViewState {
-                scale,
-                ox: (cw - iw * scale) / 2.0,
-                oy: (ch - ih * scale) / 2.0,
+            apply(&move |v| {
+                v.scale = scale;
+                v.ox = (cw - iw * scale) / 2.0;
+                v.oy = (ch - ih * scale) / 2.0;
             });
         })
     };
@@ -659,28 +675,43 @@ pub fn app() -> Html {
 
     let callbacks = ViewCallbacks {
         pan: {
-            let view = view.clone();
+            let apply = apply_view.clone();
             let user_moved = user_moved.clone();
             Callback::from(move |(dx, dy): (f64, f64)| {
                 *user_moved.borrow_mut() = true;
-                let mut v = (*view).clone();
-                v.ox += dx;
-                v.oy += dy;
-                view.set(v);
+                apply(&move |v| {
+                    v.ox += dx;
+                    v.oy += dy;
+                });
             })
         },
         zoom: {
-            let view = view.clone();
+            let apply = apply_view.clone();
             let user_moved = user_moved.clone();
             Callback::from(move |(cx, cy, factor): (f64, f64, f64)| {
                 *user_moved.borrow_mut() = true;
-                let v = &*view;
-                let ns = (v.scale * factor).clamp(0.02, 64.0);
-                let k = ns / v.scale;
-                view.set(ViewState {
-                    scale: ns,
-                    ox: cx - (cx - v.ox) * k,
-                    oy: cy - (cy - v.oy) * k,
+                apply(&move |v| {
+                    let ns = (v.scale * factor).clamp(0.02, 64.0);
+                    let k = ns / v.scale;
+                    v.ox = cx - (cx - v.ox) * k;
+                    v.oy = cy - (cy - v.oy) * k;
+                    v.scale = ns;
+                });
+            })
+        },
+        pinch: {
+            let apply = apply_view.clone();
+            let user_moved = user_moved.clone();
+            Callback::from(move |(cx, cy, factor, dx, dy): (f64, f64, f64, f64, f64)| {
+                *user_moved.borrow_mut() = true;
+                // zoom and pan in ONE update: two separate updates would
+                // each start from the same stale snapshot and clobber
+                apply(&move |v| {
+                    let ns = (v.scale * factor).clamp(0.02, 64.0);
+                    let k = ns / v.scale;
+                    v.ox = cx - (cx - v.ox) * k + dx;
+                    v.oy = cy - (cy - v.oy) * k + dy;
+                    v.scale = ns;
                 });
             })
         },
@@ -770,10 +801,6 @@ pub fn app() -> Html {
         hover_end: {
             let hover = hover.clone();
             Callback::from(move |_: ()| hover.set(None))
-        },
-        debug: {
-            let status = status.clone();
-            Callback::from(move |s: String| status.set(s))
         },
     };
 
