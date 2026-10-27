@@ -5,11 +5,14 @@
 # path on any static server.
 set -e
 cd "$(dirname "$0")/../.."
-cargo build -p wipfel --target wasm32-unknown-unknown --release
+# size-optimized build for the web (the workspace default profile
+# targets native binaries); --remove-name-section drops the debug
+# symbol names wasm-bindgen adds for devtools
+CARGO_PROFILE_RELEASE_OPT_LEVEL=z cargo build -p wipfel --target wasm32-unknown-unknown --release
 DIST=dist/wipfel
 rm -rf "$DIST"
 mkdir -p "$DIST"
-wasm-bindgen --target web --out-dir "$DIST" target/wasm32-unknown-unknown/release/wipfel.wasm
+wasm-bindgen --remove-name-section --target web --out-dir "$DIST" target/wasm32-unknown-unknown/release/wipfel.wasm
 # the loader page (not the trunk entry point, which is dev-only)
 rm -f "$DIST"/wipfel.d.ts "$DIST"/wipfel_bg.wasm.d.ts
 cp crates/wipfel/www/index.html crates/wipfel/www/style.css "$DIST/"
