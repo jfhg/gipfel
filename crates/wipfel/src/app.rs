@@ -17,7 +17,7 @@ use yew::prelude::*;
 
 use crate::bridge;
 use crate::canvas_view::{CanvasView, DotView, MarkerView, TrackView, ViewCallbacks, ViewState};
-use crate::compass::{Compass, CompassData};
+use crate::compass::{alph_at_img_x, Compass, CompassData};
 use crate::markers::{self, Marker};
 use crate::widgets::{NumItem, SliderItem};
 
@@ -164,6 +164,16 @@ pub fn app() -> Html {
     let find_peak = use_state(|| Option::<FindPeak>::None);
     let show_hidden = use_state(|| false);
     let peak_labels = use_state(|| false);
+    // collapsible control panel (desktop nav bar behaviour): start
+    // collapsed on narrow screens
+    let nav_open = use_state(|| {
+        bridge::window()
+            .inner_width()
+            .ok()
+            .and_then(|w| w.as_f64())
+            .unwrap_or(1200.0)
+            >= 900.0
+    });
     // hill indices of the GPS track, in file order
     let track = use_state(Vec::<usize>::new);
     let track_width = use_state(|| 200.0f64);
@@ -755,6 +765,29 @@ pub fn app() -> Html {
         },
     };
 
+    // Lens FOV visibility limit, port of the desktop bump(): the angle at
+    // which the (possibly distorted) projection reaches the image edge.
+    // Peaks beyond it cannot be inside the photo even if the fitted
+    // distortion folds their projection back into the image. Running this
+    // every render is idempotent and cheap; visibility is only rebuilt
+    // when the limit actually changed.
+    {
+        let mut p = pan.borrow_mut();
+        let limit = if img_size.0 > 0 {
+            let c = p.parms.a_center;
+            let proj = gipfel_core::projection::projection_from_type(p.projection_type);
+            let a_edge = alph_at_img_x(p.projection_type, &*proj, &p.parms, img_size.0 as f64 / 2.0, c);
+            (a_edge - c).abs()
+        } else {
+            0.0
+        };
+        if (limit - p.max_view_angle).abs() > 1e-9 {
+            p.max_view_angle = limit;
+            let known: Vec<usize> = markers.iter().map(|m| m.hill).collect();
+            p.update_visible_mountains(Some(&known));
+        }
+    }
+
     // overlay data for the canvas
     let marker_views: Vec<MarkerView> = {
         let p = pan.borrow();
@@ -805,16 +838,26 @@ pub fn app() -> Html {
             .collect()
     };
 
+    let collapse_cb = {
+        let nav_open = nav_open.clone();
+        Callback::from(move |_: MouseEvent| nav_open.set(false))
+    };
+    let expand_cb = {
+        let nav_open = nav_open.clone();
+        Callback::from(move |_: MouseEvent| nav_open.set(true))
+    };
+
     let zoom_pct = (view.scale * 100.0).round();
     let n_markers = markers.len();
 
     html! {
         <div class="app" ondrop={on_drop} ondragover={on_dragover}>
-            <aside class="sidebar">
+            <aside class={if *nav_open { "sidebar" } else { "sidebar collapsed" }}>
+                <button class="collapse-btn" title="Hide controls"
+                    onclick={collapse_cb}>{ "◀" }</button>
                 <h1>{ "wipfel" }</h1>
                 <p class="tag">{ "web gipfel photogrammetry" }</p>
                 <button onclick={open_picker}>{ "Open image…" }</button>
-                <button onclick={open_track_picker}>{ "Load GPX Track…" }</button>
                 <button onclick={fit} disabled={bitmap.is_none()}>{ "Fit to window" }</button>
                 <input
                     type="file"
@@ -856,6 +899,7 @@ pub fn app() -> Html {
                             { "Fit distortion (needs ≥ 4 markers)" }
                         </label>
                         <div class="section">{ "Display" }</div>
+                        <button onclick={open_track_picker}>{ "Load GPX Track…" }</button>
                         if !track.is_empty() {
                             <SliderItem label="Track width" display={format!("{:.0} m", *track_width)}
                                 value={*track_width} min={50.0} max={1000.0} step={10.0}
@@ -891,6 +935,10 @@ pub fn app() -> Html {
             </aside>
             <main class="main">
                 <div class="canvaswrap">
+                    if !*nav_open {
+                        <button class="nav-toggle" title="Show controls"
+                            onclick={expand_cb}>{ "☰" }</button>
+                    }
                     <CanvasView
                         bitmap={bitmap.as_ref().cloned()}
                         view={(*view).clone()}
