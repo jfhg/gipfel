@@ -478,7 +478,10 @@ pub fn canvas_view(props: &Props) -> Html {
                     };
                     d.pinch = Some((dist, cx, cy));
                     d.moved = true;
-                    let dbg = format!("pinch pts=2 d={dist:.0}");
+                    let dbg = match ev {
+                        Some((f, ..)) => format!("pinch d={dist:.0} f={f:.3}"),
+                        None => format!("pinch d={dist:.0} seed"),
+                    };
                     (ev, dbg)
                 } else {
                     (None, String::new())
