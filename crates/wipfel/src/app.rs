@@ -149,7 +149,7 @@ fn find_peak_panel(p: &FpProps) -> Html {
 pub fn app() -> Html {
     let bitmap = use_state(|| None::<web_sys::ImageBitmap>);
     let view = use_state(ViewState::default);
-    let status = use_state(|| "No image loaded · build 27e".to_string());
+    let status = use_state(|| "No image loaded · build 27f".to_string());
     let db_status = use_state(|| "Loading hill database…".to_string());
     let fit_info = use_state(String::new);
     let tick = use_state(|| 0u32);
@@ -670,11 +670,13 @@ pub fn app() -> Html {
         zoom: {
             let view = view.clone();
             let user_moved = user_moved.clone();
+            let status = status.clone();
             Callback::from(move |(cx, cy, factor): (f64, f64, f64)| {
                 *user_moved.borrow_mut() = true;
                 let v = &*view;
                 let ns = (v.scale * factor).clamp(0.02, 64.0);
                 let k = ns / v.scale;
+                status.set(format!("zoom cb f={factor:.3} s {:.4}->{:.4}", v.scale, ns));
                 view.set(ViewState {
                     scale: ns,
                     ox: cx - (cx - v.ox) * k,
