@@ -24,7 +24,7 @@ gipfel uses the non-linear
 [least squares method](http://en.wikipedia.org/wiki/Least_squares) to
 compute the viewing parameters from the given data points.
 
-![gipfel screenshot](gipfel_screenshot.png)
+<img src="gipfel_screenshot.png" alt="gipfel screenshot" width="720">
 
 Requirements
 ------------
