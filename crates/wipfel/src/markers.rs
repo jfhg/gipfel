@@ -46,7 +46,13 @@ pub fn nearest_hill(
     let mut best = None;
     let mut best_d = max_dist;
     for &i in &pan.visible {
-        if !show_hidden && pan.hills[i].flags & gipfel_core::hill::FLAG_HIDDEN != 0 {
+        let flags = pan.hills[i].flags;
+        if flags & gipfel_core::hill::FLAG_DUPLIC != 0
+            || flags & gipfel_core::hill::FLAG_TRACK_POINT != 0
+        {
+            continue;
+        }
+        if !show_hidden && flags & gipfel_core::hill::FLAG_HIDDEN != 0 {
             continue;
         }
         let h = &pan.hills[i];

@@ -32,7 +32,18 @@ pub fn load_gpx(path: &str, max_points: usize) -> Result<Vec<Hill>, String> {
     if size.len() > MAX_GPX_BYTES {
         return Err(format!("{path}: file too large ({} bytes)", size.len()));
     }
-    let data = std::fs::read_to_string(path).map_err(|e| format!("{path}: {e}"))?;
+    let data = std::fs::read(path).map_err(|e| format!("{path}: {e}"))?;
+    load_gpx_from_bytes(&data, max_points).map_err(|e| format!("{path}: {e}"))
+}
+
+/// Parse GPX from raw bytes. Same hardening as [`load_gpx`]: size cap,
+/// no entity expansion, `<ele>` accepted only as direct child of
+/// `<trkpt>`. Used directly by the browser front end.
+pub fn load_gpx_from_bytes(data: &[u8], max_points: usize) -> Result<Vec<Hill>, String> {
+    if data.len() as u64 > MAX_GPX_BYTES {
+        return Err(format!("file too large ({} bytes)", data.len()));
+    }
+    let data = String::from_utf8_lossy(data);
     let mut reader = quick_xml::Reader::from_str(&data);
     reader.config_mut().trim_text(true);
 
@@ -55,7 +66,7 @@ pub fn load_gpx(path: &str, max_points: usize) -> Result<Vec<Hill>, String> {
     }
 
     loop {
-        match reader.read_event().map_err(|e| format!("{path}: {e}"))? {
+        match reader.read_event().map_err(|e| e.to_string())? {
             Event::Eof => break,
             Event::Empty(e) => {
                 if e.local_name().as_ref() == b"trkpt" {
@@ -112,7 +123,7 @@ pub fn load_gpx(path: &str, max_points: usize) -> Result<Vec<Hill>, String> {
     }
 
     if pts.is_empty() {
-        return Err(format!("{path}: no track points"));
+        return Err("no track points".to_string());
     }
 
     let stride = pts.len().div_ceil(max_points.max(1));
@@ -170,6 +181,22 @@ mod tests {
         assert!(hills.iter().all(|h| h.is_track_point()));
         assert!((hills[1].phi - 47.31f64.to_radians()).abs() < 1e-12);
         assert!((hills[2].height - 1200.0).abs() < 1e-9);
+    }
+
+    #[test]
+    fn gpx_from_bytes_matches_path_api() {
+        // the browser front end feeds raw bytes directly
+        let gpx = br#"<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1"><trk><trkseg>
+  <trkpt lat="47.36" lon="11.15"><ele>2100</ele></trkpt>
+  <trkpt lat="47.37" lon="11.16"><ele>2150</ele></trkpt>
+</trkseg></trk></gpx>"#;
+        let hills = load_gpx_from_bytes(gpx, 100).unwrap();
+        assert_eq!(hills.len(), 2);
+        assert!(hills.iter().all(|h| h.is_track_point()));
+        assert!((hills[0].phi - 47.36f64.to_radians()).abs() < 1e-12);
+        assert!((hills[1].height - 2150.0).abs() < 1e-9);
+        assert!(load_gpx_from_bytes(b"<gpx></gpx>", 10).is_err()); // no points
     }
 
     #[test]

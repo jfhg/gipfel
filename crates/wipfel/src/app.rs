@@ -5,7 +5,8 @@ use std::io::Read;
 use std::rc::Rc;
 
 use flate2::read::GzDecoder;
-use gipfel_core::hill::{FLAG_DUPLIC, FLAG_HIDDEN, FLAG_TRACK_POINT};
+use gipfel_core::hill::{FLAG_DUPLIC, FLAG_HIDDEN, FLAG_TRACK_POINT, FLAG_VISIBLE};
+use gipfel_core::track as gpx;
 use gipfel_core::metadata::{apply_image_metadata, ImageMetaData};
 use gipfel_core::panorama::Panorama;
 use wasm_bindgen::closure::Closure;
@@ -15,7 +16,7 @@ use web_sys::{DragEvent, Event, HtmlCanvasElement, HtmlInputElement, InputEvent,
 use yew::prelude::*;
 
 use crate::bridge;
-use crate::canvas_view::{CanvasView, DotView, MarkerView, ViewCallbacks, ViewState};
+use crate::canvas_view::{CanvasView, DotView, MarkerView, TrackView, ViewCallbacks, ViewState};
 use crate::compass::{Compass, CompassData};
 use crate::markers::{self, Marker};
 use crate::widgets::{NumItem, SliderItem};
@@ -163,6 +164,10 @@ pub fn app() -> Html {
     let find_peak = use_state(|| Option::<FindPeak>::None);
     let show_hidden = use_state(|| false);
     let peak_labels = use_state(|| false);
+    // hill indices of the GPS track, in file order
+    let track = use_state(Vec::<usize>::new);
+    let track_width = use_state(|| 200.0f64);
+    let track_file_ref = use_node_ref();
     // set once the user pans or zooms by hand; auto-fit is then suppressed
     // until the next image load
     let user_moved = use_mut_ref(|| false);
@@ -433,6 +438,50 @@ pub fn app() -> Html {
         })
     };
 
+    let open_track_picker = {
+        let track_file_ref = track_file_ref.clone();
+        Callback::from(move |_: MouseEvent| {
+            if let Some(input) = track_file_ref.cast::<HtmlInputElement>() {
+                input.click();
+            }
+        })
+    };
+
+    // parse a GPX file and swap it into the panorama as track-point hills
+    // (always appended last, so marker hill indices never shift)
+    let on_track_file_change = {
+        let pan = pan.clone();
+        let track = track.clone();
+        let status = status.clone();
+        Callback::from(move |e: Event| {
+            let input: HtmlInputElement = e.target_unchecked_into();
+            let Some(file) = input.files().and_then(|f| f.item(0)) else {
+                return;
+            };
+            let (pan, track, status) = (pan.clone(), track.clone(), status.clone());
+            let name = file.name();
+            spawn_local(async move {
+                match bridge::read_blob(&file).await {
+                    Ok(bytes) => match gpx::load_gpx_from_bytes(&bytes, 2000) {
+                        Ok(hills) => {
+                            let n = hills.len();
+                            {
+                                let p = &mut *pan.borrow_mut();
+                                p.remove_hills(FLAG_TRACK_POINT);
+                                p.add_hills(&hills);
+                                track.set((p.hills.len() - n..p.hills.len()).collect());
+                            }
+                            status.set(format!("Track {name}: {n} points"));
+                        }
+                        Err(err) => status.set(format!("GPX failed: {err}")),
+                    },
+                    Err(err) => status.set(format!("Failed to read {name}: {err}")),
+                }
+            });
+            input.set_value(""); // allow re-selecting the same file
+        })
+    };
+
     let on_distortion_toggle = {
         let fit_distortion = fit_distortion.clone();
         let markers = markers.clone();
@@ -500,6 +549,10 @@ pub fn app() -> Html {
             let input: HtmlInputElement = e.target_unchecked_into();
             peak_labels.set(input.checked());
         })
+    };
+    let on_track_width = {
+        let track_width = track_width.clone();
+        Callback::from(move |v: f64| track_width.set(v))
     };
 
     // compass strip: shares the image transform, drag changes azimuth
@@ -720,13 +773,34 @@ pub fn app() -> Html {
         let marked: Vec<usize> = markers.iter().map(|m| m.hill).collect();
         p.visible
             .iter()
-            .filter(|&&i| *show_hidden || p.hills[i].flags & FLAG_HIDDEN == 0)
+            .filter(|&&i| {
+                p.hills[i].flags & (FLAG_DUPLIC | FLAG_TRACK_POINT) == 0
+                    && (*show_hidden || p.hills[i].flags & FLAG_HIDDEN == 0)
+            })
             .map(|&i| DotView {
                 x: p.hills[i].x,
                 y: p.hills[i].y,
                 hidden: p.hills[i].flags & FLAG_HIDDEN != 0,
                 marked: marked.contains(&i),
                 name: p.hills[i].name.clone(),
+            })
+            .collect()
+    };
+    let track_views: Vec<TrackView> = {
+        let p = pan.borrow();
+        track
+            .iter()
+            .filter(|&&i| p.hills[i].flags & FLAG_VISIBLE != 0)
+            .map(|&i| {
+                let h = &p.hills[i];
+                // C: scale * track_width / (dist_m * 10), distance in meters
+                let dist_m = p.get_real_distance(i).max(1.0);
+                TrackView {
+                    x: h.x,
+                    y: h.y,
+                    hidden: h.flags & FLAG_HIDDEN != 0,
+                    width: (p.get_scale() * *track_width / (dist_m * 10.0)).clamp(1.0, 1000.0),
+                }
             })
             .collect()
     };
@@ -740,6 +814,7 @@ pub fn app() -> Html {
                 <h1>{ "wipfel" }</h1>
                 <p class="tag">{ "web gipfel photogrammetry" }</p>
                 <button onclick={open_picker}>{ "Open image…" }</button>
+                <button onclick={open_track_picker}>{ "Load GPX Track…" }</button>
                 <button onclick={fit} disabled={bitmap.is_none()}>{ "Fit to window" }</button>
                 <input
                     type="file"
@@ -747,6 +822,13 @@ pub fn app() -> Html {
                     accept="image/jpeg,image/png"
                     class="hidden-file"
                     onchange={on_file_change}
+                />
+                <input
+                    type="file"
+                    ref={track_file_ref}
+                    accept=".gpx,application/gpx+xml"
+                    class="hidden-file"
+                    onchange={on_track_file_change}
                 />
                 <p class="status">{ (*status).clone() }</p>
                 <p class="hint">{ (*db_status).clone() }</p>
@@ -774,6 +856,11 @@ pub fn app() -> Html {
                             { "Fit distortion (needs ≥ 4 markers)" }
                         </label>
                         <div class="section">{ "Display" }</div>
+                        if !track.is_empty() {
+                            <SliderItem label="Track width" display={format!("{:.0} m", *track_width)}
+                                value={*track_width} min={50.0} max={1000.0} step={10.0}
+                                onchange={on_track_width} />
+                        }
                         <label class="row">
                             <input type="checkbox" checked={*show_hidden} onchange={on_show_hidden} />
                             { "Show hidden peaks" }
@@ -811,6 +898,7 @@ pub fn app() -> Html {
                         canvas_ref={canvas_ref.clone()}
                         tick={*tick}
                         markers={marker_views}
+                        track={track_views}
                         candidates={candidates}
                         peak_labels={*peak_labels}
                         label_font={vp.label_font}

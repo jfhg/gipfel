@@ -36,6 +36,16 @@ pub struct DotView {
     pub name: String,
 }
 
+/// One GPS track point in center-relative image coordinates; `width` is
+/// the projected stroke width in image pixels (C: scale*width/(dist_m*10)).
+#[derive(Clone, Debug, PartialEq)]
+pub struct TrackView {
+    pub x: f64,
+    pub y: f64,
+    pub hidden: bool,
+    pub width: f64,
+}
+
 #[derive(Clone, PartialEq)]
 pub struct ViewCallbacks {
     pub pan: Callback<(f64, f64)>,
@@ -64,6 +74,8 @@ pub struct Props {
     /// bumped on window resize to force a redraw
     pub tick: u32,
     pub markers: Vec<MarkerView>,
+    /// GPS track points in file order
+    pub track: Vec<TrackView>,
     /// guide dots for all visible hills
     pub candidates: Vec<DotView>,
     /// draw name labels for unmarked visible peaks too
@@ -101,6 +113,7 @@ pub fn canvas_view(props: &Props) -> Html {
         let view = props.view.clone();
         let canvas_ref = props.canvas_ref.clone();
         let markers = props.markers.clone();
+        let track = props.track.clone();
         let candidates = props.candidates.clone();
         let label_font = props.label_font;
         let peak_labels = props.peak_labels;
@@ -110,11 +123,12 @@ pub fn canvas_view(props: &Props) -> Html {
                 view,
                 props.tick,
                 markers.clone(),
+                track.clone(),
                 candidates.clone(),
                 label_font,
                 peak_labels,
             ),
-            move |(bitmap, view, _tick, markers, candidates, label_font, peak_labels)| {
+            move |(bitmap, view, _tick, markers, track, candidates, label_font, peak_labels)| {
                 let Some(canvas) = canvas_ref.cast::<HtmlCanvasElement>() else {
                     return;
                 };
@@ -153,6 +167,23 @@ pub fn canvas_view(props: &Props) -> Html {
                 let hh = bitmap.height() as f64 / 2.0;
                 let sx = |x: f64| (x + hw) * view.scale + view.ox;
                 let sy = |y: f64| (y + hh) * view.scale + view.oy;
+
+                // GPS track: consecutive points joined with round-cap
+                // strokes scaled by distance (desktop parity: red, or
+                // blue where the point is hidden by terrain)
+                for w in track.windows(2) {
+                    let (a, b) = (&w[0], &w[1]);
+                    let color = if a.hidden { "rgb(51, 102, 255)" } else { "rgb(255, 51, 51)" };
+                    #[allow(deprecated)]
+                    ctx.set_stroke_style(&wasm_bindgen::JsValue::from_str(color));
+                    ctx.set_line_width((a.width * view.scale).max(1.0));
+                    ctx.set_line_cap("round");
+                    ctx.begin_path();
+                    ctx.move_to(sx(a.x), sy(a.y));
+                    ctx.line_to(sx(b.x), sy(b.y));
+                    ctx.stroke();
+                }
+                ctx.set_line_cap("butt");
 
                 // guide dots for all visible peaks: dark outline ring +
                 // bright core so they stay visible on any photo content;
