@@ -1,7 +1,7 @@
 //! Small form controls: full-width slider with value readout above
 //! (mirrors the desktop `slider_item` layout) and a numeric input row.
 
-use web_sys::HtmlInputElement;
+use web_sys::{HtmlInputElement, InputEvent};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
@@ -18,9 +18,10 @@ pub struct SliderProps {
 
 #[function_component(SliderItem)]
 pub fn slider_item(p: &SliderProps) -> Html {
-    let onchange = {
+    // live update while dragging (oninput), not only on release
+    let oninput = {
         let onchange = p.onchange.clone();
-        Callback::from(move |e: Event| {
+        Callback::from(move |e: InputEvent| {
             let input: HtmlInputElement = e.target_unchecked_into();
             if let Ok(v) = input.value().parse::<f64>() {
                 onchange.emit(v);
@@ -39,7 +40,7 @@ pub fn slider_item(p: &SliderProps) -> Html {
                 max={p.max.to_string()}
                 step={p.step.to_string()}
                 value={p.value.to_string()}
-                {onchange}
+                {oninput}
             />
         </div>
     }

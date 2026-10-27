@@ -15,9 +15,11 @@ pub struct Marker {
 }
 
 /// Refit the projection parameters to the current markers.
-/// With fewer than 4 markers nothing can be fitted (same rule as desktop).
+/// Same graduated behavior as the original: 1 marker fits the center
+/// angle, 2 add the scale, 4+ the full viewpoint (+ distortion when
+/// unlocked and enough markers).
 pub fn refit(pan: &mut Panorama, markers: &[Marker], fit_distortion: bool) -> Result<(), String> {
-    if markers.len() < 4 {
+    if markers.is_empty() {
         return Ok(());
     }
     let mut obs: Vec<Hill> = Vec::with_capacity(markers.len());

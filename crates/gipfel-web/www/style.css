@@ -144,3 +144,41 @@ canvas.compass {
   border: 1px solid #34343e;
   border-radius: 4px;
 }
+.fpbackdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+}
+.findpeak {
+  position: absolute;
+  z-index: 10;
+  background: #1e1e26;
+  border: 1px solid #3a3a46;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  max-height: 320px;
+  overflow-y: auto;
+  min-width: 220px;
+}
+.fphead {
+  padding: 6px 10px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8a8a94;
+  border-bottom: 1px solid #2c2c34;
+}
+.fpitem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  background: none;
+  border: 0;
+  color: #e8e8ea;
+  font-size: 13px;
+  cursor: pointer;
+}
+.fpitem:hover {
+  background: #2f6fd4;
+}

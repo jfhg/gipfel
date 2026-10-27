@@ -50,6 +50,23 @@ impl Default for UiParams {
     }
 }
 
+/// one entry of the Find Peak candidate list
+#[derive(Clone, PartialEq)]
+struct FpItem {
+    hill: usize,
+    label: String,
+}
+
+/// open Find Peak popup: anchor (screen + image coords) and candidates
+#[derive(Clone, PartialEq)]
+struct FindPeak {
+    sx: f64,
+    sy: f64,
+    ix: f64,
+    iy: f64,
+    items: Vec<FpItem>,
+}
+
 fn gunzip(gz: &[u8]) -> Result<Vec<u8>, String> {
     let mut raw = Vec::new();
     GzDecoder::new(gz)
@@ -74,6 +91,7 @@ pub fn app() -> Html {
     let hover = use_state(|| Option::<String>::None);
     let vp = use_state(UiParams::default);
     let img_size = use_state(|| (0u32, 0u32));
+    let find_peak = use_state(|| Option::<FindPeak>::None);
 
     // force a redraw when the window is resized so the canvas backing
     // store tracks its CSS size (listener lives as long as the app)
@@ -143,21 +161,37 @@ pub fn app() -> Html {
         let fit_info = fit_info.clone();
         let fit_distortion = fit_distortion.clone();
         Rc::new(move |mk: &[Marker]| {
+            if mk.is_empty() {
+                fit_info.set(String::new());
+                return;
+            }
             let info = {
                 let mut p = pan.borrow_mut();
                 match markers::refit(&mut p, mk, *fit_distortion) {
-                    Ok(()) if mk.len() >= 4 => format!(
+                    Ok(()) => format!(
                         "fit: az {:.2}° · pitch {:.2}° · roll {:.2}° · scale {:.1}",
                         p.get_center_angle(),
                         p.get_pitch_angle(),
                         p.get_roll_angle(),
                         p.get_scale()
                     ),
-                    Ok(()) => format!("{} markers — place at least 4 to fit", mk.len()),
                     Err(e) => format!("fit failed: {e}"),
                 }
             };
             fit_info.set(info);
+        })
+    };
+
+    // place a marker for a hill at an image position and refit
+    let mark_peak = {
+        let markers = markers.clone();
+        let do_refit = do_refit.clone();
+        Callback::from(move |(idx, ix, iy): (usize, f64, f64)| {
+            let mut mk = (*markers).clone();
+            mk.retain(|m| m.hill != idx);
+            mk.push(Marker { hill: idx, x: ix, y: iy });
+            do_refit(&mk);
+            markers.set(mk);
         })
     };
 
@@ -171,11 +205,13 @@ pub fn app() -> Html {
         let fit_info = fit_info.clone();
         let vp = vp.clone();
         let img_size = img_size.clone();
+        let find_peak = find_peak.clone();
         Callback::from(move |(bytes, name): (Vec<u8>, String)| {
             let (bitmap, status, fit, pan, markers, fit_info) =
                 (bitmap.clone(), status.clone(), fit.clone(), pan.clone(), markers.clone(), fit_info.clone());
             let vp = vp.clone();
             let img_size = img_size.clone();
+            let find_peak = find_peak.clone();
             spawn_local(async move {
                 match bridge::decode_bitmap(&bytes).await {
                     Ok(bmp) => {
@@ -208,8 +244,22 @@ pub fn app() -> Html {
                         status.set(format!("{name} — {w}×{h} px · {vp}"));
                         markers.set(Vec::new());
                         fit_info.set(String::new());
+                        find_peak.set(None);
                         bitmap.set(Some(bmp));
                         fit.emit(MouseEvent::new("fit").unwrap());
+                        // same nudge as the desktop app: re-fit shortly
+                        // after the first paint so the image is guaranteed
+                        // to appear even if layout was not ready yet
+                        {
+                            let fit = fit.clone();
+                            spawn_local(async move {
+                                let _ = wasm_bindgen_futures::JsFuture::from(
+                                    bridge::delay_promise(120),
+                                )
+                                .await;
+                                fit.emit(MouseEvent::new("fit").unwrap());
+                            });
+                        }
                     }
                     Err(e) => status.set(format!("Failed to load {name}: {e}")),
                 }
@@ -346,6 +396,48 @@ pub fn app() -> Html {
         })
     };
 
+    let fp_close = {
+        let find_peak = find_peak.clone();
+        Callback::from(move |_: MouseEvent| find_peak.set(None))
+    };
+
+    // Find Peak popup (built outside the main html! for macro simplicity)
+    let findpeak_popup = if let Some(fp) = &*find_peak {
+        let fp2 = fp.clone();
+        let items: Html = fp2
+            .items
+            .iter()
+            .map(|it| {
+                let onclick = {
+                    let mark = mark_peak.clone();
+                    let find_peak = find_peak.clone();
+                    let (hill, ix, iy) = (it.hill, fp2.ix, fp2.iy);
+                    Callback::from(move |_: MouseEvent| {
+                        mark.emit((hill, ix, iy));
+                        find_peak.set(None);
+                    })
+                };
+                html! {
+                    <button class="fpitem" {onclick}>{ it.label.clone() }</button>
+                }
+            })
+            .collect();
+        html! {
+            <>
+                <div class="fpbackdrop" onclick={fp_close.clone()} />
+                <div
+                    class="findpeak"
+                    style={format!("left: {}px; top: {}px", fp.sx + 10.0, fp.sy + 10.0)}
+                >
+                    <div class="fphead">{ "Find Peak" }</div>
+                    { items }
+                </div>
+            </>
+        }
+    } else {
+        Html::default()
+    };
+
     let callbacks = ViewCallbacks {
         pan: {
             let view = view.clone();
@@ -371,30 +463,57 @@ pub fn app() -> Html {
         },
         click: {
             let pan = pan.clone();
-            let markers = markers.clone();
             let view = view.clone();
             let status = status.clone();
-            let do_refit = do_refit.clone();
+            let mark = mark_peak.clone();
+            let find_peak = find_peak.clone();
+            let img_size = img_size.clone();
             Callback::from(move |(ix, iy): (f64, f64)| {
-                let p = pan.borrow_mut();
-                match markers::nearest_hill(&p, ix, iy, 20.0 / view.scale) {
-                    None => status.set(
-                        "No peak near click — click on a green dot (zoom in to separate them)."
-                            .to_string(),
-                    ),
-                    Some(idx) => {
-                        let mut mk = (*markers).clone();
-                        mk.retain(|m| m.hill != idx);
-                        mk.push(Marker {
-                            hill: idx,
-                            x: ix,
-                            y: iy,
-                        });
-                        drop(p);
-                        do_refit(&mk);
-                        markers.set(mk);
-                    }
+                let scale = view.scale;
+                let p = pan.borrow();
+                // unambiguous click right on a peak: mark directly
+                if let Some(idx) = markers::nearest_hill(&p, ix, iy, 10.0 / scale) {
+                    drop(p);
+                    find_peak.set(None);
+                    mark.emit((idx, ix, iy));
+                    return;
                 }
+                // otherwise offer a Find Peak list, like the desktop dialog
+                let r = 60.0 / scale;
+                let mut cands: Vec<(f64, usize)> = p
+                    .visible
+                    .iter()
+                    .map(|&i| ((p.hills[i].x - ix).hypot(p.hills[i].y - iy), i))
+                    .filter(|(d, _)| *d <= r)
+                    .collect();
+                if cands.is_empty() {
+                    drop(p);
+                    status.set("No peaks near click — zoom in or adjust the view.".to_string());
+                    find_peak.set(None);
+                    return;
+                }
+                cands.sort_by(|a, b| a.0.total_cmp(&b.0));
+                cands.truncate(15);
+                let items: Vec<FpItem> = cands
+                    .iter()
+                    .map(|(d, i)| FpItem {
+                        hill: *i,
+                        label: format!(
+                            "{} · {:.0} m · {:.0} px",
+                            p.hills[*i].name,
+                            p.hills[*i].height,
+                            d * scale
+                        ),
+                    })
+                    .collect();
+                let (w, h) = (img_size.0 as f64, img_size.1 as f64);
+                find_peak.set(Some(FindPeak {
+                    sx: (ix + w / 2.0) * scale + view.ox,
+                    sy: (iy + h / 2.0) * scale + view.oy,
+                    ix,
+                    iy,
+                    items,
+                }));
             })
         },
         marker_drag: {
@@ -525,10 +644,10 @@ pub fn app() -> Html {
                     </>
                 }
                 <p class="hint">
-                    { "Hover a green dot to see the peak · click to mark it · drag to adjust · right-click to remove." }
+                    { "Hover a dot to see the peak · click to mark it (or pick from the list) · drag to adjust · right-click to remove." }
                 </p>
                 <p class="hint dim">
-                    { "The view is fitted automatically once 4+ markers are placed." }
+                    { "The view is fitted as soon as markers are placed; more markers improve the fit." }
                 </p>
             </aside>
             <main class="main">
@@ -543,6 +662,7 @@ pub fn app() -> Html {
                         candidates={candidates}
                         label_font={vp.label_font}
                     />
+                    { findpeak_popup.clone() }
                 </div>
                 if bitmap.is_some() {
                     <Compass data={compass_data} tick={*tick} on_change={compass_change} />

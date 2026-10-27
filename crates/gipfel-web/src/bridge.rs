@@ -53,6 +53,13 @@ pub async fn fetch_bytes(url: &str) -> Result<Vec<u8>, String> {
     Ok(Uint8Array::new(&buf).to_vec())
 }
 
+/// setTimeout as an awaitable Promise.
+pub fn delay_promise(ms: i32) -> js_sys::Promise {
+    js_sys::Promise::new(&mut |resolve, _reject| {
+        let _ = window().set_timeout_with_callback_and_timeout_and_arguments_0(&resolve, ms);
+    })
+}
+
 pub fn ctx2d(canvas: &HtmlCanvasElement) -> Option<CanvasRenderingContext2d> {
     canvas
         .get_context("2d")

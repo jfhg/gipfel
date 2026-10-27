@@ -31,6 +31,7 @@ features = [
     "HtmlElement",
     "HtmlInputElement",
     "ImageBitmap",
+    "InputEvent",
     "MouseEvent",
     "PointerEvent",
     "Request",
