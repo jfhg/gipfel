@@ -220,13 +220,16 @@ pub fn canvas_view(props: &Props) -> Html {
                     }
 
                     // layout runs in screen space, sorted by x
+                    // descending (right to left): the desktop processes
+                    // hills in alpha-descending order, which puts the
+                    // leftmost peak on top of a collision stack
                     let mut order: Vec<usize> = (0..items.len())
                         .filter(|&i| {
                             items[i].x.abs() * 2.0 <= bitmap.width() as f64
                                 && items[i].y.abs() * 2.0 <= bitmap.height() as f64
                         })
                         .collect();
-                    order.sort_by(|&a, &b| sx(items[a].x).total_cmp(&sx(items[b].x)));
+                    order.sort_by(|&a, &b| sx(items[b].x).total_cmp(&sx(items[a].x)));
                     let xs: Vec<f32> = order.iter().map(|&i| sx(items[i].x) as f32).collect();
                     let ys: Vec<f32> = order.iter().map(|&i| sy(items[i].y) as f32).collect();
                     let widths: Vec<f32> = order
