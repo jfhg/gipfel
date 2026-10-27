@@ -240,21 +240,27 @@ pub fn canvas_view(props: &Props) -> Html {
                     let in_img = vec![true; order.len()];
                     let entries = layout_label_y(&xs, &ys, &widths, &in_img, line_h);
 
-                    // leaders (yellow): cross, vertical, horizontal —
-                    // drawn for markers only
-                    #[allow(deprecated)]
-                    ctx.set_stroke_style(&wasm_bindgen::JsValue::from_str("rgb(255, 230, 51)"));
+                    // leaders: vertical + horizontal line connecting each
+                    // label to its peak (C++ draws these for every
+                    // labeled peak); markers yellow with a small cross,
+                    // unmarked peaks a muted pale green
                     ctx.set_line_width(1.0);
                     for (k, &i) in order.iter().enumerate() {
-                        if !items[i].marker {
-                            continue;
-                        }
                         let (px, py) = (sx(items[i].x), sy(items[i].y));
                         let (lx, ly) = entries[k];
                         let label_line = py + ly as f64 - line_h as f64;
+                        let color = if items[i].marker {
+                            "rgb(255, 230, 51)"
+                        } else {
+                            "rgba(196, 240, 214, 0.75)"
+                        };
+                        #[allow(deprecated)]
+                        ctx.set_stroke_style(&wasm_bindgen::JsValue::from_str(color));
                         ctx.begin_path();
-                        ctx.move_to(px - 4.0, py);
-                        ctx.line_to(px + 4.0, py);
+                        if items[i].marker {
+                            ctx.move_to(px - 4.0, py);
+                            ctx.line_to(px + 4.0, py);
+                        }
                         ctx.move_to(px, py);
                         ctx.line_to(px, label_line);
                         ctx.move_to(px, label_line);
