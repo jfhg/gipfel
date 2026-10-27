@@ -21,6 +21,7 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
 
         web = WebView(this)
+        web.setBackgroundColor(android.graphics.Color.parseColor("#141418"))
         setContentView(web)
         with(web.settings) {
             javaScriptEnabled = true
