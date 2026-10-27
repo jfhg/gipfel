@@ -114,6 +114,8 @@ pub fn canvas_view(props: &Props) -> Html {
         pts: Vec::new(),
         pinch: None,
     });
+    // event counters for pinch diagnostics (pointerdown / pointermove)
+    let evcount = use_mut_ref(|| (0u32, 0u32));
 
     // redraw on every view/bitmap/marker change and on resize ticks
     {
@@ -378,6 +380,7 @@ pub fn canvas_view(props: &Props) -> Html {
         let view = props.view.clone();
         let bitmap = props.bitmap.clone();
         let debug = props.callbacks.debug.clone();
+        let evcount = evcount.clone();
         Callback::from(move |e: PointerEvent| {
             e.prevent_default();
             let rect = canvas_ref
@@ -428,7 +431,15 @@ pub fn canvas_view(props: &Props) -> Html {
                     let _ = c.set_pointer_capture(e.pointer_id());
                 }
             }
-            debug.emit(format!("pointerdown id={} pts={n}", e.pointer_id()));
+            debug.emit(format!(
+                "pd#{} id={} pts={n}",
+                {
+                    let mut c = evcount.borrow_mut();
+                    c.0 += 1;
+                    c.0
+                },
+                e.pointer_id()
+            ));
         })
     };
 
@@ -441,6 +452,7 @@ pub fn canvas_view(props: &Props) -> Html {
         let to_img = to_img.clone();
         let canvas_ref = props.canvas_ref.clone();
         let debug = props.callbacks.debug.clone();
+        let evcount = evcount.clone();
         let scale = props.view.scale;
         Callback::from(move |e: PointerEvent| {
             // update the pointer table and handle two-finger pinch
@@ -479,7 +491,14 @@ pub fn canvas_view(props: &Props) -> Html {
                     d.pinch = Some((dist, cx, cy));
                     d.moved = true;
                     let dbg = match ev {
-                        Some((f, ..)) => format!("pinch d={dist:.0} f={f:.3} s={:.4}", scale),
+                        Some((f, ..)) => {
+                            let (pd, mv) = {
+                                let mut c = evcount.borrow_mut();
+                                c.1 += 1;
+                                (c.0, c.1)
+                            };
+                            format!("pinch d={dist:.0} f={f:.3} pd={pd} mv={mv} s={:.4}", scale)
+                        }
                         None => format!("pinch d={dist:.0} seed"),
                     };
                     (ev, dbg)
