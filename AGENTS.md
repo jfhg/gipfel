@@ -134,14 +134,10 @@ To cut a release `X.Y.Z`:
 
 1. Bump `version` in `[workspace.package]` (root `Cargo.toml`). That updates all
    three crates and the About dialog at once.
-2. Add a new entry at the **top** of `ChangeLog`:
-   ```
-   gipfel-X.Y.Z
-   * one line per user-visible change
-   ```
-   The test `gipfel-app: changelog_top_matches_version` fails if the top
-   `gipfel-X.Y.Z` line does not equal the crate version, so the manifest and the
-   ChangeLog cannot drift apart.
+2. The **ChangeLog entry is human-authored** (see the Do / Don't rule above) —
+   only touch it when explicitly asked. Its top `gipfel-X.Y.Z` header must equal
+   the crate version; the test `gipfel-app: changelog_top_matches_version` fails
+   otherwise, so the manifest and the ChangeLog cannot silently drift apart.
 3. `cargo test --lib --test golden` (with `GIPFEL_DATA` set) — must be green.
 4. Commit, then tag: `git tag vX.Y.Z`.
 5. Build the **source** tarball (tracked files only, no build artifacts):
@@ -154,6 +150,11 @@ To cut a release `X.Y.Z`:
 
 ## Do / Don't
 
+- ❌ **Never write to `ChangeLog` or `README.md` unless explicitly asked.** These
+  files are human-authored. Do not draft release notes, add ChangeLog entries,
+  or edit README prose on your own initiative. The only exception is a purely
+  mechanical version bump (e.g. renaming the top `gipfel-X.Y.Z` header during a
+  release) when the user has asked you to cut that release.
 - ✅ Run `cargo test --lib --test golden` (with `GIPFEL_DATA` set) after any
   change to the core math, projection, fit, metadata, or stitch code.
 - ✅ Keep the build warning-free (rustc `dead_code`/`unused_*` lints are the
