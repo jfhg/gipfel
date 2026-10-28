@@ -832,7 +832,7 @@ pub fn app() -> Html {
                     .map(|i| {
                         let h = &p.hills[i];
                         format!(
-                            "{} · {:.0} m · {:.2} km",
+                            "{} · {:.0} m · distance {:.2} km",
                             h.name,
                             h.height,
                             p.get_real_distance(i) / 1000.0
@@ -938,9 +938,8 @@ pub fn app() -> Html {
                 <button class="collapse-btn" title="Hide controls"
                     onclick={collapse_cb}>{ "◀" }</button>
                 <h1>{ "wipfel" }</h1>
-                <p class="tag">{ "web gipfel photogrammetry" }</p>
-                <a class="moreinfo" href="https://flpsed.org/gipfel.html" target="_blank"
-                    rel="noopener noreferrer">{ "More information…" }</a>
+                <a class="tag" href="https://flpsed.org/gipfel.html" target="_blank"
+                    rel="noopener noreferrer">{ "web gipfel photogrammetry" }</a>
                 <button onclick={open_picker}>{ "Open image…" }</button>
                 if bitmap.is_some() {
                     <button onclick={fit}>{ "Fit to window" }</button>

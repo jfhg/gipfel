@@ -87,19 +87,16 @@ body {
   font-size: 22px;
 }
 .tag {
+  display: block;
   margin: 0 0 12px;
   color: #8a8a94;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
-}
-.moreinfo {
-  color: #7fa5e8;
-  font-size: 12px;
   text-decoration: none;
-  margin-top: -6px;
 }
-.moreinfo:hover {
+.tag:hover {
+  color: #7fa5e8;
   text-decoration: underline;
 }
 .sidebar button {
