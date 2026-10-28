@@ -70,6 +70,9 @@ fn atof(s: &str) -> f64 {
         return v;
     }
     for i in (1..s.len()).rev() {
+        if !s.is_char_boundary(i) {
+            continue;
+        }
         if let Ok(v) = s[..i].parse::<f64>() {
             return v;
         }
@@ -163,6 +166,8 @@ mod tests {
         assert_eq!(atof("abc"), 0.0);
         assert_eq!(atof("12abc"), 12.0);
         assert_eq!(atof(" -3.5x"), -3.5);
+        // prefix cut must not slice through a multi-byte character
+        assert_eq!(atof("12.5\u{b0}"), 12.5);
     }
 
     #[test]
