@@ -182,16 +182,10 @@ pub fn app() -> Html {
     let find_peak = use_state(|| Option::<FindPeak>::None);
     let show_hidden = use_state(|| false);
     let peak_labels = use_state(|| true);
-    // collapsible control panel (desktop nav bar behaviour): start
-    // collapsed on narrow screens
-    let nav_open = use_state(|| {
-        bridge::window()
-            .inner_width()
-            .ok()
-            .and_then(|w| w.as_f64())
-            .unwrap_or(1200.0)
-            >= 900.0
-    });
+    // collapsible control panel (desktop nav bar behaviour): open at
+    // start so the image picker is reachable even on phones; it
+    // collapses automatically once an image is loaded on a narrow screen
+    let nav_open = use_state(|| true);
     // hill indices of the GPS track, in file order
     let track = use_state(Vec::<usize>::new);
     let track_width = use_state(|| 200.0f64);
@@ -362,6 +356,7 @@ pub fn app() -> Html {
         let img_size = img_size.clone();
         let find_peak = find_peak.clone();
         let user_moved = user_moved.clone();
+        let nav_open = nav_open.clone();
         Callback::from(move |(bytes, name): (Vec<u8>, String)| {
             let (bitmap, status, fit, pan, markers, fit_info) =
                 (bitmap.clone(), status.clone(), fit.clone(), pan.clone(), markers.clone(), fit_info.clone());
@@ -369,9 +364,21 @@ pub fn app() -> Html {
             let img_size = img_size.clone();
             let find_peak = find_peak.clone();
             let user_moved = user_moved.clone();
+            let nav_open = nav_open.clone();
             spawn_local(async move {
                 match bridge::decode_bitmap(&bytes).await {
                     Ok(bmp) => {
+                        // narrow screens: give the canvas the room once
+                        // the setup phase is over
+                        let narrow = bridge::window()
+                            .inner_width()
+                            .ok()
+                            .and_then(|w| w.as_f64())
+                            .unwrap_or(1200.0)
+                            < 900.0;
+                        if narrow {
+                            nav_open.set(false);
+                        }
                         let (w, h) = (bmp.width(), bmp.height());
                         let mut md = ImageMetaData::new();
                         md.load_image_from_bytes(&bytes);
@@ -824,7 +831,12 @@ pub fn app() -> Html {
                 let name = markers::nearest_hill(&p, ix, iy, 20.0 / view.scale, *show_hidden)
                     .map(|i| {
                         let h = &p.hills[i];
-                        format!("{} · {:.0} m", h.name, h.height)
+                        format!(
+                            "{} · {:.0} m · {:.2} km",
+                            h.name,
+                            h.height,
+                            p.get_real_distance(i) / 1000.0
+                        )
                     });
                 hover.set(name);
             })
@@ -930,7 +942,9 @@ pub fn app() -> Html {
                 <a class="moreinfo" href="https://flpsed.org/gipfel.html" target="_blank"
                     rel="noopener noreferrer">{ "More information…" }</a>
                 <button onclick={open_picker}>{ "Open image…" }</button>
-                <button onclick={fit} disabled={bitmap.is_none()}>{ "Fit to window" }</button>
+                if bitmap.is_some() {
+                    <button onclick={fit}>{ "Fit to window" }</button>
+                }
                 <input
                     type="file"
                     ref={file_ref}
@@ -992,21 +1006,23 @@ pub fn app() -> Html {
                         if let Some(h) = hover.as_ref() {
                             <p class="hover">{ h.clone() }</p>
                         }
+                        <div class="section">{ "Track" }</div>
+                        <button onclick={open_track_picker}>{ "Load GPX Track…" }</button>
+                        if !track.is_empty() {
+                            <SliderItem label="Track width" display={format!("{:.0} m", *track_width)}
+                                value={*track_width} min={50.0} max={1000.0} step={10.0}
+                                onchange={on_track_width} />
+                        }
                     </>
                 }
-                <p class="hint">
-                    { "Hover a dot to see the peak · click to mark it (or pick from the list) · drag to adjust · right-click to remove." }
-                </p>
-                <p class="hint dim">
-                    { "The view is fitted as soon as markers are placed; more markers improve the fit." }
-                </p>
-                <div class="section track-section">{ "Track" }</div>
-                <button onclick={open_track_picker}>{ "Load GPX Track…" }</button>
-                if !track.is_empty() {
-                    <SliderItem label="Track width" display={format!("{:.0} m", *track_width)}
-                        value={*track_width} min={50.0} max={1000.0} step={10.0}
-                        onchange={on_track_width} />
-                }
+                <div class="infofoot">
+                    <p class="hint">
+                        { "Hover a dot to see the peak · click to mark it (or pick from the list) · drag to adjust · right-click to remove." }
+                    </p>
+                    <p class="hint dim">
+                        { "The view is fitted as soon as markers are placed; more markers improve the fit." }
+                    </p>
+                </div>
             </aside>
             <main class="main">
                 <div class="canvaswrap">

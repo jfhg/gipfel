@@ -147,7 +147,8 @@ body {
   display: none;
 }
 /* pin the optional track section to the bottom of the control pane */
-.track-section {
+.infofoot {
+  /* pins the info texts to the bottom of the sidebar */
   margin-top: auto;
 }
 .main {
