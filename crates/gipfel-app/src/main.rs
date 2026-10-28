@@ -363,11 +363,11 @@ impl Gipfel {
     }
 
     fn focal_35mm(&self) -> f64 {
-        self.pan.get_scale() * 35.0 / self.img_max()
+        self.pan.get_scale() * 36.0 / self.img_max()
     }
 
     fn set_focal_35mm(&mut self, f: f64) {
-        self.pan.set_scale(f * self.img_max() / 35.0);
+        self.pan.set_scale(f * self.img_max() / 36.0);
     }
 
     fn sync_inputs(&mut self) {
@@ -476,7 +476,10 @@ impl Gipfel {
         md.direction = self.pan.get_center_angle();
         md.pitch = self.pan.get_pitch_angle();
         md.roll = self.pan.get_roll_angle();
-        md.focal_length_35mm = self.focal_35mm();
+        // the comment keeps its historical scale * 35 / w encoding so
+        // annotated JPEGs stay interchangeable with older gipfel
+        // versions (see apply_image_metadata)
+        md.focal_length_35mm = self.pan.get_scale() * 35.0 / self.img_max();
         md.projection_type = self.pan.projection_type as i32;
         md.k0 = self.pan.parms.k0;
         md.k1 = self.pan.parms.k1;

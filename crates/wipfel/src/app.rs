@@ -391,7 +391,7 @@ pub fn app() -> Html {
                                 lon: p.get_view_long(),
                                 height: p.get_view_height(),
                                 az: p.get_center_angle().rem_euclid(360.0),
-                                focal: (p.get_scale() * 35.0 / w as f64).clamp(1.0, 300.0),
+                                focal: (p.get_scale() * 36.0 / w as f64).clamp(1.0, 300.0),
                                 pitch: p.get_pitch_angle(),
                                 roll: p.get_roll_angle(),
                                 vis: (0.11 - p.height_dist_ratio).clamp(0.01, 0.1),
@@ -596,7 +596,7 @@ pub fn app() -> Html {
             vp.set(u);
             let w = img_size.0 as f64;
             if w > 0.0 {
-                pan.borrow_mut().set_scale(v * w / 35.0);
+                pan.borrow_mut().set_scale(v * w / 36.0);
             }
         })
     };
