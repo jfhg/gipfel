@@ -550,7 +550,11 @@ pub fn app() -> Html {
                             },
                             _ => bytes,
                         };
-                        match pan.borrow_mut().load_data_from_bytes(&raw) {
+                        // NOTE: the borrow must end before the match arm,
+                        // which calls pan.borrow() itself (nested borrow
+                        // would panic and trap the whole wasm module)
+                        let res = pan.borrow_mut().load_data_from_bytes(&raw);
+                        match res {
                             Ok(()) => {
                                 markers.set(Vec::new());
                                 track.set(Vec::new());
