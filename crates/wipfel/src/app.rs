@@ -197,11 +197,23 @@ pub fn app() -> Html {
     let user_moved = use_mut_ref(|| false);
 
     // force a redraw when the window is resized so the canvas backing
-    // store tracks its CSS size (listener lives as long as the app)
+    // store tracks its CSS size (listener lives as long as the app).
+    // The live counter lives in a RefCell: a UseStateHandle cloned into
+    // these persistent closures would deref to its render-time snapshot
+    // and stall the bump after the first resize.
+    let tick_live = use_mut_ref(|| 0u32);
     {
         let tick = tick.clone();
+        let live = tick_live.clone();
         use_effect_with((), move |_| {
-            let closure = Closure::wrap(Box::new(move || tick.set(*tick + 1)) as Box<dyn Fn()>);
+            let closure = Closure::wrap(Box::new(move || {
+                let v = {
+                    let mut l = live.borrow_mut();
+                    *l += 1;
+                    *l
+                };
+                tick.set(v);
+            }) as Box<dyn Fn()>);
             let _ = bridge::window()
                 .add_event_listener_with_callback("resize", closure.as_ref().unchecked_ref());
             // the listener is never removed (app lifetime); leak the closure
@@ -284,9 +296,15 @@ pub fn app() -> Html {
                         let fit2 = fit.clone();
                         let um = user_moved.clone();
                         let tick2 = tick.clone();
+                        let live2 = tick_live.clone();
                         let closure = wasm_bindgen::closure::Closure::wrap(Box::new(
                             move |_entries: js_sys::Array, _obs: web_sys::ResizeObserver| {
-                                tick2.set(*tick2 + 1);
+                                let v = {
+                                    let mut l = live2.borrow_mut();
+                                    *l += 1;
+                                    *l
+                                };
+                                tick2.set(v);
                                 if !*um.borrow() {
                                     fit2.emit(MouseEvent::new("fit").unwrap());
                                 }
