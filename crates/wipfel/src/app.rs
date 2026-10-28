@@ -311,6 +311,8 @@ pub fn app() -> Html {
         let pan = pan.clone();
         let fit_info = fit_info.clone();
         let fit_distortion = fit_distortion.clone();
+        let vp = vp.clone();
+        let img_size = img_size.clone();
         Rc::new(move |mk: &[Marker]| {
             if mk.is_empty() {
                 fit_info.set(String::new());
@@ -319,13 +321,25 @@ pub fn app() -> Html {
             let info = {
                 let mut p = pan.borrow_mut();
                 match markers::refit(&mut p, mk, *fit_distortion) {
-                    Ok(()) => format!(
-                        "fit: az {:.2}° · pitch {:.2}° · roll {:.2}° · scale {:.1}",
-                        p.get_center_angle(),
-                        p.get_pitch_angle(),
-                        p.get_roll_angle(),
-                        p.get_scale()
-                    ),
+                    Ok(()) => {
+                        // push the fitted values into the slider state,
+                        // otherwise Azimuth/Pitch/Roll/Focal keep showing
+                        // the pre-fit numbers
+                        let mut u = *vp;
+                        u.az = p.get_center_angle().rem_euclid(360.0);
+                        u.pitch = p.get_pitch_angle();
+                        u.roll = p.get_roll_angle();
+                        let w = img_size.0.max(1) as f64;
+                        u.focal = (p.get_scale() * 36.0 / w).clamp(1.0, 300.0);
+                        vp.set(u);
+                        format!(
+                            "fit: az {:.2}° · pitch {:.2}° · roll {:.2}° · scale {:.1}",
+                            p.get_center_angle(),
+                            p.get_pitch_angle(),
+                            p.get_roll_angle(),
+                            p.get_scale()
+                        )
+                    }
                     Err(e) => format!("fit failed: {e}"),
                 }
             };
