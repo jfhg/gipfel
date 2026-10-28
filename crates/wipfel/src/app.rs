@@ -190,6 +190,8 @@ pub fn app() -> Html {
     let track = use_state(Vec::<usize>::new);
     let track_width = use_state(|| 200.0f64);
     let track_file_ref = use_node_ref();
+    // optional alternative hill database (e.g. a regional list)
+    let db_file_ref = use_node_ref();
     // set once the user pans or zooms by hand; auto-fit is then suppressed
     // until the next image load
     let user_moved = use_mut_ref(|| false);
@@ -489,6 +491,65 @@ pub fn app() -> Html {
             if let Some(input) = track_file_ref.cast::<HtmlInputElement>() {
                 input.click();
             }
+        })
+    };
+
+    let open_db_picker = {
+        let db_file_ref = db_file_ref.clone();
+        Callback::from(move |_: MouseEvent| {
+            if let Some(input) = db_file_ref.cast::<HtmlInputElement>() {
+                input.click();
+            }
+        })
+    };
+
+    // replace the hill database at runtime (e.g. everest.dat for the
+    // Khumbu); markers and track reference hill indices and are dropped
+    let on_db_file_change = {
+        let pan = pan.clone();
+        let db_status = db_status.clone();
+        let markers = markers.clone();
+        let track = track.clone();
+        Callback::from(move |e: Event| {
+            let input: HtmlInputElement = e.target_unchecked_into();
+            let Some(file) = input.files().and_then(|f| f.item(0)) else {
+                return;
+            };
+            let (pan, db_status, markers, track) = (
+                pan.clone(),
+                db_status.clone(),
+                markers.clone(),
+                track.clone(),
+            );
+            let name = file.name();
+            spawn_local(async move {
+                match bridge::read_blob(&file).await {
+                    Ok(bytes) => {
+                        // accept plain .dat and gzipped variants
+                        let raw = match bytes.first() {
+                            Some(0x1f) if bytes.get(1) == Some(&0x8b) => match gunzip(&bytes) {
+                                Ok(r) => r,
+                                Err(err) => {
+                                    db_status.set(format!("gunzip failed: {err}"));
+                                    return;
+                                }
+                            },
+                            _ => bytes,
+                        };
+                        match pan.borrow_mut().load_data_from_bytes(&raw) {
+                            Ok(()) => {
+                                markers.set(Vec::new());
+                                track.set(Vec::new());
+                                let n = pan.borrow().hills.len();
+                                db_status.set(format!("Hill database {name}: {n} peaks"));
+                            }
+                            Err(err) => db_status.set(format!("Database failed: {err}")),
+                        }
+                    }
+                    Err(err) => db_status.set(format!("Failed to read {name}: {err}")),
+                }
+            });
+            input.set_value(""); // allow re-selecting the same file
         })
     };
 
@@ -960,6 +1021,16 @@ pub fn app() -> Html {
                 />
                 <p class="status">{ (*status).clone() }</p>
                 <p class="hint">{ (*db_status).clone() }</p>
+                <button class="secondary" onclick={open_db_picker}>
+                    { "Load hill database…" }
+                </button>
+                <input
+                    type="file"
+                    class="hidden-file"
+                    accept=".dat,.gz,.gzip,application/gzip"
+                    ref={db_file_ref}
+                    onchange={on_db_file_change}
+                />
                 if bitmap.is_some() {
                     <>
                         <div class="section">{ "Viewpoint" }</div>

@@ -163,6 +163,15 @@ body {
 .sidebar button:hover {
   background: var(--btn-hover);
 }
+.sidebar button.secondary {
+  background: var(--chip-bg);
+  color: var(--text);
+  font-size: 13px;
+  padding: 6px 10px;
+}
+.sidebar button.secondary:hover {
+  background: var(--chip-hover);
+}
 .status {
   font-size: 13px;
   color: var(--text-dim);
