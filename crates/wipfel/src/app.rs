@@ -1002,15 +1002,18 @@ pub fn app() -> Html {
                         if !fit_info.is_empty() {
                             <p class="fitinfo">{ (*fit_info).clone() }</p>
                         }
-                        if let Some(h) = hover.as_ref() {
-                            <p class="hover">{ h.clone() }</p>
-                        }
                         <div class="section">{ "Track" }</div>
                         <button onclick={open_track_picker}>{ "Load GPX Track…" }</button>
                         if !track.is_empty() {
                             <SliderItem label="Track width" display={format!("{:.0} m", *track_width)}
                                 value={*track_width} min={50.0} max={1000.0} step={10.0}
                                 onchange={on_track_width} />
+                        }
+                        // last so revealing it on hover cannot shift any
+                        // control above it (the bottom-pinned infofoot
+                        // absorbs the height change)
+                        if let Some(h) = hover.as_ref() {
+                            <p class="hover">{ h.clone() }</p>
                         }
                     </>
                 }
