@@ -28,6 +28,10 @@ pub struct ImageMetaData {
     pub x0: f64,
     pub focal_length: f64,
     pub focal_length_35mm: f64,
+    /// true when focal_length_35mm came from a gipfel JPEG comment rather
+    /// than EXIF; the comment uses a legacy scale encoding (see
+    /// apply_image_metadata)
+    pub focal_from_comment: bool,
     pub projection_type: i32,
 }
 
@@ -47,6 +51,7 @@ impl Default for ImageMetaData {
             x0: NAN,
             focal_length: NAN,
             focal_length_35mm: NAN,
+            focal_from_comment: false,
             projection_type: 0,
         }
     }
@@ -134,6 +139,7 @@ impl ImageMetaData {
         self.pitch = pit.unwrap();
         self.roll = rol.unwrap();
         self.focal_length_35mm = fr.unwrap();
+        self.focal_from_comment = true;
         self.projection_type = pt;
 
         // n >= 10: k0 and k1 were matched; x0 defaults to 0.0 when only 10
@@ -521,13 +527,20 @@ pub fn apply_image_metadata(
         pan.set_roll_angle(md.roll);
     }
 
-    // set_focal_length_35mm: scale = fl * max(w, h) / 35
+    // scale = f35 * w / 36: the 35mm film frame is 36 mm wide, so a lens
+    // with 35mm-equivalent focal length f projects with focal length
+    // f * w / 36 in pixels. Exception: the gipfel JPEG comment has always
+    // encoded the focal as scale * 35 / w, so that legacy encoding is
+    // kept for comments to reproduce identical views with annotated
+    // JPEGs written by older gipfel versions.
     let w = img_w.max(img_h);
     if md.focal_length_35mm.is_nan() || md.focal_length_35mm == 0.0 {
-        pan.set_scale(35.0 * w as f64 / 35.0);
+        pan.set_scale(35.0 * w as f64 / 36.0);
         have_info = false;
-    } else {
+    } else if md.focal_from_comment {
         pan.set_scale(md.focal_length_35mm * w as f64 / 35.0);
+    } else {
+        pan.set_scale(md.focal_length_35mm * w as f64 / 36.0);
     }
 
     // distortion parameters, C ordering:
@@ -693,5 +706,22 @@ mod tests {
             None => std::env::remove_var("XDG_DATA_HOME"),
         }
         let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn focal_scale_exif_vs_comment() {
+        // EXIF 35mm-equivalent focal: scale = f * w / 36 (film width)
+        let mut md = ImageMetaData::new();
+        md.focal_length_35mm = 50.0;
+        let mut pan = crate::panorama::Panorama::new();
+        apply_image_metadata(&mut pan, &md, 1000, 800);
+        assert!((pan.get_scale() - 50.0 * 1000.0 / 36.0).abs() < 1e-9);
+
+        // gipfel comment: legacy encoding scale = f * w / 35, kept so
+        // annotated JPEGs from older versions reproduce the same view
+        md.focal_from_comment = true;
+        let mut pan = crate::panorama::Panorama::new();
+        apply_image_metadata(&mut pan, &md, 1000, 800);
+        assert!((pan.get_scale() - 50.0 * 1000.0 / 35.0).abs() < 1e-9);
     }
 }
