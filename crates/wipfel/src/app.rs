@@ -1026,7 +1026,7 @@ pub fn app() -> Html {
                 <input
                     type="file"
                     ref={file_ref}
-                    accept="*/*"
+                    accept="image/*"
                     class="hidden-file"
                     onchange={on_file_change}
                 />
