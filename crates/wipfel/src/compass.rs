@@ -127,9 +127,11 @@ pub fn compass(props: &Props) -> Html {
             }
             let _ = ctx.set_transform(dpr, 0.0, 0.0, dpr, 0.0, 0.0);
 
-            let on = "rgb(217, 217, 217)";
-            let bg = "rgb(41, 41, 41)";
-            let divider = "rgb(82, 82, 82)";
+            // theme colors come from the CSS variables, so the strip
+            // follows light/dark preference like the rest of the UI
+            let on = bridge::css_var("--compass-fg", "rgb(217, 217, 217)");
+            let bg = bridge::css_var("--compass-bg", "rgb(41, 41, 41)");
+            let divider = bridge::css_var("--compass-divider", "rgb(82, 82, 82)");
             let red = "rgb(255, 102, 64)";
 
             let fill = |c: &str| {
@@ -142,9 +144,9 @@ pub fn compass(props: &Props) -> Html {
                 ctx.set_line_width(width);
             };
 
-            fill(bg);
+            fill(&bg);
             ctx.fill_rect(0.0, 0.0, w, STRIP_H);
-            stroke(divider, 1.0);
+            stroke(&divider, 1.0);
             ctx.begin_path();
             ctx.move_to(0.0, 0.5);
             ctx.line_to(w, 0.5);
@@ -188,7 +190,7 @@ pub fn compass(props: &Props) -> Html {
             let a_hi = a_hi.min(c + fold);
 
             // baseline
-            stroke(on, 1.0);
+            stroke(&on, 1.0);
             ctx.begin_path();
             ctx.move_to(0.0, y0 + 0.5);
             ctx.line_to(w, y0 + 0.5);
@@ -225,7 +227,7 @@ pub fn compass(props: &Props) -> Html {
                 if !x.is_finite() || x < -20.0 || x > w + 20.0 {
                     continue;
                 }
-                fill(if deg == 0.0 { red } else { on });
+                fill(if deg == 0.0 { red } else { &on });
                 ctx.fill_text(name, x, label_y).ok();
             }
             ctx.set_text_align("start");

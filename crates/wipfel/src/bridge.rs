@@ -67,3 +67,15 @@ pub fn ctx2d(canvas: &HtmlCanvasElement) -> Option<CanvasRenderingContext2d> {
         .flatten()
         .and_then(|c| c.dyn_into::<CanvasRenderingContext2d>().ok())
 }
+
+/// Read a CSS custom property from :root (follows the active
+/// prefers-color-scheme), with a fallback when unavailable.
+pub fn css_var(name: &str, fallback: &str) -> String {
+    window()
+        .document()
+        .and_then(|d| window().get_computed_style(&d.document_element()?).ok().flatten())
+        .and_then(|s| s.get_property_value(name).ok())
+        .map(|v| v.trim().to_string())
+        .filter(|v| !v.is_empty())
+        .unwrap_or_else(|| fallback.to_string())
+}

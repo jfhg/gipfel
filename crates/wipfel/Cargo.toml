@@ -19,6 +19,7 @@ features = [
     "Blob",
     "CanvasRenderingContext2d",
     "DataTransfer",
+    "CssStyleDeclaration",
     "Document",
     "DomRect",
     "DragEvent",

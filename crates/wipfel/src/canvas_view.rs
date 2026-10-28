@@ -156,10 +156,9 @@ pub fn canvas_view(props: &Props) -> Html {
                     canvas.set_height(bh);
                 }
                 let _ = ctx.set_transform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
-                // web-sys 0.3: set_fill_style takes a JsValue (deprecated alias)
-                #[allow(deprecated)]
-                ctx.set_fill_style(&wasm_bindgen::JsValue::from_str("#101014"));
-                ctx.fill_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
+                // transparent clear: the CSS background of .canvaswrap
+                // (a theme variable) shows through
+                ctx.clear_rect(0.0, 0.0, canvas.width() as f64, canvas.height() as f64);
                 let Some(bitmap) = bitmap else { return };
                 let _ = ctx.set_transform(
                     dpr * view.scale,
