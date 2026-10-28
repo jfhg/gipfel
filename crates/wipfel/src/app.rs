@@ -1039,16 +1039,6 @@ pub fn app() -> Html {
                 />
                 <p class="status">{ (*status).clone() }</p>
                 <p class="hint">{ (*db_status).clone() }</p>
-                <button class="secondary" onclick={open_db_picker}>
-                    { "Load hill database…" }
-                </button>
-                <input
-                    type="file"
-                    class="hidden-file"
-                    accept=".dat,.gz,.gzip,application/gzip"
-                    ref={db_file_ref}
-                    onchange={on_db_file_change}
-                />
                 if bitmap.is_some() {
                     <>
                         <div class="section">{ "Viewpoint" }</div>
@@ -1098,6 +1088,19 @@ pub fn app() -> Html {
                                 value={*track_width} min={50.0} max={1000.0} step={10.0}
                                 onchange={on_track_width} />
                         }
+                        // deliberately below the track controls: the
+                        // default database is loaded automatically, this
+                        // is only an optional replacement
+                        <button class="secondary" onclick={open_db_picker}>
+                            { "Load alternative hill database…" }
+                        </button>
+                        <input
+                            type="file"
+                            class="hidden-file"
+                            accept=".dat,.gz,.gzip,application/gzip"
+                            ref={db_file_ref}
+                            onchange={on_db_file_change}
+                        />
                         // last so revealing it on hover cannot shift any
                         // control above it (the bottom-pinned infofoot
                         // absorbs the height change)
