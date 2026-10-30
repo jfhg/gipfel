@@ -12,7 +12,7 @@ fn usage() {
          \n\
          commands:\n\
          \x20 export-position <img>                          print position CSV line\n\
-         \x20 export-hills <img> [-d <data>] [-e <hills>]    export hill positions\n\
+         \x20 export-hills <img> [-d <data>] [-e <hills>] [-V <r>]  export hill positions\n\
          \x20 info <img>                                     show parsed metadata\n\
          \x20 stitch [-t out.tif [-4]] [-j out.jpg] [-w N]\n\
          \x20   [-h N] [-r from,to] [-b] img...              cylindrical panorama\n\
@@ -45,7 +45,7 @@ fn fmt_f(v: f64) -> String {
     }
 }
 
-fn export_hills(img: &str, data: &str, export_file: Option<&str>) -> i32 {
+fn export_hills(img: &str, data: &str, export_file: Option<&str>, vis: f64) -> i32 {
     let Some((w, h)) = image_dimensions(img) else {
         eprintln!("could not read image {}", img);
         return 1;
@@ -61,7 +61,7 @@ fn export_hills(img: &str, data: &str, export_file: Option<&str>) -> i32 {
         eprintln!("Could not load datafile {}: {}", data, e);
         return 1;
     }
-    pan.set_height_dist_ratio(0.07); // C default "visibility"
+    pan.set_height_dist_ratio(vis); // "visibility" threshold, C default 0.07
 
     if !have_info {
         eprintln!("No gipfel info available for {}.", img);
@@ -328,9 +328,16 @@ fn main() {
                 let img = &args[2];
                 let mut data = "gipfel.dat".to_string();
                 let mut export_file: Option<String> = None;
+                let mut vis = 0.07;
                 let mut i = 3;
                 while i < args.len() {
                     match args[i].as_str() {
+                        "-V" => {
+                            if i + 1 < args.len() {
+                                vis = args[i + 1].trim().parse().unwrap_or(0.07);
+                                i += 1;
+                            }
+                        }
                         "-d" => {
                             if i + 1 < args.len() {
                                 data = args[i + 1].clone();
@@ -347,7 +354,7 @@ fn main() {
                     }
                     i += 1;
                 }
-                export_hills(img, &data, export_file.as_deref())
+                export_hills(img, &data, export_file.as_deref(), vis)
             }
         }
         "info" => {

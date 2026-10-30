@@ -448,8 +448,13 @@ impl Panorama {
         let mut rows = Vec::new();
         for &i in &self.visible {
             let m = &self.hills[i];
+            // restricted mode (-e, a curated list such as the photo
+            // index): export every listed entry inside the field of
+            // view. The prominence/occlusion heuristics are meant to
+            // thin out the full 21k peak database, not to second-guess
+            // an explicit list.
             if m.flags & crate::hill::FLAG_DUPLIC != 0
-                || m.flags & crate::hill::FLAG_HIDDEN != 0
+                || (!require_export && m.flags & crate::hill::FLAG_HIDDEN != 0)
                 || (require_export && m.flags & crate::hill::FLAG_EXPORT == 0)
             {
                 continue;
