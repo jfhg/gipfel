@@ -49,11 +49,14 @@ style: gipfelweb/style.css
 gipfelweb/style.css: $(here)style.css
 	cp $< $@
 
+# slides: web display size, capped at 6000 px on the long edge so
+# both normal photos and very wide stitched images keep a sane size
 gipfelweb/slides/%.jpg: %.jpg
-	convert $< -filter Lanczos -resize 20000x500\> -quality 94 $@
+	convert $< -filter Lanczos -resize 6000x6000\> -quality 90 $@
 
+# thumbs: gallery cards and hover popups
 gipfelweb/thumbs/%.jpg: %.jpg
-	convert $< -filter Point -resize 400x50\> -quality 80 $@
+	convert $< -filter Point -resize 480x480\> -quality 80 $@
 
 gipfelweb/gipfel/%.pos: %.jpg
 	$(GIPFEL_CLI) export-position $< > $@

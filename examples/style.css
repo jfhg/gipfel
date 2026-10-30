@@ -150,7 +150,7 @@ ul.markers { position: absolute; inset: 0; margin: 0; padding: 0; list-style: no
   background: none;
   border: 2px solid var(--label-bg);
 }
-.pop.thumb img { display: block; border-radius: 6px; max-width: 400px; }
+.pop.thumb img { display: block; border-radius: 6px; max-width: 480px; }
 .pop.thumb .cap {
   position: absolute;
   left: 0; right: 0; bottom: 0;
