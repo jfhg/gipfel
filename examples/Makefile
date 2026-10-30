@@ -26,13 +26,12 @@ positions := $(addprefix gipfelweb/gipfel/, $(addsuffix .pos, $(basename $(image
 imgpos    := $(addprefix gipfelweb/gipfel/, $(addsuffix .imgs, $(basename $(images))))
 hillpos   := $(addprefix gipfelweb/gipfel/, $(addsuffix .hills, $(basename $(images))))
 html      := $(addprefix gipfelweb/, $(addsuffix .html, $(basename $(images))))
-htmlhills := $(addprefix gipfelweb/hills/, $(addsuffix .html, $(basename $(images))))
 
 all:
 	echo "make gipfelweb - create a HTML based view of gipfel oriented"
 	echo "images in the current directory."
 
-gipfelweb: dirs $(slides) $(thumbs) $(imgpos) $(hillpos) $(html) $(htmlhills)
+gipfelweb: dirs style $(slides) $(thumbs) $(imgpos) $(hillpos) $(html) gipfelweb/index.html
 
 clean:
 	rm -rf gipfelweb/gipfel
@@ -43,8 +42,12 @@ clobber:
 dirs:
 	mkdir -p gipfelweb/slides
 	mkdir -p gipfelweb/thumbs
-	mkdir -p gipfelweb/hills
 	mkdir -p gipfelweb/gipfel
+
+style: gipfelweb/style.css
+
+gipfelweb/style.css: $(here)style.css
+	cp $< $@
 
 gipfelweb/slides/%.jpg: %.jpg
 	convert $< -filter Lanczos -resize 20000x500\> -quality 94 $@
@@ -70,14 +73,11 @@ gipfelweb/gipfel/%.hills: gipfelweb/slides/%.jpg
 gipfelweb/gipfel/index.gipfel: $(positions)
 	cat $(positions) > gipfelweb/gipfel/index.gipfel
 
-gipfelweb/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.imgs %.title $(thumbs)
-	$(GIPFEL2HTML) images "`cat $*.title`" $* > $@
+gipfelweb/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.imgs gipfelweb/gipfel/%.hills %.title $(thumbs) gipfelweb/style.css
+	$(GIPFEL2HTML) page $* > $@
 
-gipfelweb/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.imgs $(thumbs)
-	$(GIPFEL2HTML) images $* $* > $@
+gipfelweb/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.imgs gipfelweb/gipfel/%.hills $(thumbs) gipfelweb/style.css
+	$(GIPFEL2HTML) page $* > $@
 
-gipfelweb/hills/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.hills %.title
-	$(GIPFEL2HTML) hills "`cat $*.title`" $* > $@
-
-gipfelweb/hills/%.html: gipfelweb/slides/%.jpg gipfelweb/gipfel/%.hills
-	$(GIPFEL2HTML) hills $* $*  > $@
+gipfelweb/index.html: $(thumbs) $(html)
+	$(GIPFEL2HTML) gallery $(basename $(images)) > $@

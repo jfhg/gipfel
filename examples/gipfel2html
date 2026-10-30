@@ -1,139 +1,173 @@
 #!/bin/sh
+# gipfel2html — generate the modern, CSS-only gipfelweb pages.
+#
+#   gipfel2html page <file>        one panorama page (peaks + photos)
+#   gipfel2html gallery <f1> <f2>  thumbnail gallery index
+#
+# Markers are positioned in percent of the slide so the panorama can
+# scale freely (responsive default; a CSS-only checkbox switches to
+# full resolution with horizontal scrolling). Interaction is pure CSS:
+# hover for mouse, :focus-within for keyboard, :target for touch.
+
+set -e
+# awk must print dots as decimal separators regardless of locale
+LC_ALL=C
+export LC_ALL
 
 MODE="$1"
-TITLE="$2"
-FILE="$3"
 
-if [ "$MODE" = "images" ]; then
-	DATAFILE="gipfelweb/gipfel/${FILE}.imgs"
-else
-	DATAFILE="gipfelweb/gipfel/${FILE}.hills"
-fi
+AWK=awk
 
-cat << EOF
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
-<html>
+# percent of slide dimension
+pct() { $AWK -v v="$1" -v m="$2" 'BEGIN { printf "%.2f", v * 100 / m }'; }
+
+# integer percent (for threshold comparisons)
+ipct() { $AWK -v v="$1" -v m="$2" 'BEGIN { printf "%d", v * 100 / m }'; }
+
+# meters -> "12.3 km" / "850 m"
+fmt_dist() {
+    $AWK -v d="$1" 'BEGIN { if (d >= 1000) printf "%.1f km", d / 1000; else printf "%.0f m", d }'
+}
+
+# edge classes so popups stay inside the image: below if near the top,
+# left/right aligned if near a horizontal edge
+edge_classes() {
+    xp="$1"; yp="$2"
+    cls=""
+    [ "$yp" -lt 25 ] && cls="below"
+    if [ "$xp" -lt 12 ]; then cls="$cls left"
+    elif [ "$xp" -gt 88 ]; then cls="$cls right"
+    fi
+    echo "$cls"
+}
+
+
+title_of() {
+    # display title for image base name $1: %.title file, else the name
+    if [ -e "$1.title" ]; then cat "$1.title"; else echo "$1"; fi
+}
+
+head() {
+    cat << EOF
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>$1 — gipfel</title>
+<link rel="stylesheet" href="$2style.css" />
+</head>
 EOF
+}
 
-echo "<title>$TITLE</title>"
-
-cat << EOF
-<style type="text/css">
-#gipfel { display: block; position: relative; margin: 0; padding: 0; }
-#gipfel li { visibility: hidden; list-style-type: none; position: absolute; background: url(25w.png); border: 1px solid black; font-family: sans-serif; font-size: x-small; color: #000; padding: 0; line-height: 1.3em; overflow: hidden; }
-#gipfel span { visibility: hidden; position: absolute; left: 0; right: 0; display: block; padding: 5px; }
-#gipfel:hover li { visibility: visible; }
-#gipfel li:hover span {visibility: visible;}
+if [ "$MODE" = "gallery" ]; then
+    shift
+    head "gipfelweb" ""
+    cat << EOF
+<body>
+<header><h1>gipfelweb</h1></header>
+<main>
+<div class="gallery">
 EOF
-
-IFS="	"
-i=0
-grep -v "^#" ${DATAFILE} | \
-while read name height x y dist flags dummy; do
-	if [ "$MODE" = "images" ]; then
-		thumb_w=`identify -format %w gipfelweb/thumbs/${name}`
-		thumb_h=`identify -format %h gipfelweb/thumbs/${name}`
-
-		echo "#id_${i} {left:$((${x} - 10 / 2))px; top: $((${y} - 6 / 2))px; width: 10px; height: 6px;}"
-		echo "#id_${i}:hover {width: ${thumb_w}px; height: ${thumb_h}px; background: url(thumbs/${name});}"
-	else
-		echo "#id_${i} {left:$((${x} - 4 / 2))px; top: $((${y} - 4 / 2))px; width: 4px; height: 4px;}"
-		echo "#id_${i}:hover {width: 200px; height: 20px;}"
-	fi
-
-	i=$((${i} + 1))
-done
-
-cat << EOF
-</style></head>
-<body bgcolor="#919faa">
-<br/>
-<br/>
-EOF
-
-echo "<h3>$TITLE</h3>"
-
-if [ "$MODE" = "images" ]; then
-	echo "<a href=\"hills/${FILE}.html\">show hill names</a>"
-else
-	echo "<a href=\"../${FILE}.html\">back to gipfelweb</a>"
-fi
-
-cat << EOF
-<table border="0" cellpadding="0" cellspacing="1" bgcolor="black">
-<tr><td>
-<table border="0" cellpadding="10" cellspacing="0" bgcolor="white">
-<tr><td>
-<div id="gipfel">
-EOF
-
-if [ "$MODE" = "images" ]; then
-	echo "<img src=\"slides/${FILE}.jpg\"/>"
-else
-	echo "<img src=\"../slides/${FILE}.jpg\"/>"
-fi
-
-
-echo "<ul>"
-i=0
-grep -v "^#" ${DATAFILE} | \
-while read name height x y dist flags dummy; do
-	if [ "$MODE" = "images" ]; then
-		THUMB_TITLE="${name%.jpg}"
-		if [ -e "${name%.jpg}.title" ]; then
-			THUMB_TITLE=`cat ${name%.jpg}.title`
-		fi
-		echo "<li id=\"id_${i}\"><a href=\"${name%.jpg}.html\"><span>${THUMB_TITLE} (${height}m)</span></a></li>"
-	else
-		echo "<li id=\"id_${i}\"><span>${name} (${height}m)</span></li>"
-	fi
-
-	i=$((${i} + 1))
-done
-echo "</ul>"
-
-cat << EOF
+    for f in "$@"; do
+        echo "<a href=\"${f}.html\"><img src=\"thumbs/${f}.jpg\" alt=\"${f}\" loading=\"lazy\"><span class=\"t\">$(title_of "$f")</span></a>"
+    done
+    cat << EOF
 </div>
-</td></tr>
-</table>
-</td></tr>
-</table>
-<br/>
-<b>Created with <a href="http://www.ecademix.com/JohannesHofmann/gipfel.html">gipfel</a></b>
-<br/>
-<br/>
+</main>
+<footer>Created with <a href="https://flpsed.org/gipfel.html">gipfel</a></footer>
+</body>
+</html>
+EOF
+    exit 0
+fi
+
+# ---- one panorama page ----
+FILE="$2"
+SLIDE="gipfelweb/slides/${FILE}.jpg"
+HILLS="gipfelweb/gipfel/${FILE}.hills"
+IMGS="gipfelweb/gipfel/${FILE}.imgs"
+TITLE=$(title_of "$FILE")
+set -- $(identify -format "%w %h" "$SLIDE")
+W="$1" H="$2"
+
+head "$TITLE" ""
+cat << EOF
+<body>
+<header>
+<h1>${TITLE}</h1>
+<a href="index.html">&larr; Gallery</a>
+</header>
+<main>
+<input type="checkbox" id="t-peaks" class="tgl" checked />
+<label class="chip" for="t-peaks">Peaks</label>
+<input type="checkbox" id="t-photos" class="tgl" checked />
+<label class="chip" for="t-photos">Photos</label>
+<input type="checkbox" id="t-labels" class="tgl" />
+<label class="chip" for="t-labels">Labels</label>
+<input type="checkbox" id="t-full" class="tgl" />
+<label class="chip" for="t-full">Full resolution</label>
+<div class="pano-wrap">
+<div class="pano">
+<img class="slide" src="slides/${FILE}.jpg" alt="${TITLE}" />
+<ul class="markers">
 EOF
 
-if [ "$MODE" = "images" ]; then
-	echo Move the mouse over the image to see other images.
-else
-	echo Move the mouse over the image to see known mountains.
+# note: no `cmd | while` pipes here — the loop body increments the
+# marker counters and must run in the current shell
+if [ -e "$HILLS" ]; then
+    i=0
+    while IFS="	" read -r name height x y dist rest; do
+        case "$name" in \#*|"") continue ;; esac
+        xp=$(pct "$x" "$W"); yp=$(pct "$y" "$H")
+        cls=$(edge_classes "$(ipct "$x" "$W")" "$(ipct "$y" "$H")")
+        d=$(fmt_dist "$dist")
+        echo "<li class=\"mk peak $cls\" id=\"id_${i}\" style=\"--x:${xp}%;--y:${yp}%\"><a href=\"#id_${i}\" aria-label=\"${name}, ${height} m, distance ${d}\"><span class=\"dot\"></span><span class=\"pop label\">${name} &middot; ${height} m &middot; <span class=\"dist\">${d}</span></span></a></li>"
+        i=$((i + 1))
+    done < "$HILLS"
+fi
+
+if [ -e "$IMGS" ]; then
+    j=0
+    while IFS="	" read -r name height x y dist rest; do
+        case "$name" in \#*|"") continue ;; esac
+        [ "$name" = "${FILE}.jpg" ] && continue # no self links
+        xp=$(pct "$x" "$W"); yp=$(pct "$y" "$H")
+        cls=$(edge_classes "$(ipct "$x" "$W")" "$(ipct "$y" "$H")")
+        base="${name%.jpg}"
+        pt=$(title_of "$base")
+        d=$(fmt_dist "$dist")
+        echo "<li class=\"mk photo $cls\" id=\"pid_${j}\" style=\"--x:${xp}%;--y:${yp}%\"><a href=\"#pid_${j}\" aria-label=\"${pt}, distance ${d}\"><span class=\"dot\"></span><span class=\"pop thumb\"><img src=\"thumbs/${name}\" alt=\"${pt}\"><span class=\"cap\">${pt} &middot; <span class=\"dist\">${d}</span></span></span></a></li>"
+        j=$((j + 1))
+    done < "$IMGS"
 fi
 
 cat << EOF
-<br/>
-Move the mouse over the rectangle to see details.
-<br/>
-<br/>
-This image is visible on these images:<br/>
+</ul>
+</div>
+</div>
 EOF
 
-# exact match on the name column (a plain grep -l would also match
-# substrings, e.g. test.jpg inside contest.jpg); exit keeps output to
-# one line per file
-awk -F'\t' -v n="${FILE}.jpg" '$1 == n { print FILENAME; exit }' gipfelweb/gipfel/*.imgs | \
-while read f; do
-	img="`basename ${f%.imgs}`"
-	if [ "$MODE" = "images" ]; then
-		echo "<a href=\"${img}.html\"><img src=\"thumbs/${img}.jpg\"></a><br/>"
-	else
-		echo "<a href=\"../${img}.html\"><img src=\"../thumbs/${img}.jpg\"></a><br/>"
-	fi
-done
-
+# related images: panoramas in which this one also appears
+rel=$(awk -F'\t' -v n="${FILE}.jpg" '$1 == n { print FILENAME; exit }' \
+        gipfelweb/gipfel/*.imgs 2>/dev/null || true)
+if [ -n "$rel" ]; then
+    echo '<section class="related"><h2>Visible on these panoramas</h2>'
+    for f in $rel; do
+        img=$(basename "${f%.imgs}")
+        [ "$img" = "$FILE" ] && continue
+        echo "<a href=\"${img}.html\"><img src=\"thumbs/${img}.jpg\" alt=\"${img}\" loading=\"lazy\"></a>"
+    done
+    echo '</section>'
+fi
 
 cat << EOF
+</main>
+<footer>
+Hover the markers for details &middot; on touch devices, tap them.
+<br />
+Created with <a href="https://flpsed.org/gipfel.html">gipfel</a>
+</footer>
 </body>
 </html>
 EOF
