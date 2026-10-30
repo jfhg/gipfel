@@ -1,5 +1,5 @@
 # gipfelweb: static, CSS-only web galleries of gipfel-annotated
-# panoramas. Port of the historical examples/ pipeline to the Rust
+# images. Port of the historical examples/ pipeline to the Rust
 # stack: gipfel-cli replaces the C binary, ImageMagick replaces
 # netpbm + jhead (convert preserves the gipfel comment and EXIF).
 #

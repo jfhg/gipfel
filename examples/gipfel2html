@@ -1,10 +1,10 @@
 #!/bin/sh
 # gipfel2html — generate the modern, CSS-only gipfelweb pages.
 #
-#   gipfel2html page <file>        one panorama page (peaks + photos)
+#   gipfel2html page <file>        one image page (peaks + photos)
 #   gipfel2html gallery <f1> <f2>  thumbnail gallery index
 #
-# Markers are positioned in percent of the slide so the panorama can
+# Markers are positioned in percent of the slide so the image can
 # scale freely (responsive default; a CSS-only checkbox switches to
 # full resolution with horizontal scrolling). Interaction is pure CSS:
 # hover for mouse, :focus-within for keyboard, :target for touch.
@@ -82,7 +82,7 @@ EOF
     exit 0
 fi
 
-# ---- one panorama page ----
+# ---- one image page ----
 FILE="$2"
 SLIDE="gipfelweb/slides/${FILE}.jpg"
 HILLS="gipfelweb/gipfel/${FILE}.hills"
@@ -148,11 +148,11 @@ cat << EOF
 </div>
 EOF
 
-# related images: panoramas in which this one also appears
+# related images: other images in which this one also appears
 rel=$(awk -F'\t' -v n="${FILE}.jpg" '$1 == n { print FILENAME; exit }' \
         gipfelweb/gipfel/*.imgs 2>/dev/null || true)
 if [ -n "$rel" ]; then
-    echo '<section class="related"><h2>Visible on these panoramas</h2>'
+    echo '<section class="related"><h2>Visible on these images</h2>'
     for f in $rel; do
         img=$(basename "${f%.imgs}")
         [ "$img" = "$FILE" ] && continue

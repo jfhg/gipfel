@@ -1,6 +1,6 @@
 /* gipfelweb stylesheet — modern, CSS-only interaction (no JavaScript).
    Theme follows the system preference; markers are positioned in
-   percent of the panorama so the image can scale freely. */
+   percent of the slide so the image can scale freely. */
 
 :root {
   --bg: #101014;
@@ -72,7 +72,7 @@ main { padding: 0 1.25rem 1.25rem; }
 .tgl:checked + .chip { background: var(--accent); color: #fff; }
 .tgl:focus-visible + .chip { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* ---- panorama ---- */
+/* ---- image view ---- */
 .pano-wrap {
   background: var(--panel);
   border-radius: 10px;
