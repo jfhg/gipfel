@@ -112,7 +112,19 @@ pub fn sanitize_name(name: &str) -> Result<(), Error> {
     Ok(())
 }
 
-/// Parse a prefs file into ordered (name, profile) pairs. Tolerant:
+/// Parse a prefs file into ordered (name, profile) pairs. Tolerant: comments
+/// (`;`), the root group `[.]`, blank lines and unknown keys are ignored;
+/// values are parsed with Rust's `f64` (superset of C `%g`).
+pub fn parse_prefs(text: &str) -> Vec<(String, Profile)> {
+    parse(text)
+}
+
+/// Serialize profiles in FLTK's layout so the C version can read our file.
+pub fn serialize_prefs(profiles: &[(String, Profile)]) -> String {
+    serialize(profiles)
+}
+
+/// Parse a prefs file into ordered (name, profile) pairs. Tolerant: 
 /// comments (`;`), the root group `[.]`, blank lines and unknown keys are
 /// ignored; values are parsed with Rust's `f64` (superset of C `%g`).
 fn parse(text: &str) -> Vec<(String, Profile)> {

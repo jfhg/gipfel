@@ -232,6 +232,22 @@ impl ImageMetaData {
                 }
             }
         }
+        // Phone cameras record the shooting direction as GPSImgDirection.
+        // Used only when no gipfel comment provided a direction. A magnetic
+        // reference ('M') is converted to true north with the current
+        // declination of the Eastern Alps (~+2.4 deg east, IGRF 2020s);
+        // the residual error stays below typical phone compass noise.
+        if self.direction.is_nan() {
+            if let Some(f) = exif.get_field(Tag::GPSImgDirection, In::PRIMARY) {
+                if let Some(v) = field_tofloat(f, 0) {
+                    let mut dir = v;
+                    if exif_ref_is(&exif, Tag::GPSImgDirectionRef, "M") {
+                        dir += 2.4;
+                    }
+                    self.direction = dir;
+                }
+            }
+        }
     }
 }
 

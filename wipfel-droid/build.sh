@@ -9,12 +9,12 @@ export ANDROID_HOME="${ANDROID_HOME:-$HOME/android-sdk}"
 export PATH="$PATH:$HOME/.cargo/bin"
 
 echo "==> building wipfel release site"
-( cd "$repo/crates/wipfel" && ./build-release.sh >/dev/null )
+( cd "$repo/crates/gipfel" && ./build-release.sh >/dev/null )
 
 echo "==> staging assets"
 mkdir -p "$here/app/src/main/assets/www"
 rm -f "$here/app/src/main/assets/www/"*
-cp "$repo/dist/wipfel/"* "$here/app/src/main/assets/www/"
+cp "$repo/dist/gipfel/"* "$here/app/src/main/assets/www/"
 
 echo "==> gradle assembleDebug"
 ( cd "$here" && ./gradlew assembleDebug --no-daemon -q )
