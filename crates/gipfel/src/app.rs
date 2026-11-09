@@ -9,6 +9,7 @@ use gipfel_core::hill::{FLAG_DUPLIC, FLAG_HIDDEN, FLAG_TRACK_POINT, FLAG_VISIBLE
 use gipfel_core::track as gpx;
 use gipfel_core::metadata::{apply_image_metadata, ImageMetaData};
 use gipfel_core::panorama::Panorama;
+use gipfel_core::projection::ProjectionType;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::spawn_local;
@@ -72,6 +73,14 @@ struct FindPeak {
     iy: f64,
     query: String,
 }
+
+/// Build stamp injected by serve-here.sh / build-release.sh so a
+/// quick glance at the sidebar reveals whether the browser is running
+/// a cached old bundle.
+const BUILD_STAMP: &str = match option_env!("STAMP") {
+    Some(s) => s,
+    None => "dev",
+};
 
 /// Read a query parameter from the page URL (e.g. `/?file=test.jpg`).
 fn url_param(name: &str) -> Option<String> {
@@ -209,6 +218,9 @@ pub fn app() -> Html {
     let pan = use_mut_ref(Panorama::new);
     let markers = use_state(Vec::<Marker>::new);
     let fit_distortion = use_state(|| false);
+    // 0 = rectilinear, 1 = cylindrical (panoramic); mirrors
+    // Panorama::projection_type, synced from the image comment on load
+    let projection = use_state(|| 0u32);
     let hover = use_state(|| Option::<String>::None);
     let vp = use_state(UiParams::default);
     let img_size = use_state(|| (0u32, 0u32));
@@ -440,6 +452,7 @@ pub fn app() -> Html {
         let img_md = img_md.clone();
         let profile_name = profile_name.clone();
         let profiles = profiles.clone();
+        let projection = projection.clone();
         Callback::from(move |(bytes, name): (Vec<u8>, String)| {
             let (bitmap, status, fit, pan, markers, fit_info) =
                 (bitmap.clone(), status.clone(), fit.clone(), pan.clone(), markers.clone(), fit_info.clone());
@@ -453,6 +466,7 @@ pub fn app() -> Html {
             let img_md = img_md.clone();
             let profile_name = profile_name.clone();
             let profiles = profiles.clone();
+            let projection = projection.clone();
             spawn_local(async move {
                 match bridge::decode_bitmap(&bytes).await {
                     Ok(bmp) => {
@@ -528,6 +542,15 @@ pub fn app() -> Html {
                             }
                         };
                         vp.set(u);
+                        // a saved gipfel comment may request the panoramic
+                        // projection; sync the dropdown with the result
+                        projection.set(pan.borrow().projection_type as u32);
+                        // force the per-render limit block to re-evaluate:
+                        // its change detection compares against the old
+                        // value, and a metadata-driven switch to cylindrical
+                        // (limit 0) would otherwise look "unchanged" and
+                        // keep the stale visibility list
+                        pan.borrow_mut().max_view_angle = -1.0;
                         img_size.set((w, h));
                         let vp = if have {
                             format!("viewpoint from image · {vis} peaks visible")
@@ -561,18 +584,21 @@ pub fn app() -> Html {
         })
     };
 
-    // Auto-load an image given as ?file=<same-origin path> so a photo can
-    // be opened by URL alone, e.g. /?file=test.jpg. It goes through the
+    // Auto-load an image given as ?file=<path or http(s) URL> so a photo
+    // can be opened by link alone, e.g. /?file=test.jpg or
+    // /?file=https://example.org/pano.jpg&az=57.4. It goes through the
     // normal load pipeline, so EXIF viewpoint/focal metadata is applied
-    // exactly as for a picked file.
+    // exactly as for a picked file. External URLs need CORS on their
+    // host; the status line reports failures.
     {
         let load_bytes = load_bytes.clone();
         let status = status.clone();
         let overrides = overrides.clone();
         use_effect_with((), move |_| {
             let Some(path) = url_param("file") else { return };
-            if path.is_empty() || path.starts_with("http") || path.contains(":/") {
-                status.set("?file= must be a same-origin path".to_string());
+            let external = path.starts_with("https://") || path.starts_with("http://");
+            if path.is_empty() || (!external && path.contains(":/")) {
+                status.set("?file= must be a path on this host or an http(s) URL".to_string());
                 return;
             }
             let name = path.rsplit('/').next().unwrap_or(&path).to_string();
@@ -892,6 +918,21 @@ pub fn app() -> Html {
             let name = sel.value();
             profile_name.set(name.clone());
             apply(&name);
+        })
+    };
+
+    let on_projection = {
+        let pan = pan.clone();
+        let projection = projection.clone();
+        Callback::from(move |e: Event| {
+            let sel: web_sys::HtmlSelectElement = e.target_unchecked_into();
+            let cyl = sel.value() == "1";
+            projection.set(if cyl { 1 } else { 0 });
+            pan.borrow_mut().set_projection(if cyl {
+                ProjectionType::Cylindrical
+            } else {
+                ProjectionType::Rectilinear
+            });
         })
     };
 
@@ -1218,23 +1259,42 @@ pub fn app() -> Html {
     // Lens FOV visibility limit, port of the desktop bump(): the angle at
     // which the (possibly distorted) projection reaches the image edge.
     // Peaks beyond it cannot be inside the photo even if the fitted
-    // distortion folds their projection back into the image. Running this
-    // every render is idempotent and cheap; visibility is only rebuilt
-    // when the limit actually changed.
+    // distortion folds their projection back into the image. Cylindrical
+    // (panoramic) images are exempt: they may cover the full 360°, so the
+    // limit is set to 0 = unlimited. Running this every render is
+    // idempotent and cheap; visibility is only rebuilt when the limit
+    // actually changed.
     {
         let mut p = pan.borrow_mut();
-        let limit = if img_size.0 > 0 {
+        let limit = if img_size.0 == 0 || p.projection_type == ProjectionType::Cylindrical {
+            // 0 = unlimited: no image loaded, or panoramic projection,
+            // whose image may wrap all the way around the viewpoint
+            0.0
+        } else {
             let c = p.parms.a_center;
             let proj = gipfel_core::projection::projection_from_type(p.projection_type);
             let a_edge = alph_at_img_x(p.projection_type, &*proj, &p.parms, img_size.0 as f64 / 2.0, c);
             (a_edge - c).abs()
-        } else {
-            0.0
         };
         if (limit - p.max_view_angle).abs() > 1e-9 {
             p.max_view_angle = limit;
             let known: Vec<usize> = markers.iter().map(|m| m.hill).collect();
             p.update_visible_mountains(Some(&known));
+        }
+        // ?debug=1 dumps the effective visibility state to the browser
+        // console on every render (DevTools → Console)
+        if url_param("debug").is_some() {
+            web_sys::console::log_1(
+                &format!(
+                    "gipfel dbg: proj={:?} max_view_angle={:.4} visible={} img={}x{}",
+                    p.projection_type,
+                    p.max_view_angle,
+                    p.visible.len(),
+                    img_size.0,
+                    img_size.1
+                )
+                .into(),
+            );
         }
     }
 
@@ -1291,6 +1351,42 @@ pub fn app() -> Html {
     let collapse_cb = {
         let nav_open = nav_open.clone();
         Callback::from(move |_: MouseEvent| nav_open.set(false))
+    };
+
+    // Google-Maps-style +/- buttons: zoom about the canvas center using
+    // the same math as wheel/pinch zoom; counts as manual navigation so
+    // the auto-fit stays out of the way afterwards
+    let zoom_step = {
+        let apply = apply_view.clone();
+        let user_moved = user_moved.clone();
+        let canvas_ref = canvas_ref.clone();
+        Rc::new(move |factor: f64| {
+            let (cx, cy) = canvas_ref
+                .cast::<HtmlCanvasElement>()
+                .map(|c| {
+                    (
+                        c.client_width() as f64 / 2.0,
+                        c.client_height() as f64 / 2.0,
+                    )
+                })
+                .unwrap_or((400.0, 300.0));
+            *user_moved.borrow_mut() = true;
+            apply(&move |v| {
+                let ns = (v.scale * factor).clamp(0.02, 64.0);
+                let k = ns / v.scale;
+                v.ox = cx - (cx - v.ox) * k;
+                v.oy = cy - (cy - v.oy) * k;
+                v.scale = ns;
+            });
+        })
+    };
+    let zoom_in = {
+        let zoom = zoom_step.clone();
+        Callback::from(move |_: MouseEvent| zoom(1.4))
+    };
+    let zoom_out = {
+        let zoom = zoom_step.clone();
+        Callback::from(move |_: MouseEvent| zoom(1.0 / 1.4))
     };
     let expand_cb = {
         let nav_open = nav_open.clone();
@@ -1350,6 +1446,10 @@ pub fn app() -> Html {
                         <SliderItem label="Roll" display={format!("{:.1}°", vp.roll)}
                             value={vp.roll} min={-10.0} max={10.0} step={0.01} onchange={on_roll} />
                         <div class="section">{ "Projection" }</div>
+                        <select class="textinput" onchange={on_projection}>
+                            <option value="0" selected={*projection == 0}>{ "Rectilinear projection" }</option>
+                            <option value="1" selected={*projection == 1}>{ "Cylindrical (panoramic)" }</option>
+                        </select>
                         <label class="row">
                             <input type="checkbox" checked={*fit_distortion} onchange={on_distortion_toggle} />
                             { "Fit distortion (needs ≥ 4 markers)" }
@@ -1422,6 +1522,7 @@ pub fn app() -> Html {
                     </>
                 }
                 <div class="infofoot">
+                    <p class="hint dim">{ format!("gipfel {} · build {}", env!("CARGO_PKG_VERSION"), BUILD_STAMP) }</p>
                     <p class="hint">
                         { "Hover a dot to see the peak · click to mark it (or pick from the list) · drag to adjust · right-click to remove." }
                     </p>
@@ -1450,6 +1551,12 @@ pub fn app() -> Html {
                         label_font={vp.label_font}
                     />
                     { findpeak_popup.clone() }
+                    if bitmap.is_some() {
+                        <div class="zoomctrl">
+                            <button onclick={zoom_in} title="Zoom in" aria-label="Zoom in">{"+"}</button>
+                            <button onclick={zoom_out} title="Zoom out" aria-label="Zoom out">{"\u{2212}"}</button>
+                        </div>
+                    }
                 </div>
                 if bitmap.is_some() {
                     <Compass data={compass_data} tick={*tick} on_change={compass_change} />

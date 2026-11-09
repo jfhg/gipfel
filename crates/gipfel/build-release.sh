@@ -21,7 +21,8 @@ esac
 # size-optimized build for the web (the workspace default profile
 # targets native binaries); --remove-name-section drops the debug
 # symbol names wasm-bindgen adds for devtools
-CARGO_PROFILE_RELEASE_OPT_LEVEL=z cargo build -p gipfel --target wasm32-unknown-unknown --release
+touch crates/gipfel/src/app.rs  # re-stamp every build (option_env! does not track STAMP)
+STAMP=$(date -u +%Y-%m-%d_%H:%M) CARGO_PROFILE_RELEASE_OPT_LEVEL=z cargo build -p gipfel --target wasm32-unknown-unknown --release
 
 # stage into a fresh temp dir and swap it in only on success, so a
 # failing build never destroys the previous site and the old site is

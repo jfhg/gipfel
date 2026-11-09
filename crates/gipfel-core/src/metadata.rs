@@ -768,3 +768,27 @@ mod tests {
         assert!((pan.get_scale() - 50.0 * 1000.0 / 35.0).abs() < 1e-9);
     }
 }
+
+#[cfg(test)]
+mod save_tests {
+    use super::*;
+
+    #[test]
+    fn comment_roundtrip_preserves_projection_type() {
+        let mut md = ImageMetaData::new();
+        md.longitude = 10.5;
+        md.latitude = 47.0;
+        md.height = 2993.0;
+        md.direction = 57.4;
+        md.pitch = -20.0;
+        md.roll = 0.3;
+        md.focal_length_35mm = 27.0;
+        md.projection_type = 1; // cylindrical
+        // minimal valid JPEG (SOI, empty COM, EOI)
+        let jpg = b"\xff\xd8\xff\xfe\x00\x02\xff\xd9";
+        let out = md.save_image_to_bytes(jpg).unwrap();
+        let mut md2 = ImageMetaData::new();
+        md2.load_image_from_bytes(&out);
+        assert_eq!(md2.projection_type, 1, "projection type lost in comment roundtrip");
+    }
+}

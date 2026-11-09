@@ -87,6 +87,29 @@ right-click removes it. Once at least two mountains are positioned,
 gipfel fits the view parameters automatically and moves the remaining
 peaks to their correct positions. More markers improve the fit.
 
+URL Parameters
+--------------
+The web app can be fully linked to: image and view parameters are
+passed as URL query parameters, e.g.
+
+    https://example.org/gipfel/?file=photo.jpg
+    https://example.org/gipfel/?file=https://host/pano.jpg&az=57.4&pitch=-20
+
+* `file` — image to open: a path on the same host, or an absolute
+  `http(s)` URL (the remote host must allow CORS)
+* `az` — azimuth in degrees (true north)
+* `pitch` — pitch in degrees
+* `roll` — roll in degrees
+* `focal` — focal length in mm (35 mm equivalent)
+* `vis` — visibility override (0.01–0.1, same scale as the Visibility
+  slider; higher shows more distant peaks)
+
+The parameters are applied *after* the image's own EXIF/gipfel
+metadata, so they override values recorded in the photo. A `gipfel:`
+comment saved by "Save image…" is read back when the saved file is
+opened again, so annotated images carry their view without any URL
+parameters.
+
 You may also want to have a look at the (outdated)
 [screen video](http://www.flpsed.org/images/gipfel.avi)
 for an example session.

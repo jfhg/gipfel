@@ -3,7 +3,8 @@
 # /tmp/gipfel-dist (python http.server on :8090). Dev-only helper.
 set -e
 cd "$(dirname "$0")/../.."
-cargo build -p gipfel --target wasm32-unknown-unknown --release
+touch crates/gipfel/src/app.rs  # re-stamp every build (option_env! does not track STAMP)
+STAMP=$(date -u +%Y-%m-%d_%H:%M) cargo build -p gipfel --target wasm32-unknown-unknown --release
 DIST=/tmp/gipfel-dist
 mkdir -p "$DIST"
 wasm-bindgen --target web --out-dir "$DIST" target/wasm32-unknown-unknown/release/gipfel.wasm

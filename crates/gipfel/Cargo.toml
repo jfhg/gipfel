@@ -16,6 +16,7 @@ yew = { version = "0.21", features = ["csr"] }
 [dependencies.web-sys]
 version = "0.3"
 features = [
+    "console",
     "Blob",
     "BlobPropertyBag",
     "CanvasRenderingContext2d",
