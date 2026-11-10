@@ -1,4 +1,4 @@
-package org.flpsed.wipfel
+package org.flpsed.gipfel
 
 import android.Manifest
 import android.app.Activity

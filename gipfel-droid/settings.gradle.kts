@@ -12,5 +12,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "wipfel-droid"
+rootProject.name = "gipfel-droid"
 include(":app")

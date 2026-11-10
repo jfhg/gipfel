@@ -1,4 +1,4 @@
-package org.flpsed.wipfel
+package org.flpsed.gipfel
 
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -23,7 +23,7 @@ class AssetServer(private val assetManager: android.content.res.AssetManager) : 
     private var running = true
 
     init {
-        thread(isDaemon = true, name = "wipfel-http") {
+        thread(isDaemon = true, name = "gipfel-http") {
             while (running) {
                 try {
                     val socket = server.accept()

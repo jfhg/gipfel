@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the wipfel Android wrapper: wasm site -> assets -> debug APK.
+# Build the gipfel Android wrapper: wasm site -> assets -> debug APK.
 # Requires: wasm32 target + wasm-bindgen (cargo), Android SDK, JDK 17+.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -8,7 +8,7 @@ repo="$(cd "$here/.." && pwd)"
 export ANDROID_HOME="${ANDROID_HOME:-$HOME/android-sdk}"
 export PATH="$PATH:$HOME/.cargo/bin"
 
-echo "==> building wipfel release site"
+echo "==> building gipfel release site"
 ( cd "$repo/crates/gipfel" && ./build-release.sh >/dev/null )
 
 echo "==> staging assets"

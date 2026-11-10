@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="wipfel"
+        android:label="gipfel"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:networkSecurityConfig="@xml/network_security_config">

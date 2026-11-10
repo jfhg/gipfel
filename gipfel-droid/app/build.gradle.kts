@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "org.flpsed.wipfel"
+    namespace = "org.flpsed.gipfel"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "org.flpsed.wipfel"
+        applicationId = "org.flpsed.gipfel"
         minSdk = 29
         targetSdk = 35
         versionCode = 1
