@@ -394,7 +394,17 @@ impl Panorama {
     }
 
     pub fn is_visible(&self, alph: f64) -> bool {
-        let mut center_dist = (alph - self.parms.a_center).abs();
+        // NaN or infinite azimuths (from user input or a diverged fit) must
+        // never count as visible; a NaN center used to make everything so.
+        if !alph.is_finite() || !self.parms.a_center.is_finite() {
+            return false;
+        }
+        // Wrap into [0, 2pi) before the fold: a_center may lie outside
+        // [-pi, pi] (user enters "400 deg", or a fit leaves it unnormalized).
+        // Without this, |alph - a_center| > 2pi turned the single fold below
+        // into a NEGATIVE distance, which passed every comparison and made
+        // hills behind the camera visible (GipfelFind.lean Finding 1).
+        let mut center_dist = (alph - self.parms.a_center).abs() % (2.0 * PI);
         if center_dist > PI {
             center_dist = 2.0 * PI - center_dist;
         }
@@ -503,5 +513,35 @@ mod tests {
         // a wider limit never overrides the projection's own bound
         pan.max_view_angle = 80f64.to_radians();
         assert!(!pan.is_visible(a70));
+    }
+
+    #[test]
+    fn out_of_range_center_angle_stays_safe() {
+        // GipfelFind.lean Finding 1: with |alph - a_center| > 2pi the single
+        // fold produced a negative "distance" that passed every comparison.
+        // Hill azimuths come from atan2, so alph is always in [-pi, pi].
+        let mut raw = Panorama::new();
+        raw.parms.a_center = 400f64.to_radians(); // e.g. left by a fit
+        assert!(!raw.is_visible(-std::f64::consts::PI)); // 220 deg off, behind
+
+        // the setter must agree with the equivalent in-range azimuth
+        let mut pan400 = Panorama::new();
+        pan400.set_center_angle(400.0); // "bearing + full turn" input slip
+        let mut pan40 = Panorama::new();
+        pan40.set_center_angle(40.0);
+        for d in -180..=180 {
+            let a = (d as f64).to_radians();
+            assert_eq!(pan400.is_visible(a), pan40.is_visible(a), "az {d}");
+        }
+
+        // NaN / infinite azimuths are not visible (Finding 1b)
+        assert!(!pan40.is_visible(f64::NAN));
+        assert!(!pan40.is_visible(f64::INFINITY));
+        assert!(!pan40.is_visible(f64::NEG_INFINITY));
+
+        // a NaN camera azimuth hides everything (was: everything visible)
+        let mut bad = Panorama::new();
+        bad.parms.a_center = f64::NAN;
+        assert!(!bad.is_visible(0.0));
     }
 }
