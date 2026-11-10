@@ -2,7 +2,6 @@
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "gipfel",
   "mainBinaryName": "gipfel",
-  "version": "0.5.5",
   "identifier": "org.flpsed.gipfel",
   "build": {
     "frontendDist": "dist",
