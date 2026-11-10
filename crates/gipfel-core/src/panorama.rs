@@ -74,6 +74,16 @@ impl Panorama {
         Ok(())
     }
 
+    /// Like [`Panorama::load_data`] but from raw bytes (no filesystem);
+    /// used by the WASM build.
+    pub fn load_data_from_bytes(&mut self, raw: &[u8]) -> std::io::Result<()> {
+        let mut hills = crate::hill::load_from_bytes(raw)?;
+        crate::hill::mark_duplicates(&mut hills, 0.00001);
+        self.hills = hills;
+        self.update_angles();
+        Ok(())
+    }
+
     pub fn add_hills(&mut self, extra: &[Hill]) {
         self.hills.extend_from_slice(extra);
         crate::hill::mark_duplicates(&mut self.hills, 0.00001);

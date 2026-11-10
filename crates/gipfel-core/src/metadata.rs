@@ -3,9 +3,6 @@
 //!
 //! Faithful port of gipfel's `ImageMetaData.cxx`.
 
-use std::fs::File;
-use std::io::{BufReader, Write};
-
 use exif::{In, Tag, Value};
 
 pub const NAN: f64 = f64::NAN;
@@ -71,6 +68,16 @@ impl ImageMetaData {
         self.load_image_exif(path);
     }
 
+    /// Like [`ImageMetaData::load_image`] but from raw bytes (no filesystem);
+    /// used by the WASM build.
+    pub fn load_image_from_bytes(&mut self, bytes: &[u8]) {
+        *self = ImageMetaData::new();
+        if let Some(com) = read_jpeg_comment_from_bytes(bytes) {
+            self.parse_gipfel_comment(&com);
+        }
+        self.load_image_exif_bytes(bytes);
+    }
+
     /// Write the gipfel comment into a copy of `in_img`, saved as `out_img`.
     /// Writes atomically via a temp file, like the C original.
     pub fn save_image(&self, in_img: &str, out_img: &str) -> std::io::Result<()> {
@@ -79,6 +86,12 @@ impl ImageMetaData {
         write_jpeg_comment(in_img, &tmp, comment.as_bytes())?;
         std::fs::rename(&tmp, out_img)?;
         Ok(())
+    }
+
+    /// Like [`ImageMetaData::save_image`] but bytes in / bytes out (no
+    /// filesystem); used by the WASM build.
+    pub fn save_image_to_bytes(&self, in_bytes: &[u8]) -> std::io::Result<Vec<u8>> {
+        write_jpeg_comment_to_bytes(in_bytes, self.format_comment().as_bytes())
     }
 
     pub fn format_comment(&self) -> String {
@@ -155,8 +168,12 @@ impl ImageMetaData {
     }
 
     fn load_image_exif(&mut self, path: &str) {
-        let Ok(file) = File::open(path) else { return };
-        let mut reader = BufReader::new(file);
+        let Ok(bytes) = std::fs::read(path) else { return };
+        self.load_image_exif_bytes(&bytes);
+    }
+
+    fn load_image_exif_bytes(&mut self, bytes: &[u8]) {
+        let mut reader = std::io::Cursor::new(bytes);
         let Ok(exif) = exif::Reader::new().read_from_container(&mut reader) else {
             return;
         };
@@ -212,6 +229,22 @@ impl ImageMetaData {
                             self.height = -self.height;
                         }
                     }
+                }
+            }
+        }
+        // Phone cameras record the shooting direction as GPSImgDirection.
+        // Used only when no gipfel comment provided a direction. A magnetic
+        // reference ('M') is converted to true north with the current
+        // declination of the Eastern Alps (~+2.4 deg east, IGRF 2020s);
+        // the residual error stays below typical phone compass noise.
+        if self.direction.is_nan() {
+            if let Some(f) = exif.get_field(Tag::GPSImgDirection, In::PRIMARY) {
+                if let Some(v) = field_tofloat(f, 0) {
+                    let mut dir = v;
+                    if exif_ref_is(&exif, Tag::GPSImgDirectionRef, "M") {
+                        dir += 2.4;
+                    }
+                    self.direction = dir;
                 }
             }
         }
@@ -372,6 +405,11 @@ fn marker_len_ok(marker: u8) -> bool {
 /// Return the payload of the first COM segment before SOS, if any.
 pub fn read_jpeg_comment(path: &str) -> Option<Vec<u8>> {
     let bytes = std::fs::read(path).ok()?;
+    read_jpeg_comment_from_bytes(&bytes)
+}
+
+/// Byte-oriented twin of [`read_jpeg_comment`] (no filesystem; WASM-safe).
+pub fn read_jpeg_comment_from_bytes(bytes: &[u8]) -> Option<Vec<u8>> {
     if bytes.len() < 2 || bytes[0] != 0xFF || bytes[1] != 0xD8 {
         return None;
     }
@@ -412,6 +450,13 @@ pub fn read_jpeg_comment(path: &str) -> Option<Vec<u8>> {
 /// fresh COM segment right after SOI.
 pub fn write_jpeg_comment(in_img: &str, out_img: &str, comment: &[u8]) -> std::io::Result<()> {
     let bytes = std::fs::read(in_img)?;
+    let out = write_jpeg_comment_to_bytes(&bytes, comment)?;
+    std::fs::write(out_img, out)
+}
+
+/// Byte-oriented twin of [`write_jpeg_comment`] (no filesystem; WASM-safe):
+/// drop all COM segments and insert a fresh COM segment after the last APPn.
+pub fn write_jpeg_comment_to_bytes(bytes: &[u8], comment: &[u8]) -> std::io::Result<Vec<u8>> {
     if bytes.len() < 2 || bytes[0] != 0xFF || bytes[1] != 0xD8 {
         return Err(std::io::Error::new(std::io::ErrorKind::InvalidInput, "not a JPEG file"));
     }
@@ -475,9 +520,7 @@ pub fn write_jpeg_comment(in_img: &str, out_img: &str, comment: &[u8]) -> std::i
 
     out.extend_from_slice(&bytes[copy_rest_from..]);
 
-    let mut f = File::create(out_img)?;
-    f.write_all(&out)?;
-    f.flush()
+    Ok(out)
 }
 
 /// Read raw image dimensions (width, height) of a JPEG.
@@ -723,5 +766,29 @@ mod tests {
         let mut pan = crate::panorama::Panorama::new();
         apply_image_metadata(&mut pan, &md, 1000, 800);
         assert!((pan.get_scale() - 50.0 * 1000.0 / 35.0).abs() < 1e-9);
+    }
+}
+
+#[cfg(test)]
+mod save_tests {
+    use super::*;
+
+    #[test]
+    fn comment_roundtrip_preserves_projection_type() {
+        let mut md = ImageMetaData::new();
+        md.longitude = 10.5;
+        md.latitude = 47.0;
+        md.height = 2993.0;
+        md.direction = 57.4;
+        md.pitch = -20.0;
+        md.roll = 0.3;
+        md.focal_length_35mm = 27.0;
+        md.projection_type = 1; // cylindrical
+        // minimal valid JPEG (SOI, empty COM, EOI)
+        let jpg = b"\xff\xd8\xff\xfe\x00\x02\xff\xd9";
+        let out = md.save_image_to_bytes(jpg).unwrap();
+        let mut md2 = ImageMetaData::new();
+        md2.load_image_from_bytes(&out);
+        assert_eq!(md2.projection_type, 1, "projection type lost in comment roundtrip");
     }
 }

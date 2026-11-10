@@ -33,27 +33,82 @@ Requirements
 
 Installation
 ------------
-COSMIC desktop application: `cargo build --release -p gipfel-app`.
-Then run it with `target/release/gipfel [image.jpg] [--data gipfel.dat]`.
+Build the web site (see Build below), serve the resulting `dist/gipfel/`
+directory with any static webserver and open it in a browser. Ready-made
+desktop installers (.deb, AppImage, Windows installer) are built with the
+commands in the Build section.
+
+Build
+-----
+All targets share the platform-free library `crates/gipfel-core`; the
+browser/WASM front end lives in `crates/gipfel`, the desktop installer
+wrapper in `crates/gipfel-desktop`.
+
+Prerequisites (all targets):
+
+    rustup target add wasm32-unknown-unknown
+    cargo install wasm-bindgen-cli
+
+Web (static site, any webserver):
+
+    ./crates/gipfel/build-release.sh      # assembles dist/gipfel/
+
+dev loop: `./crates/gipfel/serve-here.sh` (refreshes /tmp/gipfel-dist).
+
+Desktop installers (Tauri, `crates/gipfel-desktop`; needs node/npm once:
+`npm i -D @tauri-apps/cli`):
+
+    # Linux .deb + AppImage
+    sudo apt-get install libwebkit2gtk-4.1-dev libgtk-3-dev librsvg2-dev libxdo-dev
+    cd crates/gipfel-desktop && npx tauri build --bundles deb,appimage
+
+    # Windows NSIS installer (cross-compiled from Linux)
+    sudo apt-get install mingw-w64 nsis
+    rustup target add x86_64-pc-windows-gnu
+    npx tauri build --target x86_64-pc-windows-gnu --bundles nsis
+
+Artifacts appear under `target/[x86_64-pc-windows-gnu/]release/bundle/`.
+Installers are unsigned. The official targets are Web, Windows and Linux.
 
 Running
 -------
-You should now see a window with controls on the left and the actual picture.
-Depending on whether gipfel could find localization data in the image metadata,
-you need to set the viewpoint from which the picture was taken. 
-Alternatively, you can enter the GPS coordinate of the viewpoint directly in
-the control window (hit `<Enter>` for every data field).  
-You can now use the controls in the control window to modify the view
-parameters.
+Open a picture (Open image… or drag & drop it onto the page). Depending
+on whether gipfel could find localization data in the image metadata,
+you need to set the viewpoint from which the picture was taken, either
+in the Latitude/Longitude/Height fields or by pasting GPS coordinates
+("47.676,13.32042").
 
-Play around with these parameters, until you see the names of 
-mountains, which you already recognize on the picture.
-Now middle-click on the small cross at the left of the name to mark it.
-It should turn red. Now you can drag it with the left mouse button pressed
-to the position of the mountain on the picture.
-If you have positioned at least two mountains all other mountains should
-move to their correct positions in the picture.
-You can try to set more than two mountains to ge a more accurate result.
+Play around with the view parameters (Azimuth, Pitch, Roll, Focal)
+until the projected dots roughly match the ridges in the picture.
+Hover a dot to see which peak it represents; click a dot to mark it (or
+click anywhere in the picture and pick the peak from the searchable
+list). Drag a marker onto the position of the mountain in the picture;
+right-click removes it. Once at least two mountains are positioned,
+gipfel fits the view parameters automatically and moves the remaining
+peaks to their correct positions. More markers improve the fit.
+
+URL Parameters
+--------------
+The web app can be fully linked to: image and view parameters are
+passed as URL query parameters, e.g.
+
+    https://example.org/gipfel/?file=photo.jpg
+    https://example.org/gipfel/?file=https://host/pano.jpg&az=57.4&pitch=-20
+
+* `file` — image to open: a path on the same host, or an absolute
+  `http(s)` URL (the remote host must allow CORS)
+* `az` — azimuth in degrees (true north)
+* `pitch` — pitch in degrees
+* `roll` — roll in degrees
+* `focal` — focal length in mm (35 mm equivalent)
+* `vis` — visibility override (0.01–0.1, same scale as the Visibility
+  slider; higher shows more distant peaks)
+
+The parameters are applied *after* the image's own EXIF/gipfel
+metadata, so they override values recorded in the photo. A `gipfel:`
+comment saved by "Save image…" is read back when the saved file is
+opened again, so annotated images carry their view without any URL
+parameters.
 
 You may also want to have a look at the (outdated)
 [screen video](http://www.flpsed.org/images/gipfel.avi)
@@ -96,7 +151,7 @@ GPS Tracks
 ----------
 Once you have determined the right parameters using the procedure described
 above, you can load GPS tracks and display them on the picture. Use the
-File->Load Track menu item. GPS tracks should be in GPX format.
+"Load GPX Track…" button. GPS tracks should be in GPX format.
 GPS tracks are displayed with variable width depending on the distance 
 of the way points from the current view point and the scale value. 
 You can also modify the width using the "Track Width" slider.
@@ -104,7 +159,7 @@ You can also modify the width using the "Track Width" slider.
 Loading and Saving Images
 -------------------------
 gipfel allows to save the image parameters in the comment section of 
-the JPEG image. Use the File->Save Image menu item. 
+the JPEG image. Use the "Save image…" button. 
 Note, that in the saved image all previous JPEG comments are removed.
 If you open an image containing gipfel image parameters, they are 
 automatcally set.
@@ -115,8 +170,8 @@ gipfel tries to identify objects in its database, that are hidden by others.
 This is done by assuming that every object/peak has the form of a cone 
 with a fixed steepness. If such imaginary cone would hide the view to a
 point in the database, gipfel marks it as hidden. Hidden objects are
-not shown by default, but you can enable the display of hidden objects using
-the Option->Show Hidden menu entry. Hidden objects and hidden GPS way points
+not shown by default, but you can enable their display using the
+"Show hidden peaks" checkbox. Hidden objects and hidden GPS way points
 are displayed in blue.
 
 Refraction
@@ -147,7 +202,7 @@ x0 is the main point offset in X direction.
 If you mark and position more than 3 mountains on an image and enable distortion fitting,
 gipfel tries to correct lens distortion.
 Once you have reasonable values for k0 and k1 for a special camera and
-focal length you can save the distortion profile (Distortion/Save Profile).
+focal length you can save the distortion profile (Distortion profiles → Save).
 Whenever you now open an image taken with this camera model and focal
 length, gipfel will use this distortion profile.
 Independent of the distortion profiles one can also modify the

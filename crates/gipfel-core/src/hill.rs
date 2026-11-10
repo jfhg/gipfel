@@ -2,9 +2,6 @@
 //!
 //! Faithful port of gipfel's `Hill.cxx`.
 
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 pub const FLAG_DUPLIC: u32 = 1 << 0;
 pub const FLAG_KNOWN: u32 = 1 << 1;
 pub const FLAG_HIDDEN: u32 = 1 << 2;
@@ -80,16 +77,20 @@ fn atof(s: &str) -> f64 {
     0.0
 }
 
-/// Load a hill database. Two line formats are accepted:
+/// Load a hill database from a file path.
+pub fn load(path: &str) -> std::io::Result<Vec<Hill>> {
+    load_from_bytes(&std::fs::read(path)?)
+}
+
+/// Load a hill database from raw bytes. Two line formats are accepted:
 /// - `SHORT,NAME,DESC,LAT,LON,HEIGHT` (6 fields)
 /// - `LAT,LON,HEIGHT` (3 fields, track point)
-pub fn load(path: &str) -> std::io::Result<Vec<Hill>> {
-    let file = File::open(path)?;
+///
+/// Byte-oriented entry point (no filesystem): used by the WASM build and
+/// by tests. The database is Latin-1; bytes decode to Unicode code points.
+pub fn load_from_bytes(raw: &[u8]) -> std::io::Result<Vec<Hill>> {
     let mut hills = Vec::new();
-
-    // the database is Latin-1; decode to Unicode code points
-    for line in BufReader::new(file).split(b'\n') {
-        let raw = line?;
+    for raw in raw.split(|b| *b == b'\n') {
         let line: String = raw.iter().map(|b| *b as char).collect();
         // strsep() semantics: split into at most 10 fields, keeping empties
         let vals: Vec<&str> = line.split(',').take(10).collect();
@@ -112,7 +113,6 @@ pub fn load(path: &str) -> std::io::Result<Vec<Hill>> {
             hills.push(h);
         }
     }
-
     Ok(hills)
 }
 

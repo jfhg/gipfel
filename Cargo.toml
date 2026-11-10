@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/gipfel-core", "crates/gipfel-cli", "crates/gipfel-app"]
+members = ["crates/gipfel-core", "crates/gipfel-cli", "crates/gipfel-app", "crates/gipfel", "crates/gipfel-desktop"]
 
 # Single source of truth for metadata inherited by every crate via
 # `version.workspace = true` etc. Bump `version` here on release; the

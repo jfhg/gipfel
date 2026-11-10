@@ -1,0 +1,51 @@
+[package]
+name = "gipfel"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "gipfel — web based photogrammetry for mountain images"
+
+[dependencies]
+gipfel-core = { path = "../gipfel-core" }
+flate2 = "1"
+js-sys = "0.3"
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+yew = { version = "0.21", features = ["csr"] }
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "console",
+    "Blob",
+    "BlobPropertyBag",
+    "CanvasRenderingContext2d",
+    "DataTransfer",
+    "CssStyleDeclaration",
+    "Document",
+    "DomRect",
+    "DragEvent",
+    "Element",
+    "Event",
+    "EventTarget",
+    "File",
+    "FileList",
+    "HtmlCanvasElement",
+    "HtmlElement",
+    "HtmlInputElement",
+    "HtmlSelectElement",
+    "ImageBitmap",
+    "Location",
+    "UrlSearchParams",
+    "InputEvent",
+    "MouseEvent",
+    "PointerEvent",
+    "Request",
+    "Response",
+    "ResizeObserver",
+    "Storage",
+    "TextMetrics",
+    "Url",
+    "Window",
+    "WheelEvent",
+]
