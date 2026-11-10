@@ -1,0 +1,9 @@
+[package]
+name = "rust-check"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gipfel-core = { path = "../../crates/gipfel-core" }
+
+[workspace]

@@ -1,0 +1,135 @@
+/-
+  Feasibility probe for gipfel-core, part 2: the parts that need **Mathlib**
+  (trigonometry, `ring`/`linarith` over ℝ, `Real.pi`, calculus).
+
+  ⚠ NOT CHECKED — this file is a design sketch, not a verified artifact.
+  It needs `lake new probe math` + `lake exe cache get` before any of it will
+  elaborate. Gipfel.lean (the core-only probe) *is* checked.
+
+  Everything here is stated over exact reals (ℝ), i.e. it verifies the
+  *mathematical model*, not the IEEE-754 program. See the write-up for why.
+-/
+
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+
+open Real
+
+-- ─────────────────────────────────────────────────────────────
+-- 1. stitch.rs — the Keys cubic kernel. Pure algebra: `ring` closes these.
+--    (These are the cheapest real theorems in the whole project.)
+-- ─────────────────────────────────────────────────────────────
+
+/-- `ScanImage::interp_cubic`, over a field instead of `f64`. -/
+def interpCubic {F : Type} [Field F] (x x2 x3 : F) (v : Fin 4 → F) : F :=
+  let a0 := v 3 - v 2 - v 0 + v 1
+  let a1 := v 0 - v 1 - a0
+  let a2 := v 2 - v 0
+  let a3 := v 1
+  a0 * x3 + a1 * x2 + a2 * x + a3
+
+/-- The kernel interpolates its two central samples: p(0)=v₁, p(1)=v₂.
+    This is *the* property that makes bicubic resampling pass through the grid. -/
+theorem interpCubic_zero {F : Type} [Field F] (v : Fin 4 → F) :
+    interpCubic 0 0 0 v = v 1 := by unfold interpCubic; ring
+
+theorem interpCubic_one {F : Type} [Field F] (v : Fin 4 → F) :
+    interpCubic 1 1 1 v = v 2 := by unfold interpCubic; ring
+
+/-- Weights sum to 1 ⇒ a constant image resamples to the same constant
+    (a classic resampling bug class). -/
+theorem interpCubic_partition {F : Type} [Field F] (x x2 x3 : F) (c : F) :
+    interpCubic x x2 x3 (fun _ => c) = c := by unfold interpCubic; ring
+
+-- ─────────────────────────────────────────────────────────────
+-- 2. projection/generated — check the maxima output against the textbook
+--    closed form. Rectilinear with roll = pitch = 0, k0 = k1 = 0, x0 = 0
+--    must be  x = scale * tan(azimuth − center),  y = −scale*tan(elev)/cos Δ.
+--    This is the single highest-value theorem in the project: it validates
+--    the generated straight-line code, which no test can do exhaustively.
+-- ─────────────────────────────────────────────────────────────
+
+/-- The generated `mac_x` with the 9 arguments, transcribed literally. -/
+def macX (cView cPitch cRoll scale k0 k1 x0 mView mElev : ℝ) : ℝ :=
+  let _1  := sin cRoll
+  let _2  := sin cPitch
+  let _3  := sin mElev
+  let _4  := cos cPitch
+  let _5  := cos mElev
+  let _6  := cos cView
+  let _7  := cos mView
+  let _8  := sin cView
+  let _9  := sin mView
+  let _10 := _8 * _9 + _6 * _7
+  let _11 := 1 / (_4 * _5 * _10 + _2 * _3)
+  let _12 := _2 * _5 * _10 - _4 * _3
+  let _13 := cos cRoll
+  let _14 := _6 * _9 - _8 * _7
+  let _15 := x0 + _13 * _5 * _14 * _11 + _1 * _11 * _12
+  let _16 := _15 ^ 2 + (_13 * _11 * _12 - _1 * _5 * _14 * _11) ^ 2
+  scale * _15 * (k0 * sqrt _16 + k1 * _16 + 1)
+
+/-- **Closed form.** With no tilt, no roll and no distortion the rectilinear
+    projection is the textbook gnomonic formula. (Proof: `sin_sub`, `cos_sub`,
+    then `field_simp`, `rw [tan_eq_sin_div_cos]`, `ring`.) -/
+theorem macX_zero_tilt (cView mView mElev scale : ℝ)
+    (h : cos (mView - cView) ≠ 0) :
+    macX cView 0 0 scale 0 0 0 mView mElev = scale * tan (mView - cView) := by
+  sorry
+
+-- ─────────────────────────────────────────────────────────────
+-- 3. Cheap *cross-function* identities between generated functions.
+--    `mac_x` is linear in `scale`, so ∂x/∂scale · scale = x exactly —
+--    no calculus needed, just the two straight-line programs.
+--    A mismatch here would mean the maxima codegen is broken.
+-- ─────────────────────────────────────────────────────────────
+
+theorem macX_dscale_consistent (cView cPitch cRoll scale k0 k1 x0 mView mElev : ℝ) :
+    macX cView cPitch cRoll scale k0 k1 x0 mView mElev
+      = scale * macXDscale cView cPitch cRoll scale k0 k1 x0 mView mElev := by
+  sorry   -- `unfold macX macXDscale; ring`-shaped, once both are transcribed
+
+-- ─────────────────────────────────────────────────────────────
+-- 4. panorama.rs geodesy.
+-- ─────────────────────────────────────────────────────────────
+
+/-- `Panorama::distance`, exact reals. -/
+def distance (viewPhi viewLam phi lam : ℝ) : ℝ :=
+  let dLam := viewLam - lam
+  let t1 := (cos phi * sin dLam) ^ 2
+  let t2 := (cos viewPhi * sin phi - sin viewPhi * cos phi * cos dLam) ^ 2
+  sqrt (t1 + t2) / (sin viewPhi * sin phi + cos viewPhi * cos phi * cos dLam)  -- atan2 sketch
+
+/-- A viewpoint has zero distance to itself. This justifies the
+    `if phi != view_phi || lam != view_lam` guard in `update_angles`, which
+    exists because `alpha` divides by `m.dist.sin()` (0/0 → NaN). -/
+theorem distance_self (phi lam : ℝ) : distance phi lam phi lam = 0 := by sorry
+
+/-- The guard is *necessary*: `dist = 0` iff the points coincide, so the
+    division in `alpha` is safe exactly when the guard passes. -/
+theorem distance_eq_zero_iff (viewPhi viewLam phi lam : ℝ)
+    (hPhi : |phi| < Real.pi/2) (hViewPhi : |viewPhi| < Real.pi/2) :
+    distance viewPhi viewLam phi lam = 0 ↔ phi = viewPhi ∧ (lam - viewLam) % (2*Real.pi) = 0 := by
+  sorry
+
+-- ─────────────────────────────────────────────────────────────
+-- 5. The ambitious one: verifying the generated *derivatives*.
+--    Straight-line programs as an AST, an evaluator over ℝ, a symbolic
+--    differentiator, and one proof that `deriv (eval e) = eval (diff e)`.
+--    Then generate BOTH the Rust and the Lean AST from the same maxima
+--    expression (add `expr2lean.mac` next to `codegen/expr2rust.mac`) and the
+--    theorem covers every generated derivative, present and future.
+-- ─────────────────────────────────────────────────────────────
+
+inductive SLP where
+  | var (i : Nat) | c (r : ℝ)
+  | add mul div (a b : SLP) | neg (a : SLP)
+  | sin cos (a : SLP) | sqrt (a : SLP) | pow2 (a : SLP)
+
+/-- Well-formedness: `div` denominator nonzero, `sqrt` argument nonneg, etc. -/
+inductive WF : SLP → List ℝ → Prop where | mk : WF e l → WF e l  -- sketch
+
+def eval : SLP → List ℝ → ℝ := fun e l => 0   -- sketch
+
+-- theorem hasDeriv : ∀ e l, WF e l →
+--     HasDerivAt (fun t => eval e (l.replaceIdx 0 t)) (eval (diff e) l) (l[0]!)
