@@ -7,7 +7,7 @@ members = ["crates/gipfel-core", "crates/gipfel-cli", "crates/gipfel-app", "crat
 # About dialog and all crates follow. A test enforces the ChangeLog top
 # entry matches this version.
 [workspace.package]
-version = "0.5.5"
+version = "0.5.6"
 edition = "2021"
 license = "GPL-2.0-or-later"
 

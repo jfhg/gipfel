@@ -1,6 +1,16 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.5.6
+* the WASM/Yew web front end (crates/gipfel) becomes the main front end
+* peak identification, fitting and annotated JPEG saving in the browser
+* distortion profiles and rectilinear/cylindrical projection switch
+* URL parameters (?file, ?az, ?pitch, ?roll, ?focal, ?vis, ?debug)
+* gipfel-desktop: Tauri shell with Windows (NSIS) and Linux (deb, AppImage) installers
+* fix: is_visible no longer accepts hills behind the camera for out-of-range azimuths
+* fix: focal-length-to-scale uses the 36 mm film width, not 35
+* proofs/: Lean transcriptions of core invariants plus a Rust witness referee
+
 gipfel-0.5.5
 * rust based rewrite of gipfel using libcosmic with the help of local AI (qwen3.8-flash-next)
 * zooming of images
