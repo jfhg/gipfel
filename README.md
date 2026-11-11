@@ -110,8 +110,8 @@ comment saved by "Save image…" is read back when the saved file is
 opened again, so annotated images carry their view without any URL
 parameters.
 
-You may also want to have a look at the (outdated)
-[screen video](http://www.flpsed.org/images/gipfel.avi)
+You may also want to have a look at a
+[screen video](http://www.flpsed.org/images/gipfel.mp4)
 for an example session.
 
 Data File
