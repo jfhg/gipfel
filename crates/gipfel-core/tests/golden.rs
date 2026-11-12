@@ -253,10 +253,18 @@ fn fit_golden(projtype: ProjectionType, file: &str) {
         pan.parms.k1,
         pan.parms.x0,
     ];
-    for (m, t) in mine.iter().zip(g.iter()) {
+    for (idx, (m, t)) in mine.iter().zip(g.iter()).enumerate() {
         // solver results: allow small drift, exact zeros must stay ~zero
+        // a_center (idx 0) is an angle: the C harness settles wherever its
+        // (possibly > 2pi) input azimuths put it; the Rust port normalizes.
+        // Compare modulo 2pi.
+        let d = if idx == 0 {
+            gipfel_core::projection::wrap_angle(m - t)
+        } else {
+            m - t
+        };
         assert!(
-            (m - t).abs() <= 1e-6f64.max(m.abs() * 1e-6),
+            d.abs() <= 1e-6f64.max(m.abs() * 1e-6),
             "fit param {} vs {}",
             m,
             t

@@ -298,17 +298,31 @@ pub fn comp_params(
 
     if n > 1 {
         let m2 = &hills[known[1]];
-        // The azimuth span between the two markers must be the shortest
-        // angular difference: with north between the peaks (e.g. 350 deg
-        // and 10 deg) the raw difference is 340 deg, giving an initial
-        // scale off by a factor of 17 and a fit that never recovers.
-        let d_alph = crate::projection::wrap_angle(m2.alph - m1.alph);
-        let scale_tmp = (m2.x - m1.x).abs() / d_alph.abs();
+        // Azimuth difference as SEEN IN THE IMAGE. The shortest-arc wrap
+        // alone picks the wrong branch in panoramas wider than 180 deg:
+        // markers at -170 deg and +170 deg of the view center are 340 deg
+        // apart in the image but only 20 deg apart on the compass. The
+        // sign of the pixel difference tells us which branch the user
+        // intended; the magnitude is then unique modulo 2pi (panoramas
+        // below 360 deg).
+        let dx = m2.x - m1.x;
+        let two_pi = 2.0 * std::f64::consts::PI;
+        let mut d_img = crate::projection::wrap_angle(m2.alph - m1.alph);
+        if dx >= 0.0 && d_img <= 0.0 {
+            d_img += two_pi;
+        } else if dx < 0.0 && d_img >= 0.0 {
+            d_img -= two_pi;
+        }
+        let scale_tmp = dx.abs() / d_img.abs();
         if scale_tmp.is_nan() || scale_tmp < 50.0 {
             return Err(format!("Could not determine initial scale value ({scale_tmp})"));
         }
         new_parms.scale = scale_tmp;
         new_parms.a_roll = 0.0;
+        // Start the view center between the two markers (in the image-space
+        // branch just chosen) instead of on the first marker: with markers
+        // 340 deg apart, m1.alph is 170 deg off and the fit never recovers.
+        new_parms.a_center = crate::projection::wrap_angle(m1.alph + d_img / 2.0);
     }
 
     if n > 3 && fit_distortion {
@@ -460,5 +474,74 @@ mod tests {
             (x - (-10f64.to_radians() * p.scale)).abs() < 1e-6,
             "x={x}"
         );
+    }
+
+    /// Wide panoramas: two markers more than 180 deg apart IN THE IMAGE,
+    /// i.e. straddling the seam at +/-180 deg from the view center. The
+    /// compass difference is then small (e.g. 20 deg) while the image
+    /// difference is large (340 deg); the initial guess must pick the
+    /// right branch. Only meaningful for the cylindrical projection -
+    /// rectilinear cannot exceed 180 deg of view angle.
+    fn wide_panorama(reversed: bool, span_deg: f64) -> (Box<dyn Projection>, Vec<Hill>, Vec<usize>, ViewParams) {
+        let proj = projection_from_type(ProjectionType::Cylindrical);
+        let truth = ViewParams {
+            a_center: 0.0,
+            scale: 2000.0,
+            a_pitch: 0.03,
+            a_roll: 0.0,
+            k0: 0.0,
+            k1: 0.0,
+            x0: 0.0,
+        };
+        let half = (span_deg / 2.0).to_radians();
+        let mut hills = Vec::new();
+        for (i, az) in [half, -half].iter().enumerate() {
+            let mut h = Hill::new(&format!("w{i}"), 0.0, 0.0, 2500.0);
+            h.alph = *az;
+            h.a_elev = 0.05 + 0.02 * i as f64;
+            let (x, y) = proj.get_coordinates(h.alph, h.a_elev, &truth);
+            h.x = x;
+            h.y = y;
+            hills.push(h);
+        }
+        let known = if reversed { vec![1, 0] } else { vec![0, 1] };
+        (proj, hills, known, truth)
+    }
+
+    fn assert_wide_fit(reversed: bool, span_deg: f64) {
+        let (proj, hills, known, truth) = wide_panorama(reversed, span_deg);
+        let mut p = ViewParams::new();
+        comp_params(&*proj, &hills, &known, &mut p, false).unwrap();
+        let d = crate::projection::wrap_angle(p.a_center - truth.a_center);
+        assert!(
+            d.abs() < 1e-6,
+            "span {span_deg} rev {reversed}: a_center {} rad",
+            p.a_center
+        );
+        assert!(
+            (p.scale - truth.scale).abs() < 1.0,
+            "span {span_deg} rev {reversed}: scale {}",
+            p.scale
+        );
+        assert!(
+            (p.a_pitch - truth.a_pitch).abs() < 1e-6,
+            "span {span_deg} rev {reversed}: pitch {}",
+            p.a_pitch
+        );
+    }
+
+    #[test]
+    fn fit_wide_panorama_340_deg_apart() {
+        assert_wide_fit(false, 340.0);
+    }
+
+    #[test]
+    fn fit_wide_panorama_350_deg_apart_reversed_order() {
+        assert_wide_fit(true, 350.0);
+    }
+
+    #[test]
+    fn fit_wide_panorama_just_over_half_circle() {
+        assert_wide_fit(false, 200.0);
     }
 }
