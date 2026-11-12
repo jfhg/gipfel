@@ -1450,6 +1450,13 @@ pub fn app() -> Html {
                             <option value="0" selected={*projection == 0}>{ "Rectilinear projection" }</option>
                             <option value="1" selected={*projection == 1}>{ "Cylindrical (panoramic)" }</option>
                         </select>
+                        // Distortion only affects the rectilinear
+                        // projection: the cylindrical formulas do not
+                        // contain k0/k1/x0 and its derivative trait
+                        // defaults are NaN, so a level-2 fit is a provable
+                        // no-op there. Grey the whole group out in
+                        // panorama mode (native fieldset disabling).
+                        <fieldset class="distortion" disabled={*projection == 1}>
                         <label class="row">
                             <input type="checkbox" checked={*fit_distortion} onchange={on_distortion_toggle} />
                             { "Fit distortion (needs ≥ 4 markers)" }
@@ -1476,6 +1483,7 @@ pub fn app() -> Html {
                                 }
                             </select>
                         }
+                        </fieldset>
                         <div class="section">{ "Display" }</div>
                         <label class="row">
                             <input type="checkbox" checked={*show_hidden} onchange={on_show_hidden} />

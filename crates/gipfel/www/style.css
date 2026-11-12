@@ -405,3 +405,14 @@ select.textinput {
 .zoomctrl button + button {
   border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
+
+/* distortion controls group; greyed out and disabled in panorama mode */
+fieldset.distortion {
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+}
+fieldset.distortion:disabled {
+    opacity: 0.45;
+}

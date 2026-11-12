@@ -325,7 +325,20 @@ pub fn comp_params(
         new_parms.a_center = crate::projection::wrap_angle(m1.alph + d_img / 2.0);
     }
 
-    if n > 3 && fit_distortion {
+    // Capability probe: the cylindrical projection has no distortion terms
+    // (its derivative trait defaults return NaN), so a distortion fit there
+    // is impossible - and the calibration reset below would silently zero
+    // distortion parameters a rectilinear fit had established.
+    let supports_distortion = {
+        let probe = crate::projection::ProjArgs::from_params(
+            &new_parms,
+            hills[known[0]].alph,
+            hills[known[0]].a_elev,
+        );
+        proj.mac_x_dk0(probe).is_finite()
+    };
+
+    if n > 3 && fit_distortion && supports_distortion {
         new_parms.k0 = 0.0;
         new_parms.k1 = 0.0;
         new_parms.x0 = 0.0;
@@ -334,7 +347,7 @@ pub fn comp_params(
 
     let level = if n == 1 { 0 } else { 1 };
     lsq(proj, hills, known, &mut new_parms, level);
-    if n >= 4 && fit_distortion {
+    if n >= 4 && fit_distortion && supports_distortion {
         lsq(proj, hills, known, &mut new_parms, 2);
     }
 
@@ -543,5 +556,54 @@ mod tests {
     #[test]
     fn fit_wide_panorama_just_over_half_circle() {
         assert_wide_fit(false, 200.0);
+    }
+
+    /// The cylindrical projection formulas do not contain the distortion
+    /// parameters (k0/k1/x0) at all, and its trait derivative defaults are
+    /// NaN - so "fit distortion" must be a no-op in panorama mode: the fit
+    /// still succeeds and the distortion params stay exactly where they
+    /// were. This is what the web app relies on when it greys out the
+    /// distortion controls in cylindrical mode.
+    #[test]
+    fn distortion_fit_is_a_noop_for_cylindrical() {
+        let proj = projection_from_type(ProjectionType::Cylindrical);
+        let truth = ViewParams {
+            a_center: 0.3,
+            scale: 2000.0,
+            a_pitch: 0.05,
+            a_roll: 0.0,
+            k0: 0.0,
+            k1: 0.0,
+            x0: 0.0,
+        };
+        let mut hills = Vec::new();
+        let mut known = Vec::new();
+        for i in 0..5 {
+            let mut h = Hill::new(&format!("c{i}"), 0.0, 0.0, 2000.0);
+            h.alph = 0.15 + i as f64 * 0.07;
+            h.a_elev = 0.02 + i as f64 * 0.015;
+            let (x, y) = proj.get_coordinates(h.alph, h.a_elev, &truth);
+            h.x = x;
+            h.y = y;
+            hills.push(h);
+            known.push(i);
+        }
+        // start slightly off, with nonzero distortion params that must
+        // survive untouched
+        let mut p = truth;
+        p.a_center -= 0.01;
+        p.scale *= 1.02;
+        p.k0 = -0.001;
+        p.k1 = 1e-5;
+        p.x0 = 3.0;
+        comp_params(&*proj, &hills, &known, &mut p, true).unwrap();
+        assert!(
+            (p.a_center - truth.a_center).abs() < 1e-6,
+            "a_center {}",
+            p.a_center
+        );
+        assert_eq!(p.k0, -0.001, "k0 moved in cylindrical distortion fit");
+        assert_eq!(p.k1, 1e-5, "k1 moved in cylindrical distortion fit");
+        assert_eq!(p.x0, 3.0, "x0 moved in cylindrical distortion fit");
     }
 }
