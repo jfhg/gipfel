@@ -9,6 +9,21 @@ pub mod rectilinear;
 
 pub const NAN: f64 = f64::NAN;
 
+/// Wrap an angle into (-pi, pi]. Non-finite input yields NaN, which the
+/// projection callers filter on.
+pub fn wrap_angle(mut a: f64) -> f64 {
+    if !a.is_finite() {
+        return NAN;
+    }
+    a %= 2.0 * std::f64::consts::PI;
+    if a > std::f64::consts::PI {
+        a -= 2.0 * std::f64::consts::PI;
+    } else if a <= -std::f64::consts::PI {
+        a += 2.0 * std::f64::consts::PI;
+    }
+    a
+}
+
 /// The 7 fitted view parameters (radians where angular).
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct ViewParams {
@@ -58,6 +73,14 @@ pub struct ProjArgs {
 
 impl ProjArgs {
     pub fn from_params(p: &ViewParams, m_view: f64, m_elev: f64) -> Self {
+        // Represent the mountain azimuth such that the difference
+        // `m_view - c_view` that every generated formula uses is the
+        // shortest one. The cylindrical projection uses that difference
+        // linearly (x = scale * delta_az), so a peak at 350 deg seen with
+        // the camera centered at 10 deg must contribute -20 deg, not +340.
+        // The rectilinear projection is periodic and unaffected, but is
+        // served equally well by the wrapped value.
+        let m_view = p.a_center + wrap_angle(m_view - p.a_center);
         ProjArgs {
             c_view: p.a_center,
             c_pitch: p.a_pitch,

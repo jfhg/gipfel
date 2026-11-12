@@ -298,7 +298,12 @@ pub fn comp_params(
 
     if n > 1 {
         let m2 = &hills[known[1]];
-        let scale_tmp = (m2.x - m1.x).abs() / (m2.alph - m1.alph).abs();
+        // The azimuth span between the two markers must be the shortest
+        // angular difference: with north between the peaks (e.g. 350 deg
+        // and 10 deg) the raw difference is 340 deg, giving an initial
+        // scale off by a factor of 17 and a fit that never recovers.
+        let d_alph = crate::projection::wrap_angle(m2.alph - m1.alph);
+        let scale_tmp = (m2.x - m1.x).abs() / d_alph.abs();
         if scale_tmp.is_nan() || scale_tmp < 50.0 {
             return Err(format!("Could not determine initial scale value ({scale_tmp})"));
         }
@@ -388,5 +393,72 @@ mod tests {
         comp_params(&*proj, &hills, &known, &mut p, true).unwrap();
         assert!((p.k0 - truth.k0).abs() < 1e-5, "k0={}", p.k0);
         assert!((p.k1 - truth.k1).abs() < 1e-7, "k1={}", p.k1);
+    }
+
+    /// Two markers with north between them: one peak west of north
+    /// (azimuth 350 deg), one east (10 deg). The raw azimuth difference
+    /// is 340 deg; everything must operate on the wrapped 20 deg instead.
+    /// Regression test for the panorama-mode fit failure across north
+    /// (the cylindrical projection uses m_view - c_view linearly).
+    fn north_crossing(ty: ProjectionType) -> (Box<dyn Projection>, Vec<Hill>, Vec<usize>, ViewParams) {
+        let proj = projection_from_type(ty);
+        let truth = ViewParams {
+            a_center: 0.0,
+            scale: 2000.0,
+            a_pitch: 0.03,
+            a_roll: 0.0,
+            k0: 0.0,
+            k1: 0.0,
+            x0: 0.0,
+        };
+        let mut hills = Vec::new();
+        for (i, (az_deg, el)) in [(350.0f64, 0.05f64), (10.0, 0.08)].iter().enumerate() {
+            let mut h = Hill::new(&format!("n{i}"), 0.0, 0.0, 2000.0);
+            h.alph = az_deg.to_radians();
+            h.a_elev = *el;
+            let (x, y) = proj.get_coordinates(h.alph, h.a_elev, &truth);
+            h.x = x;
+            h.y = y;
+            hills.push(h);
+        }
+        (proj, hills, vec![0, 1], truth)
+    }
+
+    fn assert_north_crossing_fits(ty: ProjectionType) {
+        let (proj, hills, known, truth) = north_crossing(ty);
+        let mut p = ViewParams::new();
+        comp_params(&*proj, &hills, &known, &mut p, false).unwrap();
+        let d_center = crate::projection::wrap_angle(p.a_center - truth.a_center);
+        assert!(
+            d_center.abs() < 1e-6,
+            "{ty:?}: a_center off: got {} rad, want 0",
+            p.a_center
+        );
+        assert!((p.scale - truth.scale).abs() < 1.0, "{ty:?}: scale {}", p.scale);
+        assert!((p.a_pitch - truth.a_pitch).abs() < 1e-6, "{ty:?}: pitch {}", p.a_pitch);
+    }
+
+    #[test]
+    fn fit_across_north_cylindrical() {
+        assert_north_crossing_fits(ProjectionType::Cylindrical);
+    }
+
+    #[test]
+    fn fit_across_north_rectilinear() {
+        assert_north_crossing_fits(ProjectionType::Rectilinear);
+    }
+
+    #[test]
+    fn projection_across_north_uses_shortest_arc() {
+        // cylindrical: x is linear in the azimuth difference, so a peak at
+        // 350 deg with the center at 0 deg must land at -10 deg * scale,
+        // not +350 deg * scale
+        let proj = projection_from_type(ProjectionType::Cylindrical);
+        let p = ViewParams::new();
+        let (x, _) = proj.get_coordinates(350f64.to_radians(), 0.0, &p);
+        assert!(
+            (x - (-10f64.to_radians() * p.scale)).abs() < 1e-6,
+            "x={x}"
+        );
     }
 }
