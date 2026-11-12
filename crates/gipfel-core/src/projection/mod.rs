@@ -172,18 +172,10 @@ pub trait Projection: Send + Sync {
         NAN
     }
 
-    /// Project azimuth/elevation to image coordinates (relative to image center),
-    /// normalizing azimuth around the view center like the C++ original.
+    /// Project azimuth/elevation to image coordinates (relative to image
+    /// center). Azimuth normalization around the view center happens once,
+    /// centrally, in [`ProjArgs::from_params`].
     fn get_coordinates(&self, alph: f64, elev: f64, parms: &ViewParams) -> (f64, f64) {
-        let mut alph = alph;
-        let pi = crate::hill::PI;
-
-        if alph - parms.a_center > pi {
-            alph -= 2.0 * pi;
-        } else if alph - parms.a_center < -pi {
-            alph += 2.0 * pi;
-        }
-
         let args = ProjArgs::from_params(parms, alph, elev);
         (self.mac_x(args), self.mac_y(args))
     }

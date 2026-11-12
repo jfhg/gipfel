@@ -409,15 +409,12 @@ impl Panorama {
         if !alph.is_finite() || !self.parms.a_center.is_finite() {
             return false;
         }
-        // Wrap into [0, 2pi) before the fold: a_center may lie outside
-        // [-pi, pi] (user enters "400 deg", or a fit leaves it unnormalized).
-        // Without this, |alph - a_center| > 2pi turned the single fold below
-        // into a NEGATIVE distance, which passed every comparison and made
+        // Shortest arc to the view center. wrap_angle also covers azimuths
+        // far outside [-pi, pi] (user enters "400 deg", a fit leaves it
+        // unnormalized); the old single fold turned |alph - a_center| > 2pi
+        // into a NEGATIVE distance that passed every comparison and made
         // hills behind the camera visible (GipfelFind.lean Finding 1).
-        let mut center_dist = (alph - self.parms.a_center).abs() % (2.0 * PI);
-        if center_dist > PI {
-            center_dist = 2.0 * PI - center_dist;
-        }
+        let center_dist = crate::projection::wrap_angle(alph - self.parms.a_center).abs();
         if center_dist >= self.proj.get_view_angle() {
             return false;
         }
