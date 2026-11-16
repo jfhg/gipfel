@@ -259,6 +259,44 @@ fn pitch_seed(hills: &[Hill], known: &[usize], scale: f64) -> f64 {
     }
 }
 
+// ---- fit diagnostics -------------------------------------------------
+// comp_params records what it tried (markers, seeds, costs, verdicts)
+// in a per-thread buffer; the web front end drains it into the browser
+// console after every refit so users can paste a full session log when
+// reporting fit problems. Native callers can ignore it; the buffer is
+// capped so undrained runs (tests) stay cheap.
+
+thread_local! {
+    static FIT_LOG: std::cell::RefCell<Vec<String>> = const {
+        std::cell::RefCell::new(Vec::new())
+    };
+}
+
+/// Take (and clear) the diagnostics of the comp_params runs since the
+/// last call.
+pub fn take_fit_log() -> Vec<String> {
+    FIT_LOG.with(|l| {
+        let mut v = l.borrow_mut();
+        std::mem::take(&mut *v)
+    })
+}
+
+fn flog(s: String) {
+    FIT_LOG.with(|l| {
+        let mut v = l.borrow_mut();
+        if v.len() < 400 {
+            v.push(s);
+        }
+    });
+}
+
+/// Log and return an error, so every rejection reason appears in the
+/// session log as well as the status line.
+fn bail<T>(e: String) -> Result<T, String> {
+    flog(format!("REJECT: {e}"));
+    Err(e)
+}
+
 /// Run the Levenberg-Marquardt fit for one parameter level and write the
 /// result back into `parms`. Mirrors `ProjectionLSQ::lsq`.
 fn lsq(proj: &dyn Projection, hills: &[Hill], known: &[usize], parms: &mut ViewParams, level: usize) -> f64 {
@@ -312,8 +350,32 @@ pub fn comp_params(
 ) -> Result<(), String> {
     let n = known.len();
     if n < 1 {
-        return Err("Please position at least 1 hill".to_string());
+        return bail("Please position at least 1 hill".to_string());
     }
+    flog(format!(
+        "comp_params proj_view={:.0}deg n={n} start[center={:.2} pitch={:.2} roll={:.2} scale={:.0} k0={:.5} k1={:.7} x0={:.1}] markers: {}",
+        proj.get_view_angle().to_degrees(),
+        parms.a_center.to_degrees(),
+        parms.a_pitch.to_degrees(),
+        parms.a_roll.to_degrees(),
+        parms.scale,
+        parms.k0,
+        parms.k1,
+        parms.x0,
+        known
+            .iter()
+            .map(|&i| format!(
+                "[{}] {} az={:.2} el={:.2} px=({:.0},{:.0})",
+                i,
+                hills[i].name,
+                hills[i].alph.to_degrees(),
+                hills[i].a_elev.to_degrees(),
+                hills[i].x,
+                hills[i].y
+            ))
+            .collect::<Vec<_>>()
+            .join(" ")
+    ));
 
     let m1 = &hills[known[0]];
     let mut new_parms = *parms;
@@ -346,7 +408,7 @@ pub fn comp_params(
         }
         let scale_tmp = dx.abs() / d_img.abs();
         if scale_tmp.is_nan() || scale_tmp < 50.0 {
-            return Err(format!("Could not determine initial scale value ({scale_tmp})"));
+            return bail(format!("Could not determine initial scale value ({scale_tmp})"));
         }
         // Left-right order: a rectilinear image lists peaks in azimuth
         // order (real-world roll stays far below 45 deg). If the second
@@ -358,7 +420,7 @@ pub fn comp_params(
             && daz.abs() > 2f64.to_radians()
             && dx * daz < 0.0
         {
-            return Err(format!(
+            return bail(format!(
                 "Wrong marker order: {} (az {:.1} deg) must be {} of {} (az {:.1} deg) in the image",
                 m2.name,
                 m2.alph.to_degrees(),
@@ -385,6 +447,17 @@ pub fn comp_params(
                 seed_scales.push(s_tan);
             }
         }
+        flog(format!(
+            "d_img={:.2}deg scale0={:.0} center0={:.2}deg scale_seeds=[{}]",
+            d_img.to_degrees(),
+            scale_tmp,
+            new_parms.a_center.to_degrees(),
+            seed_scales
+                .iter()
+                .map(|s| format!("{s:.0}"))
+                .collect::<Vec<_>>()
+                .join(" ")
+        ));
     }
 
     // Capability probe: the cylindrical projection has no distortion terms
@@ -459,6 +532,14 @@ pub fn comp_params(
                     cand.scale = s0;
                     cand.a_pitch = p0;
                     let cost = lsq(proj, hills, known, &mut cand, level);
+                    flog(format!(
+                        "seed c={:>7.1} s={:>6.0} p={:>6.2} cost={:>12.3} {}",
+                        c_seed.to_degrees(),
+                        s0,
+                        p0.to_degrees(),
+                        cost,
+                        if valid(&cand) { "valid" } else { "INVALID" }
+                    ));
                     if cost.is_finite() && valid(&cand) && best.as_ref().map_or(true, |(c, _)| cost < *c) {
                         best = Some((cost, cand));
                         // near-exact and valid: stop searching
@@ -470,22 +551,46 @@ pub fn comp_params(
             }
         }
         match best {
-            Some((_, p)) => new_parms = p,
+            Some((c, p)) => {
+                flog(format!(
+                    "chosen cost={c:.3} center={:.3} pitch={:.3} roll={:.3} scale={:.1}",
+                    p.a_center.to_degrees(),
+                    p.a_pitch.to_degrees(),
+                    p.a_roll.to_degrees(),
+                    p.scale
+                ));
+                new_parms = p;
+            }
             // No seed produced a valid fit: run the plain seeded fit so
             // the guards below report the most informative reason.
             None => {
+                flog("no valid seed result; plain fit for diagnostics".to_string());
                 lsq(proj, hills, known, &mut new_parms, level);
             }
         }
     } else {
-        lsq(proj, hills, known, &mut new_parms, level);
+        let cost = lsq(proj, hills, known, &mut new_parms, level);
+        flog(format!(
+            "single-marker fit cost={cost:.3} center={:.3} pitch={:.3}",
+            new_parms.a_center.to_degrees(),
+            new_parms.a_pitch.to_degrees()
+        ));
     }
     if n >= 4 && fit_distortion && supports_distortion {
-        lsq(proj, hills, known, &mut new_parms, 2);
+        let cost = lsq(proj, hills, known, &mut new_parms, 2);
+        flog(format!(
+            "distortion fit cost={cost:.3} k0={:.5} k1={:.7} x0={:.1}",
+            new_parms.k0,
+            new_parms.k1,
+            new_parms.x0
+        ));
     }
 
     if new_parms.scale.is_nan() || new_parms.scale < 50.0 {
-        return Err("Could not determine reasonable view parameters".to_string());
+        return bail(format!(
+            "Could not determine reasonable view parameters (scale={:.1})",
+            new_parms.scale
+        ));
     }
 
     // Reject fits that park a marked peak outside the projection's true
@@ -494,7 +599,7 @@ pub fn comp_params(
     for &i in known {
         let d = crate::projection::wrap_angle(hills[i].alph - new_parms.a_center).abs();
         if d >= domain {
-            return Err(format!(
+            return bail(format!(
                 "Fit result outside the projection's domain (marker {} at {:.1} deg from center, limit {:.0} deg) - is this a panorama? Switch to cylindrical mode",
                 hills[i].name,
                 d.to_degrees(),

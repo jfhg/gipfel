@@ -30,7 +30,27 @@ pub fn refit(pan: &mut Panorama, markers: &[Marker], fit_distortion: bool) -> Re
         obs.push(h);
     }
     let known: Vec<usize> = (0..markers.len()).collect();
-    pan.comp_params_with(&obs, &known, fit_distortion)
+    let ret = pan.comp_params_with(&obs, &known, fit_distortion);
+    // Session diagnostics: dump the core's fit log to the browser
+    // console (DevTools) so a failing placement can be analyzed from a
+    // copy-paste of the console output.
+    let log = gipfel_core::lsq::take_fit_log();
+    if !log.is_empty() {
+        web_sys::console::log_1(
+            &format!(
+                "gipfel fit session ({} markers, fit_distortion={fit_distortion})",
+                markers.len()
+            )
+            .into(),
+        );
+        for line in log {
+            web_sys::console::log_1(&format!("  {line}").into());
+        }
+    }
+    if let Err(e) = &ret {
+        web_sys::console::log_1(&format!("  => fit failed: {e}").into());
+    }
+    ret
 }
 
 /// Nearest visible hill to image position `(x, y)`, within `max_dist`
