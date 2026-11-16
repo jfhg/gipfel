@@ -361,6 +361,24 @@ pub fn comp_params(
         return Err("Could not determine reasonable view parameters".to_string());
     }
 
+    // A fit that parks a marked peak outside the projection's own view
+    // angle is nonsense: those markers are beyond what the projection can
+    // show (rectilinear: +/-60 deg), is_visible() will hide them, and the
+    // tangent-compressed solution scatters every other peak. Reject it
+    // with a clear message instead of committing garbage parameters.
+    // The cylindrical projection's limit is 2pi, so panoramas are
+    // unaffected.
+    for &i in known {
+        let d = crate::projection::wrap_angle(hills[i].alph - new_parms.a_center).abs();
+        if d >= proj.get_view_angle() {
+            return Err(format!(
+                "Fit result outside the projection's view (marker {} at {:.1} deg from center) - is this a panorama? Switch to cylindrical mode",
+                hills[i].name,
+                d.to_degrees()
+            ));
+        }
+    }
+
     *parms = new_parms;
     Ok(())
 }
@@ -577,11 +595,11 @@ mod tests {
         comp_params(&*proj, &hills, &known, &mut pano, false).unwrap();
 
         // reinterpret + refit in rectilinear mode (200 deg exceeds its
-        // domain, so the outcome is projection-weird but must stay finite)
+        // domain, so the fit is now rejected rather than committing
+        // tangent-compressed garbage)
         let rect = projection_from_type(ProjectionType::Rectilinear);
         let mut mixed = pano;
         let _ = comp_params(&*rect, &hills, &known, &mut mixed, false);
-        assert!(mixed.a_center.is_finite() && mixed.scale.is_finite());
 
         // switch back and refit: panorama parameters must come back
         let mut back = mixed;
@@ -589,6 +607,58 @@ mod tests {
         let d = crate::projection::wrap_angle(back.a_center - truth.a_center);
         assert!(d.abs() < 1e-6, "a_center {}", back.a_center);
         assert!((back.scale - truth.scale).abs() < 1.0, "scale {}", back.scale);
+    }
+
+    /// A rectilinear fit must not park markers beyond the projection's
+    /// +/-60 deg view: the tangent-compressed solution that matches far
+    /// apart markers scatters every other peak (the "jump totally weird"
+    /// report). The fit now rejects it with a clear error.
+    #[test]
+    fn rectilinear_rejects_fit_beyond_view_angle() {
+        let proj = projection_from_type(ProjectionType::Rectilinear);
+        let truth = ViewParams {
+            a_center: 0.0,
+            scale: 1000.0,
+            ..Default::default()
+        };
+        // two peaks 150 deg apart in the image (az -75/+75: outside 60 deg)
+        let mut hills = Vec::new();
+        for (i, az) in [(-75f64).to_radians(), 75f64.to_radians()].iter().enumerate() {
+            let mut h = Hill::new(&format!("r{i}"), 0.0, 0.0, 2000.0);
+            h.alph = *az;
+            h.a_elev = 0.05;
+            // pixel positions as if the image were linear (panorama-like)
+            h.x = az * 2000.0;
+            h.y = -50.0;
+            hills.push(h);
+        }
+        let mut p = ViewParams::new();
+        let r = comp_params(&*proj, &hills, &[0, 1], &mut p, false);
+        assert!(
+            r.is_err(),
+            "rectilinear fit of 150 deg-apart markers must be rejected, got center={:.1} deg scale={:.1}",
+            p.a_center.to_degrees(),
+            p.scale
+        );
+        let _ = truth;
+    }
+
+    /// Same markers in cylindrical mode: legitimate panorama, must fit.
+    #[test]
+    fn cylindrical_accepts_the_same_wide_markers() {
+        let proj = projection_from_type(ProjectionType::Cylindrical);
+        let mut hills = Vec::new();
+        for (i, az) in [(-75f64).to_radians(), 75f64.to_radians()].iter().enumerate() {
+            let mut h = Hill::new(&format!("c{i}"), 0.0, 0.0, 2000.0);
+            h.alph = *az;
+            h.a_elev = 0.0;
+            h.x = az * 2000.0;
+            h.y = 0.0;
+            hills.push(h);
+        }
+        let mut p = ViewParams::new();
+        comp_params(&*proj, &hills, &[0, 1], &mut p, false).unwrap();
+        assert!((p.scale - 2000.0).abs() < 1.0, "scale {}", p.scale);
     }
 
     /// The cylindrical projection formulas do not contain the distortion
