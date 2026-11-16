@@ -423,20 +423,27 @@ pub fn comp_params(
         return Err("Could not determine reasonable view parameters".to_string());
     }
 
-    // A fit that parks a marked peak outside the projection's own view
-    // angle is nonsense: those markers are beyond what the projection can
-    // show (rectilinear: +/-60 deg), is_visible() will hide them, and the
-    // tangent-compressed solution scatters every other peak. Reject it
-    // with a clear message instead of committing garbage parameters.
-    // The cylindrical projection's limit is 2pi, so panoramas are
-    // unaffected.
+    // A fit that parks a marked peak outside the projection's true domain
+    // is nonsense: rectilinear is only valid for |delta azimuth| < 90 deg
+    // (the tangent flips sign beyond it), cylindrical wraps at 180 deg.
+    // Note this is deliberately wider than get_view_angle()'s 60 deg
+    // visibility heuristic - wide-angle photos legitimately show peaks
+    // 60-85 deg off center, and rejecting those caused placement-
+    // dependent "fit failed" errors. Catches the camera-looking-
+    // backwards solutions and grossly misplaced markers.
+    let domain = if proj.get_view_angle() >= std::f64::consts::PI {
+        std::f64::consts::PI
+    } else {
+        std::f64::consts::PI / 2.0
+    };
     for &i in known {
         let d = crate::projection::wrap_angle(hills[i].alph - new_parms.a_center).abs();
-        if d >= proj.get_view_angle() {
+        if d >= domain {
             return Err(format!(
-                "Fit result outside the projection's view (marker {} at {:.1} deg from center) - is this a panorama? Switch to cylindrical mode",
+                "Fit result outside the projection's domain (marker {} at {:.1} deg from center, limit {:.0} deg) - is this a panorama? Switch to cylindrical mode",
                 hills[i].name,
-                d.to_degrees()
+                d.to_degrees(),
+                domain.to_degrees()
             ));
         }
     }
@@ -672,24 +679,20 @@ mod tests {
     }
 
     /// A rectilinear fit must not park markers beyond the projection's
-    /// +/-60 deg view: the tangent-compressed solution that matches far
-    /// apart markers scatters every other peak (the "jump totally weird"
-    /// report). The fit now rejects it with a clear error.
+    /// true domain (+/-90 deg, where the tangent flips sign). The old
+    /// guard used the 60 deg visibility heuristic and rejected perfectly
+    /// wide legitimate photos, causing placement-dependent "fit failed"
+    /// errors.
     #[test]
-    fn rectilinear_rejects_fit_beyond_view_angle() {
+    fn rectilinear_rejects_fit_beyond_domain() {
         let proj = projection_from_type(ProjectionType::Rectilinear);
-        let truth = ViewParams {
-            a_center: 0.0,
-            scale: 1000.0,
-            ..Default::default()
-        };
-        // two peaks 150 deg apart in the image (az -75/+75: outside 60 deg)
         let mut hills = Vec::new();
-        for (i, az) in [(-75f64).to_radians(), 75f64.to_radians()].iter().enumerate() {
+        // 200 deg apart: no rectilinear solution can place both within
+        // +/-90 deg, so the fit must be rejected
+        for (i, az) in [(-100f64).to_radians(), 100f64.to_radians()].iter().enumerate() {
             let mut h = Hill::new(&format!("r{i}"), 0.0, 0.0, 2000.0);
             h.alph = *az;
             h.a_elev = 0.05;
-            // pixel positions as if the image were linear (panorama-like)
             h.x = az * 2000.0;
             h.y = -50.0;
             hills.push(h);
@@ -698,11 +701,37 @@ mod tests {
         let r = comp_params(&*proj, &hills, &[0, 1], &mut p, false);
         assert!(
             r.is_err(),
-            "rectilinear fit of 150 deg-apart markers must be rejected, got center={:.1} deg scale={:.1}",
+            "rectilinear fit of 200 deg-apart markers must be rejected, got center={:.1} deg scale={:.1}",
             p.a_center.to_degrees(),
             p.scale
         );
-        let _ = truth;
+    }
+
+    /// A wide-angle photo (half-FOV ~70 deg) is legitimate rectilinear
+    /// territory even though it exceeds the 60 deg visibility heuristic:
+    /// the fit must succeed, not fail depending on marker placement.
+    #[test]
+    fn rectilinear_accepts_wide_angle_photo() {
+        let proj = projection_from_type(ProjectionType::Rectilinear);
+        let truth = ViewParams {
+            a_center: 0.0,
+            scale: 1200.0,
+            ..Default::default()
+        };
+        let mut hills = Vec::new();
+        for (i, az) in [(-70f64).to_radians(), 70f64.to_radians()].iter().enumerate() {
+            let mut h = Hill::new(&format!("w{i}"), 0.0, 0.0, 2000.0);
+            h.alph = *az;
+            h.a_elev = 0.0;
+            let (x, y) = proj.get_coordinates(*az, 0.0, &truth);
+            h.x = x;
+            h.y = y;
+            hills.push(h);
+        }
+        let mut p = ViewParams::new();
+        comp_params(&*proj, &hills, &[0, 1], &mut p, false).unwrap();
+        assert!((p.a_center - truth.a_center).abs() < 1e-6, "center {}", p.a_center);
+        assert!((p.scale - truth.scale).abs() < 1.0, "scale {}", p.scale);
     }
 
     /// Same markers in cylindrical mode: legitimate panorama, must fit.
