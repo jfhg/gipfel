@@ -924,6 +924,7 @@ pub fn app() -> Html {
     let on_projection = {
         let pan = pan.clone();
         let projection = projection.clone();
+        let tick = tick.clone();
         Callback::from(move |e: Event| {
             let sel: web_sys::HtmlSelectElement = e.target_unchecked_into();
             let cyl = sel.value() == "1";
@@ -933,6 +934,11 @@ pub fn app() -> Html {
             } else {
                 ProjectionType::Rectilinear
             });
+            // The peak coordinates change with the projection (the FOV-limit
+            // sync in the render body rebuilds them), but no CanvasView prop
+            // changes - bump the redraw tick or the canvas keeps showing the
+            // stale paint until a marker drag forces a repaint.
+            tick.set(*tick + 1);
         })
     };
 
