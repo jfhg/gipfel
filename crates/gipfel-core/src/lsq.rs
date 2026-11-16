@@ -636,19 +636,17 @@ pub fn comp_params(
         ));
     }
 
-    // The fit must actually MATCH the markers. cost = 0.5 * sum(resid^2)
-    // over 2n residuals, so rms = sqrt(cost/n). A huge residual means the
-    // marked geometry cannot be represented in this projection mode at
-    // all - e.g. a panorama (linear pixel spacing) fitted rectinearly has
-    // provably no exact solution for wide spans; the optimizer then
-    // commits absurd parameters (pitch -80 deg, scale at the sanity
-    // floor) that pass the other guards but never match the markers.
-    let rms = (final_cost / n as f64).max(0.0).sqrt();
-    if final_cost.is_finite() && rms > 30.0 {
-        return bail(format!(
-            "Fit cannot match the markers (RMS {rms:.0} px) - this projection cannot represent the marked geometry. Is this a panorama? Switch to cylindrical mode."
-        ));
-    }
+    // Informational only: RMS pixel error of the marked peaks in the
+    // final solution (cost = 0.5 * sum(resid^2) over 2n residuals, so
+    // rms = sqrt(cost/n)). NOT a rejection criterion - over-determined
+    // fits (4+ markers, unmodeled distortion) legitimately sit at tens
+    // of px, and the pixel unit does not translate across image sizes.
+    // Unsatisfiable geometries are caught by the principled checks
+    // (marker order, same-side feasibility, validity filter).
+    flog(format!(
+        "final rms={:.2}px",
+        (final_cost / n as f64).max(0.0).sqrt()
+    ));
 
     *parms = new_parms;
     Ok(())
