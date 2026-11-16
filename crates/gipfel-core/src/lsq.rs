@@ -559,42 +559,35 @@ pub fn comp_params(
     let level = if n == 1 { 0 } else { 1 };
     let mut final_cost;
     if n > 1 {
-        // Multi-start. The two-marker system is exactly determined and has
-        // multiple solution basins: the tangent repeats every 180 deg in
-        // the center (camera looking backwards projects identically), and
-        // pitch/roll can absorb marker y errors. A single start can land
-        // in a spurious minimum depending on where the user last dragged
-        // a marker - the "randomly sometimes fit failed" report. Try a
-        // small set of seeds and keep the lowest-cost result.
+        // Small seed grid. The exactly-determined two-marker system has
+        // multiple solution basins (the tangent repeats every 180 deg in
+        // the center), so a handful of principled starts are tried and
+        // the best VALID one wins: the derived center, two scale
+        // estimates (linear and tangent-aware), with and without the
+        // y-derived pitch seed. The validity filter below - not the seed
+        // spread - is what keeps degenerate cost-ties from winning.
         let mut best: Option<(f64, ViewParams)> = None;
-        // The center seed derived from the two markers can itself be way
-        // off when marker placements are rough; spread six center seeds
-        // across the full circle (60 deg apart). 6 centers x 2 scales x
-        // 2 pitches = 24 tiny fits, still microseconds.
-        let c0 = new_parms.a_center;
-        'seeds: for k in 0..6usize {
-            let c_seed = crate::projection::wrap_angle(c0 + k as f64 * (std::f64::consts::TAU / 6.0));
-            for &s0 in &seed_scales {
-                for &p0 in &[0.0f64, pitch_seed(hills, known, s0)] {
-                    let mut cand = new_parms;
-                    cand.a_center = c_seed;
-                    cand.scale = s0;
-                    cand.a_pitch = p0;
-                    let cost = lsq(proj, hills, known, &mut cand, level);
-                    flog(format!(
-                        "seed c={:>7.1} s={:>6.0} p={:>6.2} cost={:>12.3} {}",
-                        c_seed.to_degrees(),
-                        s0,
-                        p0.to_degrees(),
-                        cost,
-                        if valid(&cand) { "valid" } else { "INVALID" }
-                    ));
-                    if cost.is_finite() && valid(&cand) && best.as_ref().map_or(true, |(c, _)| cost < *c) {
-                        best = Some((cost, cand));
-                        // near-exact and valid: stop searching
-                        if cost < 1.0 {
-                            break 'seeds;
-                        }
+        let c_seed = new_parms.a_center;
+        'seeds: for &s0 in &seed_scales {
+            for &p0 in &[0.0f64, pitch_seed(hills, known, s0)] {
+                let mut cand = new_parms;
+                cand.a_center = c_seed;
+                cand.scale = s0;
+                cand.a_pitch = p0;
+                let cost = lsq(proj, hills, known, &mut cand, level);
+                flog(format!(
+                    "seed c={:>7.1} s={:>6.0} p={:>6.2} cost={:>12.3} {}",
+                    c_seed.to_degrees(),
+                    s0,
+                    p0.to_degrees(),
+                    cost,
+                    if valid(&cand) { "valid" } else { "INVALID" }
+                ));
+                if cost.is_finite() && valid(&cand) && best.as_ref().map_or(true, |(c, _)| cost < *c) {
+                    best = Some((cost, cand));
+                    // near-exact and valid: stop searching
+                    if cost < 1.0 {
+                        break 'seeds;
                     }
                 }
             }
@@ -641,21 +634,6 @@ pub fn comp_params(
             "Could not determine reasonable view parameters (scale={:.1})",
             new_parms.scale
         ));
-    }
-
-    // Reject fits that park a marked peak outside the projection's true
-    // domain (see `domain` above): catches camera-looking-backwards
-    // solutions and grossly misplaced markers.
-    for &i in known {
-        let d = crate::projection::wrap_angle(hills[i].alph - new_parms.a_center).abs();
-        if d >= domain {
-            return bail(format!(
-                "Fit result outside the projection's domain (marker {} at {:.1} deg from center, limit {:.0} deg) - is this a panorama? Switch to cylindrical mode",
-                hills[i].name,
-                d.to_degrees(),
-                domain.to_degrees()
-            ));
-        }
     }
 
     // The fit must actually MATCH the markers. cost = 0.5 * sum(resid^2)
