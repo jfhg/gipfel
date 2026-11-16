@@ -388,6 +388,34 @@ pub fn comp_params(
         eprintln!("Performing calibration");
     }
 
+    // Sanity domain for fitted solutions: rectilinear is only valid for
+    // |delta azimuth| < 90 deg (the tangent flips sign beyond it),
+    // cylindrical wraps at 180 deg. Deliberately wider than
+    // get_view_angle()'s 60 deg visibility heuristic - wide-angle photos
+    // legitimately show peaks 60-85 deg off center.
+    let domain = if proj.get_view_angle() >= std::f64::consts::PI {
+        std::f64::consts::PI
+    } else {
+        std::f64::consts::PI / 2.0
+    };
+    // A candidate fit is only usable if its scale is sane and every known
+    // marker stays inside the domain. The exactly-determined two-marker
+    // system has several EXACT solutions (cost ties via the tangent's
+    // periodicity per marker), and degenerate ones (scale ~ 30 px, center
+    // at a marker azimuth +/- 90 deg) match both markers perfectly and
+    // would otherwise win the cost race arbitrarily - only to be rejected
+    // by the guards below, producing "fit failed" even though a good
+    // solution existed. Validity must filter candidates BEFORE the cost
+    // comparison, not after.
+    let valid = |p: &ViewParams| -> bool {
+        if !(p.scale.is_finite() && p.scale >= 50.0) {
+            return false;
+        }
+        known
+            .iter()
+            .all(|&i| crate::projection::wrap_angle(hills[i].alph - p.a_center).abs() < domain)
+    };
+
     let level = if n == 1 { 0 } else { 1 };
     if n > 1 {
         // Multi-start. The two-marker system is exactly determined and has
@@ -403,7 +431,7 @@ pub fn comp_params(
         // across the full circle (60 deg apart). 6 centers x 2 scales x
         // 2 pitches = 24 tiny fits, still microseconds.
         let c0 = new_parms.a_center;
-        for k in 0..6usize {
+        'seeds: for k in 0..6usize {
             let c_seed = crate::projection::wrap_angle(c0 + k as f64 * (std::f64::consts::TAU / 6.0));
             for &s0 in &seed_scales {
                 for &p0 in &[0.0f64, pitch_seed(hills, known, s0)] {
@@ -412,14 +440,23 @@ pub fn comp_params(
                     cand.scale = s0;
                     cand.a_pitch = p0;
                     let cost = lsq(proj, hills, known, &mut cand, level);
-                    if cost.is_finite() && best.as_ref().map_or(true, |(c, _)| cost < *c) {
+                    if cost.is_finite() && valid(&cand) && best.as_ref().map_or(true, |(c, _)| cost < *c) {
                         best = Some((cost, cand));
+                        // near-exact and valid: stop searching
+                        if cost < 1.0 {
+                            break 'seeds;
+                        }
                     }
                 }
             }
         }
-        if let Some((_, p)) = best {
-            new_parms = p;
+        match best {
+            Some((_, p)) => new_parms = p,
+            // No seed produced a valid fit: run the plain seeded fit so
+            // the guards below report the most informative reason.
+            None => {
+                lsq(proj, hills, known, &mut new_parms, level);
+            }
         }
     } else {
         lsq(proj, hills, known, &mut new_parms, level);
@@ -432,19 +469,9 @@ pub fn comp_params(
         return Err("Could not determine reasonable view parameters".to_string());
     }
 
-    // A fit that parks a marked peak outside the projection's true domain
-    // is nonsense: rectilinear is only valid for |delta azimuth| < 90 deg
-    // (the tangent flips sign beyond it), cylindrical wraps at 180 deg.
-    // Note this is deliberately wider than get_view_angle()'s 60 deg
-    // visibility heuristic - wide-angle photos legitimately show peaks
-    // 60-85 deg off center, and rejecting those caused placement-
-    // dependent "fit failed" errors. Catches the camera-looking-
-    // backwards solutions and grossly misplaced markers.
-    let domain = if proj.get_view_angle() >= std::f64::consts::PI {
-        std::f64::consts::PI
-    } else {
-        std::f64::consts::PI / 2.0
-    };
+    // Reject fits that park a marked peak outside the projection's true
+    // domain (see `domain` above): catches camera-looking-backwards
+    // solutions and grossly misplaced markers.
     for &i in known {
         let d = crate::projection::wrap_angle(hills[i].alph - new_parms.a_center).abs();
         if d >= domain {
