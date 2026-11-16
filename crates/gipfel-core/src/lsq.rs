@@ -148,8 +148,9 @@ fn gauss_solve(a: &mut [f64], b: &[f64], n: usize) -> Option<Vec<f64>> {
 }
 
 /// One Levenberg-Marquardt fit at a single parameter level. On return, `x`
-/// holds the fitted parameters (length `np`).
-fn lm(data: &FitData, x: &mut [f64], np: usize) {
+/// holds the fitted parameters (length `np`). Returns the final cost
+/// (half the squared residual sum) so callers can compare restarts.
+fn lm(data: &FitData, x: &mut [f64], np: usize) -> f64 {
     let m = 2 * data.known.len();
     let mut f = vec![0.0f64; m];
     let mut fnew = vec![0.0f64; m];
@@ -234,11 +235,33 @@ fn lm(data: &FitData, x: &mut [f64], np: usize) {
             }
         }
     }
+    cost
+}
+
+/// Rough pitch estimate from the marker y positions: with roll = 0 each
+/// marker satisfies tan(pitch) ~ tan(elev) + y/scale (y positive down),
+/// so average the per-marker solutions. Far better than starting at 0
+/// when the camera is tilted well off horizontal.
+fn pitch_seed(hills: &[Hill], known: &[usize], scale: f64) -> f64 {
+    let mut acc = 0.0;
+    let mut n = 0;
+    for &i in known {
+        let m = &hills[i];
+        if scale > 1.0 && m.y.is_finite() {
+            acc += (m.a_elev.tan() + m.y / scale).atan();
+            n += 1;
+        }
+    }
+    if n > 0 {
+        acc / n as f64
+    } else {
+        0.0
+    }
 }
 
 /// Run the Levenberg-Marquardt fit for one parameter level and write the
 /// result back into `parms`. Mirrors `ProjectionLSQ::lsq`.
-fn lsq(proj: &dyn Projection, hills: &[Hill], known: &[usize], parms: &mut ViewParams, level: usize) {
+fn lsq(proj: &dyn Projection, hills: &[Hill], known: &[usize], parms: &mut ViewParams, level: usize) -> f64 {
     let np = np_for_level(level);
     let data = FitData {
         proj,
@@ -259,7 +282,7 @@ fn lsq(proj: &dyn Projection, hills: &[Hill], known: &[usize], parms: &mut ViewP
     ];
     x.truncate(np);
 
-    lm(&data, &mut x, np);
+    let cost = lm(&data, &mut x, np);
 
     parms.a_center = x[0];
     parms.a_pitch = x[1];
@@ -272,6 +295,7 @@ fn lsq(proj: &dyn Projection, hills: &[Hill], known: &[usize], parms: &mut ViewP
         parms.k1 = x[5];
         parms.x0 = x[6];
     }
+    cost
 }
 
 /// Fit the view parameters to the known hills.
@@ -295,6 +319,7 @@ pub fn comp_params(
     let mut new_parms = *parms;
     new_parms.a_center = m1.alph;
     new_parms.a_pitch = 0.0;
+    let mut seed_scales: Vec<f64> = Vec::new();
 
     if n > 1 {
         let m2 = &hills[known[1]];
@@ -329,6 +354,18 @@ pub fn comp_params(
         // branch just chosen) instead of on the first marker: with markers
         // 340 deg apart, m1.alph is 170 deg off and the fit never recovers.
         new_parms.a_center = crate::projection::wrap_angle(m1.alph + d_img / 2.0);
+        // Seed scales for the multi-start below: the linear estimate and a
+        // tangent-aware variant (rectilinear geometry puts dx = s * 2 *
+        // tan(d/2) for a centered pair, which the linear estimate
+        // underestimates by up to 60% at wide azimuth spans).
+        seed_scales.push(scale_tmp);
+        let tan_half = (d_img.abs() / 2.0).tan() * 2.0;
+        if tan_half.abs() > 1e-3 {
+            let s_tan = (dx.abs() / tan_half).max(50.0);
+            if s_tan.is_finite() && (s_tan - scale_tmp).abs() > scale_tmp * 0.02 {
+                seed_scales.push(s_tan);
+            }
+        }
     }
 
     // Capability probe: the cylindrical projection has no distortion terms
@@ -352,7 +389,32 @@ pub fn comp_params(
     }
 
     let level = if n == 1 { 0 } else { 1 };
-    lsq(proj, hills, known, &mut new_parms, level);
+    if n > 1 {
+        // Multi-start. The two-marker system is exactly determined and has
+        // multiple solution basins: the tangent repeats every 180 deg in
+        // the center (camera looking backwards projects identically), and
+        // pitch/roll can absorb marker y errors. A single start can land
+        // in a spurious minimum depending on where the user last dragged
+        // a marker - the "randomly sometimes fit failed" report. Try a
+        // small set of seeds and keep the lowest-cost result.
+        let mut best: Option<(f64, ViewParams)> = None;
+        for &s0 in &seed_scales {
+            for &p0 in &[0.0f64, pitch_seed(hills, known, s0)] {
+                let mut cand = new_parms;
+                cand.scale = s0;
+                cand.a_pitch = p0;
+                let cost = lsq(proj, hills, known, &mut cand, level);
+                if cost.is_finite() && best.as_ref().map_or(true, |(c, _)| cost < *c) {
+                    best = Some((cost, cand));
+                }
+            }
+        }
+        if let Some((_, p)) = best {
+            new_parms = p;
+        }
+    } else {
+        lsq(proj, hills, known, &mut new_parms, level);
+    }
     if n >= 4 && fit_distortion && supports_distortion {
         lsq(proj, hills, known, &mut new_parms, 2);
     }
