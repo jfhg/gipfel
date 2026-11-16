@@ -308,10 +308,16 @@ pub fn comp_params(
         let dx = m2.x - m1.x;
         let two_pi = 2.0 * std::f64::consts::PI;
         let mut d_img = crate::projection::wrap_angle(m2.alph - m1.alph);
-        if dx >= 0.0 && d_img <= 0.0 {
-            d_img += two_pi;
-        } else if dx < 0.0 && d_img >= 0.0 {
-            d_img -= two_pi;
+        // The wide branch (markers >180 deg apart in the image) only
+        // applies to projections that can actually show more than a
+        // half-plane; the rectilinear projection is limited to 120 deg
+        // of view, so there the shortest arc is always the intended one.
+        if proj.get_view_angle() >= std::f64::consts::PI {
+            if dx >= 0.0 && d_img <= 0.0 {
+                d_img += two_pi;
+            } else if dx < 0.0 && d_img >= 0.0 {
+                d_img -= two_pi;
+            }
         }
         let scale_tmp = dx.abs() / d_img.abs();
         if scale_tmp.is_nan() || scale_tmp < 50.0 {
@@ -556,6 +562,33 @@ mod tests {
     #[test]
     fn fit_wide_panorama_just_over_half_circle() {
         assert_wide_fit(false, 200.0);
+    }
+
+    /// User scenario: fit distant peaks in panorama mode, switch to
+    /// rectilinear (which refits with tangent-based scale), switch back.
+    /// Refitting in the cylindrical projection must fully recover the
+    /// panorama parameters - the fitted parameters of one projection are
+    /// allowed to be garbage for the other, but must never poison a
+    /// subsequent refit.
+    #[test]
+    fn refit_recovers_after_rectilinear_interlude() {
+        let (proj, hills, known, truth) = wide_panorama(false, 200.0);
+        let mut pano = ViewParams::new();
+        comp_params(&*proj, &hills, &known, &mut pano, false).unwrap();
+
+        // reinterpret + refit in rectilinear mode (200 deg exceeds its
+        // domain, so the outcome is projection-weird but must stay finite)
+        let rect = projection_from_type(ProjectionType::Rectilinear);
+        let mut mixed = pano;
+        let _ = comp_params(&*rect, &hills, &known, &mut mixed, false);
+        assert!(mixed.a_center.is_finite() && mixed.scale.is_finite());
+
+        // switch back and refit: panorama parameters must come back
+        let mut back = mixed;
+        comp_params(&*proj, &hills, &known, &mut back, false).unwrap();
+        let d = crate::projection::wrap_angle(back.a_center - truth.a_center);
+        assert!(d.abs() < 1e-6, "a_center {}", back.a_center);
+        assert!((back.scale - truth.scale).abs() < 1.0, "scale {}", back.scale);
     }
 
     /// The cylindrical projection formulas do not contain the distortion

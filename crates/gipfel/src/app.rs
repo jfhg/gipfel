@@ -925,6 +925,8 @@ pub fn app() -> Html {
         let pan = pan.clone();
         let projection = projection.clone();
         let tick = tick.clone();
+        let markers = markers.clone();
+        let do_refit = do_refit.clone();
         Callback::from(move |e: Event| {
             let sel: web_sys::HtmlSelectElement = e.target_unchecked_into();
             let cyl = sel.value() == "1";
@@ -934,6 +936,13 @@ pub fn app() -> Html {
             } else {
                 ProjectionType::Rectilinear
             });
+            // View parameters are projection-specific (a cylindrical scale
+            // is linear in azimuth, a rectilinear one is tangent-based), so
+            // refit to the markers after switching. Without this the old
+            // projection's parameters get reinterpreted by the new one and
+            // the next marker drag refits garbage, polluting the shared
+            // parameters for BOTH projections until another refit saves it.
+            do_refit(&markers);
             // The peak coordinates change with the projection (the FOV-limit
             // sync in the render body rebuilds them), but no CanvasView prop
             // changes - bump the redraw tick or the canvas keeps showing the
