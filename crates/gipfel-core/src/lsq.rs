@@ -509,6 +509,7 @@ pub fn comp_params(
     };
 
     let level = if n == 1 { 0 } else { 1 };
+    let mut final_cost;
     if n > 1 {
         // Multi-start. The two-marker system is exactly determined and has
         // multiple solution basins: the tangent repeats every 180 deg in
@@ -559,27 +560,28 @@ pub fn comp_params(
                     p.a_roll.to_degrees(),
                     p.scale
                 ));
+                final_cost = c;
                 new_parms = p;
             }
             // No seed produced a valid fit: run the plain seeded fit so
             // the guards below report the most informative reason.
             None => {
                 flog("no valid seed result; plain fit for diagnostics".to_string());
-                lsq(proj, hills, known, &mut new_parms, level);
+                final_cost = lsq(proj, hills, known, &mut new_parms, level);
             }
         }
     } else {
-        let cost = lsq(proj, hills, known, &mut new_parms, level);
+        final_cost = lsq(proj, hills, known, &mut new_parms, level);
         flog(format!(
-            "single-marker fit cost={cost:.3} center={:.3} pitch={:.3}",
+            "single-marker fit cost={final_cost:.3} center={:.3} pitch={:.3}",
             new_parms.a_center.to_degrees(),
             new_parms.a_pitch.to_degrees()
         ));
     }
     if n >= 4 && fit_distortion && supports_distortion {
-        let cost = lsq(proj, hills, known, &mut new_parms, 2);
+        final_cost = lsq(proj, hills, known, &mut new_parms, 2);
         flog(format!(
-            "distortion fit cost={cost:.3} k0={:.5} k1={:.7} x0={:.1}",
+            "distortion fit cost={final_cost:.3} k0={:.5} k1={:.7} x0={:.1}",
             new_parms.k0,
             new_parms.k1,
             new_parms.x0
@@ -606,6 +608,20 @@ pub fn comp_params(
                 domain.to_degrees()
             ));
         }
+    }
+
+    // The fit must actually MATCH the markers. cost = 0.5 * sum(resid^2)
+    // over 2n residuals, so rms = sqrt(cost/n). A huge residual means the
+    // marked geometry cannot be represented in this projection mode at
+    // all - e.g. a panorama (linear pixel spacing) fitted rectinearly has
+    // provably no exact solution for wide spans; the optimizer then
+    // commits absurd parameters (pitch -80 deg, scale at the sanity
+    // floor) that pass the other guards but never match the markers.
+    let rms = (final_cost / n as f64).max(0.0).sqrt();
+    if final_cost.is_finite() && rms > 30.0 {
+        return bail(format!(
+            "Fit cannot match the markers (RMS {rms:.0} px) - this projection cannot represent the marked geometry. Is this a panorama? Switch to cylindrical mode."
+        ));
     }
 
     *parms = new_parms;
@@ -992,7 +1008,10 @@ mod tests {
     #[test]
     fn correct_order_fits_at_any_spacing() {
         let proj = projection_from_type(ProjectionType::Rectilinear);
-        for (x1, x2) in [(500.0, -500.0), (2000.0, -2000.0), (800.0, 300.0)] {
+        // (800, 100): both right of center - fittable because the x
+        // ratio (8) exceeds the minimum a 40.9 deg azimuth pair can
+        // achieve rectinearly (~5); (800, 300) would NOT be fittable.
+        for (x1, x2) in [(500.0, -500.0), (2000.0, -2000.0), (800.0, 100.0)] {
             let mut hills = Vec::new();
             for (name, az) in [("Zugspitze", 58.4f64), ("Saeuling", 17.5)] {
                 let mut h = Hill::new(name, 0.0, 0.0, 2500.0);
@@ -1001,12 +1020,40 @@ mod tests {
                 hills.push(h);
             }
             hills[0].x = x1;
-            hills[0].y = -200.0;
+            // same elevation -> same y (consistent with roll = 0, so an
+            // exact solution exists at every spacing)
+            hills[0].y = -100.0;
             hills[1].x = x2;
             hills[1].y = -100.0;
             let mut p = ViewParams::new();
             comp_params(&*proj, &hills, &[0, 1], &mut p, false)
                 .unwrap_or_else(|e| panic!("spacing {}: {e}", x1 - x2));
         }
+    }
+
+    /// Real user session (captured via the fit log): a panorama with
+    /// Saeuling az 11.24 at px 150 and Zugspitze az 91.68 at px 3398 -
+    /// linear pixel spacing, 80.4 deg apart. Rectilinearly there is NO
+    /// exact solution (the required tangent ratio has no real root), so
+    /// the optimizer lands at cost ~12900 (RMS ~80 px) with absurd
+    /// parameters (pitch -81 deg, scale 91). The RMS guard must reject
+    /// that instead of committing it.
+    #[test]
+    fn panorama_in_rectilinear_rejected_by_rms() {
+        let proj = projection_from_type(ProjectionType::Rectilinear);
+        let mut hills = Vec::new();
+        for (name, az, el) in [("SAEULING", 11.24f64, -1.58f64), ("ZUGSPITZE", 91.68, 1.76)] {
+            let mut h = Hill::new(name, 0.0, 0.0, 2500.0);
+            h.alph = az.to_radians();
+            h.a_elev = el.to_radians();
+            hills.push(h);
+        }
+        hills[0].x = 150.0;
+        hills[0].y = -493.0;
+        hills[1].x = 3398.0;
+        hills[1].y = -651.0;
+        let mut p = ViewParams::new();
+        let e = comp_params(&*proj, &hills, &[0, 1], &mut p, false).unwrap_err();
+        assert!(e.contains("RMS"), "expected RMS rejection, got: {e}");
     }
 }
