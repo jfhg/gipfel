@@ -398,14 +398,23 @@ pub fn comp_params(
         // a marker - the "randomly sometimes fit failed" report. Try a
         // small set of seeds and keep the lowest-cost result.
         let mut best: Option<(f64, ViewParams)> = None;
-        for &s0 in &seed_scales {
-            for &p0 in &[0.0f64, pitch_seed(hills, known, s0)] {
-                let mut cand = new_parms;
-                cand.scale = s0;
-                cand.a_pitch = p0;
-                let cost = lsq(proj, hills, known, &mut cand, level);
-                if cost.is_finite() && best.as_ref().map_or(true, |(c, _)| cost < *c) {
-                    best = Some((cost, cand));
+        // The center seed derived from the two markers can itself be way
+        // off when marker placements are rough; spread six center seeds
+        // across the full circle (60 deg apart). 6 centers x 2 scales x
+        // 2 pitches = 24 tiny fits, still microseconds.
+        let c0 = new_parms.a_center;
+        for k in 0..6usize {
+            let c_seed = crate::projection::wrap_angle(c0 + k as f64 * (std::f64::consts::TAU / 6.0));
+            for &s0 in &seed_scales {
+                for &p0 in &[0.0f64, pitch_seed(hills, known, s0)] {
+                    let mut cand = new_parms;
+                    cand.a_center = c_seed;
+                    cand.scale = s0;
+                    cand.a_pitch = p0;
+                    let cost = lsq(proj, hills, known, &mut cand, level);
+                    if cost.is_finite() && best.as_ref().map_or(true, |(c, _)| cost < *c) {
+                        best = Some((cost, cand));
+                    }
                 }
             }
         }
