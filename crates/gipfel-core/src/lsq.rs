@@ -348,6 +348,25 @@ pub fn comp_params(
         if scale_tmp.is_nan() || scale_tmp < 50.0 {
             return Err(format!("Could not determine initial scale value ({scale_tmp})"));
         }
+        // Left-right order: a rectilinear image lists peaks in azimuth
+        // order (real-world roll stays far below 45 deg). If the second
+        // marker sits on the wrong side of the first, no valid fit can
+        // exist - say so plainly instead of fitting garbage.
+        let daz = crate::projection::wrap_angle(m2.alph - m1.alph);
+        if proj.get_view_angle() < std::f64::consts::PI
+            && dx.abs() > 5.0
+            && daz.abs() > 2f64.to_radians()
+            && dx * daz < 0.0
+        {
+            return Err(format!(
+                "Wrong marker order: {} (az {:.1} deg) must be {} of {} (az {:.1} deg) in the image",
+                m2.name,
+                m2.alph.to_degrees(),
+                if daz < 0.0 { "left" } else { "right" },
+                m1.name,
+                m1.alph.to_degrees()
+            ));
+        }
         new_parms.scale = scale_tmp;
         new_parms.a_roll = 0.0;
         // Start the view center between the two markers (in the image-space
@@ -835,5 +854,54 @@ mod tests {
         assert_eq!(p.k0, -0.001, "k0 moved in cylindrical distortion fit");
         assert_eq!(p.k1, 1e-5, "k1 moved in cylindrical distortion fit");
         assert_eq!(p.x0, 3.0, "x0 moved in cylindrical distortion fit");
+    }
+
+    /// Marking the peaks in the wrong left-right order is impossible to
+    /// fit rectinearly (the image lists peaks in azimuth order); the
+    /// fitter must say so plainly instead of returning garbage or a
+    /// confusing domain error.
+    #[test]
+    fn wrong_marker_order_is_rejected() {
+        let proj = projection_from_type(ProjectionType::Rectilinear);
+        let mut hills = Vec::new();
+        for (name, az) in [("Zugspitze", 58.4f64), ("Saeuling", 17.5)] {
+            let mut h = Hill::new(name, 0.0, 0.0, 2500.0);
+            h.alph = az.to_radians();
+            h.a_elev = 0.05;
+            hills.push(h);
+        }
+        // Zugspitze marked LEFT of Saeuling - backwards
+        hills[0].x = -500.0;
+        hills[0].y = -200.0;
+        hills[1].x = 500.0;
+        hills[1].y = -100.0;
+        let mut p = ViewParams::new();
+        let e = comp_params(&*proj, &hills, &[0, 1], &mut p, false).unwrap_err();
+        assert!(
+            e.contains("Wrong marker order") && e.contains("left"),
+            "expected order error, got: {e}"
+        );
+    }
+
+    /// Correct order fits at any sane spacing and on either side of center.
+    #[test]
+    fn correct_order_fits_at_any_spacing() {
+        let proj = projection_from_type(ProjectionType::Rectilinear);
+        for (x1, x2) in [(500.0, -500.0), (2000.0, -2000.0), (800.0, 300.0)] {
+            let mut hills = Vec::new();
+            for (name, az) in [("Zugspitze", 58.4f64), ("Saeuling", 17.5)] {
+                let mut h = Hill::new(name, 0.0, 0.0, 2500.0);
+                h.alph = az.to_radians();
+                h.a_elev = 0.05;
+                hills.push(h);
+            }
+            hills[0].x = x1;
+            hills[0].y = -200.0;
+            hills[1].x = x2;
+            hills[1].y = -100.0;
+            let mut p = ViewParams::new();
+            comp_params(&*proj, &hills, &[0, 1], &mut p, false)
+                .unwrap_or_else(|e| panic!("spacing {}: {e}", x1 - x2));
+        }
     }
 }
