@@ -435,6 +435,52 @@ pub fn comp_params(
         // branch just chosen) instead of on the first marker: with markers
         // 340 deg apart, m1.alph is 170 deg off and the fit never recovers.
         new_parms.a_center = crate::projection::wrap_angle(m1.alph + d_img / 2.0);
+        // Rectilinear feasibility for same-side marker pairs. With
+        // x = s*tan(az - center), two peaks with azimuth separation D that
+        // both sit on the SAME side of the image center must satisfy
+        // |x_far / x_near| >= min over u of tan(u+D)/tan(u) = tan^2(45deg +
+        // D/2). Below that no center/scale exists - the classic case being
+        // a panorama (linear pixel spacing) fitted rectinearly. Detect it
+        // up front and name the fix instead of letting the optimizer churn
+        // and the RMS guard reject generically. The 0.9 tolerance absorbs
+        // elevation/pitch/distortion perturbations of the pure tan model.
+        if proj.get_view_angle() < std::f64::consts::PI {
+            for &i in known {
+                for &j in known {
+                    if i == j {
+                        continue;
+                    }
+                    let (near, far) = if hills[i].x.abs() <= hills[j].x.abs() {
+                        (&hills[i], &hills[j])
+                    } else {
+                        (&hills[j], &hills[i])
+                    };
+                    // opposite sides of center: always fittable (center
+                    // between the peaks); a near marker at the center
+                    // makes the ratio arbitrarily large
+                    if near.x * far.x <= 0.0 || near.x.abs() < 5.0 {
+                        continue;
+                    }
+                    let d = crate::projection::wrap_angle(far.alph - near.alph).abs();
+                    // tan^2(45deg + D/2); -> infinity as D -> 90deg, which
+                    // correctly makes same-side pairs with D >= 90deg
+                    // impossible
+                    let min_ratio = (std::f64::consts::FRAC_PI_4 + d / 2.0).tan().powi(2);
+                    let ratio = far.x.abs() / near.x.abs();
+                    if ratio < min_ratio * 0.9 {
+                        return bail(format!(
+                            "{} and {} are {:.1} deg apart in azimuth but only {:.1}x apart in the image (both {} of center); rectilinear geometry needs at least {:.0}x for a pair this wide. This looks like a panorama - switch to cylindrical mode, or place the view center between the peaks.",
+                            near.name,
+                            far.name,
+                            d.to_degrees(),
+                            ratio,
+                            if far.x >= 0.0 { "right" } else { "left" },
+                            min_ratio
+                        ));
+                    }
+                }
+            }
+        }
         // Seed scales for the multi-start below: the linear estimate and a
         // tangent-aware variant (rectilinear geometry puts dx = s * 2 *
         // tan(d/2) for a centered pair, which the linear estimate
@@ -1033,13 +1079,12 @@ mod tests {
 
     /// Real user session (captured via the fit log): a panorama with
     /// Saeuling az 11.24 at px 150 and Zugspitze az 91.68 at px 3398 -
-    /// linear pixel spacing, 80.4 deg apart. Rectilinearly there is NO
-    /// exact solution (the required tangent ratio has no real root), so
-    /// the optimizer lands at cost ~12900 (RMS ~80 px) with absurd
-    /// parameters (pitch -81 deg, scale 91). The RMS guard must reject
-    /// that instead of committing it.
+    /// linear pixel spacing, 80.4 deg apart, both right of center.
+    /// Rectilinearly there is NO exact solution (same-side pairs 80.4 deg
+    /// apart need a >= 140x pixel ratio; these are 22.7x apart). The
+    /// pre-check must catch this and suggest cylindrical mode.
     #[test]
-    fn panorama_in_rectilinear_rejected_by_rms() {
+    fn panorama_in_rectilinear_suggests_cylindrical() {
         let proj = projection_from_type(ProjectionType::Rectilinear);
         let mut hills = Vec::new();
         for (name, az, el) in [("SAEULING", 11.24f64, -1.58f64), ("ZUGSPITZE", 91.68, 1.76)] {
@@ -1054,6 +1099,41 @@ mod tests {
         hills[1].y = -651.0;
         let mut p = ViewParams::new();
         let e = comp_params(&*proj, &hills, &[0, 1], &mut p, false).unwrap_err();
-        assert!(e.contains("RMS"), "expected RMS rejection, got: {e}");
+        assert!(
+            e.contains("panorama") && e.contains("cylindrical"),
+            "expected panorama suggestion, got: {e}"
+        );
+        // the same markers fit exactly in cylindrical mode
+        let cyl = projection_from_type(ProjectionType::Cylindrical);
+        let mut p = ViewParams::new();
+        comp_params(&*cyl, &hills, &[0, 1], &mut p, false).unwrap();
+    }
+
+    /// Same-side pair just above the feasibility bound fits; just below
+    /// it is rejected with the panorama hint (tan^2(45 + 40.9/2) ~ 4.8
+    /// minimum ratio for this 40.9 deg pair).
+    #[test]
+    fn same_side_ratio_bound() {
+        let proj = projection_from_type(ProjectionType::Rectilinear);
+        let mk = |x_far: f64| {
+            let mut hills = Vec::new();
+            for (name, az) in [("Zugspitze", 58.4f64), ("Saeuling", 17.5)] {
+                let mut h = Hill::new(name, 0.0, 0.0, 2500.0);
+                h.alph = az.to_radians();
+                h.a_elev = 0.05;
+                hills.push(h);
+            }
+            hills[0].x = x_far;
+            hills[0].y = -100.0;
+            hills[1].x = 100.0;
+            hills[1].y = -100.0;
+            hills
+        };
+        let mut p = ViewParams::new();
+        // ratio 10 > 4.8: fittable
+        comp_params(&*proj, &mk(1000.0), &[0, 1], &mut p, false).unwrap();
+        // ratio 3 < 4.8: impossible, named up front
+        let e = comp_params(&*proj, &mk(300.0), &[0, 1], &mut p, false).unwrap_err();
+        assert!(e.contains("cylindrical"), "got: {e}");
     }
 }
