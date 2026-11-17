@@ -507,6 +507,30 @@ pub fn app() -> Html {
                                 // same mapping as the Visibility slider
                                 p.set_height_dist_ratio((0.11 - v).clamp(0.01, 0.1));
                             }
+                            // bring the lens-FOV limit up to date NOW (the
+                            // render-time sync block would only apply it a
+                            // frame later, and the peak count below depends
+                            // on it)
+                            p.max_view_angle = if p.projection_type == ProjectionType::Cylindrical {
+                                0.0
+                            } else {
+                                let proj = gipfel_core::projection::projection_from_type(p.projection_type);
+                                let c = p.parms.a_center;
+                                (alph_at_img_x(
+                                    p.projection_type,
+                                    &*proj,
+                                    &p.parms,
+                                    w as f64 / 2.0,
+                                    c,
+                                ) - c)
+                                    .abs()
+                            };
+                            // initial visibility: pick the ratio that puts
+                            // a reasonable number of peaks in the view,
+                            // unless the URL pinned ?vis=
+                            if ov.vis.is_none() {
+                                p.auto_visibility(8, 40);
+                            }
                         }
                         // keep the source bytes and EXIF for "Save image"
                         *orig.borrow_mut() = Some((bytes.clone(), name.clone()));

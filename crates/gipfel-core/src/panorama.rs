@@ -161,6 +161,46 @@ impl Panorama {
         self.update_close_mountains();
     }
 
+    /// Pick `height_dist_ratio` so that the current view shows a
+    /// reasonable number of peaks: the count is monotone decreasing in
+    /// the ratio (a larger ratio drops the far, flat candidates first),
+    /// so a binary search over the slider range [0.01, 0.10] finds the
+    /// LARGEST ratio that still leaves at least `lo` visible peaks -
+    /// the sparsest view that is not empty. If even that ratio shows
+    /// more than `hi` peaks (dense alpine terrain, panoramic view) the
+    /// overshoot is accepted; the user can always tighten the slider.
+    /// Returns the resulting visible count.
+    pub fn auto_visibility(&mut self, lo: usize, hi: usize) -> usize {
+        let probe = |p: &mut Self, r: f64| -> usize {
+            p.height_dist_ratio = r;
+            p.update_close_mountains();
+            p.update_visible_mountains(None);
+            p.visible.len()
+        };
+        // already reasonable where it is: keep the user's/loaded state
+        let now = probe(self, self.height_dist_ratio);
+        if now >= lo && now <= hi {
+            return now;
+        }
+        // binary search: largest ratio with count >= lo
+        let (mut a, mut b) = (0.01_f64, 0.10_f64);
+        if probe(self, a) < lo {
+            // flat terrain: even the most generous ratio stays below lo
+            return probe(self, a);
+        }
+        let mut best = a;
+        while b - a > 0.002 {
+            let m = 0.5 * (a + b);
+            if probe(self, m) >= lo {
+                best = m;
+                a = m;
+            } else {
+                b = m;
+            }
+        }
+        probe(self, best)
+    }
+
     pub fn set_view_long(&mut self, deg: f64) {
         self.view_lam = deg * DEG2RAD;
         self.update_angles();
@@ -550,5 +590,81 @@ mod tests {
         let mut bad = Panorama::new();
         bad.parms.a_center = f64::NAN;
         assert!(!bad.is_visible(0.0));
+    }
+
+    /// Synthetic terrain: `near` peaks ~10 km away and `far` hills
+    /// ~120 km away, all inside the +-60 deg default view. Hill
+    /// positions are geocentric radians (as after load_data); the
+    /// close-candidate ratio is height/distance_m.
+    fn terrain(near: usize, far: usize) -> Panorama {
+        let mut pan = Panorama::new();
+        let mut hills = Vec::new();
+        let d_near = 10_000.0 / 6_371_000.0; // 10 km in radians
+        let d_far = 120_000.0 / 6_371_000.0; // 120 km in radians
+        for k in 0..near {
+            let az = (-40.0 + k as f64 * 80.0 / (near.max(2) - 1) as f64).to_radians();
+            // 500 m at 10 km -> ratio 0.05: below the default 0.07,
+            // inside the slider range
+            hills.push(Hill::new(
+                &format!("near{k}"),
+                d_near * az.cos(),
+                d_near * az.sin(),
+                500.0,
+            ));
+        }
+        for k in 0..far {
+            let az = (-80.0 + k as f64 * 160.0 / (far.max(2) - 1) as f64).to_radians();
+            // 800 m at 120 km -> ratio 0.0067: below the slider floor
+            hills.push(Hill::new(
+                &format!("far{k}"),
+                d_far * az.cos(),
+                d_far * az.sin(),
+                800.0,
+            ));
+        }
+        pan.add_hills(&hills);
+        pan
+    }
+
+    #[test]
+    fn auto_visibility_targets_reasonable_count() {
+        // default ratio 0.07 shows nothing (near peaks are 0.05) ->
+        // search must find the band that keeps the 15 near peaks and
+        // drops the 300 far ones
+        let mut pan = terrain(15, 300);
+        let n = pan.auto_visibility(8, 40);
+        assert!((8..=40).contains(&n), "count {n}");
+        assert!(pan.height_dist_ratio > 0.01 && pan.height_dist_ratio < 0.06);
+    }
+
+    #[test]
+    fn auto_visibility_flat_terrain_shows_everything() {
+        let mut pan = terrain(0, 300);
+        let n = pan.auto_visibility(8, 40);
+        assert!(n < 8);
+        assert!((pan.height_dist_ratio - 0.01).abs() < 1e-9);
+    }
+
+    #[test]
+    fn auto_visibility_dense_terrain_accepts_overshoot() {
+        // 200 near peaks: no ratio in the slider range lands inside
+        // [8, 40]; the sparsest setting is chosen and the overshoot
+        // accepted
+        let mut pan = terrain(200, 0);
+        let n = pan.auto_visibility(8, 40);
+        assert!(n > 40);
+        assert!(pan.height_dist_ratio > 0.03);
+    }
+
+    #[test]
+    fn auto_visibility_keeps_good_state() {
+        // 20 near peaks (ratio 0.05) at r=0.02: already in range, the
+        // search must not move the ratio
+        let mut pan = terrain(20, 0);
+        pan.set_height_dist_ratio(0.02);
+        let r0 = pan.height_dist_ratio;
+        let n = pan.auto_visibility(8, 40);
+        assert_eq!(n, 20);
+        assert_eq!(pan.height_dist_ratio, r0);
     }
 }
