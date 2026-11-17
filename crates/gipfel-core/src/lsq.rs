@@ -469,7 +469,7 @@ pub fn comp_params(
                     let ratio = far.x.abs() / near.x.abs();
                     if ratio < min_ratio * 0.9 {
                         return bail(format!(
-                            "{} is {:.1} times farther from the image center than {} ({:.0} px vs {:.0} px, both {} of center). A pair {:.1} deg apart in azimuth needs a distance ratio of at least {:.0} in rectilinear mode. This looks like a panorama - switch to cylindrical mode, or place the view center between the peaks.",
+                            "{} is {:.1} times farther from the image center than {} ({:.0} px vs {:.0} px, both {} of center). A pair {:.1} deg apart in azimuth needs a distance ratio of at least {:.0} in rectilinear mode. This looks like a panorama - switch to Panorama (cylindrical) mode, or place the view center between the peaks.",
                             far.name,
                             ratio,
                             near.name,

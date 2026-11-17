@@ -1462,8 +1462,8 @@ pub fn app() -> Html {
                             value={vp.roll} min={-10.0} max={10.0} step={0.01} onchange={on_roll} />
                         <div class="section">{ "Projection" }</div>
                         <select class="textinput" onchange={on_projection}>
-                            <option value="0" selected={*projection == 0}>{ "Rectilinear projection" }</option>
-                            <option value="1" selected={*projection == 1}>{ "Cylindrical (panoramic)" }</option>
+                            <option value="0" selected={*projection == 0}>{ "Normal (rectilinear)" }</option>
+                            <option value="1" selected={*projection == 1}>{ "Panorama (cylindrical)" }</option>
                         </select>
                         // Distortion only affects the rectilinear
                         // projection: the cylindrical formulas do not
