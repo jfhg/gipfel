@@ -529,7 +529,7 @@ pub fn app() -> Html {
                             // a reasonable number of peaks in the view,
                             // unless the URL pinned ?vis=
                             if ov.vis.is_none() {
-                                p.auto_visibility(8, 40);
+                                p.auto_visibility(12, 60);
                             }
                         }
                         // keep the source bytes and EXIF for "Save image"
