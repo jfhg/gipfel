@@ -221,6 +221,21 @@ pub fn app() -> Html {
     // 0 = rectilinear, 1 = cylindrical (panoramic); mirrors
     // Panorama::projection_type, synced from the image comment on load
     let projection = use_state(|| 0u32);
+    // The `selected` ATTRIBUTE on an <option> only drives the default
+    // selection; once the browser's selectedIndex PROPERTY has been
+    // established (first render, user interaction) patching the
+    // attribute no longer moves the visible choice. Mirror the state
+    // onto the property so a comment-driven projection switch on a
+    // later image load always shows up in the dropdown.
+    let proj_select_ref = use_node_ref();
+    {
+        let sel = proj_select_ref.clone();
+        use_effect_with(*projection, move |p| {
+            if let Some(sel) = sel.cast::<web_sys::HtmlSelectElement>() {
+                sel.set_selected_index(*p as i32);
+            }
+        });
+    }
     let hover = use_state(|| Option::<String>::None);
     let vp = use_state(UiParams::default);
     let img_size = use_state(|| (0u32, 0u32));
@@ -1485,7 +1500,7 @@ pub fn app() -> Html {
                         <SliderItem label="Roll" display={format!("{:.1}°", vp.roll)}
                             value={vp.roll} min={-10.0} max={10.0} step={0.01} onchange={on_roll} />
                         <div class="section">{ "Projection" }</div>
-                        <select class="textinput" onchange={on_projection}>
+                        <select class="textinput" onchange={on_projection} ref={proj_select_ref}>
                             <option value="0" selected={*projection == 0}>{ "Normal (rectilinear)" }</option>
                             <option value="1" selected={*projection == 1}>{ "Panorama (cylindrical)" }</option>
                         </select>
