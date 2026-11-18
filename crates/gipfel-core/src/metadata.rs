@@ -540,9 +540,12 @@ pub fn apply_image_metadata(
 
     let mut have_info = true;
 
-    pan.set_view_long(md.longitude);
-    pan.set_view_lat(md.latitude);
-    pan.set_view_height(md.height);
+    // NaN guards: an image without GPS must not poison the viewpoint
+    // (a NaN view_phi/lam makes every hill azimuth NaN and hides the
+    // whole database). Neutral 0 matches Panorama::new defaults.
+    pan.set_view_long(if md.longitude.is_nan() { 0.0 } else { md.longitude });
+    pan.set_view_lat(if md.latitude.is_nan() { 0.0 } else { md.latitude });
+    pan.set_view_height(if md.height.is_nan() { 0.0 } else { md.height });
 
     pan.set_projection(match md.projection_type {
         1 => ProjectionType::Cylindrical,
@@ -766,6 +769,27 @@ mod tests {
         let mut pan = crate::panorama::Panorama::new();
         apply_image_metadata(&mut pan, &md, 1000, 800);
         assert!((pan.get_scale() - 50.0 * 1000.0 / 35.0).abs() < 1e-9);
+    }
+
+    #[test]
+    fn metadataless_image_does_not_poison_viewpoint() {
+        // an image with no EXIF/comment at all (every field NaN) must
+        // leave a finite, neutral viewpoint - even after a previous
+        // image had set one (NaN view lat/lon would NaN every hill
+        // azimuth and hide the whole database)
+        let mut pan = crate::panorama::Panorama::new();
+        pan.set_view_lat(47.0);
+        pan.set_view_long(10.5);
+        pan.set_view_height(2993.0);
+        let md = ImageMetaData::new(); // all NaN
+        let have = apply_image_metadata(&mut pan, &md, 1000, 800);
+        assert!(!have);
+        assert!(pan.get_view_lat().is_finite());
+        assert!(pan.get_view_long().is_finite());
+        assert!(pan.get_view_height().is_finite());
+        assert!(pan.get_pitch_angle().is_finite());
+        assert!(pan.get_roll_angle().is_finite());
+        assert!(pan.get_scale().is_finite());
     }
 }
 
