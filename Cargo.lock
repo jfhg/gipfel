@@ -2427,7 +2427,7 @@ dependencies = [
 
 [[package]]
 name = "gipfel"
-version = "0.5.6"
+version = "0.6.0"
 dependencies = [
  "flate2",
  "gipfel-core",
@@ -2440,7 +2440,7 @@ dependencies = [
 
 [[package]]
 name = "gipfel-app"
-version = "0.5.6"
+version = "0.6.0"
 dependencies = [
  "cosmic-text",
  "fontdb",
@@ -2453,14 +2453,14 @@ dependencies = [
 
 [[package]]
 name = "gipfel-cli"
-version = "0.5.6"
+version = "0.6.0"
 dependencies = [
  "gipfel-core",
 ]
 
 [[package]]
 name = "gipfel-core"
-version = "0.5.6"
+version = "0.6.0"
 dependencies = [
  "dirs 6.0.0",
  "image",
@@ -2471,7 +2471,7 @@ dependencies = [
 
 [[package]]
 name = "gipfel-desktop"
-version = "0.5.6"
+version = "0.6.0"
 dependencies = [
  "tauri",
  "tauri-build",

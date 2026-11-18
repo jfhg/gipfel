@@ -1,6 +1,19 @@
 gipfel ChangeLog
 =================
 
+gipfel-0.6.0
+* fit: correct viewpoint fitting across north and for panoramas wider than 180 deg
+* fit: impossible marker sets are now rejected with helpful messages instead of
+  silently producing garbage (wrong left-right order, panorama markers in
+  normal projection mode)
+* fit: validity-filtered restarts remove placement-dependent fit failures
+* fit: browser console session log to diagnose fit problems
+* initial visibility is auto-tuned to show a reasonable number of peaks
+* projection switch: repaint and refit on change, clearer labels
+  "Normal (rectilinear)" / "Panorama (cylindrical)", reliable dropdown sync
+* fix: distortion fitting is skipped in panorama mode, where it has no effect
+* fix: images without GPS metadata no longer wipe the viewpoint
+
 gipfel-0.5.6
 * the WASM/Yew web front end (crates/gipfel) becomes the main front end
 * peak identification, fitting and annotated JPEG saving in the browser
